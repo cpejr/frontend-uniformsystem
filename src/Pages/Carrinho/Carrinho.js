@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.css'
+import './Carrinho.css'
 
 function Carrinho(){
   return (

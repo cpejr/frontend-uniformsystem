@@ -1,0 +1,63 @@
+.all_header {
+    width: 100vw;
+    height: 10vh;
+
+    color: white;
+    background-color: black;
+    box-sizing: content-box;
+
+    display: flex;
+    justify-content: center;
+}
+
+.all_header .header_content {
+    height: 100%;
+    width: 90%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.all_header .header_content .logo_container {
+    width: fit-content;
+    height: 100% !important;
+}
+
+.all_header .header_content .logo_container .Logo {
+    height: 100% !important;
+}
+
+.all_header .header_content .icons {
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.all_header .header_content .icons * {
+    cursor: pointer;
+    color: white;
+    height: 25px;
+    width: 20px;
+    margin: 0 30px 0 0;
+}
+.all_header .header_content .icons *:hover {
+    color: #ede3d9;
+}
+
+.all_header .header_content .icons .login {
+    height: 25px;
+    width: 20px;
+    display: flex;
+    width: fit-content;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.all_header .header_content .icons .login * {
+    margin: 0 !important;
+}
+
+.all_header .header_content .icons .login:hover {
+    color: #ede3d9 !important;
+}

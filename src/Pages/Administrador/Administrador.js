@@ -1,12 +1,20 @@
-import React from 'react';
-import './Administrador.css'
+import React from "react";
 
-function Adminstrador(){
-  return (
-    <div>
-      Pagina Adminstrador
-    </div>
-  );
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+
+function Administrador() {
+    return (
+        <div>
+            <Header></Header>
+            Pagina Administrador 
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <Footer></Footer>
+        </div>
+    );
 }
 
-export default Adminstrador;
+export default Administrador;

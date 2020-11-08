@@ -16,7 +16,7 @@ export default function Routes() {
                 <Route path="/adm" export exact component={Administrador} />
                 <Route path="/shop" export exact component={Loja} />
                 <Route path="/perfil" export exact component={Perfil} />
-                <Route path="/car" export exact component={Carrinho} />
+                <Route path="/cart" export exact component={Carrinho} />
                 <Route path="/contact" export exact component={Contato} />
             </Switch>
         </BrowserRouter>

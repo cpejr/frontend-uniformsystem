@@ -41,9 +41,7 @@
     width: 20px;
     margin: 0 30px 0 0;
 }
-.all_header .header_content .icons *:hover {
-    color: #ede3d9;
-}
+
 
 .all_header .header_content .icons .login {
     height: 25px;
@@ -51,13 +49,20 @@
     display: flex;
     width: fit-content;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 100;
 }
 
 .all_header .header_content .icons .login * {
     margin: 0 !important;
 }
 
-.all_header .header_content .icons .login:hover {
+.all_header .header_content .icons .login:hover *{
     color: #ede3d9 !important;
+}
+
+.all_header .header_content .icons .inputSearch{
+    margin-left:-30px;
+    background-color: white;
+    width: fit-content;
+    color:black;
 }

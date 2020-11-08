@@ -14,20 +14,20 @@ function Footer() {
                         <img src={Logo} alt="Logo" className="Logo" />
                     </Link>
                 </div>
-                <a href="www.google.com.br" className="customize">
+                <a href="https://www.google.com.br" className="customize">
                     Customize o seu uniforme
                 </a>
-                <a href="www.google.com.br" className="contact">
+                <a href="https://www.google.com.br" className="contact">
                     Contato
                 </a>
                 <div className="icons">
-                    <a href="www.facebook.com" className="facebook">
+                    <a href="https://www.facebook.com" className="facebook">
                         <FaFacebook />
                     </a>
-                    <a href="www.instagram.com" className="instagram">
+                    <a href="https://www.instagram.com" className="instagram">
                         <FaInstagram />
                     </a>
-                    <a href="www.whatsapp.com" className="whatsapp">
+                    <a href="https://www.whatsapp.com" className="whatsapp">
                         <FaWhatsapp />
                     </a>
                 </div>

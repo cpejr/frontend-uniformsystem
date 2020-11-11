@@ -7,10 +7,23 @@ import Loja from "./Pages/Loja";
 import Perfil from "./Pages/Perfil";
 import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 export default function Routes() {
     return (
         <BrowserRouter>
+            <Switch>
+                <Route path ="/" component = {MenuRoutes} /> 
+            </Switch>
+        </BrowserRouter>
+    );
+}
+
+function MenuRoutes (){
+    return(
+        <div>
+            <Header/>
             <Switch>
                 <Route path="/home" export exact component={Home} />
                 <Route path="/adm" export exact component={Administrador} />
@@ -19,6 +32,7 @@ export default function Routes() {
                 <Route path="/cart" export exact component={Carrinho} />
                 <Route path="/contact" export exact component={Contato} />
             </Switch>
-        </BrowserRouter>
-    );
+            <Footer/>
+        </div>
+    )
 }

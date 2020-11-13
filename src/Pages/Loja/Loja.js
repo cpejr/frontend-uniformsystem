@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaSearch } from 'react-icons/fa';
+import { Button } from "@material-ui/core";
+import { SearchIcon } from '@material-ui/icons/Search';
+
 
 const FILTER_OPTIONS = [
   'TODOS OS PRODUTOS',
@@ -73,48 +76,70 @@ function Loja() {
     }
   }
 
+  function onChangeInputSearch(e) {
+
+  }
+
+  function findProduct() {
+    alert("Você está pesquisando!")
+  }
+
 
   return (
-    <div className="shop">
-      <div className="shopContainer">
-        <p>{filter.join(" ")}</p>
+    <div>
+      <div className="shop">
+      <div className="search">
+        <div>
+          <input
+            id='search'
+            type='text'
+            onChange={(e) => onChangeInputSearch(e.target.value)}
+            placeholder="O que você precisa?"
+          />
+        </div>
+        <FaSearch onClick={findProduct} className="searchButton" />
+      </div>
+        <div className="shopContainer">
 
-        <div className="filterContainer">
+          <p>{filter.join(" ")}</p>
 
-          <div className="filterTitleProducts">
-            <FaFilter />  FILTROS
+          <div className="filterContainer">
+
+            <div className="filterTitleProducts">
+              <FaFilter />  FILTROS
         </div>
 
-          {FILTER_OPTIONS.map((option, index) => {
-            return (
-              <div className="filtersProducts">
-                <input type="checkbox" id={`filter-${index}`} name="filter" onChange={handleInputChange} />
-                <label for={`filter-${index}`}>{option}</label>
-              </div>
-            )
-          })}
-
-          <div className="priceContainer">
-            <p>PREÇO</p>
-
-            {PRICE_OPTIONS.map((price, index) => {
+            {FILTER_OPTIONS.map((option, index) => {
               return (
-                <div className="filterPrice">
-                  <label for={`price-${index}`}>{price}</label>
-                  <input type="radio" id={`price-${index}`} name="price" onChange={handleInputChange} />
+                <div className="filtersProducts">
+                  <input type="checkbox" id={`filter-${index}`} name="filter" onChange={handleInputChange} />
+                  <label for={`filter-${index}`}>{option}</label>
                 </div>
               )
             })}
+
+            <div className="priceContainer">
+              <p>PREÇO</p>
+
+              {PRICE_OPTIONS.map((price, index) => {
+                return (
+                  <div className="filterPrice">
+                    <label for={`price-${index}`}>{price}</label>
+                    <input type="radio" id={`price-${index}`} name="price" onChange={handleInputChange} />
+                  </div>
+                )
+              })}
+            </div>
+
+          </div>
+
+          <div className="productContainer">
+            {products.map(product =>
+              <ProductCard key={product.product_model_id} product={product} />
+            )}
           </div>
 
         </div>
-
-        <div className="productContainer">
-          {products.map(product =>
-            <ProductCard key={product.product_model_id} product={product} />
-          )}
-        </div>
-
       </div>
     </div>
   );

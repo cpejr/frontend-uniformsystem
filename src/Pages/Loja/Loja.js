@@ -65,6 +65,11 @@ function Loja() {
         const teste = [aux, query[2]];
         setAux(teste.join('&'));
       }
+    } else {
+      const index = filter.indexOf(id);
+      const newFilter = [...filter];
+      newFilter.splice(index, 1);
+      setFilter(newFilter);
     }
   }
 

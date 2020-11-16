@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {Link} from 'react-router-dom';
 import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
@@ -83,26 +82,23 @@ function Loja() {
     alert("Você está pesquisando!")
   }
 
-
   return (
-    <div>
+   
       <div className="shop">
-      <div className="search">
-        <div>
-          <input
-            id='search'
-            type='text'
-            onChange={(e) => onChangeInputSearch(e.target.value)}
-            placeholder="O que você precisa?"
-          />
+        <div className="search">
+            <input
+              id='search'
+              type='text'
+              onChange={(e) => onChangeInputSearch(e.target.value)}
+              placeholder="O que você precisa?"
+            />
+         
+          <FaSearch onClick={findProduct} className="searchButton" />
         </div>
-        <FaSearch onClick={findProduct} className="searchButton" />
-      </div>
         <div className="shopContainer">
 
-          <p>{filter.join(" ")}</p>
-
           <div className="filterContainer">
+            <p>{filter.join(" ")}</p>
 
             <div className="filterTitleProducts">
               <FaFilter />  FILTROS
@@ -132,21 +128,14 @@ function Loja() {
 
           </div>
           <div className="productContainer">
-            {products.map(product => {
-              return(
-                <>
-                <ProductCard key={product.product_model_id} product={product} />
-                <Link to={`/shop/${product.product_model_id}`}></Link>
-               </>
-              )
-            }
-              
+            {products.map(product =>
+              <ProductCard key={product.product_model_id} product={product} />
             )}
           </div>
 
         </div>
       </div>
-    </div>
+    
   );
 }
 

@@ -15,7 +15,13 @@ function Footer() {
                     </Link>
                 </div>
                 <a href="https://www.google.com.br" className="customize">
-                    Customize o seu uniforme
+                   <p className="address" style={{height:'80% !important', textAlign:'center'}}>
+                       Rua Alguma Coisa, 100, Liberdade<br/>
+                        Belo Horizonte - MG
+                   </p>
+                </a>
+                <a href="https://www.google.com.br" className="customize">
+                   (31) 99999-9999
                 </a>
                 <a href="https://www.google.com.br" className="contact">
                     Contato

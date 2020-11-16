@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom';
 import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
 import { FaFilter, FaSearch } from 'react-icons/fa';
-import { Button } from "@material-ui/core";
-import { SearchIcon } from '@material-ui/icons/Search';
 
 
 const FILTER_OPTIONS = [
@@ -132,10 +131,16 @@ function Loja() {
             </div>
 
           </div>
-
           <div className="productContainer">
-            {products.map(product =>
-              <ProductCard key={product.product_model_id} product={product} />
+            {products.map(product => {
+              return(
+                <>
+                <ProductCard key={product.product_model_id} product={product} />
+                <Link to={`/shop/${product.product_model_id}`}></Link>
+               </>
+              )
+            }
+              
             )}
           </div>
 

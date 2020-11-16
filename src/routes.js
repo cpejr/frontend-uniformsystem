@@ -28,6 +28,7 @@ function MenuRoutes (){
                 <Route path="/home" export exact component={Home} />
                 <Route path="/adm" export exact component={Administrador} />
                 <Route path="/shop" export exact component={Loja} />
+                <Route path="/shop/:product_id" export exact component={Loja} />
                 <Route path="/perfil" export exact component={Perfil} />
                 <Route path="/cart" export exact component={Carrinho} />
                 <Route path="/contact" export exact component={Contato} />

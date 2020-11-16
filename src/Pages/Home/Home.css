@@ -1,0 +1,133 @@
+.fullContent{
+
+    width: 100%;
+    height: 100%;
+
+    padding: 20px 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    overflow-x: hidden;
+}
+
+.divCarousel{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+ul{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+li{
+    list-style: none;
+    width: 100%;
+}
+
+
+.divQuemSomos{
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.divQuemSomos h2, .divNossosProdutos h2{
+    font-family: 'Roboto';
+    font-size: 36px;
+    line-height: 49px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lineUnderTitle{
+    width: 150px;
+    height: 2px;
+    background-color: #38726C;
+}
+
+.divQuemSomos .conteudoQuemSomos{
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.divQuemSomos .conteudoQuemSomos span{
+    width: 65%;
+    text-align: initial;
+    font-size: 20;
+    line-break: 25;
+    color: #000;
+}
+
+.divQuemSomos .conteudoQuemSomos img{
+    width: 30%;
+}
+
+.divNossosProdutos {
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+
+    
+}
+
+/* .divNossosProdutos h2 {
+    font-family: 'Roboto';
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 49px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
+
+.divNossosProdutos span{
+    margin: 15px 0;
+}
+
+.divNossosProdutos .divCardsExterna{
+    width: 100%;
+    height: 400px;
+
+    margin: 40px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.divCardProdutos{
+    width: 280px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: 1px solid #707070;
+    border-radius: 15px;
+
+    padding: 5px 8px;
+}
+
+.divCardProdutos img{
+    height: 85%;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.divCardProdutos strong{
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 25px;
+}

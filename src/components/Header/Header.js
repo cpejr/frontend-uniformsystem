@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Logo from "../../Assets/Logo_1.png";
 
 //importando icones:
-import { FaShoppingCart, FaUser, FaAngleDown, FaSearch } from "react-icons/fa";
+import { FaShoppingCart, FaUser, FaAngleDown} from "react-icons/fa";
 
 //o import abaixo é para fechar os dropdowns quando clicarmos fora deles
 import { ClickAwayListener } from "@material-ui/core";
@@ -44,8 +44,6 @@ const Products_in_Cart = [
 ];
 
 function Header() {
-    const [ShowInput, setShowInput] = useState(false);
-    const [SearchWord, setSearchWord] = useState("");
     const [ClickLogin, setClickLogin] = useState(false);
     const [ClickCart, setClickCart] = useState(false);
 

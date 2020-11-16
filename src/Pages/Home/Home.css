@@ -17,24 +17,55 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    margin-bottom: 40px;
+    background-color: #aa2b2b;
 }
 
-ul{
+.carousel{
+    /* height: 25%; */
+    width: 90%;
+    background-color: #aa2b2b;
+    margin: 0 auto;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
+.carousel-inner{
+    /* height: 100%; */
+    width: 80% !important;
+    display: flex;
+}
+.carousel-item div {
+
+display: flex;
+justify-content: center;
 }
 
-li{
-    list-style: none;
-    width: 100%;
+.carousel-control-prev, .carousel-control-next{
+    width: auto;
+}
+
+.carousel-control-prev > span, .carousel-control-next > span{
+    background-color:#aa2b2b;
+}
+
+
+.carousel-indicators{
+margin-bottom: -30px;
+}
+
+.carousel-indicators li{
+height: 7px !important;
+/* background-color: #000 !important; */
 }
 
 
 .divQuemSomos{
     width: 90%;
     height: auto;
-    margin: 0 auto;
+    margin: 0 auto 32px auto;
 }
 
 .divQuemSomos h2, .divNossosProdutos h2{
@@ -45,12 +76,16 @@ li{
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    margin-bottom: 24px;
 }
 
 .lineUnderTitle{
-    width: 150px;
+    width: 160px;
     height: 2px;
     background-color: #38726C;
+
+    margin-top: 8px;
 }
 
 .divQuemSomos .conteudoQuemSomos{
@@ -82,16 +117,6 @@ li{
     
 }
 
-/* .divNossosProdutos h2 {
-    font-family: 'Roboto';
-    font-size: 36px;
-    font-weight: 500;
-    line-height: 49px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-} */
-
 .divNossosProdutos span{
     margin: 15px 0;
 }
@@ -108,7 +133,7 @@ li{
 }
 
 .divCardProdutos{
-    width: 280px;
+    width: 300px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -130,4 +155,39 @@ li{
     font-size: 24px;
     font-weight: 500;
     line-height: 25px;
+}
+
+@media(max-width: 800px){
+
+    .carousel-control-prev {
+        margin-right: 15px;
+    }
+    .carousel-control-next {
+        margin-left: 15px;
+    }
+
+    .divQuemSomos .conteudoQuemSomos{
+        width: 100%;
+    
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+    
+    }
+
+    .divQuemSomos .conteudoQuemSomos img{
+        width: 70%;
+        margin-top: 30px;
+    }
+
+    .divNossosProdutos .divCardsExterna{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .divCardProdutos + .divCardProdutos{
+        margin-top: 24px;
+    }
 }

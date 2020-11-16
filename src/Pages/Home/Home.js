@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 
-import { Carousel } from "react-responsive-carousel";
+import { Carousel } from 'react-bootstrap';
 
 import camisa from '../../Assets/camisa.jpg';
+
 
 import './Home.css'
 
@@ -36,7 +37,6 @@ function Home(){
         },
     ],
     QuemSomos: {
-      texto: '',
       imgSrc: camisa,
       imgAlt: '',
     },
@@ -45,52 +45,47 @@ function Home(){
         {
           imgSrc: camisa,
           imgAlt: 'teste',
-          NomeProduto: 'Nome',
+          NomeProduto: 'Nome 1',
         },
         {
           imgSrc: camisa,
           imgAlt: 'teste',
-          NomeProduto: 'Nome',
+          NomeProduto: 'Nome 2',
         },
         {
           imgSrc: camisa,
           imgAlt: 'teste',
-          NomeProduto: 'Nome',
+          NomeProduto: 'Nome 3',
         },
       ]
     }
   }
-
-  const [index, setIndex] = useState(0);
-
-  const handleSelect = (selectedIndex, e) => {
-    setIndex(selectedIndex);
-  };
 
 
   return (
     <div className="fullContent">
       <div className="divCarousel">
         <Carousel 
-          showArrows={true}
-          showIndicators={false}
-          // width="100"
-          showThumbs={false}
-          showStatus={false}
+          controls={true}
+          indicators={true}
           // indicators={false}
-          // interval={1000}
+          interval={1000}
         >
-          {
-            conteudoHome.Carrossel.map(item => {
-              return (
-                // <Carousel.Item>
-                  <div>
-                    <img src={item.imgSrc} alt={item.imgSrc} />
+                <Carousel.Item>
+                  <div className="teste">
+                    <img src={conteudoHome.Carrossel[0].imgSrc} alt={conteudoHome.Carrossel[0].imgAlt} />
                   </div>
-                // </Carousel.Item>
-              );
-            })
-          }
+                </Carousel.Item>
+                <Carousel.Item>
+                  <div className="teste">
+                    <img src={conteudoHome.Carrossel[1].imgSrc} alt={conteudoHome.Carrossel[1].imgAlt} />
+                  </div>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <div className="teste">
+                    <img src={conteudoHome.Carrossel[2].imgSrc} alt={conteudoHome.Carrossel[2].imgAlt} />
+                  </div>
+                </Carousel.Item>
         </Carousel>
       </div>
       <div className="divQuemSomos">

@@ -23,7 +23,6 @@
 }
 
 .carousel{
-    /* height: 25%; */
     width: 90%;
     background-color: #aa2b2b;
     margin: 0 auto;
@@ -33,7 +32,6 @@
     justify-content: center;
 }
 .carousel-inner{
-    /* height: 100%; */
     width: 80% !important;
     display: flex;
 }
@@ -66,9 +64,13 @@ height: 7px !important;
     width: 90%;
     height: auto;
     margin: 0 auto 32px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .divQuemSomos h2, .divNossosProdutos h2{
+    width: fit-content;
     font-family: 'Roboto';
     font-size: 36px;
     line-height: 49px;
@@ -81,7 +83,7 @@ height: 7px !important;
 }
 
 .lineUnderTitle{
-    width: 160px;
+    width: 80%;
     height: 2px;
     background-color: #38726C;
 
@@ -113,8 +115,9 @@ height: 7px !important;
     width: 90%;
     height: auto;
     margin: 0 auto;
-
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .divNossosProdutos span{

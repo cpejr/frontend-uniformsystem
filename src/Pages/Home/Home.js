@@ -68,7 +68,6 @@ function Home(){
         <Carousel 
           controls={true}
           indicators={true}
-          // indicators={false}
           interval={1000}
         >
                 <Carousel.Item>

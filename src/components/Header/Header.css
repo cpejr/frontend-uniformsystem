@@ -38,11 +38,14 @@
 
 .all_header .header_content .icons .icon{
     cursor: pointer;
-   /*  color: white; */
+    color: white; 
    /*  height: 25px; */
     width: fit-content;
     margin: 0 30px 0 0;
     text-decoration: none;
+}
+.all_header .header_content .icons .icon:hover{
+    color: #ede3d9 !important;
 }
 
 .all_header .header_content .icons .login {
@@ -59,6 +62,7 @@
     display: flex;
     width: fit-content;
     font-weight: 100;
+    align-items: center;
 }
 
 .all_header .header_content .icons .login .icons_log * {
@@ -69,3 +73,6 @@
     color: #ede3d9 !important;
 }
 
+.all_header .header_content .icons .all_cart:hover{
+    color: #ede3d9 !important;
+}

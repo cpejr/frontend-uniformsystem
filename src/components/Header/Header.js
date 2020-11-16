@@ -1,45 +1,53 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
 
 import Logo from "../../Assets/Logo_1.png";
 
 //importando icones:
-import { FaShoppingCart, FaUser, FaAngleDown} from "react-icons/fa";
+import { FaShoppingCart, FaUser, FaAngleDown } from "react-icons/fa";
 
 //o import abaixo é para fechar os dropdowns quando clicarmos fora deles
 import { ClickAwayListener } from "@material-ui/core";
 
 import api from "../../services/api";
 
-import Foto_camisa from "../../Assets/Foto_camisa.png";
-
 const Products_in_Cart = [
-    { name: "Camisa 1", price: "15,00", quantity: 10 },
     {
-        name: "Camisa 2",
-        price: "20,00",
+        name: "Camisa 1",
+        price: "15,00",
         quantity: 10,
+        size: "P",
+        imgLink:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcROM5jiaPvJ6rmWc1OwhzHC8EdexGOEXSM9Y0IcwIHvI7mUQPoST6wHIFoSUpsx7qJusI5ly-DI&usqp=CAc",
+        color: "Branco",
     },
     {
-        name: "Camisa 3",
-        price: "20,00",
+        name: "Camisa 1",
+        price: "15,00",
         quantity: 10,
+        size: "P",
+        imgLink:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcROM5jiaPvJ6rmWc1OwhzHC8EdexGOEXSM9Y0IcwIHvI7mUQPoST6wHIFoSUpsx7qJusI5ly-DI&usqp=CAc",
+        color: "Branco",
     },
     {
-        name: "Camisa 3",
-        price: "20,00",
+        name: "Camisa 1",
+        price: "15,00",
         quantity: 10,
+        size: "P",
+        imgLink:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcROM5jiaPvJ6rmWc1OwhzHC8EdexGOEXSM9Y0IcwIHvI7mUQPoST6wHIFoSUpsx7qJusI5ly-DI&usqp=CAc",
+        color: "Branco",
     },
     {
-        name: "Camisa 3",
-        price: "20,00",
+        name: "Camisa 1",
+        price: "15,00",
         quantity: 10,
-    },
-    {
-        name: "Camisa 3",
-        price: "20,00",
-        quantity: 10,
+        size: "P",
+        imgLink:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcROM5jiaPvJ6rmWc1OwhzHC8EdexGOEXSM9Y0IcwIHvI7mUQPoST6wHIFoSUpsx7qJusI5ly-DI&usqp=CAc",
+        color: "Branco",
     },
 ];
 
@@ -71,21 +79,44 @@ function Header() {
                 <div
                     className="drop_content"
                     style={{
-                        margin: "15px",
-                        padding: "20px",
-                        width: "fit-content",
-                        height: "fit-content",
-                        backgroundColor: "#ccc",
+                        border: "solid 0.5px #ccc",
+                        borderRadius: "10px",
+                        width: "300px",
+                        height: "200px",
+                        backgroundColor: "#fff",
                         position: "absolute",
-                        bottom: "-210px",
-                        right: "15px",
+                        top: "23px",
+                        right: "0px",
                     }}
                 >
-                    <label
-                        htmlFor="input_login"
-                        style={{ width: "fit-content", color: "black" }}
+                    <div
+                        className="title_login"
+                        style={{
+                            width: "100%",
+                            backgroundColor: "#ccc",
+                            height: "fit-content",
+                            textAlign: "center",
+                            borderRadius: "10px 10px 0 0",
+                            padding: "10px 0",
+                            color: "black",
+                        }}
                     >
-                        Login:
+                        LOGIN
+                    </div>
+                    <div
+                        className="inputs"
+                        style={{
+                            width: "80%",
+                            color: "black",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            margin: "auto",
+                            padding: "10px 0",
+                        }}
+                    >
+                        USUÁRIO
                         <input
                             className="input_login"
                             style={{
@@ -93,36 +124,31 @@ function Header() {
                                 justifyContent: "space-between",
                                 color: "black",
                                 width: "95%",
+                                borderRadius: "15px",
+                                border: "solid 1px #ccc",
                             }}
                             type="text"
-                            placeholder="Digite seu Email aqui"
                             onChange={(e) => {
                                 setEmail(e.target.value);
                             }}
                         />
-                    </label>
-
-                    <label
-                        htmlFor="password"
-                        style={{ width: "fit-content", color: "black" }}
-                    >
-                        Senha:
+                        SENHA
                         <input
                             style={{
                                 display: "flex",
                                 justifyContent: "space-between",
                                 color: "black",
                                 width: "95%",
+                                borderRadius: "15px",
+                                border: "solid 1px #ccc",
                             }}
                             className="input_password"
                             type="password"
-                            placeholder="Digite sua Senha aqui"
                             onChange={(e) => {
                                 setPassword(e.target.value);
                             }}
                         />
-                    </label>
-
+                    </div>
                     <div
                         className="buttons"
                         style={{
@@ -135,36 +161,194 @@ function Header() {
                         <button
                             className="b_login"
                             onClick={() => Login()}
-                            style={{
+                          /*   style={{
                                 display: "flex",
                                 justifyContent: "space-between",
                                 color: "black",
-                                width: "50%",
+                                width: "fit-content",
                                 padding: "auto",
+                            }} */
+                            style={{
+                                margin: "auto",
+                                width: "fit-content",
+                                color: "black",
+                                marginBottom: "10px",
+                                backgroundColor: "#AFC6FF",
+                                padding: "5px 20px",
+                                borderRadius: "15px",
+                                border: "0",
+                                display: "flex",
+                                alignItems: "center",
                             }}
                         >
-                            Login
+                            ACESSAR
                         </button>
 
                         <button
                             className="b_register"
-                            style={{
+                           /*  style={{
                                 display: "flex",
                                 justifyContent: "space-between",
                                 color: "black",
-                                width: "50%",
+                                width: "fit-content",
                                 padding: "auto",
+                            }} */
+                            style={{
+                                margin: "auto",
+                                width: "fit-content",
+                                color: "black",
+                                marginBottom: "10px",
+                                backgroundColor: "#AFC6FF",
+                                padding: "5px 20px",
+                                borderRadius: "15px",
+                                border: "0",
+                                display: "flex",
+                                alignItems: "center",
                             }}
                         >
-                            Cadastrar
+                            CADASTRAR
                         </button>
                     </div>
+                    <a href={"/forgetPassword"} style={{
+                        margin:'0 10px',
+                        color:'#666'
+                    }}>Esqueceu sua senha?</a>
                 </div>
             </ClickAwayListener>
         );
     }
 
     function DropDownCartContent() {
+        function SingleProducts() {
+            return Products_in_Cart.map((produto) => {
+                return (
+                    <>
+                        <div
+                            className="singleProduct"
+                            style={{
+                                boxSizing: "border-box",
+                                width: "95%",
+                                height: "90px",
+                                margin: "auto",
+                                padding: "0px 1px 0px 3px",
+                                /* borderBottom: "solid 1px rgba(0,0,0,0.2)", */
+                                color: "black",
+
+                                display: "flex",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <div
+                                className="photo"
+                                /* Provavel que seja necessario um width ali. Nao coloquei por enquanto */
+                                style={{
+                                    height: "90%",
+                                    maxWidth: "33%",
+                                    margin: "auto",
+                                }}
+                            >
+                                {/* Na linha abaixo deveria entrar uma variavel do objeto, no campo SRC. */}
+                                <img
+                                    src={produto.imgLink}
+                                    alt="FotoCamisa"
+                                    style={{
+                                        width: "90%",
+                                        height: "90%",
+                                    }}
+                                />
+                            </div>
+                            <div
+                                className="texts"
+                                style={{
+                                    width: "67%",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    height: "100%",
+                                }}
+                            >
+                                <h4
+                                    style={{
+                                        margin: "10px 0px",
+                                        fontWeight: "lighter",
+                                    }}
+                                >
+                                    {produto.name}
+                                </h4>
+                                <div
+                                    className="description"
+                                    syle={{ color: "black" }}
+                                >
+                                    <div
+                                        className="pt1"
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            width: "100%",
+                                            fontSize: "12px",
+                                            color: "#666",
+                                            margin: "3px 0",
+                                        }}
+                                    >
+                                        <p
+                                            style={{
+                                                width: "fit-content",
+                                                margin: "0",
+                                            }}
+                                        >
+                                            Tamanho: {produto.size}
+                                        </p>
+                                        <p
+                                            style={{
+                                                width: "fit-content",
+                                                margin: "0",
+                                            }}
+                                        >
+                                            R$ {produto.price}
+                                        </p>
+                                    </div>
+                                    <div
+                                        className="pt2"
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            width: "100%",
+                                            fontSize: "12px",
+                                            color: "#666",
+                                        }}
+                                    >
+                                        <p
+                                            style={{
+                                                width: "fit-content",
+                                                margin: "0",
+                                            }}
+                                        >
+                                            Cor: Branca
+                                        </p>
+                                        <p
+                                            style={{
+                                                width: "fit-content",
+                                                margin: "0",
+                                                fontSize: "12px",
+                                            }}
+                                        >
+                                            {produto.quantity}xR${" "}
+                                            {produto.price}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr
+                            style={{
+                                width: "90%",
+                                margin: "-1px auto",
+                            }}
+                        />
+                    </>
+                );
+            });
+        }
+
         function handleClickAway() {
             setClickCart(false);
         }
@@ -176,102 +360,79 @@ function Header() {
                     style={{
                         position: "absolute",
                         top: "25px",
-                        right: "0px",
+                        right: "20px",
                         display: "flex",
                         flexDirection: "column",
                         backgroundColor: "#fff",
-                        height: "240px",
+                        height: "fit-content",
                         width: "350px",
                         boxSizing: "content-box",
+
+                        borderLeft: "solid 0.5px rgba(0,0,0,0.2)",
+                        borderRight: "solid 0.5px rgba(0,0,0,0.2)",
+                        borderBottom: "solid 0.5px rgba(0,0,0,0.2)",
+                        /* paddingTop:'10px' */
                     }}
                 >
                     <div
                         className="blueLine"
                         style={{
-                            width: "100%",
-                            height: "2px",
-                            backgroundColor: "blue",
+                            width: "100.60%",
+                            height: "4px",
+                            backgroundColor: "#3772FF",
+                            marginBottom: "15px",
+                            margin: "-1.5px",
+                            zIndex: "9",
                         }}
                     ></div>
 
                     <div
                         className="products"
                         style={{
-                            minHeight: "180px",
-                            maxHeight: "440px",
+                            minHeight: "90px",
+                            maxHeight: "175px",
                             overflow: "auto",
                             width: "100%",
+                            margin: "auto",
+                            padding: "10px 0px",
                         }}
                     >
-                        {Products_in_Cart.map((produto) => {
-                            return (
-                                <div
-                                    className="singleProduct"
-                                    style={{
-                                        boxSizing: "border-box",
-                                        width: "90%",
-                                        height: "90px",
-                                        /*  backgroundColor: "#ccc", */
-                                        margin: "auto",
-                                        padding: "0px 1px",
-                                        borderBottom: "solid 1px #ccc",
-                                        color: "black",
-
-                                        display: "flex",
-                                        justifyContent:'space-between'
-
-                                        
-                                    }}
-                                >
-                                    <div
-                                        className="photo"
-                                        style={{ width: "33%", height: "100%" }}
-                                    >
-                                        {/* Na linha abaixo deveria entrar uma variavel do objeto, no campo SRC. */}
-                                        <img
-                                            src={Foto_camisa}
-                                            alt="FotoCamisa"
-                                            style={{
-                                                width: "90%",
-                                                height: "90%",
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="texts" style={{width:'67%', display:'flex', flexDirection:"column", height:'100%'}}>
-                                        <h3 style={{margin:'0'}}>{produto.name}</h3>
-                                        <div className="description" syle={{color:'black'}}>
-                                            <div className="pt1" style={{display:'flex', justifyContent:'space-between', width:'100%',fontSize:'11px', color:'#666'}}>
-                                                <p style={{width:'fit-content',margin:'0'}}>Tamanho:P</p>
-                                                <p style={{width:'fit-content',margin:'0'}}>R$50,00</p>
-                                            </div>
-                                            <div className="pt2" style={{display:'flex', justifyContent:'space-between', width:'100%', fontSize:'11px', color:'#666'}}>
-                                                <p style={{width:'fit-content',margin:'0'}}>Cor:Branca</p>
-                                                <p style={{width:'fit-content',margin:'0',fontSize:'11px'}}>10x50,00=R$500,00</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
+                        {SingleProducts()}
                     </div>
+
                     <div
-                        className="subtotal"
+                        className="subtotal_div"
                         style={{
                             display: "flex",
                             justifyContent: "space-between",
-                            width: "100%",
+                            width: "90%",
                             color: "black",
+                            margin: "auto",
                         }}
                     >
                         <h5 className="subtotal" style={{ color: "black" }}>
-                            Subtotal{" "}
+                            SUBTOTAL{" "}
                         </h5>
                         <h5 className="price" style={{ color: "black" }}>
-                            R$5500,00
+                            R$ 5500,00
                         </h5>
                     </div>
-                    <button style={{ margin: "auto", color: "black" }}>
-                        Ir para o carrinho
+                    <button
+                        style={{
+                            margin: "auto",
+                            width: "fit-content",
+                            color: "black",
+                            marginBottom: "10px",
+                            backgroundColor: "#AFC6FF",
+                            padding: "5px 20px",
+                            borderRadius: "15px",
+                            border: "0",
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        Ir para o carrinho {"  "}
+                        <FaShoppingCart className="cart_icon" style={{}} />
                     </button>
                 </div>
             </ClickAwayListener>
@@ -287,9 +448,15 @@ function Header() {
                     </Link>
                 </div>
                 <div className="icons">
-                    <Link className='icon' to="/home">HOME</Link>
-                    <Link className='icon' to="/shop">LOJA</Link>
-                    <Link className='icon' to="/contact">CONTATO</Link>
+                    <Link className="icon" to="/home">
+                        HOME
+                    </Link>
+                    <Link className="icon" to="/shop">
+                        LOJA
+                    </Link>
+                    <Link className="icon" to="/contact">
+                        CONTATO
+                    </Link>
 
                     <div
                         className="login"
@@ -318,7 +485,7 @@ function Header() {
                         >
                             <FaShoppingCart
                                 className="cart_icon"
-                                style={{ margin: 0 }}
+                                style={{ margin: "0 30px" }}
                             />
                         </div>
                         {ClickCart && DropDownCartContent()}

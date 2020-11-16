@@ -3,7 +3,7 @@
     height: 10vh;
 
     color: white;
-    background-color: black;
+    background-color:#201F24;
     box-sizing: content-box;
 
     display: flex;
@@ -18,9 +18,11 @@
     justify-content: space-between;
     align-items: center;
 }
+
 .all_footer .content_footer .logo {
     height: 100%;
 }
+
 .all_footer .content_footer .logo .Logo {
     height: 100%;
 }
@@ -30,6 +32,7 @@
     text-decoration: none;
     color: white;
 }
+
 .all_footer .content_footer *:hover {
     color: #ede3d9;
 }

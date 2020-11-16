@@ -15,7 +15,7 @@ function Footer() {
                     </Link>
                 </div>
                 <a href="https://www.google.com.br" className="customize">
-                   <p className="address" style={{height:'80% !important', textAlign:'center'}}>
+                   <p className="address" style={{height:'80% !important', textAlign:'center', fontSize:'14px'}}>
                        Rua Alguma Coisa, 100, Liberdade<br/>
                         Belo Horizonte - MG
                    </p>
@@ -24,7 +24,7 @@ function Footer() {
                    (31) 99999-9999
                 </a>
                 <a href="https://www.google.com.br" className="contact">
-                    Contato
+                    CONTATO
                 </a>
                 <div className="icons">
                     <a href="https://www.facebook.com" className="facebook">

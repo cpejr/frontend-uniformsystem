@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ClickAwayListener } from "@material-ui/core";
 
-import api from "../../services/api";
+import api from "../../../services/api";
 
 export default function DropDownLoginContent(props) {
     const [User, setUser] = useState("");
@@ -11,20 +11,37 @@ export default function DropDownLoginContent(props) {
         props.setClickLogin(false);
     }
 
-    async function Login() {
+    async function handleLogin(e) {
+        e.preventDefault();
+
+        handleClickAway()
+
         try {
-            const response = await api.post("login", { User, Password });
-            console.log(response);
+            const response = await api.post("login", { email:User, password:Password });
+
+            
+            console.log(response, "o response");
+            
+            localStorage.setItem("accessToken", response.data.accessToken);
+            
+            const user = response.data.user[0];
+            
+            console.log(user);
+            alert('Bem vindo, '+ user.name)
         } catch (error) {
-            console.log(error);
+            /* setError(error.response.data.message); */
+            console.error(error);
+
+            alert(error.response.data.message)
         }
+
         console.log(User, "<- User|| Password -> ", Password);
         console.log("AAAAAAAA");
     }
 
     return (
         <ClickAwayListener onClickAway={handleClickAway}>
-            <div
+            <form
                 className="drop_content"
                 style={{
                     border: "solid 0.5px #ccc",
@@ -108,20 +125,13 @@ export default function DropDownLoginContent(props) {
                 >
                     <button
                         className="b_login"
-                        onClick={() => Login()}
-                        /*   style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            color: "black",
-                            width: "fit-content",
-                            padding: "auto",
-                        }} */
+                        onClick={(e) => handleLogin(e)}
                         style={{
                             margin: "auto",
                             width: "fit-content",
                             color: "black",
                             marginBottom: "10px",
-                            backgroundColor: "#AFC6FF",
+                            backgroundColor: "#4DCDBC",
                             padding: "5px 20px",
                             borderRadius: "15px",
                             border: "0",
@@ -134,19 +144,12 @@ export default function DropDownLoginContent(props) {
 
                     <button
                         className="b_register"
-                        /*  style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            color: "black",
-                            width: "fit-content",
-                            padding: "auto",
-                        }} */
                         style={{
                             margin: "auto",
                             width: "fit-content",
                             color: "black",
                             marginBottom: "10px",
-                            backgroundColor: "#AFC6FF",
+                            backgroundColor: "#4DCDBC",
                             padding: "5px 20px",
                             borderRadius: "15px",
                             border: "0",
@@ -166,7 +169,7 @@ export default function DropDownLoginContent(props) {
                 >
                     Esqueceu sua senha?
                 </a>
-            </div>
+            </form>
         </ClickAwayListener>
     );
 }

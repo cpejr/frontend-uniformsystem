@@ -8,8 +8,8 @@ import Logo from "../../Assets/Logo_1.png";
 import { FaShoppingCart, FaUser, FaAngleDown } from "react-icons/fa";
 
 //importando os DropDowns
-import DropDownLoginContent from './DropDownLoginContent'
-import DropDownCartContent from './DropDownCartContent'
+import DropDownLoginContent from './Components/DropDownLoginContent'
+import DropDownCartContent from './Components/DropDownCartContent'
 
 
 function Header() {

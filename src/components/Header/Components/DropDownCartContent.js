@@ -61,7 +61,6 @@ export default function DropDownCartContent(props) {
                             height: "90px",
                             margin: "auto",
                             padding: "0px 1px 0px 3px",
-                            /* borderBottom: "solid 1px rgba(0,0,0,0.2)", */
                             color: "black",
 
                             display: "flex",
@@ -208,7 +207,7 @@ export default function DropDownCartContent(props) {
                     style={{
                         width: "100.60%",
                         height: "4px",
-                        backgroundColor: "#3772FF",
+                        backgroundColor: "#4DCDBC",
                         marginBottom: "15px",
                         margin: "-1.5px",
                         zIndex: "9",
@@ -252,7 +251,7 @@ export default function DropDownCartContent(props) {
                         width: "fit-content",
                         color: "black",
                         marginBottom: "10px",
-                        backgroundColor: "#AFC6FF",
+                        backgroundColor: "#4DCDBC",
                         padding: "5px 20px",
                         borderRadius: "15px",
                         border: "0",

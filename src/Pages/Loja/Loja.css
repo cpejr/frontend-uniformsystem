@@ -64,3 +64,17 @@
     display: flex;
     flex-direction: row;
 }
+
+.pagination{
+    display: flex;
+    min-width: 500px;
+    justify-content: space-between;
+}
+
+.pagination_button{
+    display: flex;
+}
+
+.pagination_item{
+    margin: 0 10px;
+}

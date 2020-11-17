@@ -22,6 +22,15 @@ const PRICE_OPTIONS = [
   'R$100,00 - R$150,00',
   'Acima de R$150,00',
 ]
+//as constantes que eu acrescentei
+const total = [
+  '15'
+]
+const limit = []
+const pages = []
+const currentPage = []
+const setCurrentPage = []
+
 
 function Loja() {
 
@@ -82,6 +91,32 @@ function Loja() {
     alert("Você está pesquisando!")
   }
 
+  function Pagination(){
+    const [products, setProducts] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [limit, setLimit] = useState(5);
+    const [pages, setPages] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    
+    useEffect(() => {
+    async function loadProducts() {
+        const response = await api.get(`/shop?page=${currentPage}&limit=${limit}`);
+        setTotal(response.headers['x-total-count']);
+        const totalPages = Math.ceil(total / limit);
+        const arrayPages = [];
+        for(let i=1; i<= totalPages; i++){
+            arrayPages.push(i);
+        }
+        setPages(arrayPages);
+        setProducts(response.data);
+    }
+    loadProducts();
+}, [currentPage, limit, total]);
+}
+
+  
+
+
   return (
    
       <div className="shop">
@@ -132,11 +167,22 @@ function Loja() {
               <ProductCard key={product.product_model_id} product={product} />
             )}
           </div>
-
+        </div>
+  
+        <div className="pagination">
+              <div>Quantidade {total} </div>
+              <div className="pagination_button">
+                <div className="pagination_item">Anterior</div>
+                {pages.map(page => (
+                  <div className="pagination_item" key={page} onClick={() => setCurrentPage(page)}>{page}</div>
+                ))}
+                <div className="pagination_item">Próximo</div>
+              </div>
         </div>
       </div>
     
   );
 }
 
+//Paloma: acescentei a funcao Pagination e pus a parte do pagination no response, e pus a const total tb
 export default Loja;

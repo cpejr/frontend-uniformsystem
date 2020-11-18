@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
 import { FaFilter, FaSearch } from 'react-icons/fa';
+import _ from 'lodash';
 
 
 const FILTER_OPTIONS = [
-  'TODOS OS PRODUTOS',
   'FEMININO',
   'MASCULINO',
   'ESPORTIVO',
   'UNIVERSITÁRIO',
   'EMPRESARIAL',
-  'CAMISAS',
   'BONÉS',
 ]
 const PRICE_OPTIONS = [
@@ -35,11 +34,32 @@ const setCurrentPage = []
 function Loja() {
 
   const [products, setProducts] = useState([]);
-  const [route, setRoute] = useState('/productmodels');
+  const [filter, setFilter] = useState({ product_type: [], gender: [] });
 
   async function getProducts() { //fazendo a requisição pro back
     try {
-      const response = await api.get(`${route}`);
+
+      let query = [];
+      if (filter.product_type.length > 0) {
+        let products_type = filter.product_type.join(',');
+        let param = 'product_type=' + products_type;
+        query.push(param);
+      }
+      if (filter.gender.length === 1) {
+        let genders = filter.gender.join(',');
+        let param = 'gender=' + genders;
+        query.push(param);
+      }
+      if (filter.max) {
+        let param = 'maxprice=' + filter.max;
+        query.push(param);
+      }
+      if (filter.min) {
+        let param = 'minprice=' + filter.min;
+        query.push(param);
+      }
+
+      const response = await api.get(`/productmodels?${query.join('&')}`);
       console.log(response);
       setProducts([...response.data.models]);
     }
@@ -51,39 +71,90 @@ function Loja() {
 
   useEffect(() => {
     getProducts()
-  }, [])
-
-
-  const [filter, setFilter] = useState([]);
-  const [aux, setAux] = useState(route);
+  }, [filter])
 
   function handleInputChange(e) {
-    const id = e.target.id;
-    const query = ['gender=M', 'gender=F', 'product_type=sport'];
-    if (filter.indexOf(id) === -1) {
-      const newFilter = [...filter, id];
-      setFilter(newFilter);
-      if (id === 'filter-1') {
-        const teste = [aux, query[1]];
-        setAux(teste.join('?'));
-      }
-      if (id === 'filter-2') {
-        const teste = [aux, query[0]];
-        setAux(teste.join('&'));
-      }
-      if (id === 'filter-3') {
-        const teste = [aux, query[2]];
-        setAux(teste.join('&'));
-      }
-    } else {
-      const index = filter.indexOf(id);
-      const newFilter = [...filter];
-      newFilter.splice(index, 1);
-      setFilter(newFilter);
+    const newFilter = { ...filter };
+    let fieldProductType;
+    let fieldGender;
+    switch (e.target.name) {
+      case 'FEMININO':
+        fieldGender = 'F';
+        break;
+
+      case 'MASCULINO':
+        fieldGender = 'M'
+        break;
+
+      case 'ESPORTIVO':
+        fieldProductType = 'sport';
+        break;
+
+      case 'UNIVERSITÁRIO':
+        fieldProductType = 'university';
+        break;
+
+      case 'EMPRESARIAL':
+        fieldProductType = 'company';
+        break;
+
+      case 'BONÉS':
+        fieldProductType = 'cap'
+        break;
     }
+
+    const checked = e.target.checked;
+
+    if (checked) {
+      if (fieldProductType)
+        newFilter.product_type.push(fieldProductType);
+      else if (fieldGender)
+        newFilter.gender.push(fieldGender);
+    }
+    else {
+      if (fieldProductType)
+        _.remove(newFilter.product_type, (el) => el === fieldProductType);
+      else if (fieldGender)
+        _.remove(newFilter.gender, (el) => el === fieldGender);
+    }
+    setFilter(newFilter);
+
   }
 
-  function onChangeInputSearch(e) {
+  function handlePriceChange(e) {
+    let min = 0;
+    let max = 0;
+    const newFilter = {...filter};
+    delete newFilter.min;
+    delete newFilter.max;
+
+    switch (e.target.value) {
+      case 'Até R$25,00':
+        max = 25;
+        break;
+      case 'R$25,00 - R$50,00':
+        min = 25;
+        max = 50;
+        break;
+      case 'R$50,00 - R$100,00':
+        min = 50;
+        max = 100;
+        break;
+      case 'R$100,00 - R$150,00':
+        min = 100;
+        max = 150;
+        break;
+      case 'Acima de R$150,00':
+        min = 150;
+        break;
+    }
+
+    if(min > 0)
+      newFilter.min = min;
+    if(max > 0)
+      newFilter.max = max;
+    
+    setFilter(newFilter);
 
   }
 
@@ -91,96 +162,93 @@ function Loja() {
     alert("Você está pesquisando!")
   }
 
-  function Pagination(){
+  function Pagination() {
     const [products, setProducts] = useState([]);
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(5);
     const [pages, setPages] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    
+
     useEffect(() => {
-    async function loadProducts() {
+      async function loadProducts() {
         const response = await api.get(`/shop?page=${currentPage}&limit=${limit}`);
         setTotal(response.headers['x-total-count']);
         const totalPages = Math.ceil(total / limit);
         const arrayPages = [];
-        for(let i=1; i<= totalPages; i++){
-            arrayPages.push(i);
+        for (let i = 1; i <= totalPages; i++) {
+          arrayPages.push(i);
         }
         setPages(arrayPages);
         setProducts(response.data);
-    }
-    loadProducts();
-}, [currentPage, limit, total]);
-}
-
-  
+      }
+      loadProducts();
+    }, [currentPage, limit, total]);
+  }
 
 
   return (
-   
-      <div className="shop">
-        <div className="search">
-            <input
-              id='search'
-              type='text'
-              onChange={(e) => onChangeInputSearch(e.target.value)}
-              placeholder="O que você precisa?"
-            />
-         
-          <FaSearch onClick={findProduct} className="searchButton" />
+
+    <div className="shop">
+      <div className="search">
+        <input
+          id='search'
+          type='text'
+          placeholder="O que você precisa?"
+        />
+
+        <FaSearch onClick={findProduct} className="searchButton" />
+      </div>
+      <div className="shopContainer">
+
+        <div className="filterContainer">
+          {/* <p>{JSON.stringify(filter)}</p> */}
+
+          <div className="filterTitleProducts">
+            <FaFilter />  FILTROS
         </div>
-        <div className="shopContainer">
 
-          <div className="filterContainer">
-            <p>{filter.join(" ")}</p>
+          {FILTER_OPTIONS.map((option, index) => {
+            return (
+              <div className="filtersProducts">
+                <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange} />
+                <label for={`filter-${index}`}>{option}</label>
+              </div>
+            )
+          })}
 
-            <div className="filterTitleProducts">
-              <FaFilter />  FILTROS
-        </div>
+          <div className="priceContainer">
+            <p>PREÇO</p>
 
-            {FILTER_OPTIONS.map((option, index) => {
+            {PRICE_OPTIONS.map((price, index) => {
               return (
-                <div className="filtersProducts">
-                  <input type="checkbox" id={`filter-${index}`} name="filter" onChange={handleInputChange} />
-                  <label for={`filter-${index}`}>{option}</label>
+                <div className="filterPrice">
+                  <label for={`price-${index}`}>{price}</label>
+                  <input type="radio" id={`price-${index}`} name="price" onChange={handlePriceChange} value={price} />
                 </div>
               )
             })}
-
-            <div className="priceContainer">
-              <p>PREÇO</p>
-
-              {PRICE_OPTIONS.map((price, index) => {
-                return (
-                  <div className="filterPrice">
-                    <label for={`price-${index}`}>{price}</label>
-                    <input type="radio" id={`price-${index}`} name="price" onChange={handleInputChange} />
-                  </div>
-                )
-              })}
-            </div>
-
           </div>
-          <div className="productContainer">
-            {products.map(product =>
-              <ProductCard key={product.product_model_id} product={product} />
-            )}
-          </div>
+
         </div>
-  
-        <div className="pagination">
-              <div>Quantidade {total} </div>
-              <div className="pagination_button">
-                <div className="pagination_item">Anterior</div>
-                {pages.map(page => (
-                  <div className="pagination_item" key={page} onClick={() => setCurrentPage(page)}>{page}</div>
-                ))}
-                <div className="pagination_item">Próximo</div>
-              </div>
+        <div className="productContainer">
+          {products.map(product =>
+            <ProductCard key={product.product_model_id} product={product} />
+          )}
         </div>
       </div>
-    
+
+      <div className="pagination">
+        <div>Quantidade {total} </div>
+        <div className="pagination_button">
+          <div className="pagination_item">Anterior</div>
+          {pages.map(page => (
+            <div className="pagination_item" key={page} onClick={() => setCurrentPage(page)}>{page}</div>
+          ))}
+          <div className="pagination_item">Próximo</div>
+        </div>
+      </div>
+    </div>
+
   );
 }
 

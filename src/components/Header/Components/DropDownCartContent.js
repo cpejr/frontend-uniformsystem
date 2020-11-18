@@ -56,11 +56,7 @@ export default function DropDownCartContent(props) {
             return (
                 <>
                     <div className="singleProduct">
-                        <div
-                            className="photo"
-                            /* Provavel que seja necessario um width ali. Nao coloquei por enquanto */
-                        >
-                            {/* Na linha abaixo deveria entrar uma variavel do objeto, no campo SRC. */}
+                        <div className="photo">
                             <img
                                 src={produto.imgLink}
                                 alt="FotoCamisa"

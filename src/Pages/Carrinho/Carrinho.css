@@ -1,0 +1,106 @@
+.cardContainer{
+    min-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    overflow: auto;
+    padding: 0 20px
+}
+
+.cardContainer table,th,td{
+    border: 1px solid #707070;
+    border-collapse: collapse;
+}
+
+.cardContainer th{
+    background-color: #D8D8D8;
+    padding: 15px
+}
+
+.cartTable{
+    width: 80vw;
+    margin: 0 auto;
+    padding: 15px;
+    margin-right: 15px;
+}
+
+.productInfo{
+    text-align: center;
+    padding: 15px;
+}
+
+.productName{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.productImg{
+    height: 10vh;
+    width: auto;
+}
+
+.amountContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.amountInput{
+    width: 50px;
+    text-align: center;
+}
+
+.shippingContainer{
+    padding: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.shippingText{
+    margin: 0;
+}
+
+.inputShipping{
+    margin-left: 10px;
+    width: 40% !important;
+}
+
+.subTotal{
+    background-color: #D8D8D8;
+    padding: 15px;
+    text-align: right;
+}
+
+.total{
+    background-color: #D8D8D8;
+    padding: 15px;
+    text-align: right;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.cartTitle{
+    margin-left: 10%;
+    text-decoration: underline;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.checkoutButton{
+    margin-top: 5vh;
+    height: 50px;
+    width: 300px;
+    align-self: flex-end;
+    border-radius: 30px;
+    background-color:#0EC4AB;
+    border: 1px solid #707070;
+    font-size: 1.8rem;
+    font-weight: 400;
+    transition: 0.5s;
+}
+
+.checkoutButton:hover{
+    background-color:#086b5e;
+    color: #fff;
+}

@@ -4,7 +4,7 @@ import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
 import { FaFilter, FaSearch } from 'react-icons/fa';
 import { Button } from "@material-ui/core";
-import { SearchIcon } from '@material-ui/icons/Search';
+// import { SearchIcon } from '@material-ui/icons';
 
 
 const FILTER_OPTIONS = [

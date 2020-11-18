@@ -3,9 +3,9 @@ import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
 import { FaFilter, FaSearch } from 'react-icons/fa';
-import { Button } from "@material-ui/core";
+/* import { Button } from "@material-ui/core";
 import { SearchIcon } from '@material-ui/icons/Search';
-
+ */
 
 const FILTER_OPTIONS = [
   'TODOS OS PRODUTOS',

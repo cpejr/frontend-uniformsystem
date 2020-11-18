@@ -2,14 +2,14 @@ import React, {useState } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
 
-import Logo from "../../Assets/Logo_1.png";
+import Logo from "../../../Assets/Logo_1.png";
 
 //importando icones:
 import { FaShoppingCart, FaUser, FaAngleDown } from "react-icons/fa";
 
 //importando os DropDowns
-import DropDownLoginContent from './Components/DropDownLoginContent'
-import DropDownCartContent from './Components/DropDownCartContent'
+import DropDownLoginContent from '../Components/DropDownLoginContent'
+import DropDownCartContent from '../Components/DropDownCartContent'
 
 
 function Header() {

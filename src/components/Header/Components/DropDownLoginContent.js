@@ -29,16 +29,13 @@ export default function DropDownLoginContent(props) {
             const user = response.data.user[0];
 
             console.log(user);
-            alert("Bem vindo, " + user.name);
-        } catch (error) {
-            /* setError(error.response.data.message); */
-            console.error(error);
 
+        } catch (error) {
+            console.error(error);
             alert(error.response.data.message);
         }
-
         console.log(User, "<- User|| Password -> ", Password);
-        console.log("AAAAAAAA");
+
     }
 
     return (

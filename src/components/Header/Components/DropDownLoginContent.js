@@ -34,8 +34,6 @@ export default function DropDownLoginContent(props) {
             console.error(error);
             alert(error.response.data.message);
         }
-        console.log(User, "<- User|| Password -> ", Password);
-
     }
 
     return (

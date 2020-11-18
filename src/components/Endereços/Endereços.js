@@ -10,7 +10,7 @@ function Endereços({endereço}){
       <div className="endereçosCep">{endereço.cep}</div>
       <div className="endereçosEstado">{endereço.estado}</div>
       <div className="endereçosPais">{endereço.pais}</div>
-      <div className="endereçosEdit">{endereço.editEnd}</div>
+      <div className="endereçosEdit"><a href="url">{endereço.editEnd}</a></div>
     </div>);
 }
 

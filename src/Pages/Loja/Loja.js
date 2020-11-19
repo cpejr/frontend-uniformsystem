@@ -28,6 +28,7 @@ function Loja() {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState({ product_type: [], gender: [] });
   const page = useRef(1);
+  const pageLoading = useRef(false);
 
   async function getProducts() { //fazendo a requisição pro back
     try {
@@ -58,7 +59,7 @@ function Loja() {
 
       const response = await api.get(`/productmodels?${query.join('&')}`);
       console.log(response);
-      setProducts([...response.data.models]);
+      return (response.data.models);
     }
     catch (error) {
       console.warn(error)
@@ -68,7 +69,9 @@ function Loja() {
 
   useEffect(() => {
     page.current = 1;
-    getProducts()
+    getProducts().then(newProducts => {
+      setProducts(newProducts);
+    });
   }, [filter])
 
   function handleInputChange(e) {
@@ -169,14 +172,6 @@ function Loja() {
     alert("Você está pesquisando!")
   }
 
-  function loadNextPage(){
-    page.current++;
-    getProducts();
-  }
-
-
-
-//coisas que eu fiz agr a tarde
    useEffect(() => {
     function handleScroll() {
       const windowHeight =
@@ -201,13 +196,23 @@ function Loja() {
           //.catch((error) => console.error(error));
       }
     }
+    function loadNextPage(){
+      if(!pageLoading.current){
+        pageLoading.current = true;
+        page.current++;
+        getProducts().then(newProducts => {
+          setProducts([...products, ...newProducts]);
+          pageLoading.current = false;
+        })
+      }
+    }
 		window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [products]);
 
   
 

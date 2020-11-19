@@ -202,24 +202,26 @@ function Loja() {
 
         <FaSearch onClick={findProduct} className="searchButton" />
       </div>
-      
+
       <div className="shopContainer">
-        
+
         <div className="filterContainer">
           <div className="filterTitleProducts">
             <FaFilter />  FILTROS
-        </div>
-
-          {FILTER_OPTIONS.map((option, index) => {
-            return (
-              <div className="filtersProducts">
-                <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange}/>
-                <label for={`filter-${index}`}>{option}</label>
-              </div>
-            )
-          })}
+            </div>
+          {
+            FILTER_OPTIONS.map((option, index) => {
+              return (
+                <div className="filtersProducts">
+                  <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange} />
+                  <label for={`filter-${index}`}>{option}</label>
+                </div>
+              )
+            })
+          }
 
           <div className="priceContainer">
+            <br></br>
             <p>PREÇO</p>
 
             {PRICE_OPTIONS.map((price, index) => {
@@ -231,8 +233,8 @@ function Loja() {
               )
             })}
           </div>
-
         </div>
+
         <div className="productContainer">
           {products.map(product =>
             <ProductCard key={product.product_model_id} product={product} />
@@ -254,6 +256,5 @@ function Loja() {
 
   );
 }
-
-//Paloma: acescentei a funcao Pagination e pus a parte do pagination no response, e pus a const total tb
 export default Loja;
+

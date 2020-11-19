@@ -5,6 +5,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { IconContext } from "react-icons";
 
 function CartProduct({ handleDelete, index, changeAmount, product }) {
+
   return (
     <tr>
       <td className="productInfo">

@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Home from "./Pages/Home";
 import Administrador from "./Pages/Administrador";
 import Loja from "./Pages/Loja";
+import Produto from "./Pages/Produto";
 import Perfil from "./Pages/Perfil";
 import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";

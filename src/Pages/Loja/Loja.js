@@ -5,7 +5,6 @@ import ProductCard from '../../components/ProductCard';
 import { FaFilter, FaSearch } from 'react-icons/fa';
 import _ from 'lodash';
 
-
 const FILTER_OPTIONS = [
   'FEMININO',
   'MASCULINO',

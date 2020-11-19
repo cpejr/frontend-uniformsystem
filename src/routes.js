@@ -43,7 +43,7 @@ function MenuRoutes() {
         <div>
             <Header />
             <Switch>
-                <Route path="/home" export exact component={Home} />
+                <Route path="/" export exact component={Home} />
                 <Route path="/adm" export exact component={Administrador} />
                 <Route path="/shop" export exact component={Loja} />
                 {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar

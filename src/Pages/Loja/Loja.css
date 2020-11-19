@@ -39,18 +39,6 @@
     
 }
 
-.productContainer{
-    margin-left: 20px;
-    width: 100%;
-    height: auto;
-    padding: 20px;
-    display: grid;
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 0.4fr));
-    justify-content: center;
-}
-
 .filterContainer{
     width: 200px;
 }
@@ -69,16 +57,19 @@
     flex-grow: 1;
 }
 
-.pagination{
-    display: flex;
-    min-width: 500px;
-    justify-content: space-between;
+.productContainer{
+    margin-left: 20px;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 0.4fr));
+    justify-content: center;
 }
 
-.pagination_button{
+.loading_css{
     display: flex;
-}
-
-.pagination_item{
-    margin: 0 10px;
+    justify-content: center;
+    align-items: center;
 }

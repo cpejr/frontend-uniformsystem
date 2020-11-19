@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
-import { FaFilter, FaSearch } from 'react-icons/fa';
+import { FaFilter, FaSearch, FaTruckLoading } from 'react-icons/fa';
 import _ from 'lodash';
 
 const FILTER_OPTIONS = [
@@ -21,20 +21,13 @@ const PRICE_OPTIONS = [
   'Acima de R$150,00',
   'Qualquer valor'
 ]
-//as constantes que eu acrescentei
-const total = [
-  '15'
-]
-const limit = []
-const pages = []
-const currentPage = []
-const setCurrentPage = []
 
 
 function Loja() {
 
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState({ product_type: [], gender: [] });
+  const page = useRef(1);
 
   async function getProducts() { //fazendo a requisição pro back
     try {
@@ -51,11 +44,15 @@ function Loja() {
         query.push(param);
       }
       if (filter.max) {
-        let param = 'maxprice=' + filter.max;
+        const param = 'maxprice=' + filter.max;
         query.push(param);
       }
       if (filter.min) {
-        let param = 'minprice=' + filter.min;
+        const param = 'minprice=' + filter.min;
+        query.push(param);
+      }
+      if (page.current!==1){
+        const param = 'page='+ page.current;
         query.push(param);
       }
 
@@ -70,6 +67,7 @@ function Loja() {
   }
 
   useEffect(() => {
+    page.current = 1;
     getProducts()
   }, [filter])
 
@@ -101,6 +99,7 @@ function Loja() {
       case 'BONÉS':
         fieldProductType = 'cap'
         break;
+        default: break;
     }
 
     const checked = e.target.checked;
@@ -147,10 +146,14 @@ function Loja() {
       case 'Acima de R$150,00':
         min = 150;
         break;
+
       case 'Qualquer valor':
         min = 0;
         max = 0;
         break;
+
+        default: break;
+
     }
 
     if (min > 0)
@@ -166,32 +169,49 @@ function Loja() {
     alert("Você está pesquisando!")
   }
 
-  function Pagination() {
-    const [products, setProducts] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [limit, setLimit] = useState(5);
-    const [pages, setPages] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-
-    useEffect(() => {
-      async function loadProducts() {
-        const response = await api.get(`/shop?page=${currentPage}&limit=${limit}`);
-        setTotal(response.headers['x-total-count']);
-        const totalPages = Math.ceil(total / limit);
-        const arrayPages = [];
-        for (let i = 1; i <= totalPages; i++) {
-          arrayPages.push(i);
-        }
-        setPages(arrayPages);
-        setProducts(response.data);
-      }
-      loadProducts();
-    }, [currentPage, limit, total]);
+  function loadNextPage(){
+    page.current++;
+    getProducts();
   }
 
 
-  return (
 
+//coisas que eu fiz agr a tarde
+   useEffect(() => {
+    function handleScroll() {
+      const windowHeight =
+        "innerHeight" in window
+          ? window.innerHeight
+          : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.pageYOffset;
+      if (windowBottom >= docHeight) {
+        //bottom reached
+				//Fuçã que faz requisição no back pela proxima pagina
+        loadNextPage();
+          //.then(setOngsData)
+          //.catch((error) => console.error(error));
+      }
+    }
+		window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  
+
+  return (
     <div className="shop">
       <div className="search">
         <input
@@ -239,22 +259,17 @@ function Loja() {
           {products.map(product =>
             <ProductCard key={product.product_model_id} product={product} />
           )}
-        </div>
+      </div>
       </div>
 
-      <div className="pagination">
-        <div>Quantidade {total} </div>
-        <div className="pagination_button">
-          <div className="pagination_item">Anterior</div>
-          {pages.map(page => (
-            <div className="pagination_item" key={page} onClick={() => setCurrentPage(page)}>{page}</div>
-          ))}
-          <div className="pagination_item">Próximo</div>
-        </div>
-      </div>
+      
+
+      
     </div>
 
   );
 }
+
+
 export default Loja;
 

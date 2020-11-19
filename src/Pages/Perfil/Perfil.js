@@ -53,6 +53,7 @@ function Perfil() {
     <div className="profileContainer">
       <div>
         <h1 className="title">DADOS PESSOAIS</h1>
+        <hr className="titleLine"></hr>
         <div className="containerDados">
           {dados.map((dado) => (
             <DadosPessoais key={dado.id} dado={dado} />
@@ -67,6 +68,7 @@ function Perfil() {
       </div>
       <div className="ordersContainer">
         <h1 className="title">MEUS PEDIDOS</h1>
+        <hr className="titleLine2"></hr>
         <div className="containerPedidos">
           {pedidos.map((pedido) => (
             <CardPedido key={pedido.id} pedido={pedido} />

@@ -63,13 +63,14 @@
 
 .inputShipping{
     margin-left: 10px;
-    width: 40% !important;
+    width: 70% !important;
 }
 
 .subTotal{
     background-color: #D8D8D8;
     padding: 15px;
-    text-align: right;
+    text-align: left;
+    font-size: 1.5rem;
 }
 
 .total{
@@ -103,4 +104,8 @@
 .checkoutButton:hover{
     background-color:#086b5e;
     color: #fff;
+}
+
+.pointerCursor{
+    cursor: pointer;
 }

@@ -2,6 +2,8 @@ import React from "react";
 import "./CardPedido.css";
 import { MdInfoOutline } from 'react-icons/md';
 import { RiTruckFill } from 'react-icons/ri';
+import { Button } from 'react-bootstrap';
+
 
 
 
@@ -13,12 +15,15 @@ function CardPedido({pedido}){
       <div className="pedidoStatus"><MdInfoOutline />{pedido.status}</div>  
       <div className="pedidoDestino"><RiTruckFill/>{pedido.destino}</div>  
       <div className="pedidoTotal">{pedido.total}</div>  
-      <div className="pedidoBotao"><button>{pedido.button}</button></div>
+      <div className="pedidoBotao"><Button variant="primary">{pedido.button}</Button>{' '}</div>
 
     </div>);
+
 }
 
 export default CardPedido;
+
+
 
 
 

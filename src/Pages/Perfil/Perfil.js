@@ -4,6 +4,7 @@ import DadosPessoais from "../../components/DadosPessoais/DadosPessoais";
 import Endereços from "../../components/Endereços";
 import "./Perfil.css";
 
+
 const pedidos = [
   {
     id: 1,

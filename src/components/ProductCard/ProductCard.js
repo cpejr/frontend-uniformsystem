@@ -9,7 +9,7 @@ function ProductCard (props){
                 <img className = "imageProduct" src = "blusa1.png"></img>
             </div>
             <div className = "productDescription">{props.product.model_description}</div>
-            <div className = "productPrice">R${(props.product.price)}</div>
+            <div className = "productPrice">{(props.product.price).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
             <div className="Button">
                 <Link to={`/shop/${props.product.product_model_id}`} className="buyButton">COMPRAR</Link>
             </div>

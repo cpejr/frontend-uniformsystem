@@ -20,6 +20,7 @@ const PRICE_OPTIONS = [
   'R$50,00 - R$100,00',
   'R$100,00 - R$150,00',
   'Acima de R$150,00',
+  'Qualquer valor'
 ]
 //as constantes que eu acrescentei
 const total = [
@@ -124,7 +125,7 @@ function Loja() {
   function handlePriceChange(e) {
     let min = 0;
     let max = 0;
-    const newFilter = {...filter};
+    const newFilter = { ...filter };
     delete newFilter.min;
     delete newFilter.max;
 
@@ -147,13 +148,17 @@ function Loja() {
       case 'Acima de R$150,00':
         min = 150;
         break;
+      case 'Qualquer valor':
+        min = 0;
+        max = 0;
+        break;
     }
 
-    if(min > 0)
+    if (min > 0)
       newFilter.min = min;
-    if(max > 0)
+    if (max > 0)
       newFilter.max = max;
-    
+
     setFilter(newFilter);
 
   }
@@ -198,11 +203,10 @@ function Loja() {
 
         <FaSearch onClick={findProduct} className="searchButton" />
       </div>
+      
       <div className="shopContainer">
-
+        
         <div className="filterContainer">
-          {/* <p>{JSON.stringify(filter)}</p> */}
-
           <div className="filterTitleProducts">
             <FaFilter />  FILTROS
         </div>
@@ -210,7 +214,7 @@ function Loja() {
           {FILTER_OPTIONS.map((option, index) => {
             return (
               <div className="filtersProducts">
-                <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange} />
+                <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange}/>
                 <label for={`filter-${index}`}>{option}</label>
               </div>
             )

@@ -55,14 +55,14 @@
     width: 200px;
 }
 
-.filterPrice label{
-    display: flex;
-    flex-grow: 1;
-}
-
 .filterPrice{
     display: flex;
     flex-direction: row;
+}
+
+.filterPrice label{
+    display: flex;
+    flex-grow: 1;
 }
 
 .pagination{

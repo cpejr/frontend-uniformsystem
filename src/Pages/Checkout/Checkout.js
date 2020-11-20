@@ -2,6 +2,10 @@ import React from 'react';
 
 import camisa from '../../Assets/camisa.jpg';
 
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import './Checkout.css'
 
@@ -35,7 +39,23 @@ function Checkout(){
             <div className="aboutPayment">
               <h2>Pagamento</h2>
 
-              Acordeão
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                >
+                  Cartão de Crédito
+                </AccordionSummary>
+                <AccordionDetails></AccordionDetails>
+              </Accordion>
+              <Accordion>
+              <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                >
+                  Boleto
+                </AccordionSummary>
+                <AccordionDetails></AccordionDetails>
+              </Accordion>
+
             </div>
         </div>
 

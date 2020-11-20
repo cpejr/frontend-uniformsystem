@@ -17,13 +17,13 @@ function MobileHeader() {
     return (
         <div className="cell_header" /* style={{display: 'flex', flexDirection: 'column'}} */>
              <div className="logo_container">
-                    <Link to="/home">
+                    <Link to="/">
                         <img src={Logo} alt="Logo" className="Logo" />
                     </Link>
                 </div>
             <div className="header_content">
                 <div className="icons">
-                    <Link className="icon" to="/home">
+                    <Link className="icon" to="/">
                         HOME
                     </Link>
                     <Link className="icon" to="/shop">

@@ -20,12 +20,12 @@ function Header() {
         <div className="all_header">
             <div className="header_content">
                 <div className="logo_container">
-                    <Link to="/home">
+                    <Link to="/">
                         <img src={Logo} alt="Logo" className="Logo" />
                     </Link>
                 </div>
                 <div className="icons">
-                    <Link className="icon" to="/home">
+                    <Link className="icon" to="/">
                         HOME
                     </Link>
                     <Link className="icon" to="/shop">
@@ -46,7 +46,7 @@ function Header() {
                             }}
                         >
                             <FaUser className="user_icon" />{" "}
-                            <div style={{ width: "fit-content" }}>ENTRAR</div>
+                            <div style={{ width: "fit-content", cursor: "pointer"}}> ENTRAR </div>
                             <FaAngleDown className="arrow_icon" />
                         </div>
                         {ClickLogin && <DropDownLoginContent setClickLogin={setClickLogin}/> }
@@ -62,7 +62,7 @@ function Header() {
                         >
                             <FaShoppingCart
                                 className="cart_icon"
-                                style={{ margin: "0 30px" }}
+                                style={{ margin: "0 30px", cursor: "pointer"}}
                             />
                         </div>
                         {ClickCart && <DropDownCartContent setClickCart={setClickCart}/>}

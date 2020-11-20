@@ -13,6 +13,8 @@
     border-left: solid 0.5px rgba(0, 0, 0, 0.2);
     border-right: solid 0.5px rgba(0, 0, 0, 0.2);
     border-bottom: solid 0.5px rgba(0, 0, 0, 0.2);
+
+    z-index: 1;
 }
 
 .all_window .blueLine {
@@ -138,11 +140,12 @@
     border: solid 0.5px #ccc;
     border-radius: 10px;
     width: 300px;
-    height: 200px;
+    height: 250px;
     background-color: #fff;
     position: absolute;
     top: 23px;
     right: 0px;
+    z-index: 1;
 }
 
 .drop_content .title_login {
@@ -198,6 +201,79 @@
 .drop_content .forgetPassword {
     margin: 0 10px;
     color: #666;
+    cursor: pointer;
 }
 
 /* Fim LoginContent -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+/*Começo Modal ForgetPassword*/
+
+.title-modal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+}
+
+.title-modal span{
+    margin-left: 3%;
+}
+
+.conteudo-modal {
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    margin: 5% 0 5% 0;
+}
+
+.conteudo-modal input{
+    border: 1px solid #707070;
+    border-radius: 40px;
+    width: 80%;
+    height: 40px;
+    margin-bottom: 3%;
+    padding-left: 3%;
+    font-size: 1.1rem;
+}
+
+.conteudo-modal .modalbutton{
+    background-color: #8ED7CD;
+    border: none;
+    border-radius: 40px;
+    width: 30%;
+    font-size: 1.3rem;
+    color: black;
+    margin-bottom: 3%;
+}
+
+.conteudo-modal p{
+    font-size: 1.1rem;
+    color: black;
+}
+
+
+/* Fim Modal ForgetPassword -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+@media (max-width: 430px){
+    .title-modal{
+        font-size: 2rem;
+        margin-bottom: 3%;
+    }
+    .conteudo-modal input{
+        width: 95%;
+        height: 50px;
+        margin-bottom: 5%;
+        padding-left: 5%;
+        font-size: 1.5rem;
+    }
+    .conteudo-modal .modalbutton{
+        width: 40%;
+        font-size: 1.8rem;
+        margin-bottom: 5%;
+    }
+    .conteudo-modal p{
+        font-size: 1.5rem;
+        text-align: center;
+    }
+}

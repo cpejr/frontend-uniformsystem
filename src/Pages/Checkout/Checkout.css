@@ -1,5 +1,15 @@
-h1, h2, button, span, strong {
+h1, h2, button, span, strong, label {
     font-family: 'Century Gothic';
+}
+
+input{
+    outline: none;
+    max-width: 70%;
+}
+
+label{
+    margin: 0 !important;
+    font-size: 15px; 
 }
 
 .fullContent{
@@ -275,6 +285,7 @@ h1, h2, button, span, strong {
 .MuiAccordion-root{
     width: 90%;
     background-color: #8ED7CD !important;
+    border: 0.7px solid #CCC;
 }
 
 .MuiAccordion-root + .MuiAccordion-root{
@@ -287,6 +298,75 @@ h1, h2, button, span, strong {
 
 .MuiAccordionSummary-content{
     font-size: 30px;
+}
+
+.MuiAccordionDetails-root{
+    background-color: #fff;
+    flex-direction: column;
+    align-items: center;
+}
+
+.MuiButton-contained{
+
+    background-color: #8ED7CD !important;
+
+    margin: 30px 0 10px 0 !important;
+
+    outline: none !important;
+    border: none;
+
+    transition: background-color 0.6s ease !important;
+}
+
+.MuiButton-contained:hover{
+    background-color: #b6eee7 !important;
+}
+
+.MuiButton-contained span{
+    font-size: 25px;
+    font-family: 'Century Gothic';
+}
+
+.creditCardInfo{
+    width: 90%;
+    margin: 0 auto;
+}
+
+.divInputLabelError{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.inputsTogether{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.inputsTogether + .inputsTogether{
+    margin-top: 10px;
+}
+
+.inputsTogether .divInputLabelError + .divInputLabelError{
+    margin-left: auto;
+}
+
+.inputsBirthday{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputsBirthday input{
+    width: 60px;
+}
+
+.inputsBirthday input + input{
+    margin-left: 8px;
 }
 
 @media(max-width: 800px){
@@ -315,6 +395,22 @@ h1, h2, button, span, strong {
         width: 60%;
 
         font-size: 1.3rem;
+    }
+
+    .MuiAccordion-root{
+        width: 100%;
+    }
+
+    .inputsTogether{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .inputsTogether .divInputLabelError + .divInputLabelError{
+        margin-left: 0;
+        margin-top: 10px;
     }
 
 }

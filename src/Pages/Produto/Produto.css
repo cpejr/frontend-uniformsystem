@@ -1,0 +1,169 @@
+.all_page {
+    width: 100%;
+    height: 80vh;
+
+    display: flex;
+    justify-content: center;
+
+    box-sizing: border-box;
+}
+
+.all_page .page_content {
+    width: 97%;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Daqui pra baixo temos somente a parte da imagem. */
+
+.all_page .page_content .shirt_images {
+    width: 34%;
+    /* background-color: red; */
+    height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 5px 0 0 0;
+}
+
+.all_page .page_content .shirt_images .div_main_image {
+    height: 70%;
+}
+
+.all_page .page_content .shirt_images .div_main_image .main_image {
+    /* max-width: 100%;
+    max-height: 90%; */
+    /* width: 100%; */
+    height: 100%;
+}
+
+.all_page .page_content .shirt_images .div_secundary_images {
+    height: 15%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    overflow-x: auto;
+}
+
+.all_page .page_content .shirt_images .div_secundary_images .secundary_images {
+    width: 33%;
+    max-height: 100%;
+    padding-left: 1px;
+}
+
+.all_page
+    .page_content
+    .shirt_images
+    .div_secundary_images
+    .secundary_images:hover {
+    border: solid 1px black;
+}
+
+/* Daqui pra baixo teremos a parte das informações das camisas */
+.all_page .page_content .shirt_informations {
+    width: 65%;
+    height: 100%;
+    background-color: blue;
+}
+
+.all_page .page_content .shirt_informations .title_and_description {
+    height: 20%;
+    margin-bottom: 10px;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .title_and_description
+    .title_shirt {
+    font-weight: bold;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .title_and_description
+    .div_descript {
+    margin: -3px 0 0 0;
+}
+.all_page
+    .page_content
+    .shirt_informations
+    .title_and_description
+    .div_descript
+    .descript_text {
+    margin: -5px 0 0 0;
+}
+
+.all_page .page_content .shirt_informations .two_columns {
+    display: flex;
+    justify-content: space-between;
+    height: 78%;
+}
+
+.all_page .page_content .shirt_informations .two_columns .priceAndImages {
+    width:39%;
+    background-color: yellow !important;
+    display: flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:space-between;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .teste {
+        height: 70%;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .images {
+    width: 50%;
+    height: 60%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .images
+    .image {
+    margin: 5px;
+    border-radius: 10px;
+    max-width: 50%;
+    max-height: 50%;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .images
+    .image:hover {
+    border: solid 1px black;
+}
+
+.all_page .page_content .shirt_informations .two_columns .order_container {
+    width: 59%;
+    height: 98%;
+    background-color: green !important;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+}
+/* .all_page .page_content .shirt_informations .two_columns */

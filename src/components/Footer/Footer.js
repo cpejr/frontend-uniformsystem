@@ -59,7 +59,7 @@ function MobileFooter() {
                 </Link>
             </div>
             <div className="content_footer">
-                <div className="firstLine">
+                {/* <div className="firstLine"> */}
                     <a href="https://www.google.com.br" className="customize">
                         <p
                             className="address"
@@ -72,8 +72,8 @@ function MobileFooter() {
                     <a href="https://www.google.com.br" className="customize">
                         (31) 99999-9999
                     </a>
-                </div>
-                <div className="secondLine">
+               {/*  </div>
+                <div className="secondLine"> */}
                     <a href="https://www.google.com.br" className="contact">
                         CONTATO
                     </a>
@@ -90,7 +90,7 @@ function MobileFooter() {
                         <a href="https://www.whatsapp.com" className="whatsapp">
                             <FaWhatsapp />
                         </a>
-                    </div>
+                    {/* </div> */}
                 </div>
             </div>
         </div>

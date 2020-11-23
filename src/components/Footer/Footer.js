@@ -21,6 +21,7 @@ function ComputerFooter() {
                             height: "80% !important",
                             textAlign: "center",
                             fontSize: "14px",
+                            margin: "auto",
                         }}
                     >
                         Rua Alguma Coisa, 100, Liberdade

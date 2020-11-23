@@ -8,17 +8,21 @@
     box-sizing: border-box;
 }
 
-.all_page .page_content {
+.all_page .page_content{
     width: 97%;
 
     display: flex;
     justify-content: space-between;
 }
 
+.all_page .page_content .small_title {
+    font-weight: bold;
+}
+
 /* Daqui pra baixo temos somente a parte da imagem. */
 
 .all_page .page_content .shirt_images {
-    width: 34%;
+    width: 35%;
     /* background-color: red; */
     height: 80vh;
 
@@ -32,6 +36,7 @@
 
 .all_page .page_content .shirt_images .div_main_image {
     height: 70%;
+    margin: 0px 0 50px 0;
 }
 
 .all_page .page_content .shirt_images .div_main_image .main_image {
@@ -41,23 +46,39 @@
     height: 100%;
 }
 
-.all_page .page_content .shirt_images .div_secundary_images {
-    height: 15%;
-    width: 100%;
-    margin: 0;
+.all_page .page_content .shirt_images .container_secundary_images {
     display: flex;
+    align-items: center;
     overflow-x: auto;
+    width: 80%;
+    height: 15%;
+    margin: 0;
 }
 
-.all_page .page_content .shirt_images .div_secundary_images .secundary_images {
+.all_page
+    .page_content
+    .shirt_images
+    .container_secundary_images
+    .div_secundary_images {
+    width: 100%;
+    height: 100%;
+}
+
+.all_page
+    .page_content
+    .shirt_images
+    .container_secundary_images
+    .div_secundary_images
+    .secundary_images {
     width: 33%;
-    max-height: 100%;
+    height: 100%;
     padding-left: 1px;
 }
 
 .all_page
     .page_content
     .shirt_images
+    .container_secundary_images
     .div_secundary_images
     .secundary_images:hover {
     border: solid 1px black;
@@ -119,9 +140,18 @@
     .shirt_informations
     .two_columns
     .priceAndImages
-    .teste {
+    .div_aux {
     height: 70%;
 }
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .div_aux
+    .price{
+        font-weight:bold;
+    }
 
 .all_page
     .page_content
@@ -129,8 +159,8 @@
     .two_columns
     .priceAndImages
     .images {
-    width: 50%;
-    height: 60%;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
 }
@@ -144,9 +174,43 @@
     .image {
     margin: 5px;
     border-radius: 10px;
+    border: 1px solid black;
     max-width: 50%;
     max-height: 50%;
 }
+
+
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .frete {
+    display: flex;
+    flex-direction: column;
+}
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .frete
+    input {
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .frete
+    a {
+    text-decoration: underline;
+    color: #666;
+}
+
 
 .all_page
     .page_content
@@ -167,49 +231,119 @@
     justify-content: space-between;
 }
 
-.all_page .page_content .shirt_informations .two_columns .order_container .quantity{
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .quantity {
     display: flex;
     align-items: center;
-
 }
 
-.all_page .page_content .shirt_informations .two_columns .order_container .quantity input{
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .quantity
+    input {
     width: 50px;
-    border-radius:3px;
-    border:1px solid black;
-    margin:5px;
+    border-radius: 3px;
+    border: 1px solid black;
+    margin: 5px;
 }
 
-.all_page .page_content .shirt_informations .two_columns .order_container .interprise_logo{
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .quantity
+    h6 {
+    margin-top: auto;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .interprise_logo {
     display: flex;
     flex-direction: column;
     /* align-items:center; */
     /* justify-content:center; */
 }
 
-.all_page .page_content .shirt_informations .two_columns .order_container .interprise_logo button{
-    margin:auto;
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .interprise_logo
+    button {
+    margin: auto;
+}
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .div_cart_button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.all_page .page_content .shirt_informations .two_columns .order_container .cart_button{
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .div_cart_button
+    .cart_button {
     display: flex;
     align-items: center;
-    justify-content:center;
-    
+    justify-content: center;
+
     word-wrap: normal;
     width: 200px;
 }
 
-.all_page .page_content .shirt_informations .two_columns .order_container .cart_button .icon{
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .div_cart_button
+    .cart_button
+    * {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+}
+
+.all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .order_container
+    .cart_button
+    .icon {
     height: 40px;
 }
 
-#stilyzed_button{
-    border:0;
+#stylized_button {
+    border: 0;
     border-radius: 25px;
     /* width: fit-content; */
-    background-color: #4DCDBC;
-    padding:1px 30px;
+    background-color: #4dcdbc;
+    padding: 1px 30px;
+    cursor: pointer;
 }
 
-/* .all_page .page_content .shirt_informations .two_columns */
+#stylized_button:hover{
+    background-color: #369c8f;
+}

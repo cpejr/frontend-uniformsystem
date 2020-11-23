@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { FaCheck, FaShoppingCart } from "react-icons/fa";
+import {
+    FaCheck,
+    FaShoppingCart,
+    FaAngleRight,
+    FaAngleLeft,
+} from "react-icons/fa";
 
 import "./Produto.css";
 
 import Image from "../../Assets/camisa.jpg";
+import Camisa from "../../Assets/Foto_camisa.png";
 
 const secundary_images = [
     {
@@ -11,7 +17,7 @@ const secundary_images = [
         alt: "alt_img2",
     },
     {
-        src: Image,
+        src: Camisa,
         alt: "alt_img3",
     },
     {
@@ -43,7 +49,7 @@ function Produto() {
     function Content() {
         return (
             <div
-                className="checked"
+                className='checked'
                 style={{
                     width: "100%",
                     height: "100%",
@@ -55,7 +61,7 @@ function Produto() {
                     alignItems: "center",
                 }}
             >
-                <FaCheck color="white" />
+                <FaCheck color='white' />
             </div>
         );
     }
@@ -63,15 +69,15 @@ function Produto() {
     function CheckBox() {
         const [checked, setChecked] = useState(false);
         return (
-            <div className="CheckBoxes">
+            <div className='CheckBoxes'>
                 <div
-                    className="square"
+                    className='square'
                     onClick={() => setChecked(!checked)}
                     style={{
                         width: "30px",
                         height: "25px",
                         backgroundColor: "white",
-                        border: "solid 1px black",
+                        border: "solid 1px #666",
                         borderRadius: "5px",
                     }}
                 >
@@ -83,19 +89,19 @@ function Produto() {
 
     function CheckBoxes() {
         return (
-            <div className="" style={{ display: "flex" }}>
+            <div className='' style={{ display: "flex" }}>
                 {obj_sizes.map((size, index) => {
                     return (
                         <div
-                            className="size"
+                            className='size'
                             key={index}
                             style={{
                                 display: "flex",
                                 flexDirection: "row",
-                                paddingLeft: "5px",
+                                padding: "5px 10px",
                             }}
                         >
-                            {size} {CheckBox()}
+                            {size}{CheckBox()}
                         </div>
                     );
                 })}
@@ -103,95 +109,127 @@ function Produto() {
         );
     }
 
+    function MainImage(index=0){
+        //retorna uma imagem principal, com base no clique da imagem
+        return <img  className='main_image' src={(secundary_images[index]).src} alt='main_imagem'></img>
+    }  
+
+    const [index, setIndex]=useState(0);
+
     return (
-        <div className="all_page">
-            <div className="page_content">
-                <div className="shirt_images">
-                    <div className="div_main_image">
-                        <img src={Image} alt="Imagem" className="main_image" />
+        <div className='all_page'>
+            <div className='page_content'>
+                <div className='shirt_images'>
+                    <div className='div_main_image'>
+                        {MainImage(index)}
                     </div>
-                    <div className="div_secundary_images">
-                        {secundary_images.map((image) => {
-                            return (
-                                <img
-                                    src={image.src}
-                                    alt={image.alt}
-                                    className="secundary_images"
-                                />
-                            );
-                        })}
+                    <div className='container_secundary_images'>
+                        <div className='left_arrow'>
+                            <FaAngleLeft size='30px' />
+                        </div>
+                        <div className='div_secundary_images'>
+                            {secundary_images.map((image, index) => {
+                                return (
+                                    <img
+                                        onClick={() =>setIndex(index)}
+                                        key={index}
+                                        src={image.src}
+                                        alt={image.alt}
+                                        className='secundary_images'
+                                    />
+                                );
+                            })}
+                        </div>
+                        <div className='right_arrow'>
+                            <FaAngleRight size='30px' />
+                        </div>
                     </div>
                 </div>
 
-                <div className="shirt_informations">
-                    <div className="title_and_description">
-                        <h1 className="title_shirt">{ProdutoEscolhido.name}</h1>
-                        <div className="div_descript">
-                            <h5>Descrição:</h5>
-                            <p className="descript_text">
+                <div className='shirt_informations'>
+                    <div className='title_and_description'>
+                        <h1 className='title_shirt'>{ProdutoEscolhido.name}</h1>
+                        <div className='div_descript'>
+                            <h6 className='small_title'>Descrição:</h6>
+                            <p className='descript_text'>
                                 {ProdutoEscolhido.description}
                             </p>
                         </div>
                     </div>
 
-                    <div className="two_columns">
-                        <div className="priceAndImages">
-                            <div className="teste">
-                                <div className="price">
+                    <div className='two_columns'>
+                        <div className='priceAndImages'>
+                            <div className='div_aux'>
+                                <div className='price'>
                                     <h2>R${ProdutoEscolhido.price},00</h2>
                                 </div>
-                                <div className="images">
+                                <div className='images'>
                                     {ProdutoEscolhido.images.map((image) => {
                                         return (
                                             <img
                                                 src={image.src}
                                                 alt={image.a}
-                                                className="image"
+                                                className='image'
                                             />
                                         );
                                     })}
                                 </div>
                             </div>
-                            <div className="frete">
-                                <h6>Calcule o frete:</h6>
-                                <input type="text" /> <button>Calcular</button>
-                                <p>Não sei meu cep</p>
+                            <div className='frete'>
+                                <div>
+                                    <h6>Calcule o frete:</h6>
+                                    <input type='text' placeholder=' CEP' />{" "}
+                                    <button id='stylized_button'>
+                                        Calcular
+                                    </button>
+                                </div>
+
+                                <a href='http://www.google.com'>
+                                    Não sei meu cep
+                                </a>
                             </div>
                         </div>
-                        <div className="order_container">
-                            <div className="sizes">
-                                <h5>Tamanho</h5>
+                        <div className='order_container'>
+                            <div className='sizes'>
+                                <h6 className='small_title'>Tamanho</h6>
                                 <h6>Feminino</h6>
                                 {CheckBoxes()}
                                 <h6>Masculino</h6>
                                 {CheckBoxes()}
                             </div>
-                            <div className="quantity">
-                                <h5>Quantidade:</h5>
-                                <input type="number" />
+                            <div className='quantity'>
+                                <h6 className='small_title'>Quantidade:</h6>
+                                <input type='number' />
                             </div>
-                            <div className="interprise_logo">
-                                <h5>Logo da sua empresa:</h5>
+                            <div className='interprise_logo'>
+                                <h6 className='small_title'>
+                                    Logo da sua empresa:
+                                </h6>
                                 <p>
                                     Envie o logo da sua empresa abaixo e veja
                                     como fica:
                                 </p>
                                 <button
-                                    id="stilyzed_button"
-                                    className="send_logo"
+                                    id='stylized_button'
+                                    className='send_logo'
                                 >
                                     Carregue a sua logo!
                                 </button>
                             </div>
-                            <button
-                                id="stilyzed_button"
-                                className="cart_button"
-                            >
-                                <FaShoppingCart className="icon" size="35px" />
-                                <div className="text">
-                                    <p>ADICIONAR AO CARRINHO</p>
+                            <div className='div_cart_button'>
+                                <div
+                                    id='stylized_button'
+                                    className='cart_button'
+                                >
+                                    <FaShoppingCart
+                                        className='icon'
+                                        size='35px'
+                                    />
+                                    <div className='text'>
+                                        <p>ADICIONAR AO CARRINHO</p>
+                                    </div>
                                 </div>
-                            </button>
+                            </div>
                         </div>
                     </div>
                     {/* <div className="final_page"></div> */}

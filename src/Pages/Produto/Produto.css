@@ -223,12 +223,15 @@
 }
 
 .all_page .page_content .shirt_informations .two_columns .order_container {
-    width: 59%;
+    width: 60%;
     height: 98%;
     /* background-color: green !important; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    padding-left:30px;
+
 }
 
 .all_page

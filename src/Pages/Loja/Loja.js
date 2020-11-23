@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
+
 import { FaFilter, FaSearch, FaTruckLoading } from 'react-icons/fa';
 import _ from 'lodash';
+
 
 const FILTER_OPTIONS = [
   'FEMININO',

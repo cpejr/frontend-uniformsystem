@@ -7,6 +7,8 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+
 import Button from '@material-ui/core/Button';
 
 import './Checkout.css'
@@ -37,47 +39,67 @@ function InputWithLabel({label, width, setInfo, error, maxLenght}){
 function Checkout(){
 
   const [errorBirthInput, setErrorBirthInput] = useState('');
+  const [errorInstallmentOptions, setErrorInstallmentOptions] = useState('');
+
   const [dayStored, setDayStored] = useState('');
   const [monthStored, setMonthStored] = useState('');
   const [yearStored, setYearStored] = useState('');
 
-  function validateBirthInput(type){
+  const [installmentOptions, setInstallmentOptions] = useState(' ');
 
-    var data = new Date(Number(yearStored),  Number(monthStored)-1, Number(dayStored), 0, 0, 0)
+  useEffect(() => {
 
-    console.log(data)
-    console.log(isNaN(Date.parse(data)))
-
-    if(type === 'day'){
-      console.log('aqui')
-      if( (Number(dayStored) <= 31) || (Number(dayStored) > 0) || (!isNaN(Number(dayStored)))){
-        setErrorBirthInput('')
-      }else{
-        setErrorBirthInput('Data inválida')
-      }
+    function validateBirthInput(type){
       
-    }
-    else if(type === 'month'){
-        if( (Number(monthStored) <= 12) || (Number(monthStored) > 0) || (!isNaN(Number(monthStored)))){
+      if(type === 'day'){
+        if( (parseInt(dayStored, 10) <= 31) && (parseInt(dayStored, 10) > 0) && (!isNaN(Number(dayStored)))){
           setErrorBirthInput('')
         }else{
           setErrorBirthInput('Data inválida')
         }
         
-      }else{
-          var today = new Date()
-          if( (Number(yearStored) <= today.getFullYear()) || (Number(yearStored) > 0) || (!isNaN(Number(yearStored)))){
+      }
+      else if(type === 'month'){
+          if( (Number(monthStored) <= 12) && (Number(monthStored) > 0) && (!isNaN(Number(monthStored)))){
             setErrorBirthInput('')
           }else{
             setErrorBirthInput('Data inválida')
           }
+          
+        }else{
+          var today = new Date()
+          console.log('aqui')
+          if( (parseInt(yearStored, 10) <= today.getFullYear()) && (parseInt(yearStored, 10) > 0) && (!isNaN(Number(yearStored)))){
+            setErrorBirthInput('')
+          }else{
+            setErrorBirthInput('Data inválida')
+          }
+        }
+        
+      }
+      
+      validateBirthInput('day')
+      validateBirthInput('month')
+      validateBirthInput('year')
+      
+  }, [dayStored, monthStored, yearStored]);
+
+useEffect(() => {
+
+  const maximumInstallment = 10
+
+  function validateInstallmentOptions(){
+    if( (parseInt(installmentOptions,10) >= 0) && (parseInt(installmentOptions,10) <= maximumInstallment) && (!isNaN(parseInt(installmentOptions,10)))){
+      setErrorInstallmentOptions('')
     }
-
+    else{
+      setErrorInstallmentOptions('Parcelamento inválido')
+    }
   }
 
-  function validateInstallmentOptions(value){
-    console.log('aqui')
-  }
+  validateInstallmentOptions()
+
+}, [installmentOptions]);
 
   const [cardNumberStored, setCardNumber] = useState("");
   const [securityNumberStored, setSecurityNumber] = useState('');
@@ -100,11 +122,7 @@ function Checkout(){
     validateInput('cardName')
   }, [cardNameStored]);
 
-  useEffect(() => {
-    validateBirthInput('day')
-    // validateBirthInput('month')
-    // validateBirthInput('year')
-  }, [dayStored, monthStored, yearStored]);
+  
 
 
   function validateInput(type){
@@ -115,20 +133,20 @@ function Checkout(){
         setErrorInputCardNumber('')
       }
       else{
-        setErrorInputCardNumber('Número de cartão incorreto.')
+        setErrorInputCardNumber('Número de cartão incorreto')
       }
     }else if(type ==='securityNumber'){
 
       if(!isNaN(Number(securityNumberStored) )){
         setErrorInputSecurityNumber('')
       }else{
-        setErrorInputSecurityNumber('Código de segurança incorreto.')
+        setErrorInputSecurityNumber('Código incorreto')
       }
 
     }else{
 
       if(!isNaN(Number(cardNameStored) )){
-        setErrorInputCardName('Nome inválido.')
+        setErrorInputCardName('Nome inválido')
       }
       else{
         setErrorInputCardName('')
@@ -145,7 +163,7 @@ function Checkout(){
         <div className="leftSide">
 
           <div className="aboutProduct">
-            <img src={camisa} alt=""/>
+            <img src={camisa} alt="Camisa"/>
             <div className="infoProduct">
               <span>
                 Nome do produto: Produto
@@ -213,10 +231,10 @@ function Checkout(){
                         <div className="inputsInstallment" >
                           <input type="text" name="input" 
                             style={{width: '150px'}}
-                            onChange={(value) => validateInstallmentOptions(value)} />
+                            onChange={(e) => setInstallmentOptions(e.target.value)} />
                         </div>
                         <span style={{color: '#ff0033', fontSize: '15px'}}>
-                          {errorBirthInput}
+                          {errorInstallmentOptions}
                         </span>
                       </div>
                     </div>
@@ -274,7 +292,7 @@ function Checkout(){
 
               <div className="changeAddressArea">
                 <span>Quer receber seus produtos em outro endereço?</span>
-                <button type="button">Alterar endereço</button>
+                <Button type="button">Alterar endereço</Button>
               </div>
             </div>
 
@@ -282,7 +300,7 @@ function Checkout(){
               <strong>Frete</strong>
               <div className="valueShipping">
                 <div className="leftValueShipping">
-                  <img src="" alt=""/>
+                  <LocalShippingIcon />
                   <span>Valor</span>
                 </div> 
                 <div className="rightValueShipping">
@@ -301,9 +319,9 @@ function Checkout(){
 
       </div>
 
-      <button type="button" className="purchaseFinished">
+      <Button type="button" className="purchaseFinished">
         Finalizar Compra
-      </button>
+      </Button>
     </div>
   );
 }

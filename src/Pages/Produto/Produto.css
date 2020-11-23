@@ -67,7 +67,7 @@
 .all_page .page_content .shirt_informations {
     width: 65%;
     height: 100%;
-    background-color: blue;
+    /* background-color: blue; */
 }
 
 .all_page .page_content .shirt_informations .title_and_description {
@@ -106,12 +106,12 @@
 }
 
 .all_page .page_content .shirt_informations .two_columns .priceAndImages {
-    width:39%;
-    background-color: yellow !important;
+    width: 39%;
+    /* background-color: yellow !important; */
     display: flex;
-    flex-direction:column;
-    justify-content:space-between;
-    align-items:space-between;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: space-between;
 }
 
 .all_page
@@ -120,7 +120,7 @@
     .two_columns
     .priceAndImages
     .teste {
-        height: 70%;
+    height: 70%;
 }
 
 .all_page
@@ -161,9 +161,55 @@
 .all_page .page_content .shirt_informations .two_columns .order_container {
     width: 59%;
     height: 98%;
-    background-color: green !important;
+    /* background-color: green !important; */
     display: flex;
     flex-direction: column;
-    justify-content:space-between;
+    justify-content: space-between;
 }
+
+.all_page .page_content .shirt_informations .two_columns .order_container .quantity{
+    display: flex;
+    align-items: center;
+
+}
+
+.all_page .page_content .shirt_informations .two_columns .order_container .quantity input{
+    width: 50px;
+    border-radius:3px;
+    border:1px solid black;
+    margin:5px;
+}
+
+.all_page .page_content .shirt_informations .two_columns .order_container .interprise_logo{
+    display: flex;
+    flex-direction: column;
+    /* align-items:center; */
+    /* justify-content:center; */
+}
+
+.all_page .page_content .shirt_informations .two_columns .order_container .interprise_logo button{
+    margin:auto;
+}
+
+.all_page .page_content .shirt_informations .two_columns .order_container .cart_button{
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    
+    word-wrap: normal;
+    width: 200px;
+}
+
+.all_page .page_content .shirt_informations .two_columns .order_container .cart_button .icon{
+    height: 40px;
+}
+
+#stilyzed_button{
+    border:0;
+    border-radius: 25px;
+    /* width: fit-content; */
+    background-color: #4DCDBC;
+    padding:1px 30px;
+}
+
 /* .all_page .page_content .shirt_informations .two_columns */

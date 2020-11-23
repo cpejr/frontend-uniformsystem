@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaCheck, FaShoppingCart } from "react-icons/fa";
 
 import "./Produto.css";
 
@@ -36,9 +37,70 @@ const ProdutoEscolhido = {
     ],
 };
 
+const obj_sizes = ["PP", "P", "M", "G", "GG"];
+
 function Produto() {
+    function Content() {
+        return (
+            <div
+                className="checked"
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#4DCDBC",
+                    /* border: "solid 1px black", */
+                    borderRadius: "4px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <FaCheck color="white" />
+            </div>
+        );
+    }
+
+    function CheckBox() {
+        const [checked, setChecked] = useState(false);
+        return (
+            <div className="CheckBoxes">
+                <div
+                    className="square"
+                    onClick={() => setChecked(!checked)}
+                    style={{
+                        width: "30px",
+                        height: "25px",
+                        backgroundColor: "white",
+                        border: "solid 1px black",
+                        borderRadius: "5px",
+                    }}
+                >
+                    {checked && Content()}
+                </div>
+            </div>
+        );
+    }
+
     function CheckBoxes() {
-        return <div className="CheckBoxes">checkBoxesAqui</div>;
+        return (
+            <div className="" style={{ display: "flex" }}>
+                {obj_sizes.map((size, index) => {
+                    return (
+                        <div
+                            className="size"
+                            key={index}
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                paddingLeft: "5px",
+                            }}
+                        >
+                            {size} {CheckBox()}
+                        </div>
+                    );
+                })}
+            </div>
+        );
     }
 
     return (
@@ -114,11 +176,22 @@ function Produto() {
                                     Envie o logo da sua empresa abaixo e veja
                                     como fica:
                                 </p>
-                                <button className="send_logo">
+                                <button
+                                    id="stilyzed_button"
+                                    className="send_logo"
+                                >
                                     Carregue a sua logo!
                                 </button>
                             </div>
-                            <button>Adicionar ao Carrinho</button>
+                            <button
+                                id="stilyzed_button"
+                                className="cart_button"
+                            >
+                                <FaShoppingCart className="icon" size="35px" />
+                                <div className="text">
+                                    <p>ADICIONAR AO CARRINHO</p>
+                                </div>
+                            </button>
                         </div>
                     </div>
                     {/* <div className="final_page"></div> */}

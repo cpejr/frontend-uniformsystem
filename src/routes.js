@@ -55,7 +55,7 @@ function MenuRoutes() {
                 <Route path="/checkout" export exact component={Checkout} />
                 {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                 logado, você será redirecionado para a página Login. */}
-                <PrivateRoute path="/perfil" export exact component={Perfil} />
+                <Route path="/perfil" export exact component={Perfil} />
                 <Route
                     path="/login"
                     export

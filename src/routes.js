@@ -9,6 +9,9 @@ import Perfil from "./Pages/Perfil";
 import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
 import SignUp from "./Pages/Sign_Up";
+import Checkout from "./Pages/Checkout";
+
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -47,6 +50,7 @@ function MenuRoutes() {
                 <Route path="/" export exact component={Home} />
                 <Route path="/adm" export exact component={Administrador} />
                 <Route path="/shop" export exact component={Loja} />
+                <Route path="/checkout" export exact component={Checkout} />
                 {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                 logado, você será redirecionado para a página Login. */}
                 <PrivateRoute path="/perfil" export exact component={Perfil} />

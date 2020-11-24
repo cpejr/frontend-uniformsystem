@@ -45,7 +45,7 @@ export default function Routes() {
 function MenuRoutes() {
     return (
         <div>
-            <Header />
+            {/* <Header /> */}
             <Switch>
                 <Route path="/" export exact component={Home} />
                 <Route path="/adm" export exact component={Administrador} />
@@ -66,7 +66,7 @@ function MenuRoutes() {
                 {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
                 <Route path="*" component={() => <h1>Page not found</h1>} />
             </Switch>
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 }

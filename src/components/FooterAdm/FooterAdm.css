@@ -1,0 +1,60 @@
+.all_footerAdm {
+    width: 100%;
+    height: 10vh;
+
+    color: white;
+    background-color: #201f24;
+    box-sizing: content-box;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 24px 0 !important;
+    margin-bottom: 0px !important;
+}
+
+.all_footerAdm .content_footer {
+    height: 100%;
+    width: 90%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.all_footerAdm .content_footer .logo {
+    height: 100%;
+}
+
+.all_footerAdm .content_footer .logo .Logo {
+    height: 100%;
+}
+
+
+/* Daqui pra baixo é para o cell footer */
+
+.cell_footerAdm {
+    width: 100vw;
+    min-width: auto;
+    height: fit-content;
+
+    color: white;
+    background-color: #201f24;
+    box-sizing: content-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 24px 0 !important;
+}
+
+.cell_footerAdm .logo {
+    height: 90%;
+}
+
+.cell_footerAdm .logo .Logo {
+    height: 90%;
+}
+

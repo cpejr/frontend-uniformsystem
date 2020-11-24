@@ -1,6 +1,6 @@
 .cell_header {
     width: 100%;
-    min-width: 475px;
+    /* min-width: 475px; */
     height: fit-content;
 
     color: white;

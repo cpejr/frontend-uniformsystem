@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa";
 
 import "./Produto.css";
+import "./Radio.css";
 
 import Image from "../../Assets/camisa.jpg";
 import Camisa from "../../Assets/Foto_camisa.png";
@@ -46,93 +47,80 @@ const ProdutoEscolhido = {
 const obj_sizes = ["PP", "P", "M", "G", "GG"];
 
 function Produto() {
+
     function Content() {
         return (
-            <div
-                className='checked'
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "#4DCDBC",
-                    /* border: "solid 1px black", */
-                    borderRadius: "4px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-            >
+            <div className='checked'>
                 <FaCheck color='white' />
             </div>
         );
     }
 
-    function CheckBox() {
-        const [checked, setChecked] = useState(false);
-        return (
-            <div className='CheckBoxes'>
-                <div
-                    className='square'
-                    onClick={() => setChecked(!checked)}
-                    style={{
-                        width: "30px",
-                        height: "25px",
-                        backgroundColor: "white",
-                        border: "solid 1px #666",
-                        borderRadius: "5px",
-                    }}
-                >
-                    {checked && Content()}
-                </div>
-            </div>
-        );
-    }
+    const [selectedValue, setSelectedValue] = useState(0);
 
-    function CheckBoxes() {
+
+    //essa funcao tem um CSS só pra ela, pois gastou uns esquemas diferenciados pra fazer
+    function Radio(gender) {
         return (
-            <div className='' style={{ display: "flex" }}>
+            <div className={"radio"} style={{ display: "flex" }}>
                 {obj_sizes.map((size, index) => {
+                    let value;
+                    value = gender + "_" + size;
                     return (
-                        <div
-                            className='size'
+                        <label
                             key={index}
-                            style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                padding: "5px 10px",
-                            }}
+                            htmlFor='radio_size_item'
+                            className='radio_container'
+                            onClick={() => setSelectedValue(value)}
                         >
-                            {size}{CheckBox()}
-                        </div>
+                            {size}
+                            <input
+                                type='radio'
+                                name='radio_size_item'
+                                value={value}
+                            ></input>
+                            <span className='radio_checkmark'>
+                                {selectedValue === value ? Content() : null}
+                            </span>
+                        </label>
                     );
                 })}
             </div>
         );
     }
 
-    function MainImage(index=0){
+    function MainImage(indexImage = 0) {
         //retorna uma imagem principal, com base no clique da imagem
-        return <img  className='main_image' src={(secundary_images[index]).src} alt='main_imagem'></img>
-    }  
+        return (
+            <img
+                className='main_image'
+                src={secundary_images[indexImage].src}
+                alt='main_imagem'
+            ></img>
+        );
+    }
 
-    const [index, setIndex]=useState(0);
+    const [indexImage, setIndexImage] = useState(0);
 
     return (
         <div className='all_page'>
             <div className='page_content'>
                 <div className='shirt_images'>
                     <div className='div_main_image'>
-                        {MainImage(index)}
+                        {MainImage(indexImage)}
                     </div>
                     <div className='container_secundary_images'>
                         <div className='left_arrow'>
                             <FaAngleLeft size='30px' />
                         </div>
                         <div className='div_secundary_images'>
-                            {secundary_images.map((image, index) => {
+                            {secundary_images.map((image, indexImage) => {
                                 return (
                                     <img
-                                        onClick={() =>setIndex(index)}
-                                        key={index}
+                                        onClick={() =>
+                                            setIndexImage(indexImage)
+                                        }
+                                        key={indexImage}
                                         src={image.src}
                                         alt={image.alt}
                                         className='secundary_images'
@@ -164,21 +152,27 @@ function Produto() {
                                     <h2>R${ProdutoEscolhido.price},00</h2>
                                 </div>
                                 <div className='images'>
-                                    {ProdutoEscolhido.images.map((image) => {
-                                        return (
-                                            <img
-                                                src={image.src}
-                                                alt={image.a}
-                                                className='image'
-                                            />
-                                        );
-                                    })}
+                                    {ProdutoEscolhido.images.map(
+                                        (image, index) => {
+                                            return (
+                                                <img
+                                                    key={index}
+                                                    src={image.src}
+                                                    alt={image.a}
+                                                    className='image'
+                                                />
+                                            );
+                                        }
+                                    )}
                                 </div>
                             </div>
                             <div className='frete'>
                                 <div>
                                     <h6>Calcule o frete:</h6>
-                                    <input type='text' placeholder=' CEP' />{" "}
+                                    <input
+                                        type='text'
+                                        placeholder=' CEP'
+                                    />{" "}
                                     <button id='stylized_button'>
                                         Calcular
                                     </button>
@@ -193,9 +187,9 @@ function Produto() {
                             <div className='sizes'>
                                 <h6 className='small_title'>Tamanho</h6>
                                 <h6>Feminino</h6>
-                                {CheckBoxes()}
+                                {Radio("Fem")}
                                 <h6>Masculino</h6>
-                                {CheckBoxes()}
+                                {Radio("Mas")}
                             </div>
                             <div className='quantity'>
                                 <h6 className='small_title'>Quantidade:</h6>

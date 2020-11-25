@@ -4,6 +4,8 @@ import { Carousel } from 'react-bootstrap';
 
 import camisa from '../../Assets/camisa.jpg';
 
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+
 
 import './Home.css'
 
@@ -69,6 +71,8 @@ function Home(){
           controls={true}
           indicators={true}
           interval={1000}
+          prevIcon={<MdKeyboardArrowLeft />}
+          nextIcon={<MdKeyboardArrowRight />}
         >
                 <Carousel.Item>
                   <div className="teste">

@@ -19,12 +19,12 @@
     align-items: center;
 
     margin-bottom: 40px;
-    background-color: #aa2b2b;
+    /* background-color: #aa2b2b; */
 }
 
 .carousel{
     width: 90%;
-    background-color: #aa2b2b;
+    /* background-color: #aa2b2b; */
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -42,16 +42,21 @@ justify-content: center;
 }
 
 .carousel-control-prev, .carousel-control-next{
-    width: auto;
+    width: fit-content;
 }
 
-.carousel-control-prev > span, .carousel-control-next > span{
-    background-color:#aa2b2b;
+.carousel-control-prev svg, .carousel-control-next svg{
+    font-size: 95px;
+    color: #707070;
 }
+
+/* .carousel-control-prev > span, .carousel-control-next > span{
+    background-color:#aa2b2b;
+} */
 
 
 .carousel-indicators{
-margin-bottom: -30px;
+    margin-bottom: -30px;
 }
 
 .carousel-indicators li{
@@ -167,6 +172,11 @@ height: 7px !important;
     }
     .carousel-control-next {
         margin-left: 15px;
+    }
+
+    .carousel-control-prev svg, .carousel-control-next svg{
+        font-size: 45px;
+        color: #707070;
     }
 
     .divQuemSomos .conteudoQuemSomos{

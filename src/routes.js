@@ -2,7 +2,13 @@ import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import Home from "./Pages/Home";
-import Administrador from "./Pages/Administrador";
+
+import HomeEditable from "./Pages/Administrador/HomeEditable";
+import OrdersAdm from "./Pages/Administrador/OrdersAdm";
+import ProductsAdm from "./Pages/Administrador/ProductsAdm";
+import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
+
+
 import Loja from "./Pages/Loja";
 import Produto from "./Pages/Produto";
 import Perfil from "./Pages/Perfil";
@@ -40,14 +46,15 @@ export default function Routes() {
     return (
         <BrowserRouter>
             <Switch>
-                <Route path="/" exact component={MenuRoutes} />
-                <Route path="/adm/home" exact component={AdmRoutes} />
+                <Route path="/" component={MenuRoutes} />:
+                <Route path="/adm/home" component={AdmRoutes} />
             </Switch>
         </BrowserRouter>
     );
 }
 
 function MenuRoutes() {
+
     return (
         <div>
             <Header />
@@ -82,12 +89,12 @@ function AdmRoutes() {
     return (
         <div>
             <HeaderAdm />
-            <SidebarAdm>
+            <SidebarAdm >
             <Switch>
-                <Route path="/adm/home" export exact component={Administrador} />
-                {/*<Route path="/adm/pedidos" export exact component={Loja} />
-                <Route path="/adm/produtos" export exact component={Checkout} />
-                <Route path="/adm/funcionarios" export exact component={Checkout} /> */}
+                <Route path="/adm/home" export exact component={HomeEditable} />
+                <Route path="/adm/pedidos" export exact component={OrdersAdm} />
+                <Route path="/adm/produtos" export exact component={ProductsAdm} />
+                <Route path="/adm/funcionarios" export exact component={EmployeeAdm} />
             </Switch>
             </SidebarAdm>
             <FooterAdm />

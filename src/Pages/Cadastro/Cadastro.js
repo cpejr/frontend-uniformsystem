@@ -14,7 +14,6 @@ function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
       />
       <span style={{ color: "#ff0033", fontSize: "15px" }}>{error}</span>
     </div>
-    
   );
 }
 
@@ -212,6 +211,7 @@ function Cadastro() {
             maxLenght={10}
           />
         </div>
+        <div><button className="buttonCad">CRIAR CONTA</button></div>
       </div>
     </div>
   );

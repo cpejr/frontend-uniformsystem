@@ -92,12 +92,7 @@ label {
   border: 0.7px solid #ccc;
 }
 
-.divInputLabelError {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-}
+
 
 @media (max-width: 800px) {
   .mainContent {
@@ -122,8 +117,8 @@ label {
   .fullContent .purchaseFinished {
     padding: 8px 10px;
     width: 60%;
-
     font-size: 1.3rem;
+    margin-bottom: 15px;
   }
 }
 
@@ -132,17 +127,43 @@ label {
   padding: 5px;
   border: 3px solid black;
   margin-top: 40px;
-  margin-bottom: 50px;
   line-height: 30px;
   justify-content: center;
   display: flex;
-}
+  flex-direction: column;
+  width: fit-content;
+  margin: auto;
+  min-width: 500px;
+  margin: auto;
 
+}
+.inputsTogetherCad * {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 500px;
+
+}
 
 .titleCad{
   display: flex;
   justify-content: center;
   margin-top: 5%;
 }
+
+.buttonCad{
+  display: flex;
+  justify-content: center;
+}
+
+.inputsEndereço{
+  margin-bottom: 5%;
+}
+
+.buttonCad{
+  display: flex;
+  align-items: center;
+}
+
 
 

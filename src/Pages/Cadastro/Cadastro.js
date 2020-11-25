@@ -139,7 +139,7 @@ function Cadastro() {
     }
   }
   return (
-    <div>
+    <div className="fullPage">
       <h1 className="title">CADASTRO</h1>
       <div className="inputsTogether">
         <div className="inputsPrimeira">

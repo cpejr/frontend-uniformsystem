@@ -141,4 +141,11 @@ label {
       padding: 30px;
       border: 30px;
   }
+  .fullPage{
+      display: flex;
+      justify-content: center;
+      border: 20px;
+      margin: 20px;
+      border-color: black;
+  }
 }

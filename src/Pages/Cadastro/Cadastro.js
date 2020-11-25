@@ -14,6 +14,7 @@ function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
       />
       <span style={{ color: "#ff0033", fontSize: "15px" }}>{error}</span>
     </div>
+    
   );
 }
 

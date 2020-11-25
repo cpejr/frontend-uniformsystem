@@ -1,414 +1,144 @@
-h1, h2, button, span, strong, label {
-    font-family: 'Century Gothic';
+h1,
+h2,
+button,
+span,
+strong,
+label {
+  font-family: "Century Gothic";
 }
 
-input{
-    outline: none;
-    max-width: 70%;
+input {
+  outline: none;
+  max-width: 70%;
 }
 
-label{
-    margin: 0 !important;
-    font-size: 15px; 
+label {
+  margin: 0 !important;
+  font-size: 15px;
 }
 
-.fullContent{
+.fullContent {
+  width: 90%;
+  height: 100%;
 
-    width: 90%;
-    height: 100%;
+  padding: 20px 0;
 
-    padding: 20px 0;
-
-    margin: 20px auto;
-
+  margin: 20px auto;
 }
 
-.fullContent h1{
-    width: 90%;
-    font-size: 48px;
-    line-height: 49px;
-    align-self: flex-start;
-    margin-bottom: 20px;
+.fullContent h1 {
+  width: 90%;
+  font-size: 48px;
+  line-height: 49px;
+  align-self: flex-start;
+  margin-bottom: 20px;
 }
 
-.mainContent{
+.mainContent {
+  width: 100%;
 
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.leftSide {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.leftSide .aboutProduct {
+  width: 90%;
+  margin-bottom: 32px;
+
+  padding: 60px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+
+  align-self: flex-start;
+
+  border: 1px solid rgb(167, 162, 162);
+}
+
+.fullContent .purchaseFinished {
+  background-color: #0ec4ab;
+  padding: 8px 70px;
+  outline: none;
+  border: 1px solid rgb(167, 162, 162);
+  border-radius: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 35px;
+  font-weight: normal;
+  margin-top: 24px;
+
+  transition: background-color 0.6s ease;
+}
+
+.fullContent .purchaseFinished:hover {
+  background-color: #9ccac4;
+}
+
+.MuiAccordion-root {
+  width: 90%;
+  background-color: #8ed7cd !important;
+  border: 0.7px solid #ccc;
+}
+
+.divInputLabelError {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+@media (max-width: 800px) {
+  .mainContent {
     width: 100%;
 
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-
-.leftSide{
-
-    width: 60%;
-    display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-
-.leftSide .aboutProduct{
-    
-    width: 90%;
-    margin-bottom: 32px;
-
-    padding: 60px 10px;
-    display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
+  }
 
-    align-self: flex-start;
-
-    border: 1px solid rgb(167, 162, 162);
-}
-
-.leftSide .aboutProduct img{
-    width: 30%;
-    align-self: flex-start;
-    margin-right: 30px;
-}
-
-.leftSide .aboutProduct .infoProduct{
-    display: flex;
-    flex-direction: column;
-    align-items: initial;
-    justify-content: center;
-}
-
-.aboutPayment{
-    width: 100%;
-    margin: 0px 0 32px 0;
-}
-.aboutPayment h2{
-    font-size: 30px;
-    line-height: 20px;
-    align-self: flex-start;
-    margin-bottom: 20px;
-}
-
-.rightSide{
-    width: 35%;
-/* 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; */
-}
-
-.productSummary{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.productSummary .summaryTitle{
-    width: 100%;
-    background-color: #D3C2B0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    padding: 10px 16px;
-    margin-bottom: 16px;
-    
-}
-
-.productSummary .summaryTitle strong{
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 20px;
-}
-
-.productSummary .addressInfo{
-    width: 100%;
-    padding: 30px 15px 15px 15px;
-    
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-
-    border: 1px solid #EDE3D9;
-
-    margin-bottom: 16px;
-    
-}
-
-.productSummary .addressInfo .addressConfirmation{
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin-bottom: 16px;
-}
-
-.productSummary .addressInfo .addressConfirmation strong{
-    font-size: 20px;
-    font-weight: bold;
-    font-family: 'Century Gothic';
-    line-height: 20px;
-}
-
-.productSummary .addressInfo .changeAddressArea{
-
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-}
-
-.productSummary .addressInfo .changeAddressArea > span{
-    font-size: 12px;
-    font-weight: normal;
-    font-family: 'Century Gothic';
-    line-height: 20px;
-    margin-bottom: 5px;
-}
-
-.productSummary .addressInfo .changeAddressArea .MuiButton-root{
-    padding: 3px 8px;
-    outline: none;
-    border: 1px solid rgb(167, 162, 162);
-    font-size: 18px;
-    font-weight: normal;
-
-    transition: background-color 0.6s ease;
-}
-
-.productSummary .addressInfo .changeAddressArea button:hover{
-    background-color: #9faaa9;
-}
-
-.productSummary .shippingInfo{
-    width: 100%;
-    padding: 20px 15px 15px 15px;
-    
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-
-    border: 1px solid #EDE3D9;
-
-    margin-bottom: 16px;
-}
-
-.productSummary .shippingInfo strong{
-    font-size: 18px;
-    font-weight: bold;
-    font-family: 'Century Gothic';
-    line-height: 20px;
-    margin-bottom: 5px;
-}
-
-.productSummary .shippingInfo .valueShipping{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-}
-
-.productSummary .shippingInfo .valueShipping .leftValueShipping{
-    width: 50%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.productSummary .shippingInfo .valueShipping .leftValueShipping svg{
-    width: 20%;
-    margin-right: 8px; 
-}
-
-.productSummary .shippingInfo .valueShipping .rightValueShipping span{
-    font-size: 18px;
-    font-weight: normal;
-    line-height: 20px;
-}
-
-.productSummary .totalArea{
-    width: 100%;
-    padding: 20px 15px 15px 15px;
-    
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    border: 1px solid #EDE3D9;
-}
-
-.productSummary .totalArea strong{
-    font-size: 16px;
-    font-weight: bold;
-    font-family: 'Century Gothic';
-    line-height: 20px;
-    margin-bottom: 5px;
-}
-
-.fullContent .purchaseFinished{
-
-    background-color: #0EC4AB;
-    padding: 8px 70px;
-    outline: none;
-    border: 1px solid rgb(167, 162, 162);
-    border-radius: 43px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    font-size: 35px;
-    font-weight: normal;
-    margin-top: 24px;
-
-    transition: background-color 0.6s ease;
-}
-
-.fullContent .purchaseFinished:hover{
-    background-color: #9ccac4;
-}
-
-.MuiAccordion-root{
-    width: 90%;
-    background-color: #8ED7CD !important;
-    border: 0.7px solid #CCC;
-}
-
-.MuiAccordion-root + .MuiAccordion-root{
-    margin-top: 16px;
-}
-
-.MuiSvgIcon-root{
-    font-size: 50px !important;
-}
-
-.MuiAccordionSummary-content{
-    font-size: 30px;
-}
-
-.MuiAccordionDetails-root{
-    background-color: #fff;
-    flex-direction: column;
-    align-items: center;
-}
-
-.MuiButton-contained{
-
-    background-color: #8ED7CD !important;
-
-    margin: 30px 0 10px 0 !important;
-
-    outline: none !important;
-    border: none;
-
-    transition: background-color 0.6s ease !important;
-}
-
-.MuiButton-contained:hover{
-    background-color: #b6eee7 !important;
-}
-
-.MuiButton-contained span{
-    font-size: 25px;
-    font-family: 'Century Gothic';
-}
-
-.creditCardInfo{
+  .mainContent .leftSide,
+  .rightSide {
     width: 90%;
     margin: 0 auto;
-}
+  }
 
-.divInputLabelError{
+  .mainContent .leftSide .aboutProduct {
+    width: 100%;
+  }
+
+  .fullContent .purchaseFinished {
+    padding: 8px 10px;
+    width: 60%;
+
+    font-size: 1.3rem;
+  }
+
+  .inputsTogether {
+   display: flex;
+  }
+
+  .inputsEndereço {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-}
-
-.inputsTogether{
-    display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-}
-
-.inputsTogether + .inputsTogether{
-    margin-top: 10px;
-}
-
-/* .inputsTogether .divInputLabelError + .divInputLabelError{
-    margin-left: auto;
-} */
-
-.inputsBirthday{
-    width: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.inputsBirthday input{
-    width: 60px;
-}
-
-.inputsBirthday input + input{
-    margin-left: 8px;
-}
-
-@media(max-width: 800px){
-
-    .mainContent{
-
-        width: 100%;
-    
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-
-    .mainContent .leftSide, .rightSide{
-        width: 90%;
-        margin: 0 auto;
-    }
-    
-    .mainContent .leftSide .aboutProduct{
-        width: 100%;
-    }
-
-    .fullContent .purchaseFinished{
-        padding: 8px 10px;
-        width: 60%;
-
-        font-size: 1.3rem;
-    }
-
-    .MuiAccordion-root{
-        width: 100%;
-    }
-
-    .inputsTogether{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-    }
-
-    .inputsTogether .divInputLabelError + .divInputLabelError{
-        margin-left: 0;
-        margin-top: 10px;
-    }
-
+    margin-right: 90px;
+  }
+  .inputsPrimeira{
+      margin-left: 180px;
+      padding: 30px;
+      border: 30px;
+  }
 }

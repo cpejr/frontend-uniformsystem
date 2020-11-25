@@ -15,6 +15,10 @@ import Checkout from "./Pages/Checkout";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
+import HeaderAdm from "./components/HeaderAdm";
+import FooterAdm from "./components/FooterAdm";
+import SidebarAdm from "./components/SidebarAdm";
+
 import { isAuthenticated } from "./services/auth";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -36,7 +40,8 @@ export default function Routes() {
     return (
         <BrowserRouter>
             <Switch>
-                <Route path="/" component={MenuRoutes} />
+                <Route path="/" exact component={MenuRoutes} />
+                <Route path="/adm/home" exact component={AdmRoutes} />
             </Switch>
         </BrowserRouter>
     );
@@ -45,10 +50,12 @@ export default function Routes() {
 function MenuRoutes() {
     return (
         <div>
-            {/* <Header /> */}
+            <Header />
             <Switch>
                 <Route path="/" export exact component={Home} />
-                <Route path="/adm" export exact component={Administrador} />
+
+                {/* <Route path="/adm" export exact component={AdmRoutes} /> */}
+
                 <Route path="/shop" export exact component={Loja} />
                 <Route path="/checkout" export exact component={Checkout} />
                 {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
@@ -66,7 +73,24 @@ function MenuRoutes() {
                 {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
                 <Route path="*" component={() => <h1>Page not found</h1>} />
             </Switch>
-            {/* <Footer /> */}
+            <Footer />
+        </div>
+    );
+}
+
+function AdmRoutes() {
+    return (
+        <div>
+            <HeaderAdm />
+            <SidebarAdm>
+            <Switch>
+                <Route path="/adm/home" export exact component={Administrador} />
+                {/*<Route path="/adm/pedidos" export exact component={Loja} />
+                <Route path="/adm/produtos" export exact component={Checkout} />
+                <Route path="/adm/funcionarios" export exact component={Checkout} /> */}
+            </Switch>
+            </SidebarAdm>
+            <FooterAdm />
         </div>
     );
 }

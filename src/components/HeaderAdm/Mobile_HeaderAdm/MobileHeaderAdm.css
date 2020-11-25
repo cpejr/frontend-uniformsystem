@@ -4,7 +4,7 @@ h1, h2, button, span, p{
 
 .cell_header{
     width: 100%;
-    height: 10vh;
+    /* height: 10vh; */
     min-width: auto;
 
     color: white;

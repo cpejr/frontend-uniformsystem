@@ -140,30 +140,30 @@ function Cadastro() {
   }
   return (
     <div className="fullPage">
-      <h1 className="title">CADASTRO</h1>
-      <div className="inputsTogether">
+      <h1 className="titleCad">CADASTRO</h1>
+      <div className="inputsTogetherCad">
         <div className="inputsPrimeira">
           <InputWithLabel
             label="Nome"
-            width={280}
+            width={500}
             setInfo={setName}
             maxLenght={50}
           />{" "}
           <InputWithLabel
             label="CPF"
-            width={280}
+            width={105}
             setInfo={setCpf}
             maxLenght={11}
           />{" "}
           <InputWithLabel
             label="Email"
-            width={280}
+            width={500}
             setInfo={setEmail}
             maxLenght={150}
           />
           <InputWithLabel
             label="Senha"
-            width={280}
+            width={200}
             setInfo={setPassword}
             maxLenght={50}
           />
@@ -171,42 +171,42 @@ function Cadastro() {
         <div className="inputsEndereço">
           <InputWithLabel
             label="Rua"
-            width={280}
+            width={500}
             setInfo={setStreet}
             maxLenght={100}
           />
 
           <InputWithLabel
             label="Bairro"
-            width={280}
+            width={300}
             setInfo={setBairro}
             maxLenght={100}
           />
 
           <InputWithLabel
             label="Cidade"
-            width={280}
+            width={300}
             setInfo={setCity}
             maxLenght={100}
           />
 
           <InputWithLabel
             label="Estado"
-            width={280}
+            width={80}
             setInfo={setEstado}
             maxLenght={2}
           />
 
           <InputWithLabel
             label="CEP"
-            width={280}
+            width={150}
             setInfo={setCep}
             maxLenght={20}
           />
 
           <InputWithLabel
             label="Complemento (opcional)"
-            width={280}
+            width={100}
             setInfo={setComplemento}
             maxLenght={10}
           />

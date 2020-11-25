@@ -125,27 +125,23 @@ label {
 
     font-size: 1.3rem;
   }
-
-  .inputsTogether {
-   display: flex;
-  }
-
-  .inputsEndereço {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 90px;
-  }
-  .inputsPrimeira{
-      margin-left: 180px;
-      padding: 30px;
-      border: 30px;
-  }
-  .fullPage{
-      display: flex;
-      justify-content: center;
-      border: 20px;
-      margin: 20px;
-      border-color: black;
-  }
 }
+
+.inputsTogetherCad {
+  background-color: white;
+  padding: 5px;
+  border: 3px solid black;
+  margin-top: 40px;
+  margin-bottom: 50px;
+  line-height: 30px;
+  justify-content: center;
+  display: flex;
+}
+
+.titleCad{
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+}
+
+

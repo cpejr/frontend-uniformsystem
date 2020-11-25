@@ -90,6 +90,16 @@ function Cadastro() {
   const [cardNumberStored, setCardNumber] = useState("");
   const [securityNumberStored, setSecurityNumber] = useState("");
   const [cardNameStored, setCardName] = useState("");
+  const [nameStored, setName] = useState("");
+  const [cpfStored, setCpf] = useState("");
+  const [emailStored, setEmail] = useState("");
+  const [passwordStored, setPassword] = useState("");
+  const [streetStored, setStreet] = useState("");
+  const [bairroStored, setBairro] = useState("");
+  const [cityStored, setCity] = useState("");
+  const [estadoStored, setEstado] = useState("");
+  const [cepStored, setCep] = useState("");
+  const [complementoStored, setComplemento] = useState("");
 
   const [errorInputCardNumber, setErrorInputCardNumber] = useState("");
   const [errorInputSecurityNumber, setErrorInputSecurityNumber] = useState("");
@@ -131,18 +141,68 @@ function Cadastro() {
   return (
     <div className="inputsTogether">
       <InputWithLabel
-        label="Número do Cartão"
+        label="Nome"
         width={280}
-        setInfo={setCardNumber}
-        maxLenght={16}
-        error={cardNumberStored ? errorInputCardNumber : ""}
+        setInfo={setName}
+        maxLenght={50}
       />
+
+      <InputWithLabel label="CPF" width={280} setInfo={setCpf} maxLenght={11} />
+
       <InputWithLabel
-        label="Código de segurança"
-        width={70}
-        setInfo={setSecurityNumber}
-        maxLenght={3}
-        error={securityNumberStored ? errorInputSecurityNumber : ""}
+        label="Email"
+        width={280}
+        setInfo={setEmail}
+        maxLenght={150}
+      />
+
+      <InputWithLabel
+        label="Senha"
+        width={280}
+        setInfo={setPassword}
+        maxLenght={50}
+      />
+
+      <InputWithLabel
+        label="Rua"
+        width={280}
+        setInfo={setStreet}
+        maxLenght={100}
+      />
+
+      <InputWithLabel
+        label="Bairro"
+        width={280}
+        setInfo={setBairro}
+        maxLenght={100}
+      />
+
+      <InputWithLabel
+        label="Cidade"
+        width={280}
+        setInfo={setCity}
+        maxLenght={100}
+      />
+
+      <InputWithLabel
+        label="Estado"
+        width={280}
+        setInfo={setEstado}
+        maxLenght={2}
+      />
+
+      <InputWithLabel
+        label="CEP"
+        width={280}
+        setInfo={setCep}
+        maxLenght={20}
+      />
+      
+      <InputWithLabel
+        label="Complemento"
+        width={280}
+        setInfo={setComplemento}
+        maxLenght={10}
       />
     </div>
   );

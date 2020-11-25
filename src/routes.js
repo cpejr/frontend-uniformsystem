@@ -10,6 +10,8 @@ import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
 import SignUp from "./Pages/Sign_Up";
 import Checkout from "./Pages/Checkout";
+import Cadastro from "./Pages/Cadastro";
+
 
 
 import Header from "./components/Header";
@@ -53,7 +55,7 @@ function MenuRoutes() {
                 <Route path="/checkout" export exact component={Checkout} />
                 {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                 logado, você será redirecionado para a página Login. */}
-                <PrivateRoute path="/perfil" export exact component={Perfil} />
+                <Route path="/perfil" export exact component={Perfil} />
                 <Route
                     path="/login"
                     export
@@ -63,6 +65,7 @@ function MenuRoutes() {
                 <Route path="/cart" export exact component={Carrinho} />
                 <Route path="/contact" export exact component={Contato} />
                 <Route path="/signUp" export exact component={SignUp} />
+                <Route path="/cadastro" export exact component={Cadastro} />
                 {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
                 <Route path="*" component={() => <h1>Page not found</h1>} />
             </Switch>

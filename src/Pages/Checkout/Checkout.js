@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import camisa from '../../Assets/camisa.jpg';
 
+import api from "../../services/api";
+
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -38,6 +40,15 @@ function InputWithLabel({label, width, setInfo, error, maxLenght}){
 
 function Checkout(){
 
+  
+  const [cardNumberStored, setCardNumber] = useState("");
+  const [securityNumberStored, setSecurityNumber] = useState('');
+  const [cardNameStored, setCardName] = useState('');
+
+  const [errorInputCardNumber, setErrorInputCardNumber] = useState('');
+  const [errorInputSecurityNumber, setErrorInputSecurityNumber] = useState('');
+  const [errorInputCardName, setErrorInputCardName] = useState('');
+
   const [errorBirthInput, setErrorBirthInput] = useState('');
   const [errorInstallmentOptions, setErrorInstallmentOptions] = useState('');
 
@@ -46,6 +57,36 @@ function Checkout(){
   const [yearStored, setYearStored] = useState('');
 
   const [installmentOptions, setInstallmentOptions] = useState(' ');
+
+  const [products, setProducts] = useState([]);
+  const [address, setAddress] = useState({});
+
+  const user_id = 'bd1d08-e614-37d4-5da2-45108852f0'
+
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYmQxZDA4LWU2MTQtMzdkNC01ZGEyLTQ1MTA4ODUyZjAiLCJuYW1lIjoiRGlvZ28gQWRtaW4gMCIsImZpcmViYXNlX3VpZCI6Im1FQ001UnV3c3FTZHJaTnlPd01CMmVkOFZkQTIiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImRpb2dvYWRtMTBAZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5MTAiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMS0yNCAwMzowOTozMCIsInVwZGF0ZWRfYXQiOiIyMDIwLTExLTI0IDAzOjA5OjMwIn1dLCJpYXQiOjE2MDYzNjMxMzcsImV4cCI6MTYwODk1NTEzN30.eZhANDozTHrqWDkRPnL75ky7JloUH7_pgW8ZNI1mm7M';
+
+  const serviceCode = '04014'
+
+  const comprasCarrinho = [
+    {
+      nomeProduto: 'Produto 1',
+      quantidadeProduto: 500,
+      corProduct: 'Branco',
+      precoProduto: '10,00'
+    },
+    {
+      nomeProduto: 'Produto 2',
+      quantidadeProduto: 10,
+      corProduct: 'Preto',
+      precoProduto: '20,00'
+    },
+    {
+      nomeProduto: 'Produto 3',
+      quantidadeProduto: 40,
+      corProduct: 'Verde',
+      precoProduto: '50,00'
+    }
+  ]
 
   useEffect(() => {
 
@@ -101,28 +142,73 @@ useEffect(() => {
 
 }, [installmentOptions]);
 
-  const [cardNumberStored, setCardNumber] = useState("");
-  const [securityNumberStored, setSecurityNumber] = useState('');
-  const [cardNameStored, setCardName] = useState('');
-
-  const [errorInputCardNumber, setErrorInputCardNumber] = useState('');
-  const [errorInputSecurityNumber, setErrorInputSecurityNumber] = useState('');
-  const [errorInputCardName, setErrorInputCardName] = useState('');
-
 
   useEffect(() => {
     validateInput('cardNumber')
   }, [cardNumberStored]);
-
+  
   useEffect(() => {
     validateInput('securityNumber')
   }, [securityNumberStored]);
-
+  
   useEffect(() => {
     validateInput('cardName')
   }, [cardNameStored]);
 
+  // Post order
+  async function handlePostOrder() {
+    try{
+      const address_id = address.address_id;
+      await api.post(`/order`, {
+        address_id: address_id,
+        service_code: serviceCode,
+        products: products,
+      },
+      {
+        headers: { authorization: `bearer ${token}` },
+
+      });
+    }
+    catch(error){
+      console.warn(error);
+      alert("Erro ao criar um pedido.");
+    }
+  }
   
+  // Lista dos produtos para finalizar pedido 
+  async function getProducts() {
+    const response = await api.get("/cart", {
+      headers: { authorization: `bearer ${token}` },
+    });
+    setProducts([...response.data]);
+  }
+  
+  useEffect(() => {
+    try {
+      getProducts();
+    } catch (error) {
+      console.warn(error);
+      alert("Erro ao buscar os produtos.");
+    }
+  }, []);
+
+  // Pega endereço
+  async function getAddress() {
+    const response = await api.get(`/address/${user_id}`, {
+      headers: { authorization: `bearer ${token}` },
+    });
+    // console.log(response.data.adresses[0])
+    setAddress({...response.data.adresses[0]});
+  }
+  
+  useEffect(() => {
+    try {
+      getAddress();
+    } catch (error) {
+      console.warn(error);
+      alert("Erro ao buscar o endereço.");
+    }
+  }, []);
 
 
   function validateInput(type){
@@ -162,22 +248,48 @@ useEffect(() => {
       <div className="mainContent">
         <div className="leftSide">
 
-          <div className="aboutProduct">
-            <img src={camisa} alt="Camisa"/>
-            <div className="infoProduct">
-              <span>
-                Nome do produto: Produto
-              </span>
-              <span>
-                Quantidade total: 10 uni.
-              </span>
-              <span>
-                Cor: Branco
-              </span>
-              <span>
-                Preço: R$ 500,00
-              </span>
-            </div>
+          <div className="aboutListProducts">
+            { !comprasCarrinho ? 
+                  <div className="aboutProduct">
+                    <img src={camisa} alt="Camisa"/>
+                    <div className="infoProduct">
+                      <span>
+                        Nome do produto: Produto
+                      </span>
+                      <span>
+                        Quantidade total: 10 uni.
+                      </span>
+                      <span>
+                        Cor: Branco
+                      </span>
+                      <span>
+                        Preço: R$ 500,00
+                      </span>
+                    </div>
+                  </div>
+              :
+              comprasCarrinho.map( (product, index) => {
+                return (
+                  <div className="aboutProduct" key={index}>
+                    <img src={camisa} alt="Camisa"/>
+                    <div className="infoProduct">
+                      <span>
+                        Nome do produto: {product.nomeProduto}
+                      </span>
+                      <span>
+                        Quantidade total: {product.quantidadeProduto} uni.
+                      </span>
+                      <span>
+                        Cor: {product.corProduto}
+                      </span>
+                      <span>
+                        Preço: R$ {product.precoProduto}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            }
           </div>
             <div className="aboutPayment">
               <h2>Pagamento</h2>
@@ -277,16 +389,16 @@ useEffect(() => {
               <div className="addressConfirmation">
                 <strong>Endereço de entrega</strong>
                 <span>
-                  Rua Fulano de Tal, 900
+                  {address.street}/ {address.complement}
                 </span>
                 <span>
-                  Bairro: Esse aqui
+                  Bairro: {address.neighborhood}
                 </span>
                 <span>
-                  Cidade: Belo Horizonte - MG
+                  Cidade: {address.city} - {address.state} - {address.country}
                 </span>
                 <span>
-                  CEP: 00000-000
+                  CEP: {address.zip_code}
                 </span>
               </div>
 
@@ -319,7 +431,10 @@ useEffect(() => {
 
       </div>
 
-      <Button type="button" className="purchaseFinished">
+      <Button type="button" 
+        className="purchaseFinished"
+        onClick={() => handlePostOrder()}
+      >
         Finalizar Compra
       </Button>
     </div>

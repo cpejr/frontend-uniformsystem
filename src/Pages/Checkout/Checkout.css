@@ -45,16 +45,32 @@ label{
     width: 60%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 }
 
-
-.leftSide .aboutProduct{
-    
+.leftSide .aboutListProducts{
     width: 90%;
+    height: 300px;
+
+    padding: 20px 10px;
     margin-bottom: 32px;
 
-    padding: 60px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    border: 1px solid rgb(167, 162, 162);
+    overflow: auto;
+}
+
+.leftSide .aboutListProducts .aboutProduct{
+    
+    width: 90%;
+    height: 280px;
+    margin: 0 auto;
+
+    padding: 30px 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -65,13 +81,17 @@ label{
     border: 1px solid rgb(167, 162, 162);
 }
 
-.leftSide .aboutProduct img{
+.leftSide .aboutListProducts .aboutProduct + .aboutProduct{
+    margin-top: 32px;
+}
+
+.leftSide .aboutListProducts .aboutProduct img{
     width: 30%;
     align-self: flex-start;
     margin-right: 30px;
 }
 
-.leftSide .aboutProduct .infoProduct{
+.leftSide .aboutListProducts .aboutProduct .infoProduct{
     display: flex;
     flex-direction: column;
     align-items: initial;
@@ -384,7 +404,7 @@ label{
         margin: 0 auto;
     }
     
-    .mainContent .leftSide .aboutProduct{
+    .mainContent .leftSide .aboutListProducts .aboutProduct{
         width: 100%;
     }
 

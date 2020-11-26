@@ -1,45 +1,48 @@
-.pedido{
-background-color: white;
-padding: 20px;
-margin: 20px;
-font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-border: 2px solid gray;
-margin-top: 15px;
-margin-bottom: 15px;
-line-height: 28px;
-
+.pedido {
+  background-color: white;
+  padding: 20px;
+  margin: 20px;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  border: 2px solid gray;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 28px;
 }
 
-.pedidoNumber{
-font-weight: 550;
-font-size: large;
+.pedidoNumber {
+  font-weight: 550;
+  font-size: large;
 }
 
-.data{
-font-size: smaller;
+.data {
+  font-size: smaller;
 }
 
-.status{
-
+.status {
 }
-.destino{
-
+.destino {
 }
 
-.total{
-font-size: medium;
-
-
+.total {
+  font-size: medium;
 }
 
-hr{
-    border-top: 2px solid gray;
-    margin-block-start: 0.3em;
-    margin-block-end: 0.5em;
+hr {
+  border-top: 2px solid gray;
+  margin-block-start: 0.3em;
+  margin-block-end: 0.5em;
 }
 
-.pedidoBotao{
-   margin-top: 8%;
-   margin-left: 15%;
-   margin-right: 15%;
+.pedidoBotao {
+  margin-top: 8%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+@media (max-width: 1030px) {
+  .pedido {
+    width: fit-content;
+    margin: auto;
+    align-items: center;
+  }
 }

@@ -92,8 +92,6 @@ label {
   border: 0.7px solid #ccc;
 }
 
-
-
 @media (max-width: 800px) {
   .mainContent {
     width: 100%;
@@ -123,7 +121,6 @@ label {
 }
 
 .inputsTogetherCad {
-  background-color: white;
   padding: 5px;
   border: 3px solid black;
   margin-top: 40px;
@@ -133,37 +130,60 @@ label {
   flex-direction: column;
   width: fit-content;
   margin: auto;
-  min-width: 500px;
-  margin: auto;
-
+  margin-bottom: 60px !important;
 }
 .inputsTogetherCad * {
   display: flex;
   justify-content: center;
   flex-direction: column;
   width: 500px;
-
 }
 
-.titleCad{
+.titleCad {
   display: flex;
   justify-content: center;
   margin-top: 5%;
 }
 
-.buttonCad{
+.buttonCad {
   display: flex;
   justify-content: center;
 }
 
-.inputsEndereço{
+.inputsEndereço {
   margin-bottom: 5%;
 }
 
-.buttonCad{
+.buttonCad {
   display: flex;
   align-items: center;
+  margin-top: 10px;
+
+  background-color: #0ec4ab;
+  padding: 8px 70px;
+  outline: none;
+  border: 1px solid rgb(167, 162, 162);
+  border-radius: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.divInputLabelError {
+  width: 750px;
+}
 
-
+@media (max-width: 800px) {
+  .inputsTogetherCad {
+    display: flex;
+    justify-content: space-evenly;
+    width: 300px;
+  }
+  .divInputLabelError {
+    width: 400px;
+  }
+  .buttonCad{
+    width: 280px;
+  }
+}

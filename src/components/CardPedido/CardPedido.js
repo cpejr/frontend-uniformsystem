@@ -15,8 +15,7 @@ function CardPedido({pedido}){
       <div className="pedidoStatus"><MdInfoOutline />{pedido.status}</div>  
       <div className="pedidoDestino"><RiTruckFill/>{pedido.destino}</div>  
       <div className="pedidoTotal">{pedido.total}</div>  
-      <div className="pedidoBotao"><Button>{pedido.button}</Button>{' '}</div>
-
+      <button className="pedidoBotao2">{pedido.button}</button>
     </div>);
 
 }

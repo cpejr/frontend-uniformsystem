@@ -4,7 +4,6 @@ import DadosPessoais from "../../components/DadosPessoais/DadosPessoais";
 import Endereços from "../../components/Endereços";
 import "./Perfil.css";
 
-
 const pedidos = [
   {
     id: 1,
@@ -51,7 +50,7 @@ const endereços = [
 function Perfil() {
   return (
     <div className="profileContainer">
-      <div>
+      <div className="personalDataContainer">
         <h1 className="title">DADOS PESSOAIS</h1>
         <hr className="titleLine"></hr>
         <div className="containerDados">

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import api from "../../services/api";
+import { useParams } from "react-router-dom";
 import {
     FaCheck,
     FaShoppingCart,
-    FaAngleRight,
-    FaAngleLeft,
+  /*   FaAngleRight,
+    FaAngleLeft, */
 } from "react-icons/fa";
 
 import "./Produto.css";
@@ -11,6 +13,8 @@ import "./Radio.css";
 
 import Image from "../../Assets/camisa.jpg";
 import Camisa from "../../Assets/Foto_camisa.png";
+
+import { Carousel } from "react-bootstrap";
 
 const secundary_images = [
     {
@@ -44,23 +48,42 @@ const ProdutoEscolhido = {
     ],
 };
 
+/* const Models = [
+    { imgLink: Image, alt: "alt_img2 },
+    { imgLink: Camisa , alt: "alt_img1" },
+]; */
+
 const obj_sizes = ["PP", "P", "M", "G", "GG"];
 
 function Produto() {
-
-    function Content() {
-        return (
-            <div className='checked'>
-                <FaCheck color='white' />
-            </div>
-        );
-    }
-
+    const [indexImage, setIndexImage] = useState(0);
     const [selectedValue, setSelectedValue] = useState(0);
 
+    const [Cep, setCep] = useState(null);
+    const [Quantity, setQuantity] = useState(null);
+
+    //Pegando o id do produto pelo link
+    const { product_id } = useParams();
+
+    useEffect(() => {
+        const produto = getProduto(product_id);
+        console.log(produto);
+    }, []);
+
+    async function getProduto(product_id) {
+        await api.get(`/productmodels?${product_id}`);
+    }
 
     //essa funcao tem um CSS só pra ela, pois gastou uns esquemas diferenciados pra fazer
     function Radio(gender) {
+        function Content() {
+            return (
+                <div className='checked'>
+                    <FaCheck color='white' />
+                </div>
+            );
+        }
+
         return (
             <div className={"radio"} style={{ display: "flex" }}>
                 {obj_sizes.map((size, index) => {
@@ -100,7 +123,51 @@ function Produto() {
         );
     }
 
-    const [indexImage, setIndexImage] = useState(0);
+    function LittleCarrousel() {
+        return (
+            <div className='div_carousel'>
+                <Carousel
+                    controls={true}
+                    /* indicators={true} */ interval={99999}
+                    className='carrousel_product'
+                >
+                    {secundary_images.map((img, index) => {
+                        /* Possíveis soluções pro carrousel:
+                        -Matriz de imagens, em vez de vetor
+                            Cada Matriz [i][3] tem na posição i 3 imagens, que servem de 
+                            para entrar no carrousel. Conforme o i passa, se tem novas imagens. No fim, 
+                            se faz uma tratativa para nao pegarmos matrizes vazias */
+                        return (
+                            <Carousel.Item>
+                                <div className='div_img_carousel'>
+                                    <img
+                                        src={img.src}
+                                        alt={img.alt}
+                                        className='carousel_image'
+                                        onClick={() => setIndexImage(index)}
+                                    />
+
+                                    <img
+                                        src={img.src}
+                                        alt={img.alt}
+                                        className='carousel_image'
+                                        onClick={() => setIndexImage(index)}
+                                    />
+
+                                    <img
+                                        src={img.src}
+                                        alt={img.alt}
+                                        className='carousel_image'
+                                        onClick={() => setIndexImage(index)}
+                                    />
+                                </div>
+                            </Carousel.Item>
+                        );
+                    })}
+                </Carousel>
+            </div>
+        );
+    }
 
     return (
         <div className='all_page'>
@@ -110,7 +177,7 @@ function Produto() {
                         {MainImage(indexImage)}
                     </div>
                     <div className='container_secundary_images'>
-                        <div className='left_arrow'>
+                        {/*  <div className='left_arrow'>
                             <FaAngleLeft size='30px' />
                         </div>
                         <div className='div_secundary_images'>
@@ -129,8 +196,8 @@ function Produto() {
                             })}
                         </div>
                         <div className='right_arrow'>
-                            <FaAngleRight size='30px' />
-                        </div>
+                        <FaAngleRight size='30px' /> */}
+                        {LittleCarrousel()}
                     </div>
                 </div>
 
@@ -172,6 +239,7 @@ function Produto() {
                                     <input
                                         type='text'
                                         placeholder=' CEP'
+                                        onChange={(e) => setCep(e.target.value)}
                                     />{" "}
                                     <button id='stylized_button'>
                                         Calcular
@@ -193,7 +261,12 @@ function Produto() {
                             </div>
                             <div className='quantity'>
                                 <h6 className='small_title'>Quantidade:</h6>
-                                <input type='number' />
+                                <input
+                                    type='number'
+                                    onChange={(e) =>
+                                        setQuantity(e.target.value)
+                                    }
+                                />
                             </div>
                             <div className='interprise_logo'>
                                 <h6 className='small_title'>

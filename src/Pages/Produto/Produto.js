@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 import {
     FaCheck,
     FaShoppingCart,
-  /*   FaAngleRight,
-    FaAngleLeft, */
+    FaAngleRight,
+    FaAngleLeft,
 } from "react-icons/fa";
 
 import "./Produto.css";
@@ -48,16 +48,12 @@ const ProdutoEscolhido = {
     ],
 };
 
-/* const Models = [
-    { imgLink: Image, alt: "alt_img2 },
-    { imgLink: Camisa , alt: "alt_img1" },
-]; */
-
 const obj_sizes = ["PP", "P", "M", "G", "GG"];
 
 function Produto() {
     const [indexImage, setIndexImage] = useState(0);
     const [selectedValue, setSelectedValue] = useState(0);
+    const [Produto, setProduto] = useState({});
 
     const [Cep, setCep] = useState(null);
     const [Quantity, setQuantity] = useState(null);
@@ -65,13 +61,40 @@ function Produto() {
     //Pegando o id do produto pelo link
     const { product_id } = useParams();
 
+    //depois de pego o id do produto pelo link
+    //depois com o id produto os models (getproductmodel)
+    //depois eu pego a img link.
+
     useEffect(() => {
-        const produto = getProduto(product_id);
-        console.log(produto);
+        getProduto(product_id).then((response) => {
+            setProduto(response);
+            console.log(response);
+        });
     }, []);
 
+    /* 
+    product_id: "10", name: "Camisa bonita", description: "Camisa de malha bem macia e estilosa", product_type: "university", models: Array(1)}
+        description: "Camisa de malha bem macia e estilosa"
+        models: Array(1)
+        0:
+            gender: "M"
+            img_link: "www.google.com.br"
+            is_main: 1
+            model_description: "Uma camisa branca"
+            price: 12
+            product_model_id: 17
+            __proto__: Object
+            length: 1
+        __proto__: Array(0)
+        name: "Camisa bonita"
+        product_id: "10"
+        product_type: "university"
+    */
+
     async function getProduto(product_id) {
-        await api.get(`/productmodels?${product_id}`);
+        const response = await api.get(`/productmodels/${product_id}`);
+
+        return response.data;
     }
 
     //essa funcao tem um CSS só pra ela, pois gastou uns esquemas diferenciados pra fazer
@@ -168,6 +191,18 @@ function Produto() {
             </div>
         );
     }
+    
+    function AddToCart(){
+        window.alert('Voce AddToCart !!')
+    }
+
+    function CalculateCEP(){
+        window.alert('Voce CalculateCEP !!')
+    }
+
+    function AddALogo(){
+        window.alert('Voce AddALogo !!')
+    }
 
     return (
         <div className='all_page'>
@@ -177,7 +212,7 @@ function Produto() {
                         {MainImage(indexImage)}
                     </div>
                     <div className='container_secundary_images'>
-                        {/*  <div className='left_arrow'>
+                        <div className='left_arrow'>
                             <FaAngleLeft size='30px' />
                         </div>
                         <div className='div_secundary_images'>
@@ -196,18 +231,19 @@ function Produto() {
                             })}
                         </div>
                         <div className='right_arrow'>
-                        <FaAngleRight size='30px' /> */}
-                        {LittleCarrousel()}
+                            <FaAngleRight size='30px' />
+                            {/* {LittleCarrousel()} */}
+                        </div>
                     </div>
                 </div>
 
                 <div className='shirt_informations'>
                     <div className='title_and_description'>
-                        <h1 className='title_shirt'>{ProdutoEscolhido.name}</h1>
+                        <h1 className='title_shirt'>{Produto.name}</h1>
                         <div className='div_descript'>
                             <h6 className='small_title'>Descrição:</h6>
                             <p className='descript_text'>
-                                {ProdutoEscolhido.description}
+                                {Produto.description}
                             </p>
                         </div>
                     </div>
@@ -219,13 +255,15 @@ function Produto() {
                                     <h2>R${ProdutoEscolhido.price},00</h2>
                                 </div>
                                 <div className='images'>
-                                    {ProdutoEscolhido.images.map(
-                                        (image, index) => {
+                                    {Produto.models?.map(
+                                        
+                                        (model, index) => {
+                                            // console.log(Produto.models)
                                             return (
                                                 <img
                                                     key={index}
-                                                    src={image.src}
-                                                    alt={image.a}
+                                                    src={Image}
+                                                    alt={`alt_da_${index}`}
                                                     className='image'
                                                 />
                                             );
@@ -241,7 +279,7 @@ function Produto() {
                                         placeholder=' CEP'
                                         onChange={(e) => setCep(e.target.value)}
                                     />{" "}
-                                    <button id='stylized_button'>
+                                    <button id='stylized_button' onClick={()=>CalculateCEP()}>
                                         Calcular
                                     </button>
                                 </div>
@@ -279,6 +317,7 @@ function Produto() {
                                 <button
                                     id='stylized_button'
                                     className='send_logo'
+                                    onClick={()=>AddALogo()}
                                 >
                                     Carregue a sua logo!
                                 </button>
@@ -292,7 +331,7 @@ function Produto() {
                                         className='icon'
                                         size='35px'
                                     />
-                                    <div className='text'>
+                                    <div className='text' onClick={()=>AddToCart()}>
                                         <p>ADICIONAR AO CARRINHO</p>
                                     </div>
                                 </div>

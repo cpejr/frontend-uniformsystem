@@ -101,7 +101,7 @@
     margin: 0;
 }
 
-/* .all_page
+ .all_page
     .page_content
     .shirt_images
     .container_secundary_images
@@ -120,8 +120,8 @@
     height: 100%;
     padding-left: 1px;
 }
- */
-/* .all_page
+ 
+ .all_page
     .page_content
     .shirt_images
     .container_secundary_images
@@ -129,7 +129,7 @@
     .secundary_images:hover {
     border: solid 1px black;
 }
- */
+ 
 
 /* Daqui pra baixo teremos a parte das informações das camisas */
 .all_page .page_content .shirt_informations {
@@ -206,6 +206,8 @@
     .two_columns
     .priceAndImages
     .images {
+    overflow-y: auto;
+    flex-wrap: wrap;
     width: 100%;
     height: 100%;
     display: flex;
@@ -219,11 +221,11 @@
     .priceAndImages
     .images
     .image {
-    margin: 5px;
+    margin:0 5px;
     border-radius: 10px;
     border: 1px solid black;
     max-width: 50%;
-    max-height: 50%;
+    max-height: 48%;
 }
 
 

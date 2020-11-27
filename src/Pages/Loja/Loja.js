@@ -54,8 +54,8 @@ function Loja() {
         const param = 'minprice=' + filter.min;
         query.push(param);
       }
-      if (page.current!==1){
-        const param = 'page='+ page.current;
+      if (page.current !== 1) {
+        const param = 'page=' + page.current;
         query.push(param);
       }
 
@@ -104,7 +104,7 @@ function Loja() {
       case 'BONÉS':
         fieldProductType = 'cap'
         break;
-        default: break;
+      default: break;
     }
 
     const checked = e.target.checked;
@@ -157,7 +157,7 @@ function Loja() {
         max = 0;
         break;
 
-        default: break;
+      default: break;
 
     }
 
@@ -174,7 +174,7 @@ function Loja() {
     alert("Você está pesquisando!")
   }
 
-   useEffect(() => {
+  useEffect(() => {
     function handleScroll() {
       const windowHeight =
         "innerHeight" in window
@@ -192,14 +192,14 @@ function Loja() {
       const windowBottom = windowHeight + window.pageYOffset;
       if (windowBottom >= docHeight) {
         //bottom reached
-				//Fuçã que faz requisição no back pela proxima pagina
+        //Fuçã que faz requisição no back pela proxima pagina
         loadNextPage();
-          //.then(setOngsData)
-          //.catch((error) => console.error(error));
+        //.then(setOngsData)
+        //.catch((error) => console.error(error));
       }
     }
-    function loadNextPage(){
-      if(!pageLoading.current){
+    function loadNextPage() {
+      if (!pageLoading.current) {
         pageLoading.current = true;
         page.current++;
         getProducts().then(newProducts => {
@@ -208,7 +208,7 @@ function Loja() {
         })
       }
     }
-		window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -216,7 +216,7 @@ function Loja() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products]);
 
-  
+
 
   return (
     <div className="shop">
@@ -234,31 +234,33 @@ function Loja() {
 
         <div className="filterContainer">
           <div className="filterTitleProducts">
-            <FaFilter />  FILTROS
+            <FaFilter />  FILTRAR
+          </div>
+          <div className="filterContent">
+            {FILTER_OPTIONS.map((option, index) => {
+                return (
+                  <div className="filtersProducts">
+                    <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange} className="checkbox"/>
+                    <label for={`filter-${index}`} >{option}</label>
+                  </div>
+                )
+              })
+            }
+
+            <div className="priceContainer">
+              <br></br>
+              <p>PREÇO</p>
+
+              {PRICE_OPTIONS.map((price, index) => {
+                return (
+                  <div className="filterPrice">
+                    <input type="radio" id={`price-${index}`} name="price" onChange={handlePriceChange} value={price} className="radio"/>
+                    <label for={`price-${index}`}>{price}</label>
+                    
+                  </div>
+                )
+              })}
             </div>
-          {
-            FILTER_OPTIONS.map((option, index) => {
-              return (
-                <div className="filtersProducts">
-                  <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange} />
-                  <label for={`filter-${index}`}>{option}</label>
-                </div>
-              )
-            })
-          }
-
-          <div className="priceContainer">
-            <br></br>
-            <p>PREÇO</p>
-
-            {PRICE_OPTIONS.map((price, index) => {
-              return (
-                <div className="filterPrice">
-                  <label for={`price-${index}`}>{price}</label>
-                  <input type="radio" id={`price-${index}`} name="price" onChange={handlePriceChange} value={price} />
-                </div>
-              )
-            })}
           </div>
         </div>
 
@@ -266,12 +268,12 @@ function Loja() {
           {products.map(product =>
             <ProductCard key={product.product_model_id} product={product} />
           )}
-      </div>
+        </div>
       </div>
 
-      
 
-      
+
+
     </div>
 
   );

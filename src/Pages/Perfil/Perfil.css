@@ -43,6 +43,8 @@
   display: flex;
   flex-wrap: wrap;
   margin-left: 5%;
+  margin-bottom: 10%;
+  margin-top: 3%;
 }
 
 .ordersContainer {
@@ -53,8 +55,7 @@
   border-top: 3px solid #4dcdbc;
   border-radius: 20px;
   width: 50%;
-  margin-left: 20%;
-  
+  margin-left: 10%;
 }
 
 .titleLine2 {
@@ -62,4 +63,16 @@
   border-radius: 20px;
   width: 30%;
   margin-left: 10%;
+}
+
+@media (max-width: 800px) {
+  .ordersContainer {
+    margin-left: -30px;
+  }
+
+  .containerPedidos {
+    width: 100%;
+    padding: 28px;
+    display: grid;
+  }
 }

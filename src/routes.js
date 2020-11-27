@@ -46,8 +46,11 @@ export default function Routes() {
     return (
         <BrowserRouter>
             <Switch>
-                <Route path="/" component={MenuRoutes} />:
-                <Route path="/adm/home" component={AdmRoutes} />
+                <Route render={(path) => 
+                        path.location.pathname.includes("/adm/") ?(
+                        <AdmRoutes /> ): (
+                        <MenuRoutes/>)
+                    } />:
             </Switch>
         </BrowserRouter>
     );
@@ -60,8 +63,6 @@ function MenuRoutes() {
             <Header />
             <Switch>
                 <Route path="/" export exact component={Home} />
-
-                {/* <Route path="/adm" export exact component={AdmRoutes} /> */}
 
                 <Route path="/shop" export exact component={Loja} />
                 <Route path="/checkout" export exact component={Checkout} />
@@ -95,6 +96,7 @@ function AdmRoutes() {
                 <Route path="/adm/pedidos" export exact component={OrdersAdm} />
                 <Route path="/adm/produtos" export exact component={ProductsAdm} />
                 <Route path="/adm/funcionarios" export exact component={EmployeeAdm} />
+                <Route path="*" component={() => <h1>Page not found</h1>} />
             </Switch>
             </SidebarAdm>
             <FooterAdm />

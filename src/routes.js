@@ -7,6 +7,8 @@ import HomeEditable from "./Pages/Administrador/HomeEditable";
 import OrdersAdm from "./Pages/Administrador/OrdersAdm";
 import ProductsAdm from "./Pages/Administrador/ProductsAdm";
 import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
+import EspecificEmployee  from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
+
 
 
 import Loja from "./Pages/Loja";
@@ -99,6 +101,7 @@ function AdmRoutes() {
                 <Route path="/adm/pedidos" export exact component={OrdersAdm} />
                 <Route path="/adm/produtos" export exact component={ProductsAdm} />
                 <Route path="/adm/funcionarios" export exact component={EmployeeAdm} />
+                <Route path="/adm/funcionarios/funcionarioEspecifico" export exact component={EspecificEmployee} />
                 <Route path="*" component={() => <h1>Page not found</h1>} />
             </Switch>
             </SidebarAdm>

@@ -1,0 +1,277 @@
+
+/* GLOBAL */
+h1, h2, span, button{
+    font-family: 'Century Gothic';
+}
+
+/* COMPONENTES DA PÁGINA */
+.boxOutsideImage{
+    height: 100%;
+    width: 100px;
+
+    border: 1.5px solid #8ED7CD;
+}
+
+.boxOutsideImage + .boxOutsideImage{
+    margin-left: 24px;
+}
+
+.labelWithInputHomeEditable{
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.labelWithInputHomeEditable svg{
+    width: 40px;
+    margin-right: 24px;
+};
+
+/* WTF */
+.HomeEditableContent label{
+    font-size: 16px;
+
+    margin-right: 16px;
+};
+
+.HomeEditableContent input{
+    border: 1px solid #aaa;
+    border-radius: 15px;
+    outline: none;
+}
+
+/* PARTE CARROSSEL */
+
+.HomeEditableContent{
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.HomeEditableContent .carouselPart, .HomeEditableContent .whoWeArePart,
+.HomeEditableContent .productsPart, .HomeEditableContent .contactInfoPart{
+    width: 95%;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-bottom: 40px;
+}
+
+.HomeEditableContent .titleArea{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.HomeEditableContent .titleArea h1{
+    font-size: 32px;
+    line-height: 49px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.HomeEditableContent .titleArea h1 span{
+    width: 90%;
+    height: 2px;
+    margin: 0 auto;
+    border-bottom: 2px solid #0EC4AB
+}
+
+.HomeEditableContent .changeImagesPart{
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+}
+
+.HomeEditableContent h2{
+    font-size: 18px;
+
+    margin: 16px 0 8px 0;
+}
+
+.HomeEditableContent .changeImagesPart .boxChangeImages{
+    width: 100%;
+    height: 130px;
+
+    padding: 10px 15px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    border: 1px solid #8ED7CD;
+
+    margin-bottom: 24px;
+}
+
+.HomeEditableContent .changeImagesPart .buttonsCarouselPart{
+    width: 70%;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.HomeEditableContent button{
+    
+    font-size: 18px;
+    
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.HomeEditableContent .firstButton{
+    color: #3772FF;
+}
+
+.HomeEditableContent .secondButton{
+    color: #FF5656;
+}
+
+/* PARTE QUEM SOMOS */
+
+.HomeEditableContent .whoWeArePart .changeTextArea{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.HomeEditableContent .whoWeArePart .changeTextArea .textWhoWeAre{
+    width: 100%;
+    height: 90px;
+
+    margin-bottom: 16px;
+}
+
+.HomeEditableContent .whoWeArePart .changeTextArea .textWhoWeAre textarea{
+    width: 100%;
+    height: 100%;
+
+    outline: none;
+    border: 1px solid #AAA;
+}
+
+.HomeEditableContent .whoWeArePart .changeImageArea{
+    width: 100%;
+
+    height: 220px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.HomeEditableContent .whoWeArePart .changeImageArea .imageWhoWeAre{
+    width: 100%;
+    height: 100%;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    
+}
+
+.HomeEditableContent .whoWeArePart .changeImageArea .imageWhoWeAre .boxChangeImageWhoWeAre{
+    height: 100%;
+    width: 200px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1.5px solid #8ED7CD;
+    margin-right: 24px;
+}
+
+.HomeEditableContent .whoWeArePart .changeImageArea .imageWhoWeAre .buttonsWhoWeArePart{
+
+    width: auto;
+    height: 80%;
+
+    margin: auto 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    justify-content: space-evenly;
+}
+
+/* PARTE PRODUTOS */
+
+.HomeEditableContent .productsPart .changeTextArea{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.HomeEditableContent .productsPart .changeTextArea .textProducts{
+    width: 100%;
+    height: 90px;
+
+    margin-bottom: 16px;
+}
+
+.HomeEditableContent .productsPart .changeTextArea .textProducts textarea{
+    width: 100%;
+    height: 100%;
+
+    outline: none;
+    border: 1px solid #AAA;
+}
+
+/* PARTE INFORMAÇÕES DE CONTATO */
+
+.HomeEditableContent .contactInfoPart .changeInfoArea{
+    width: 100%;
+
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    margin-top: 24px;
+
+}
+
+.HomeEditableContent .contactInfoPart .socialMediaInfo{
+    margin-top: 24px;
+}
+
+/* BOTÃO DE SALVAR */
+.HomeEditableContent .saveChangesButton{
+
+    width: 60%;
+    font-size: 24px;
+
+    outline: none;
+    background-color: #0EC4AB;
+    border-radius: 20px;
+
+    transition: background-color 0.3s;
+}
+
+.HomeEditableContent .saveChangesButton:hover{
+    background-color: #50dac7;
+}

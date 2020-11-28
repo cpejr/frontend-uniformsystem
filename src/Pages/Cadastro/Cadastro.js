@@ -18,7 +18,6 @@ function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
 }
 
 function Cadastro() {
- 
   const [nameStored, setName] = useState("");
   const [cpfStored, setCpf] = useState("");
   const [emailStored, setEmail] = useState("");
@@ -29,7 +28,6 @@ function Cadastro() {
   const [estadoStored, setEstado] = useState("");
   const [cepStored, setCep] = useState("");
   const [complementoStored, setComplemento] = useState("");
-
 
   return (
     <div className="fullPage">
@@ -104,7 +102,9 @@ function Cadastro() {
             maxLenght={10}
           />
         </div>
-        <div><button className="buttonCad">CRIAR CONTA</button></div>
+        <div>
+          <button className="buttonCad">CRIAR CONTA</button>
+        </div>
       </div>
     </div>
   );

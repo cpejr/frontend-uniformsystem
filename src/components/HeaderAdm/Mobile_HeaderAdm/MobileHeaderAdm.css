@@ -1,0 +1,89 @@
+h1, h2, button, span, p{
+    font-family: 'Century Gothic';
+}
+
+.cell_header{
+    width: 100%;
+    /* height: 10vh; */
+    min-width: auto;
+
+    color: white;
+    background-color: #201F24;
+    box-sizing: content-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell_header .header_content {
+    height: 100%;
+    width: 90%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cell_header .header_content .logo_container {
+    width: fit-content;
+    height: 100% !important;
+}
+
+.cell_header .header_content .logo_container .Logo {
+    height: 100% !important;
+}
+
+.cell_header .header_content .rightSide {
+    width: 80%;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 0;
+}
+
+.cell_header .header_content .rightSide .aboutTheUser{
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell_header .header_content .rightSide svg{
+    font-size: 35px;
+}
+
+.cell_header .header_content .rightSide .divNameFunction{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    margin-left: 8px;
+}
+
+.cell_header .header_content .rightSide .divNameFunction span{
+    font-size: 18px;
+    margin: 0;
+}
+
+.cell_header .header_content .rightSide .divNameFunction p{
+    font-size: 14px;
+    margin: -5px 0 0 0;
+}
+
+.cell_header .header_content .rightSide .logoutPart{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell_header .header_content .rightSide .logoutPart span{
+    margin-right: 8px;
+}

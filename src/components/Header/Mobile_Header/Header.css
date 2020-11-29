@@ -1,6 +1,6 @@
 .cell_header {
     width: 100%;
-    min-width: 475px;
+    /* min-width: 475px; */
     height: fit-content;
 
     color: white;
@@ -32,8 +32,12 @@
 }
 
 .cell_header .header_content .icons {
-    display: flex;
+    width:90%;
+    max-width:450px;
     height: 100%;
+
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 

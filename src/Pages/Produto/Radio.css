@@ -1,0 +1,54 @@
+.radio_container {
+    display: flex;
+    align-items: center;
+    justify-content:center;
+
+    margin-right: 20px;
+
+
+    margin-bottom: 12px;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* nao podemos estilizar o input, logo, o deixei invisivel e estilizei outro componente */
+.radio_container input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio_checkmark {
+    display: flex;
+    align-items: center;
+    justify-content:center;
+
+    width: 25px;
+    height: 25px;
+
+    border: 1px solid #666;
+    border-radius: 8px;
+
+}
+
+/* On mouse-over, add a grey background color */
+.radio_container:hover input ~ .radio_checkmark {
+    background-color: #ccc;
+}
+
+.radio_checkmark .checked {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 25px;
+    height: 24px;
+    border-radius: 8px;
+
+    background-color: #4dcdbc;
+}

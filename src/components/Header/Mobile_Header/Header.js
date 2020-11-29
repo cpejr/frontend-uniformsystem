@@ -15,7 +15,7 @@ function MobileHeader() {
     const [ClickCart, setClickCart] = useState(false);
 
     return (
-        <div className="cell_header" /* style={{display: 'flex', flexDirection: 'column'}} */>
+        <div className="cell_header">
              <div className="logo_container">
                     <Link to="/">
                         <img src={Logo} alt="Logo" className="Logo" />

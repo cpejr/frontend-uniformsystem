@@ -17,6 +17,8 @@ import Contato from "./Pages/Contato";
 import SignUp from "./Pages/Sign_Up";
 import Checkout from "./Pages/Checkout";
 import Cadastro from "./Pages/Cadastro";
+import Pedidos from "./Pages/Pedidos";
+
 
 
 
@@ -82,6 +84,7 @@ function MenuRoutes() {
                 <Route path="/contact" export exact component={Contato} />
                 <Route path="/signUp" export exact component={SignUp} />
                 <Route path="/cadastro" export exact component={Cadastro} />
+                <Route path="/orders" export exact component={Pedidos} />
                 {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
                 <Route path="*" component={() => <h1>Page not found</h1>} />
             </Switch>

@@ -1,0 +1,106 @@
+/* Estlizações abaixo são para a tabela */
+#orderStyle {
+    width: fit-content;
+    border-radius: 15px;
+    height: fit-content;
+    background-color: red;
+    padding: 0px 15px;
+}
+
+table, td, th{
+    
+    height: 40px;
+    border:0;
+    border:0.1px solid#7FA5A0 !important;
+
+}
+
+.orders {
+    text-align: center;
+    width: 100%;
+}
+
+.orders th{
+    background-color: #ccc;
+    font-size: 22px;
+    font-weight: normal;
+}
+
+.orders .singleOrder .status_table {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.orders .singleOrder .id_table .id_camp{
+    display: flex;
+     justify-content:space-between;
+     align-items:center;
+     margin-left:40%;
+     width:60%;
+
+}
+
+/*Estlizacção para a página */
+
+.orders_page {
+    display: flex;
+    width: 100vw;
+    /* justify-content:space-between; */
+}
+
+.orders_page .sidebarAdm {
+    width: 15%;
+}
+
+.orders_page .orders_data {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.orders_page .orders_data .top_page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 60%;
+    height: 15%;
+}
+
+.orders_page .orders_data .top_page .search_order{
+    width: 50%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.orders_page .orders_data .top_page .search_order .input_div .input_id {
+    border: 1px solid #7FA5A0;
+    border-radius: 20px;
+    height: 40px;
+}
+
+.orders_page .orders_data .top_page .div_pendente{
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+
+    width:fit-content;
+}
+.orders_page .orders_data .top_page .div_pendente .text_pendente{
+    margin-right:10px ;
+    width: fit-content;
+    height: fit-content;
+}
+
+.orders_page .orders_data .top_page .div_pendente .toggle_order{
+    margin-left: 10px;
+}
+
+.orders_page .orders_data .div_table{
+    width: 80%;
+    height: 90%;
+}

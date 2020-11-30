@@ -1,0 +1,17 @@
+.setaVoltar {
+  margin-bottom: 2%;
+  font-size: 20px;
+}
+
+.boxTitle {
+  margin-left: 3%;
+}
+
+.titleLineExp {
+  border-top: 3px solid #4dcdbc;
+  border-radius: 20px;
+  width: 42%;
+  margin-left: 0.5%;
+  margin-top: -1%;
+  margin-bottom: 5%;
+}

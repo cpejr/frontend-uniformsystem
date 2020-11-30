@@ -1,0 +1,27 @@
+.tabela {
+  margin-left: 12%;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+
+.titulotab {
+  background-color: #D9D9D9;
+  text-align: center;
+}
+
+.idfunc {
+  text-align: center;
+}
+
+.datafunc {
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+}
+
+table, td, th{
+  border:1px solid #4dcdbc !important;
+  font-weight: normal;
+
+}

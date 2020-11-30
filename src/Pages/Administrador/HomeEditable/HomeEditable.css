@@ -9,7 +9,30 @@ h1, h2, span, button{
     height: 100%;
     width: 100px;
 
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     border: 1.5px solid #8ED7CD;
+
+    cursor: pointer;
+}
+
+.boxOutsideImage:hover{
+    background-color: rgba(0,0,0,0.1);
+}
+
+.boxOutsideImage img{
+    height: 90%;
+    width: auto;
+    overflow: hidden;
+
+}
+
+.selected{
+    background-color: #8ED7CD;
 }
 
 .boxOutsideImage + .boxOutsideImage{
@@ -131,6 +154,7 @@ h1, h2, span, button{
 .HomeEditableContent button{
     
     font-size: 18px;
+    font-weight: 600;
     
     background-color: transparent;
     border: none;
@@ -139,10 +163,14 @@ h1, h2, span, button{
 
 .HomeEditableContent .firstButton{
     color: #3772FF;
+    border: 1px solid #3772FF;
+    outline: none;
 }
 
 .HomeEditableContent .secondButton{
     color: #FF5656;
+    border: 1px solid #FF5656;
+    outline: none;
 }
 
 /* PARTE QUEM SOMOS */

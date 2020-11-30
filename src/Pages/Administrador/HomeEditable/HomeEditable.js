@@ -4,6 +4,11 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+// import Snackbar from '@material-ui/core/Snackbar';
+// import MuiAlert from '@material-ui/lab/Alert';
+
 import Button from '@material-ui/core/Button';
 
 import api from "../../../services/api";
@@ -45,6 +50,10 @@ function InputsOrIconWithInput({label, placeholderInfo, icon, hasIcon, defaultVa
 function HomeEditable(){
 
   const token = '';
+
+  const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
+
+  const [loading, setLoading] = useState(false);
 
   // Estado para armazenar todas as imagens da Home
   const [imagesHome, setImagesHome] = useState([]);
@@ -124,11 +133,6 @@ function HomeEditable(){
   ]
 
 
-  const [excludedCarouselImages, setExcludedCarouselImages] = useState([]);
-  const [excludedWhoWeAreImages, setExcludedWhoWeAreImages] = useState([]);
-  const [excludedProductsImages, setExcludedProductsImages] = useState([]);
-
-
   // Estados para armazenar textos
   const [textoQuemSomos, setTextoQuemSomos] = useState('');
   const [textoProdutos, setTextoProdutos] = useState('');
@@ -178,29 +182,55 @@ function HomeEditable(){
       {
         headers: { authorization: `bearer ${token}` },
       });
-      const imagesCarousel = responseCarousel.data;
+
+      let imagesCarousel = []
+      if(responseCarousel.data){
+        imagesCarousel = responseCarousel.data.map(item => ({
+          file: `${bucketAWS}${item.image_id}.jpg`,
+          imgSrc: item.imgSrc, 
+          imgAlt: item.imgAlt, 
+          imgPlace: item.imgPlace
+        }));
+      }
 
       const responseWhoWeAre = await api.get('/home/images?img_place=whoWeAre',
       {
         headers: { authorization: `bearer ${token}` },
       });
-      const imagesWhoWeAre = responseWhoWeAre.data;
+
+      
+      let imagesWhoWeAre = {}
+      if(responseWhoWeAre.data[0]){
+        const { image_id, imgSrc, imgAlt, imgPlace } = responseWhoWeAre.data[0];
+        imagesWhoWeAre = {
+          file: `${bucketAWS}${image_id}.jpg`,
+          imgSrc: imgSrc, 
+          imgAlt: imgAlt, 
+          imgPlace: imgPlace
+        };
+      }
 
       const responseProducts = await api.get('/home/images?img_place=products',
       {
         headers: { authorization: `bearer ${token}` },
       });
-      const imagesProducts = responseProducts.data;
+      // const imagesProducts = responseProducts.data;
+      let imagesProducts = []
+      if(responseProducts.data){
+        imagesProducts = responseProducts.data.map(item => ({
+          file: `${bucketAWS}${item.image_id}.jpg`,
+          imgSrc: item.imgSrc, 
+          imgAlt: item.imgAlt, 
+          imgPlace: item.imgPlace
+        }));
+      }
 
-      // const imagesCarousel = response.data.filter(item => item.imgPlace === 'carousel'); 
-      // const imagesWhoWeAre = response.data.filter(item => item.imgPlace === 'whoWeAre'); 
-      // const imagesProducts = response.data.filter(item => item.imgPlace === 'products');
       
-      // setImagesCarousel([...imagesCarousel])
+      setImagesCarousel([...imagesCarousel])
       setImagesWhoWeAre(imagesWhoWeAre)
       setImagesProducts([...imagesProducts])
     
-      // setImagesHome([...imagesCarousel, imagesWhoWeAre, ...imagesProducts ]);
+      setImagesHome([...imagesCarousel, imagesWhoWeAre, ...imagesProducts ]);
     }
 
     getHomeImages();
@@ -222,8 +252,8 @@ function HomeEditable(){
       const fileLoaded = fileData.result;
       setImagesCarousel([...imagesCarousel, {
         file: fileLoaded,
-        imgSrc: 'Imagem Carousel',
-        imgAlt: '',
+        imgSrc: fileData,
+        imgAlt: 'Imagem Carrossel',
         imgPlace: 'carousel'
       }])
     }
@@ -235,7 +265,6 @@ function HomeEditable(){
 
   function handleDeleteImageCarousel(){
 
-    console.log('antes',excludedCarouselImages)
     const auxiliarArray = []
     arrayImages.forEach((item, index) =>
     item === true? (
@@ -244,7 +273,6 @@ function HomeEditable(){
       imagesCarousel.splice(index, 1, {}))
       : imagesCarousel[index] !== undefined? auxiliarArray.push(imagesCarousel[index]): null)
       
-      console.log('depois',excludedCarouselImages)
       setImagesCarousel(auxiliarArray)
   }
 
@@ -264,8 +292,8 @@ function HomeEditable(){
       const fileLoaded = fileData.result;
       setImagesWhoWeAre({
         file: fileLoaded,
-        imgSrc: 'Imagem WhoWeAre',
-        imgAlt: '',
+        imgSrc: 'Imagem Quem Somos',
+        imgAlt: 'Imagem Quem somos',
         imgPlace: 'whoWeAre'
       })
     }
@@ -299,7 +327,7 @@ function HomeEditable(){
       setImagesProducts([...imagesProducts, {
         file: fileLoaded,
         imgSrc: 'Imagem Produtos',
-        imgAlt: '',
+        imgAlt: 'Imagem Produtos',
         imgPlace: 'products'
       }])
     }
@@ -328,12 +356,14 @@ function HomeEditable(){
     console.log(imagesCarousel)
   }, [imagesCarousel]);
 
+
   // Função para salvar as informações depois de editar a Home
   async function handleSaveChanges(){
 
+    setLoading(true);
     // Salva mudanças de Home Info 
     try{
-      const response = await api.put('/home/info',
+      await api.put('/home/info',
         {
           textWhoWeAre: textoQuemSomos,
           textProducts: textoProdutos, 
@@ -349,44 +379,51 @@ function HomeEditable(){
           headers: { authorization: `bearer ${token}` },
         });
 
-        console.log(response)
-
     }catch(err){
       console.log(err.message)
-      return err.message
     }
 
     // Salva mudanças de Home Images 
     try{
       
       // Deleta imagens para colocar novas
-      // imagesHome.includes(imagesCarousel.map(item => item))
-      // await api.delete('/home/images',
-      //   {
-        //     headers: { authorization: `bearer ${token}` },
-        //   });
-        
-        // setExcludedCarouselImages([])
-        
-      // Posta novas imagens
-      setImagesHome([...imagesCarousel, ...imagesWhoWeAre, ...imagesProducts]);
-      imagesHome.map( async (item) => {
+      imagesHome.forEach(async (item) => {
 
-        const objImage = {
-          file: item.file,
-          imgPlace: item.imgPlace,
-          imgSrc: item.imgSrc,
-          imgAlt: item.imgAlt
-        }
-
-        await api.post('/home/images',
-          {
-            ...objImage
-          },
+        if(item.file){
+          const nameWithType = item.file.split('.com/')[1]
+          const name = nameWithType.split('.')[0]
+          const type = nameWithType.split('.')[1]
+          await api.delete(`/home/images?name=${name}&type=${type}`,
           {
             headers: { authorization: `bearer ${token}` },
           });
+        }
       });
+      
+      
+      // Posta novas imagens
+      setImagesHome([...imagesCarousel, imagesWhoWeAre, ...imagesProducts]);
+      if(imagesHome){
+        imagesHome.map( async (item) => {
+  
+          const objImage = {
+            "file": item.imgSrc,
+            "imgPlace": item.imgPlace,
+            "imgSrc": "HAHA",
+            "imgAlt": item.imgAlt
+          }
+  
+          const response = await api.post('/home/images',
+            objImage,
+            {
+              headers: { authorization: `bearer ${token}` },
+            });
+            console.log(response)
+        });
+      }
+
+      setTimeout(() => setLoading(false), 3000);
+      
     }catch(err){
       console.log(err.message)
       return err.message
@@ -452,7 +489,7 @@ function HomeEditable(){
           <h2>ALTERAR IMAGEM</h2>
           <div className="imageWhoWeAre">
             <div className="boxChangeImageWhoWeAre">
-              {imagesWhoWeAre !== {} ? <SelectedImages srcImg={imagesWhoWeAre.file} 
+              {imagesWhoWeAre ? <SelectedImages srcImg={imagesWhoWeAre.file} 
                                   altImg={imagesWhoWeAre.imgAlt}
                                 />:
                 <span>Uma foto legal deles aqui</span>
@@ -531,13 +568,13 @@ function HomeEditable(){
 
         <div className="changeInfoArea">
             <InputsOrIconWithInput label={"TELEFONE"} 
-              placeholderInfo={"testeholder"} icon={<FacebookIcon/>}
+              placeholderInfo={"(XX) XXXX-XXXX"} icon={<FacebookIcon/>}
               defaultValue={telephoneInfo}
               hasIcon={false}
               setInfo={setTelephoneInfo} 
             />
             <InputsOrIconWithInput label={"ENDEREÇO"} 
-              placeholderInfo={"testeholder"} icon={<FacebookIcon/>} 
+              placeholderInfo={"Rua ABC"} icon={<FacebookIcon/>} 
               defaultValue={enderecoInfo}
               hasIcon={false}
               setInfo={setEnderecoInfo}
@@ -571,8 +608,8 @@ function HomeEditable(){
         className="saveChangesButton"
         onClick={handleSaveChanges}
       >
-        SALVAR ALTERAÇÕES
-      </Button>
+        {loading ? <CircularProgress />: 'SALVAR ALTERAÇÕES'}
+      </Button> 
 
     </div>
   );

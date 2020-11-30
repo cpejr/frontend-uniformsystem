@@ -1,7 +1,7 @@
 import React from "react";
 import "./TabelaFuncionario.css";
 
-function TabelaFuncionarios({ funcionario, historico }) {
+function TabelaFuncionarios({ funcionario, orderHistory }) {
   return (
     <table className="tabela">
       <thead>
@@ -22,8 +22,15 @@ function TabelaFuncionarios({ funcionario, historico }) {
               <th className="subtitle">ID DO PEDIDO</th>
               <th className="subtitle">DATA DE ENVIO</th>
             </tr>
-            <td className="idfunc">#alguma id</td>
-            <td className="datafunc">alguma data</td>
+            {orderHistory.map((order) => {
+              return (
+                <tr>
+                  {" "}
+                  <td className="idfunc">{order.idpedido}</td>
+                  <td className="datafunc">{order.data}</td>
+                </tr>
+              );
+            })}
           </td>
         </tr>
       </tbody>

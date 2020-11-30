@@ -4,15 +4,15 @@ import TabelaFuncionarios from "../../../../components/TabelaFuncionario/TabelaF
 import "./EspecificEmployee.css";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
-const funcionarios = [
+const funcionario = 
   {
     id: 1,
     nome: "MARIA SOUZA",
     cpf: "123456789-35",
-  },
-];
+  };
 
-const historicoPedidos = [
+
+const orderHistory = [
   {
     id: 3,
     idpedido: "#0003",
@@ -39,9 +39,7 @@ function EspecificEmployee() {
         <hr className="titleLineExp"></hr>
       </div>
       <div className="tabela">
-        {funcionarios.map((funcionario) => (
-          <TabelaFuncionarios key={funcionario.id} funcionario={funcionario} />
-        ))}
+          <TabelaFuncionarios funcionario={funcionario} orderHistory={orderHistory} />
       </div>
     </div>
   );

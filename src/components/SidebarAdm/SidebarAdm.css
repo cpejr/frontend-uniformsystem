@@ -32,9 +32,8 @@
     background-color: #707070;
 }
 
-.fullContentSidebar ul li svg{
-    font-size: 30px;
-    margin-right: 15px;
+.makeStyles-drawer-2 .MuiSvgIcon-root{
+    font-size: 35px !important;
 }
 
 .fullContentSidebar ul li span{

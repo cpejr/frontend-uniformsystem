@@ -43,7 +43,11 @@ function InputsOrIconWithInput({label, placeholderInfo, icon, hasIcon, defaultVa
       }
       <input type="text" name="inputFromLabel"
         value={defaultValue}
-        // placeholder={placeholderInfo}
+        style={{border: '1px solid #aaa',
+          borderRadius: '15px',
+          padding:'3px 5px',
+          outline: 'none'}}
+        placeholder={placeholderInfo}
         onChange={(e) => setInfo(e.target.value)} 
       />
     </div>
@@ -632,22 +636,22 @@ function HomeEditable(){
               hasIcon={false}
               setInfo={setEnderecoInfo}
           />
-            <div className="socialMediaInfo">
+            <div className="socialMediaInfo" style={{marginTop: '24px'}}>
               <h2>REDES SOCIAIS</h2>
               <InputsOrIconWithInput label={"FACEBOOK"} 
-                placeholderInfo={"testeholder"} icon={<FacebookIcon/>} 
+                placeholderInfo={"testeholder"} icon={<FacebookIcon style={{fontSize: '45px', marginRight: '16px'}}/>} 
                 defaultValue={facebookInfo}
                 hasIcon={true}
                 setInfo={setFacebookInfo}
             />
               <InputsOrIconWithInput label={"INSTAGRAM"} 
-                placeholderInfo={"testeholder"} icon={<InstagramIcon/>} 
+                placeholderInfo={"testeholder"} icon={<InstagramIcon style={{fontSize: '45px', margin: '16px 16px 0 0'}}/>} 
                 defaultValue={instagramInfo}
                 hasIcon={true}
                 setInfo={setInstagramInfo}
             />
               <InputsOrIconWithInput label={"WHATSAPP"} 
-                placeholderInfo={"testeholder"} icon={<WhatsAppIcon />}
+                placeholderInfo={"testeholder"} icon={<WhatsAppIcon  style={{fontSize: '45px', margin: '16px 16px 0 0'}}/>}
                 defaultValue={whatsappInfo}
                 hasIcon={true}
                 setInfo={setWhatsappInfo}

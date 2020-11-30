@@ -325,20 +325,19 @@ h1, h2, span, button{
     margin-right: 16px !important;
 };
 
-.HomeEditableContent .contactInfoPart .changeInfoArea .labelWithInputHomeEditable .MuiSvgIcon-root{
-    font-size: 40px ;
+.labelWithInputHomeEditable svg{
+    font-size: 45px !important;
     margin-right: 24px;
 };
 
-.HomeEditableContent .contactInfoPart .changeInfoArea .labelWithInputHomeEditable input[type="text"]{
-    border: 1px solid #aaa;
-    border-radius: 15px;
-    outline: none;
-}
+/*  CSS INLINE */
+/* .HomeEditableContent .contactInfoPart .changeInfoArea .labelWithInputHomeEditable input{
+} */
 
-.HomeEditableContent .contactInfoPart .socialMediaInfo{
-    margin-top: 24px;
-}
+
+/*  CSS INLINE */
+/* .HomeEditableContent .contactInfoPart .changeInfoArea .socialMediaInfo{
+} */
 
 .HomeEditableContent .contactInfoPart .socialMediaInfo .labelWithInputHomeEditable + .labelWithInputHomeEditable{
     margin-top: 0;

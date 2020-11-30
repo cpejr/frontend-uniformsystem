@@ -39,32 +39,14 @@ h1, h2, span, button{
     margin-left: 24px;
 }
 
-.labelWithInputHomeEditable{
-    width: 100%;
+/* CSS de labelWithInputHomeEditable está no final do arquivo */
 
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.labelWithInputHomeEditable svg{
-    width: 40px;
-    margin-right: 24px;
-};
-
-/* WTF */
-.HomeEditableContent label{
-    font-size: 16px;
-
-    margin-right: 16px;
-};
-
-.HomeEditableContent input{
+/* .HomeEditableContent input{
     border: 1px solid #aaa;
     border-radius: 15px;
     outline: none;
-}
+}  */
+
 
 /* PARTE CARROSSEL */
 
@@ -142,13 +124,17 @@ h1, h2, span, button{
 }
 
 .HomeEditableContent .changeImagesPart .buttonsCarouselPart{
-    width: 70%;
+    width: 90%;
     margin: 0 auto;
 
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
+}
+
+.HomeEditableContent .changeImagesPart .iconsCarouselPart{
+    display: none;
 }
 
 .HomeEditableContent button{
@@ -171,6 +157,22 @@ h1, h2, span, button{
     color: #FF5656;
     border: 1px solid #FF5656;
     outline: none;
+}
+/* Media relacionado ao Carrossel */
+@media(max-width: 650px){
+    .HomeEditableContent .changeImagesPart .buttonsCarouselPart{
+        display: none;
+    }
+    
+    .HomeEditableContent .changeImagesPart .iconsCarouselPart{
+        width: 70%;
+        margin: 0 auto;
+    
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+    }
 }
 
 /* PARTE QUEM SOMOS */
@@ -244,6 +246,27 @@ h1, h2, span, button{
     justify-content: space-evenly;
 }
 
+.HomeEditableContent .whoWeArePart .changeImageArea .imageWhoWeAre .iconsWhoWeArePart{
+    display: none;
+}
+
+/* Media relacionado ao Quem Somos */
+@media(max-width: 650px){
+    .HomeEditableContent .whoWeArePart .changeImageArea .imageWhoWeAre .buttonsWhoWeArePart{
+        display: none;
+    }
+    
+    .HomeEditableContent .whoWeArePart .changeImageArea .imageWhoWeAre .iconsWhoWeArePart{
+        height: 90%;
+        margin: auto 0;
+    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+}
+
 /* PARTE PRODUTOS */
 
 .HomeEditableContent .productsPart .changeTextArea{
@@ -281,12 +304,45 @@ h1, h2, span, button{
 
     margin-top: 24px;
 
+
+}
+.HomeEditableContent .contactInfoPart .changeInfoArea .labelWithInputHomeEditable{
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.HomeEditableContent .contactInfoPart .changeInfoArea .labelWithInputHomeEditable + .labelWithInputHomeEditable{
+    margin-top: 16px;
+}
+
+.HomeEditableContent .contactInfoPart .changeInfoArea .labelWithInputHomeEditable label{
+    font-size: 16px;
+
+    margin-right: 16px !important;
+};
+
+.HomeEditableContent .contactInfoPart .changeInfoArea .labelWithInputHomeEditable .MuiSvgIcon-root{
+    font-size: 40px ;
+    margin-right: 24px;
+};
+
+.HomeEditableContent .contactInfoPart .changeInfoArea .labelWithInputHomeEditable input[type="text"]{
+    border: 1px solid #aaa;
+    border-radius: 15px;
+    outline: none;
 }
 
 .HomeEditableContent .contactInfoPart .socialMediaInfo{
     margin-top: 24px;
 }
 
+.HomeEditableContent .contactInfoPart .socialMediaInfo .labelWithInputHomeEditable + .labelWithInputHomeEditable{
+    margin-top: 0;
+}
 /* BOTÃO DE SALVAR */
 .HomeEditableContent .saveChangesButton{
 

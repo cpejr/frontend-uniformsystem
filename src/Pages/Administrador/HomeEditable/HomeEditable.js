@@ -6,6 +6,9 @@ import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 // import Snackbar from '@material-ui/core/Snackbar';
 // import MuiAlert from '@material-ui/lab/Alert';
 
@@ -301,11 +304,11 @@ function HomeEditable(){
 
   // useEffect para as imagens do Quem Somos
   useEffect(() => {
+    console.log('WHOWEARE', imagesWhoWeAre)
   }, [imagesWhoWeAre, arrayImages]);
 
   function handleDeleteImageWhoWeAre(){
     const auxiliarArray = {}
-    // setExcludedWhoWeAreImages(imagesWhoWeAre);
     
     setImagesWhoWeAre(auxiliarArray)
   }
@@ -467,6 +470,22 @@ function HomeEditable(){
             >
               DELETAR IMAGENS SELECIONADAS</Button>
           </div>
+
+          <div className="iconsCarouselPart">
+            <Button className="firstButton"
+              onClick={handleAddImageCarousel}
+            >
+              <input type="file" hidden ref={inputCarousel} 
+                onChange={(e) => handleAddImageCarouselFileInput()}
+              />
+              <AddCircleIcon/>
+            </Button>
+            <Button className="secondButton"
+              onClick={handleDeleteImageCarousel}
+            >
+              <DeleteIcon />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -489,10 +508,10 @@ function HomeEditable(){
           <h2>ALTERAR IMAGEM</h2>
           <div className="imageWhoWeAre">
             <div className="boxChangeImageWhoWeAre">
-              {imagesWhoWeAre ? <SelectedImages srcImg={imagesWhoWeAre.file} 
+              {imagesWhoWeAre.file ? <SelectedImages srcImg={imagesWhoWeAre.file} 
                                   altImg={imagesWhoWeAre.imgAlt}
                                 />:
-                <span>Uma foto legal deles aqui</span>
+                <span>Sem imagem</span>
               }
             </div>
             <div className="buttonsWhoWeArePart">
@@ -510,6 +529,23 @@ function HomeEditable(){
                 DELETAR IMAGEM
               </Button>
             </div>
+
+            <div className="iconsWhoWeArePart">
+              <Button className="firstButton"
+                onClick={handleAddImageWhoWeAre}
+              >
+                <input type="file" hidden ref={inputWhoWeAre} 
+                  onChange={(e) => handleAddImageWhoWeAreFileInput()}
+                />
+                <AddCircleIcon/>
+              </Button>
+              <Button className="secondButton"
+                onClick={handleDeleteImageWhoWeAre}
+              >
+                <DeleteIcon />
+              </Button>
+            </div>
+
           </div>
         </div>
       </div>
@@ -555,6 +591,23 @@ function HomeEditable(){
               DELETAR IMAGENS SELECIONADAS
             </Button>
           </div>
+
+          <div className="iconsCarouselPart">
+            <Button className="firstButton"
+              onClick={handleAddImageProducts}
+            >
+              <input type="file" hidden ref={inputProducts} 
+                onChange={(e) => handleAddImageProductsFileInput()}
+              />
+              <AddCircleIcon/>
+            </Button>
+            <Button className="secondButton"
+              onClick={handleDeleteImageProducts}
+            >
+              <DeleteIcon />
+            </Button>
+          </div>
+
         </div>
       </div>
 

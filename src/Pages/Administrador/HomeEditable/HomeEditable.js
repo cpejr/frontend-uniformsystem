@@ -64,42 +64,15 @@ function HomeEditable(){
 
   // Estado para armazenar todas as imagens da Home
   const [imagesHome, setImagesHome] = useState([]);
-
+  
   // Estado para armazenar Imagens do Carrossel
-  const [imagesCarousel, setImagesCarousel] = useState([
-    {
-      file: 'https://profit-uniformes.s3.amazonaws.com/27840087-bbe7-43d6-a36e-c435eb52b93a.jpg',
-      imgSrc: 'Imagem Source',
-      imgAlt: '',
-      imgPlace: 'carousel'
-    },
-  ]);
-
+  const [imagesCarousel, setImagesCarousel] = useState([]);
+  
   // Estado para armazenar Imagem de Quem Somos
-  const [imagesWhoWeAre, setImagesWhoWeAre] = useState(
-    {
-      file: camisa,
-      imgSrc: 'Imagem Source',
-      imgAlt: '',
-      imgPlace: 'whoWeAre'
-    }
-  );
-
+  const [imagesWhoWeAre, setImagesWhoWeAre] = useState({});
+  
   // Estado para armazenar Imagens de Produtos
-  const [imagesProducts, setImagesProducts] = useState([
-    {
-      file: camisa,
-      imgSrc: 'Imagem Source',
-      imgAlt: '',
-      imgPlace: 'products'
-    },
-    {
-      file: camisa,
-      imgSrc: 'Imagem Source',
-      imgAlt: '',
-      imgPlace: 'products'
-    },
-  ]);
+  const [imagesProducts, setImagesProducts] = useState([]);
 
   // Estados para armazenar imagens selecionadas do Carrossel
   const [imagemCarousel01, setImagemCarousel01] = useState(false);
@@ -253,16 +226,19 @@ function HomeEditable(){
 
   function handleAddImageCarouselFileInput(){
     let fileData = new FileReader();
-    fileData.readAsDataURL(inputCarousel.current.files[0]) 
+    fileData.readAsDataURL(inputCarousel.current.files[0])
+    
+    console.log(inputCarousel.current.files[0])
 
     fileData.onload = function() {
       const fileLoaded = fileData.result;
       setImagesCarousel([...imagesCarousel, {
         file: fileLoaded,
-        imgSrc: fileData,
+        imgSrc: inputCarousel.current.files[0],
         imgAlt: 'Imagem Carrossel',
         imgPlace: 'carousel'
       }])
+
     }
   }
 
@@ -299,7 +275,7 @@ function HomeEditable(){
       const fileLoaded = fileData.result;
       setImagesWhoWeAre({
         file: fileLoaded,
-        imgSrc: 'Imagem Quem Somos',
+        imgSrc: inputWhoWeAre.current.files[0],
         imgAlt: 'Imagem Quem somos',
         imgPlace: 'whoWeAre'
       })
@@ -308,7 +284,6 @@ function HomeEditable(){
 
   // useEffect para as imagens do Quem Somos
   useEffect(() => {
-    console.log('WHOWEARE', imagesWhoWeAre)
   }, [imagesWhoWeAre, arrayImages]);
 
   function handleDeleteImageWhoWeAre(){
@@ -333,7 +308,7 @@ function HomeEditable(){
       const fileLoaded = fileData.result;
       setImagesProducts([...imagesProducts, {
         file: fileLoaded,
-        imgSrc: 'Imagem Produtos',
+        imgSrc: inputProducts.current.files[0],
         imgAlt: 'Imagem Produtos',
         imgPlace: 'products'
       }])
@@ -393,6 +368,8 @@ function HomeEditable(){
     // Salva mudanças de Home Images 
     try{
       
+      console.log('ANTES DO DELETE', imagesHome)
+
       // Deleta imagens para colocar novas
       imagesHome.forEach(async (item) => {
 
@@ -407,27 +384,94 @@ function HomeEditable(){
         }
       });
       
-      
+      // Inicializa
+      setImagesHome([])
       // Posta novas imagens
-      setImagesHome([...imagesCarousel, imagesWhoWeAre, ...imagesProducts]);
-      if(imagesHome){
-        imagesHome.map( async (item) => {
-  
-          const objImage = {
-            "file": item.imgSrc,
-            "imgPlace": item.imgPlace,
-            "imgSrc": "HAHA",
-            "imgAlt": item.imgAlt
-          }
-  
-          const response = await api.post('/home/images',
+      if(imagesCarousel[0].file){
+        console.log('entoru carousel')
+        console.log(imagesCarousel)
+        imagesCarousel.map( async (item) => {
+          console.log('item', item)
+
+          let objImage = new FormData()
+
+          objImage.append("file", !item.imgSrc.name? item.imgSrc.splice(bucketAWS)[1]: item.imgSrc)
+          objImage.append("imgPlace", item.imgPlace)
+          objImage.append("imgSrc", 'Src Imagem')
+          objImage.append("imgAlt", item.imgAlt)
+
+          await api.post('/home/images',
             objImage,
             {
-              headers: { authorization: `bearer ${token}` },
+              headers: { 
+                "Content-Type": "multipart/form-data",
+                authorization: `bearer ${token}` },
             });
-            console.log(response)
+            
         });
       }
+      if(imagesWhoWeAre.file){
+        console.log('entoru quem somos')
+        console.log(imagesWhoWeAre)
+
+        let objImage = new FormData()
+        objImage.append("file", imagesWhoWeAre.imgSrc)
+        objImage.append("imgPlace", imagesWhoWeAre.imgPlace)
+        objImage.append("imgSrc", imagesWhoWeAre.file)
+        objImage.append("imgAlt", imagesWhoWeAre.imgAlt)
+
+        await api.post('/home/images',
+          objImage,
+          {
+            headers: { 
+              "Content-Type": "multipart/form-data",
+              authorization: `bearer ${token}` },
+          });
+            
+      }
+      if(imagesProducts[0].file){
+        console.log('entoru produtos')
+        console.log(imagesProducts)
+        imagesProducts.map( async (item) => {
+          console.log('item', item)
+
+          let objImage = new FormData()
+          objImage.append("file", item.imgSrc)
+          objImage.append("imgPlace", item.imgPlace)
+          objImage.append("imgSrc", item.file)
+          objImage.append("imgAlt", item.imgAlt)
+
+          await api.post('/home/images',
+            objImage,
+            {
+              headers: { 
+                "Content-Type": "multipart/form-data",
+                authorization: `bearer ${token}` },
+            });
+        });
+      }
+      // if(imagesCarousel[0].file){
+
+      //   // console.log(imagesHome)
+      //   imagesCarousel.map( async (item) => {
+      //     console.log('item', item)
+
+      //     let objImage = new FormData()
+      //     objImage.append("file", item.imgSrc)
+      //     objImage.append("imgPlace", item.imgPlace)
+      //     objImage.append("imgSrc", item.file)
+      //     objImage.append("imgAlt", item.imgAlt)
+
+      //     const response = await api.post('/home/images',
+      //       objImage,
+      //       {
+      //         headers: { 
+      //           "Content-Type": "multipart/form-data",
+      //           authorization: `bearer ${token}` },
+      //       });
+      //       console.log('respostaaa',response)
+      //   });
+      // }
 
       setTimeout(() => setLoading(false), 3000);
       

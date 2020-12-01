@@ -61,32 +61,13 @@ function Checkout(){
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState({});
 
-  const user_id = 'bd1d08-e614-37d4-5da2-45108852f0'
+  const user_id = '534a5d-8e8d-0e50-4db-88b45325ae1d'
 
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYmQxZDA4LWU2MTQtMzdkNC01ZGEyLTQ1MTA4ODUyZjAiLCJuYW1lIjoiRGlvZ28gQWRtaW4gMCIsImZpcmViYXNlX3VpZCI6Im1FQ001UnV3c3FTZHJaTnlPd01CMmVkOFZkQTIiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImRpb2dvYWRtMTBAZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5MTAiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMS0yNCAwMzowOTozMCIsInVwZGF0ZWRfYXQiOiIyMDIwLTExLTI0IDAzOjA5OjMwIn1dLCJpYXQiOjE2MDYzNjMxMzcsImV4cCI6MTYwODk1NTEzN30.eZhANDozTHrqWDkRPnL75ky7JloUH7_pgW8ZNI1mm7M';
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiNTM0YTVkLThlOGQtMGU1MC00ZGItODhiNDUzMjVhZTFkIiwibmFtZSI6IkRpb2dvIEFkbWluIDEiLCJmaXJlYmFzZV91aWQiOiI3SndrSGl0VmR2Y1NoU3ptV2NzTExpb2VqZG8xIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJkaW9nb2FkbTEyQGVtYWlsLmNvbSIsImNwZiI6IjEyMzQ1Njc4OTEyIiwiY3JlYXRlZF9hdCI6IjIwMjAtMTEtMzAgMjM6NDc6NDEiLCJ1cGRhdGVkX2F0IjoiMjAyMC0xMS0zMCAyMzo0Nzo0MSJ9XSwiaWF0IjoxNjA2NzgwMDcyLCJleHAiOjE2MDkzNzIwNzJ9.6_OAGKyrXfQ9kfvq-EQWZzpS0G2CIDF1grmCH708Wbs';
 
-  const serviceCode = '04014'
+  const serviceCode = '04014';
 
-  const comprasCarrinho = [
-    {
-      nomeProduto: 'Produto 1',
-      quantidadeProduto: 500,
-      corProduct: 'Branco',
-      precoProduto: '10,00'
-    },
-    {
-      nomeProduto: 'Produto 2',
-      quantidadeProduto: 10,
-      corProduct: 'Preto',
-      precoProduto: '20,00'
-    },
-    {
-      nomeProduto: 'Produto 3',
-      quantidadeProduto: 40,
-      corProduct: 'Verde',
-      precoProduto: '50,00'
-    }
-  ]
+  const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
 
   useEffect(() => {
 
@@ -109,7 +90,6 @@ function Checkout(){
           
         }else{
           var today = new Date()
-          console.log('aqui')
           if( (parseInt(yearStored, 10) <= today.getFullYear()) && (parseInt(yearStored, 10) > 0) && (!isNaN(Number(yearStored)))){
             setErrorBirthInput('')
           }else{
@@ -178,8 +158,11 @@ useEffect(() => {
   // Lista dos produtos para finalizar pedido 
   async function getProducts() {
     const response = await api.get("/cart", {
-      headers: { authorization: `bearer ${token}` },
+      headers: {
+        authorization: `bearer ${token}` 
+      },
     });
+
     setProducts([...response.data]);
   }
   
@@ -197,7 +180,6 @@ useEffect(() => {
     const response = await api.get(`/address/${user_id}`, {
       headers: { authorization: `bearer ${token}` },
     });
-    // console.log(response.data.adresses[0])
     setAddress({...response.data.adresses[0]});
   }
   
@@ -249,41 +231,34 @@ useEffect(() => {
         <div className="leftSide">
 
           <div className="aboutListProducts">
-            { !comprasCarrinho ? 
+            { products.length == 0 ? 
                   <div className="aboutProduct">
-                    <img src={camisa} alt="Camisa"/>
                     <div className="infoProduct">
                       <span>
-                        Nome do produto: Produto
-                      </span>
-                      <span>
-                        Quantidade total: 10 uni.
-                      </span>
-                      <span>
-                        Cor: Branco
-                      </span>
-                      <span>
-                        Preço: R$ 500,00
+                        Sem produtos
                       </span>
                     </div>
                   </div>
               :
-              comprasCarrinho.map( (product, index) => {
+              products.map( (product, index) => {
                 return (
                   <div className="aboutProduct" key={index}>
-                    <img src={camisa} alt="Camisa"/>
+                    <img src={bucketAWS+product.img_link} alt={product.name}/>
                     <div className="infoProduct">
                       <span>
-                        Nome do produto: {product.nomeProduto}
+                        Nome do produto: {product.name}
                       </span>
                       <span>
-                        Quantidade total: {product.quantidadeProduto} uni.
+                        Quantidade total: {product.amount} uni.
                       </span>
                       <span>
-                        Cor: {product.corProduto}
+                        Tamanho: {product.size}
                       </span>
                       <span>
-                        Preço: R$ {product.precoProduto}
+                        Preço único: R$ {product.price}
+                      </span>
+                      <span>
+                        Total: R$ {product.amount * product.price}
                       </span>
                     </div>
                   </div>

@@ -1,0 +1,178 @@
+.products-adm-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin: auto;
+}
+
+.cards-products{
+    width: 80%;
+    padding: 20px;
+    display: grid;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 0.4fr));
+    justify-content: center;
+}
+
+.sidebar-container{
+    width: 250px;
+}
+
+.button-content{
+    border: solid 2px #0EC4AB;
+    border-radius: 38px;
+    padding: 5px;
+    background-color: #0EC4AB;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.button-content:hover{
+    border: solid 2px #0EC4AB;
+    background-color: white;
+    color: black;
+    text-decoration: none;
+}
+
+.filter-container{
+    width: 230px;
+    margin: 25px 0 0 10px;
+}
+
+.filters-products{
+    margin-top: 7px;
+}
+
+/*Trocando a cor dos inputs checkbox e radio*/
+.checkbox{
+    display: none;
+}
+
+input[type=checkbox] + label {
+    position: relative;
+    cursor: pointer;
+    padding-left: 30px;
+}
+
+input[type=checkbox] + label::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    bottom: 0;
+    border: 1px solid  #201F24;
+    vertical-align: bottom;
+    border-radius: 2px;
+
+}
+
+input[type=checkbox]:checked + label::before {
+    background-color: #0EC4AB;
+    border: 1px solid #0EC4AB;
+}
+
+input[type=checkbox]:checked + label::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    bottom: 4px;
+    width: 8px;
+    height: 16px;
+    border-right: solid 3px white;
+    border-bottom: solid 3px white;
+    transform: rotate(45deg);
+}
+
+.radio{
+    display: none;
+}
+
+input[type=radio] + label {
+    position: relative;
+    cursor: pointer;
+}
+
+input[type=radio] + label::before {
+    content: '';
+    position: absolute;
+    left: 200px;
+    bottom: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: solid 1px;
+    vertical-align: bottom;
+}
+
+input[type=radio]:checked + label::before {
+    background-color: #0EC4AB;
+    border: 1px solid #0EC4AB;
+}
+
+input[type=radio]:checked + label::after {
+    content: '';
+    position: absolute;
+    left: 206px;
+    bottom: 4px;
+    width: 8px;
+    height: 15px;
+    border-right: solid 3px white;
+    border-bottom: solid 3px white;
+    transform: rotate(45deg);
+}
+/*---------------------------------------------------------------------*/
+
+.price-container{
+    width: 230px;
+}
+
+.filter-price{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 7px;
+}
+
+.filter-price label{
+    display: flex;
+    flex-grow: 1;
+}
+
+@media (max-width: 430px){
+    .products-adm-container{
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+        align-items:center;
+    }
+    .filter-container{
+        position: relative;
+        margin-bottom: 2vh;
+        display: inline-block;
+    }
+    .filter-content{
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 3vh;
+        background-color: #f9f9f9;
+        min-width: 230px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    .filters-products{
+        margin-left: 7px;
+    }
+    .filter-container:hover .filter-content{ display: block;}
+    .filters-products input{ background-color: black;}
+    .product-container{
+        margin-left: 5px;
+    }
+    .price-container{
+        margin-left: 5px;
+    }
+}

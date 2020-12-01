@@ -32,7 +32,7 @@
     background-color: #707070;
 }
 
-.makeStyles-drawer-2 .MuiSvgIcon-root{
+.MuiDrawer-root .MuiSvgIcon-root{
     font-size: 35px !important;
 }
 

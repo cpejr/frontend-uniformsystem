@@ -45,7 +45,7 @@ function InputsOrIconWithInput({label, placeholderInfo, icon, hasIcon, defaultVa
         value={defaultValue}
         style={{border: '1px solid #aaa',
           borderRadius: '15px',
-          padding:'3px 5px',
+          padding:'5px 10px',
           outline: 'none'}}
         placeholder={placeholderInfo}
         onChange={(e) => setInfo(e.target.value)} 
@@ -689,13 +689,13 @@ function HomeEditable(){
                 setInfo={setFacebookInfo}
             />
               <InputsOrIconWithInput label={"INSTAGRAM"} 
-                placeholderInfo={"testeholder"} icon={<InstagramIcon style={{fontSize: '45px', margin: '16px 16px 0 0'}}/>} 
+                placeholderInfo={"testeholder"} icon={<InstagramIcon style={{fontSize: '45px', marginRight: '16px'}}/>} 
                 defaultValue={instagramInfo}
                 hasIcon={true}
                 setInfo={setInstagramInfo}
             />
               <InputsOrIconWithInput label={"WHATSAPP"} 
-                placeholderInfo={"testeholder"} icon={<WhatsAppIcon  style={{fontSize: '45px', margin: '16px 16px 0 0'}}/>}
+                placeholderInfo={"testeholder"} icon={<WhatsAppIcon  style={{fontSize: '45px', marginRight: '16px'}}/>}
                 defaultValue={whatsappInfo}
                 hasIcon={true}
                 setInfo={setWhatsappInfo}

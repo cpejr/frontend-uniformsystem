@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../../services/api';
 import ProductCardAdm from '../../../components/ProductCardAdm';
@@ -14,25 +14,36 @@ const FILTER_OPTIONS = [
   'EMPRESARIAL',
   'BONÉS',
 ]
-const PRICE_OPTIONS = [
-  'Até R$25,00',
-  'R$25,00 - R$50,00',
-  'R$50,00 - R$100,00',
-  'R$100,00 - R$150,00',
-  'Acima de R$150,00',
-  'Qualquer valor'
-]
 
 function ProductsAdm() {
 
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState({ product_type: [], gender: [] });
+  const page = useRef(1);
+  const pageLoading = useRef(false);
 
   async function getProducts() {
     try {
-      const response = await api.get('/product');
+
+      let query = [];
+      if (filter.product_type.length > 0) {
+        let products_type = filter.product_type.join(',');
+        let param = 'product_type=' + products_type;
+        query.push(param);
+      }
+      if (filter.gender.length === 1) {
+        let genders = filter.gender.join(',');
+        let param = 'gender=' + genders;
+        query.push(param);
+      }
+      if (page.current !== 1) {
+        const param = 'page=' + page.current;
+        query.push(param);
+      }
+      console.log(query);
+      const response = await api.get(`/product?${query.join('&')}`);
       console.log(response);
-      setProducts([...response.data.products]);
+      return(response.data.products);
     }
     catch (error) {
       console.warn(error);
@@ -41,8 +52,11 @@ function ProductsAdm() {
   }
 
   useEffect(() => {
-    getProducts()
-  }, [])
+    page.current = 1;
+    getProducts().then(newProducts => {
+      setProducts(newProducts);
+    });
+  }, [filter])
 
   function handleInputChange(e) {
     const newFilter = { ...filter };
@@ -138,6 +152,49 @@ function ProductsAdm() {
 
   }
 
+  useEffect(() => {
+    function handleScroll() {
+      const windowHeight =
+        "innerHeight" in window
+          ? window.innerHeight
+          : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.pageYOffset;
+      if (windowBottom >= docHeight) {
+        //bottom reached
+        //Fuçã que faz requisição no back pela proxima pagina
+        loadNextPage();
+        //.then(setOngsData)
+        //.catch((error) => console.error(error));
+      }
+    }
+    function loadNextPage() {
+      if (!pageLoading.current) {
+        pageLoading.current = true;
+        page.current++;
+        getProducts().then(newProducts => {
+          console.log(newProducts);
+          setProducts([...products, ...newProducts]);
+          pageLoading.current = false;
+        })
+      }
+    }
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products]);
+
 
   return (
     <div className="products-adm-container">
@@ -159,21 +216,6 @@ function ProductsAdm() {
               )
             })
             }
-
-            <div className="price-container">
-              <br></br>
-              <p>PREÇO</p>
-
-              {PRICE_OPTIONS.map((price, index) => {
-                return (
-                  <div className="filter-price">
-                    <input type="radio" id={`price-${index}`} name="price" onChange={handlePriceChange} value={price} className="radio" />
-                    <label for={`price-${index}`}>{price}</label>
-
-                  </div>
-                )
-              })}
-            </div>
           </div>
         </div>
 

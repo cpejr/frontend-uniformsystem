@@ -88,59 +88,7 @@ input[type=checkbox]:checked + label::after {
     transform: rotate(45deg);
 }
 
-.radio{
-    display: none;
-}
-
-input[type=radio] + label {
-    position: relative;
-    cursor: pointer;
-}
-
-input[type=radio] + label::before {
-    content: '';
-    position: absolute;
-    left: 200px;
-    bottom: 0;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: solid 1px;
-    vertical-align: bottom;
-}
-
-input[type=radio]:checked + label::before {
-    background-color: #0EC4AB;
-    border: 1px solid #0EC4AB;
-}
-
-input[type=radio]:checked + label::after {
-    content: '';
-    position: absolute;
-    left: 206px;
-    bottom: 4px;
-    width: 8px;
-    height: 15px;
-    border-right: solid 3px white;
-    border-bottom: solid 3px white;
-    transform: rotate(45deg);
-}
 /*---------------------------------------------------------------------*/
-
-.price-container{
-    width: 230px;
-}
-
-.filter-price{
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 7px;
-}
-
-.filter-price label{
-    display: flex;
-    flex-grow: 1;
-}
 
 @media (max-width: 430px){
     .products-adm-container{

@@ -16,7 +16,7 @@ function ProductCardAdm(props) {
                 <div className="product-img">
                     <img className="img-product" src={camisa} />
                 </div>
-                <div className="product-name">{props.product.name}</div>
+                <div className="product-name">{props.product.product_id}</div>
                 <div className="product-adm-price">{(props.product.models.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
             </div>
         </Link>

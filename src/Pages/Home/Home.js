@@ -11,7 +11,6 @@ import api from "../../services/api";
 import './Home.css'
 
 const CardProdutosHome = ({ imgSrcProduto, imgAltProduto, nomeProduto}) => {
-  console.log(imgSrcProduto)
   return (
     <div className="divCardProdutos">
       <img src={imgSrcProduto} alt={imgAltProduto} />

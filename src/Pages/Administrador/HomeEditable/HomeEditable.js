@@ -1,78 +1,101 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 
-import FacebookIcon from '@material-ui/icons/Facebook';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import FacebookIcon from "@material-ui/icons/Facebook";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import DeleteIcon from '@material-ui/icons/Delete';
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 // import Snackbar from '@material-ui/core/Snackbar';
 // import MuiAlert from '@material-ui/lab/Alert';
 
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 
 import api from "../../../services/api";
 
-import camisa from '../../../Assets/camisa.jpg';
+import camisa from "../../../Assets/camisa.jpg";
 
-import './HomeEditable.css';
+import "./HomeEditable.css";
 
-function SelectedImages({srcImg, altImg, setSelectedImage, SelectedImage}){
-  
+function SelectedImages({ srcImg, altImg, whoWeAre = false, setSelectedImage, SelectedImage }) {
   const handleClick = () => {
-    setSelectedImage(!SelectedImage)
-    console.log(SelectedImage)
-  }
+    setSelectedImage(!SelectedImage);
+    console.log(SelectedImage);
+  };
+  
+  if(!whoWeAre){
+    return (
+      <div
+        className={SelectedImage ? "boxOutsideImage selected" : "boxOutsideImage"}
+        onClick={handleClick}
+      >
+        <img src={srcImg} alt={altImg} />
+      </div>
+    );
+  }else{
+      return (
+        <div
+          className={"boxOutsideImage"}
+        >
+          <img src={srcImg} alt={altImg} />
+        </div>
+      );
 
-  return (
-    <div className={ SelectedImage? "boxOutsideImage selected" : "boxOutsideImage" } onClick={handleClick}>
-      <img src={srcImg} alt={altImg} />
-    </div>
-  );
+  }
 }
 
-function InputsOrIconWithInput({label, placeholderInfo, icon, hasIcon, defaultValue, setInfo}){
-
+function InputsOrIconWithInput({
+  label,
+  placeholderInfo,
+  icon,
+  hasIcon,
+  defaultValue,
+  setInfo,
+}) {
   return (
     <div className="labelWithInputHomeEditable">
-      {hasIcon ? icon
-        : <label style={{marginRight: '16px'}}>{label}</label>
-      }
-      <input type="text" name="inputFromLabel"
+      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label}</label>}
+      <input
+        type="text"
+        name="inputFromLabel"
         value={defaultValue}
-        style={{border: '1px solid #aaa',
-          borderRadius: '15px',
-          padding:'5px 10px',
-          outline: 'none'}}
+        style={{
+          border: "1px solid #aaa",
+          borderRadius: "15px",
+          padding: "5px 10px",
+          outline: "none",
+        }}
         placeholder={placeholderInfo}
-        onChange={(e) => setInfo(e.target.value)} 
+        onChange={(e) => setInfo(e.target.value)}
       />
     </div>
   );
 }
 
-function HomeEditable(){
+function HomeEditable() {
+  const token = "";
 
-  const token = '';
-
-  const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
+  const bucketAWS = "https://profit-uniformes.s3.amazonaws.com/";
 
   const [loading, setLoading] = useState(false);
 
   // Estado para armazenar todas as imagens da Home
   const [imagesHome, setImagesHome] = useState([]);
-  
+
   // Estado para armazenar Imagens do Carrossel
   const [imagesCarousel, setImagesCarousel] = useState([]);
-  
+  // const [newImagesCarousel, setNewImagesCarousel] = useState([]);
+
   // Estado para armazenar Imagem de Quem Somos
   const [imagesWhoWeAre, setImagesWhoWeAre] = useState({});
-  
+  // const [newImagesWhoWeAre, setNewImagesWhoWeAre] = useState({});
+
   // Estado para armazenar Imagens de Produtos
   const [imagesProducts, setImagesProducts] = useState([]);
+  // const [newImagesProducts, setNewImagesProducts] = useState([]);
 
   // Estados para armazenar imagens selecionadas do Carrossel
   const [imagemCarousel01, setImagemCarousel01] = useState(false);
@@ -87,14 +110,14 @@ function HomeEditable(){
     imagemCarousel03,
     imagemCarousel04,
     imagemCarousel05,
-  ]
+  ];
   const arrayStateImages = [
     setImagemCarousel01,
     setImagemCarousel02,
     setImagemCarousel03,
     setImagemCarousel04,
     setImagemCarousel05,
-  ]
+  ];
 
   // Estados para armazenar imagens selecionadas de Produtos
   const [imagemProducts01, setImagemProducts01] = useState(false);
@@ -105,42 +128,56 @@ function HomeEditable(){
     imagemProducts01,
     imagemProducts02,
     imagemProducts03,
-  ]
+  ];
   const arrayStateImagesProducts = [
     setImagemProducts01,
     setImagemProducts02,
     setImagemProducts03,
-  ]
+  ];
 
+  const [excludedCarouselImages, setExcludedCarouselImages] = useState([]);
+  const [excludedWhoWeAreImages, setExcludedWhoWeAreImages] = useState({});
+  const [excludedProductsImages, setExcludedProductsImages] = useState([]);
 
   // Estados para armazenar textos
-  const [textoQuemSomos, setTextoQuemSomos] = useState('');
-  const [textoProdutos, setTextoProdutos] = useState('');
+  const [textoQuemSomos, setTextoQuemSomos] = useState("");
+  const [textoProdutos, setTextoProdutos] = useState("");
 
-  const [telephoneInfo, setTelephoneInfo] = useState('');
-  const [enderecoInfo, setEnderecoInfo] = useState('');
-  const [facebookInfo, setFacebookInfo] = useState('');
-  const [instagramInfo, setInstagramInfo] = useState('');
-  const [whatsappInfo, setWhatsappInfo] = useState('');
-
+  const [telephoneInfo, setTelephoneInfo] = useState("");
+  const [enderecoInfo, setEnderecoInfo] = useState("");
+  const [facebookInfo, setFacebookInfo] = useState("");
+  const [instagramInfo, setInstagramInfo] = useState("");
+  const [whatsappInfo, setWhatsappInfo] = useState("");
 
   // UseEffect para inicializar as informações da Home
   useEffect(() => {
-    
-    async function getHomeInfo(){
-      const response = await api.get('/home/info',
-      {
+    async function getHomeInfo() {
+      const response = await api.get("/home/info", {
         headers: { authorization: `bearer ${token}` },
       });
 
-      const textWhoWeAre = response.data.filter(item => item.key === 'textWhoWeAre'? item.data: null)[0]; 
-      const textProducts = response.data.filter(item => item.key === 'textProducts'? item.data: null)[0]; 
-      const cellphone = response.data.filter(item => item.key === 'cellphone'? item.data: null)[0]; 
-      const address = response.data.filter(item => item.key === 'address'? item.data: null)[0]; 
-      const facebookLink = response.data.filter(item => item.key === 'facebookLink'? item.data: null)[0]; 
-      const instagramLink = response.data.filter(item => item.key === 'instagramLink'? item.data: null)[0]; 
-      const whatsAppNumber = response.data.filter(item => item.key === 'whatsAppNumber'? item.data: null)[0];
-  
+      const textWhoWeAre = response.data.filter((item) =>
+        item.key === "textWhoWeAre" ? item.data : null
+      )[0];
+      const textProducts = response.data.filter((item) =>
+        item.key === "textProducts" ? item.data : null
+      )[0];
+      const cellphone = response.data.filter((item) =>
+        item.key === "cellphone" ? item.data : null
+      )[0];
+      const address = response.data.filter((item) =>
+        item.key === "address" ? item.data : null
+      )[0];
+      const facebookLink = response.data.filter((item) =>
+        item.key === "facebookLink" ? item.data : null
+      )[0];
+      const instagramLink = response.data.filter((item) =>
+        item.key === "instagramLink" ? item.data : null
+      )[0];
+      const whatsAppNumber = response.data.filter((item) =>
+        item.key === "whatsAppNumber" ? item.data : null
+      )[0];
+
       setTextoQuemSomos(textWhoWeAre.data);
       setTextoProdutos(textProducts.data);
       setTelephoneInfo(cellphone.data);
@@ -151,341 +188,372 @@ function HomeEditable(){
     }
 
     getHomeInfo();
-
   }, []);
 
   // UseEffect para inicializar as imagens da Home
   useEffect(() => {
-    
-    async function getHomeImages(){
-      const responseCarousel = await api.get('/home/images?img_place=carousel',
-      {
-        headers: { authorization: `bearer ${token}` },
-      });
+    async function getHomeImages() {
+      const responseCarousel = await api.get(
+        "/home/images?img_place=carousel",
+        {
+          headers: { authorization: `bearer ${token}` },
+        }
+      );
 
-      let imagesCarousel = []
-      if(responseCarousel.data){
-        imagesCarousel = responseCarousel.data.map(item => ({
-          file: `${bucketAWS}${item.image_id}.jpg`,
-          imgSrc: item.imgSrc, 
-          imgAlt: item.imgAlt, 
-          imgPlace: item.imgPlace
+      let imagesCarousel = [];
+      if (responseCarousel.data) {
+        imagesCarousel = responseCarousel.data.map((item) => ({
+          file: `${bucketAWS}${item.image_id}`,
+          imgSrc: item.imgSrc,
+          imgAlt: item.imgAlt,
+          imgPlace: item.imgPlace,
         }));
       }
 
-      const responseWhoWeAre = await api.get('/home/images?img_place=whoWeAre',
-      {
-        headers: { authorization: `bearer ${token}` },
-      });
+      const responseWhoWeAre = await api.get(
+        "/home/images?img_place=whoWeAre",
+        {
+          headers: { authorization: `bearer ${token}` },
+        }
+      );
 
-      
-      let imagesWhoWeAre = {}
-      if(responseWhoWeAre.data[0]){
+      let imagesWhoWeAre = {};
+      if (responseWhoWeAre.data[0]) {
         const { image_id, imgSrc, imgAlt, imgPlace } = responseWhoWeAre.data[0];
         imagesWhoWeAre = {
-          file: `${bucketAWS}${image_id}.jpg`,
-          imgSrc: imgSrc, 
-          imgAlt: imgAlt, 
-          imgPlace: imgPlace
+          file: `${bucketAWS}${image_id}`,
+          imgSrc: imgSrc,
+          imgAlt: imgAlt,
+          imgPlace: imgPlace,
         };
       }
 
-      const responseProducts = await api.get('/home/images?img_place=products',
-      {
-        headers: { authorization: `bearer ${token}` },
-      });
+      const responseProducts = await api.get(
+        "/home/images?img_place=products",
+        {
+          headers: { authorization: `bearer ${token}` },
+        }
+      );
       // const imagesProducts = responseProducts.data;
-      let imagesProducts = []
-      if(responseProducts.data){
-        imagesProducts = responseProducts.data.map(item => ({
-          file: `${bucketAWS}${item.image_id}.jpg`,
-          imgSrc: item.imgSrc, 
-          imgAlt: item.imgAlt, 
-          imgPlace: item.imgPlace
+      let imagesProducts = [];
+      if (responseProducts.data) {
+        imagesProducts = responseProducts.data.map((item) => ({
+          file: `${bucketAWS}${item.image_id}`,
+          imgSrc: item.imgSrc,
+          imgAlt: item.imgAlt,
+          imgPlace: item.imgPlace,
         }));
       }
 
-      
-      setImagesCarousel([...imagesCarousel])
-      setImagesWhoWeAre(imagesWhoWeAre)
-      setImagesProducts([...imagesProducts])
-    
-      setImagesHome([...imagesCarousel, imagesWhoWeAre, ...imagesProducts ]);
+      setImagesCarousel([...imagesCarousel]);
+      setImagesWhoWeAre(imagesWhoWeAre);
+      setImagesProducts([...imagesProducts]);
+
+      setImagesHome([...imagesCarousel, imagesWhoWeAre, ...imagesProducts]);
     }
 
     getHomeImages();
-
   }, []);
 
   // Manipulação para as imagens do Carrossel
   const inputCarousel = useRef(null);
 
-  function handleAddImageCarousel(){
+  function handleAddImageCarousel() {
     inputCarousel.current.click();
   }
 
-  function handleAddImageCarouselFileInput(){
+  function handleAddImageCarouselFileInput() {
     let fileData = new FileReader();
-    fileData.readAsDataURL(inputCarousel.current.files[0])
-    
-    console.log(inputCarousel.current.files[0])
+    fileData.readAsDataURL(inputCarousel.current.files[0]);
 
-    fileData.onload = function() {
+    console.log(inputCarousel.current.files[0]);
+
+    fileData.onload = function () {
       const fileLoaded = fileData.result;
-      setImagesCarousel([...imagesCarousel, {
-        file: fileLoaded,
-        imgSrc: inputCarousel.current.files[0],
-        imgAlt: 'Imagem Carrossel',
-        imgPlace: 'carousel'
-      }])
+      console.log("imagem upada", fileLoaded);
 
-    }
+      setImagesCarousel([
+        ...imagesCarousel,
+        {
+          file: fileLoaded,
+          imgSrc: inputCarousel.current.files[0],
+          imgAlt: "Imagem Carrossel 33",
+          imgPlace: "carousel",
+        },
+      ]);
+
+    };
   }
 
   // useEffect para as imagens do carrossel
-  useEffect(() => {
-  }, [imagesCarousel, arrayImages]);
+  useEffect(() => {}, [imagesCarousel, arrayImages]);
 
-  function handleDeleteImageCarousel(){
+  function handleDeleteImageCarousel() {
+    const indexToExclude = [];
 
-    const auxiliarArray = []
-    arrayImages.forEach((item, index) =>
-    item === true? (
-      arrayStateImages[index](false),
-      // setExcludedCarouselImages([...excludedCarouselImages, imagesCarousel.splice(index, 1, {}) ]))
-      imagesCarousel.splice(index, 1, {}))
-      : imagesCarousel[index] !== undefined? auxiliarArray.push(imagesCarousel[index]): null)
-      
-      setImagesCarousel(auxiliarArray)
+    arrayImages.forEach((item, index) => {
+
+      if (item) {
+        indexToExclude.push(index);
+
+        arrayStateImages[index](false);
+
+        const newExcludedCarouselImages = [...excludedCarouselImages];
+        newExcludedCarouselImages.push(imagesCarousel[index]);
+
+        setExcludedCarouselImages(newExcludedCarouselImages);
+      } 
+
+    });
+
+    const newImagesCarousel = [];
+    let excludeIndex = 0;
+
+    for (let index = 0; index < imagesCarousel.length; index++) {
+      const element = imagesCarousel[index];
+      if (indexToExclude[excludeIndex] === index) excludeIndex++;
+      else newImagesCarousel.push(element);
+    }
+
+    setImagesCarousel(newImagesCarousel)
   }
-
 
   // Manipulação para as imagens de Quem Somos
   const inputWhoWeAre = useRef(null);
 
-  function handleAddImageWhoWeAre(){
+  function handleAddImageWhoWeAre() {
     inputWhoWeAre.current.click();
   }
 
-  function handleAddImageWhoWeAreFileInput(){
+  function handleAddImageWhoWeAreFileInput() {
     let fileData = new FileReader();
-    fileData.readAsDataURL(inputWhoWeAre.current.files[0]) 
+    fileData.readAsDataURL(inputWhoWeAre.current.files[0]);
 
-    fileData.onload = function() {
+    fileData.onload = function () {
       const fileLoaded = fileData.result;
       setImagesWhoWeAre({
         file: fileLoaded,
         imgSrc: inputWhoWeAre.current.files[0],
-        imgAlt: 'Imagem Quem somos',
-        imgPlace: 'whoWeAre'
-      })
-    }
+        imgAlt: "Imagem Quem somos 32",
+        imgPlace: "whoWeAre",
+      });
+    };
   }
 
   // useEffect para as imagens do Quem Somos
-  useEffect(() => {
-  }, [imagesWhoWeAre, arrayImages]);
+  useEffect(() => {}, [imagesWhoWeAre, arrayImages]);
 
-  function handleDeleteImageWhoWeAre(){
-    const auxiliarArray = {}
-    
-    setImagesWhoWeAre(auxiliarArray)
+  function handleDeleteImageWhoWeAre() {
+    const auxiliarArray = {};
+    setExcludedWhoWeAreImages(imagesWhoWeAre);
+    setImagesWhoWeAre(auxiliarArray);
   }
-
 
   // Manipulação para as imagens de Produtos
   const inputProducts = useRef(null);
 
-  function handleAddImageProducts(){
+  function handleAddImageProducts() {
     inputProducts.current.click();
   }
 
-  function handleAddImageProductsFileInput(){
+  function handleAddImageProductsFileInput() {
     let fileData = new FileReader();
-    fileData.readAsDataURL(inputProducts.current.files[0]) 
+    fileData.readAsDataURL(inputProducts.current.files[0]);
 
-    fileData.onload = function() {
+    fileData.onload = function () {
       const fileLoaded = fileData.result;
-      setImagesProducts([...imagesProducts, {
-        file: fileLoaded,
-        imgSrc: inputProducts.current.files[0],
-        imgAlt: 'Imagem Produtos',
-        imgPlace: 'products'
-      }])
-    }
+      setImagesProducts([
+        ...imagesProducts,
+        {
+          file: fileLoaded,
+          imgSrc: inputProducts.current.files[0],
+          imgAlt: inputProducts.current.files[0].name,
+          imgPlace: "products",
+        },
+      ]);
+    };
   }
 
   // useEffect para as imagens de Produtos
-  useEffect(() => {
-  }, [imagesProducts, arrayImagesProducts]);
+  useEffect(() => {}, [imagesProducts, arrayImagesProducts]);
 
-  function handleDeleteImageProducts(){
-    const auxiliarArray = []
-    arrayImagesProducts.forEach((item, index) =>
-    item === true? (
-      arrayStateImagesProducts[index](false),
-      // setExcludedProductsImages([...excludedProductsImages, imagesProducts.splice(index, 1, {}) ]))
-      imagesProducts.splice(index, 1, {}) )
-      : imagesProducts[index] !== undefined? auxiliarArray.push(imagesProducts[index]): null)
-    
-      setImagesProducts(auxiliarArray)
+  function handleDeleteImageProducts() {
+    const indexToExclude = [];
+
+    arrayImagesProducts.forEach((item, index) => {
+
+      if (item) {
+        indexToExclude.push(index);
+
+        arrayStateImagesProducts[index](false);
+
+        const newExcludedProductsImages = [...excludedProductsImages];
+        newExcludedProductsImages.push(imagesProducts[index]);
+
+        setExcludedProductsImages(newExcludedProductsImages);
+      } 
+
+    });
+
+    const newImagesProducts = [];
+    let excludeIndex = 0;
+
+    for (let index = 0; index < imagesProducts.length; index++) {
+      const element = imagesProducts[index];
+      if (indexToExclude[excludeIndex] === index) excludeIndex++;
+      else newImagesProducts.push(element);
+    }
+
+    setImagesProducts(newImagesProducts)
   }
-
-
 
   // useEffect para excluir elementos
   useEffect(() => {
-    console.log(imagesCarousel)
   }, [imagesCarousel]);
 
-
   // Função para salvar as informações depois de editar a Home
-  async function handleSaveChanges(){
-
+  async function handleSaveChanges() {
     setLoading(true);
-    // Salva mudanças de Home Info 
-    try{
-      await api.put('/home/info',
+    // Salva mudanças de Home Info
+    try {
+      await api.put(
+        "/home/info",
         {
           textWhoWeAre: textoQuemSomos,
-          textProducts: textoProdutos, 
+          textProducts: textoProdutos,
           contactInfo: {
             cellphone: telephoneInfo,
             address: enderecoInfo,
             facebookLink: facebookInfo,
             instagramLink: instagramInfo,
-            whatsAppNumber: whatsappInfo
-          }
+            whatsAppNumber: whatsappInfo,
+          },
         },
         {
           headers: { authorization: `bearer ${token}` },
-        });
-
-    }catch(err){
-      console.log(err.message)
+        }
+      );
+    } catch (err) {
+      console.log(err.message);
     }
 
-    // Salva mudanças de Home Images 
-    try{
-      
-      console.log('ANTES DO DELETE', imagesHome)
+    // Salva mudanças de Home Images
+    try {
 
-      // Deleta imagens para colocar novas
-      imagesHome.forEach(async (item) => {
+      // Deleta imagens para colocar novas - Carrossel
+      if(excludedCarouselImages[0]){
 
-        if(item.file){
-          const nameWithType = item.file.split('.com/')[1]
-          const name = nameWithType.split('.')[0]
-          const type = nameWithType.split('.')[1]
-          await api.delete(`/home/images?name=${name}&type=${type}`,
-          {
+        excludedCarouselImages.forEach(async (item) => {
+
+          if (item.file.includes(bucketAWS)) {
+            const nameWithType = item.file.split(".com/")[1];
+            const name = nameWithType.split(".")[0];
+            const type = nameWithType.split(".")[1];
+            await api.delete(`/home/images?name=${name}&type=${type}`, {
+              headers: { authorization: `bearer ${token}` },
+            });
+          }
+        });
+      }
+
+      // Deleta imagens para colocar novas - Who We Are
+      if(excludedWhoWeAreImages.file){
+        if (excludedWhoWeAreImages.file.includes(bucketAWS)) {
+          const nameWithType = excludedWhoWeAreImages.file.split(".com/")[1];
+          const name = nameWithType.split(".")[0];
+          const type = nameWithType.split(".")[1];
+          await api.delete(`/home/images?name=${name}&type=${type}`, {
             headers: { authorization: `bearer ${token}` },
           });
         }
-      });
-      
+      }
+
+      // Deleta imagens para colocar novas - Products
+      if(excludedProductsImages[0]){
+        excludedProductsImages.forEach(async (item) => {
+          if (item.file.includes(bucketAWS)) {
+            const nameWithType = item.file.split(".com/")[1];
+            const name = nameWithType.split(".")[0];
+            const type = nameWithType.split(".")[1];
+            await api.delete(`/home/images?name=${name}&type=${type}`, {
+              headers: { authorization: `bearer ${token}` },
+            });
+          }
+        });
+      }
+
       // Inicializa
-      setImagesHome([])
+      // setImagesHome([])
       // Posta novas imagens
-      if(imagesCarousel[0].file){
-        console.log('entoru carousel')
-        console.log(imagesCarousel)
-        imagesCarousel.map( async (item) => {
-          console.log('item', item)
+      if (imagesCarousel[0].file) {
 
-          let objImage = new FormData()
+        imagesCarousel.map(async (item) => {
+          if (!item.file.includes(bucketAWS)) {
+            let objImage = new FormData();
 
-          objImage.append("file", !item.imgSrc.name? item.imgSrc.splice(bucketAWS)[1]: item.imgSrc)
-          objImage.append("imgPlace", item.imgPlace)
-          objImage.append("imgSrc", 'Src Imagem')
-          objImage.append("imgAlt", item.imgAlt)
+            objImage.append("file", item.imgSrc);
+            objImage.append("imgPlace", item.imgPlace);
+            objImage.append("imgSrc", item.imgAlt);
+            objImage.append("imgAlt", item.imgAlt);
 
-          await api.post('/home/images',
-            objImage,
-            {
-              headers: { 
+            await api.post("/home/images", objImage, {
+              headers: {
                 "Content-Type": "multipart/form-data",
-                authorization: `bearer ${token}` },
+                authorization: `bearer ${token}`,
+              },
             });
-            
+          }
         });
       }
-      if(imagesWhoWeAre.file){
-        console.log('entoru quem somos')
-        console.log(imagesWhoWeAre)
 
-        let objImage = new FormData()
-        objImage.append("file", imagesWhoWeAre.imgSrc)
-        objImage.append("imgPlace", imagesWhoWeAre.imgPlace)
-        objImage.append("imgSrc", imagesWhoWeAre.file)
-        objImage.append("imgAlt", imagesWhoWeAre.imgAlt)
+      if (imagesWhoWeAre.file) {
 
-        await api.post('/home/images',
-          objImage,
-          {
-            headers: { 
+        if (!imagesWhoWeAre.file.includes(bucketAWS)) {
+          let objImage = new FormData();
+          objImage.append("file", imagesWhoWeAre.imgSrc);
+          objImage.append("imgPlace", imagesWhoWeAre.imgPlace);
+          objImage.append("imgSrc", imagesWhoWeAre.imgAlt);
+          objImage.append("imgAlt", imagesWhoWeAre.imgAlt);
+
+          await api.post("/home/images", objImage, {
+            headers: {
               "Content-Type": "multipart/form-data",
-              authorization: `bearer ${token}` },
+              authorization: `bearer ${token}`,
+            },
           });
-            
+        }
       }
-      if(imagesProducts[0].file){
-        console.log('entoru produtos')
-        console.log(imagesProducts)
-        imagesProducts.map( async (item) => {
-          console.log('item', item)
 
-          let objImage = new FormData()
-          objImage.append("file", item.imgSrc)
-          objImage.append("imgPlace", item.imgPlace)
-          objImage.append("imgSrc", item.file)
-          objImage.append("imgAlt", item.imgAlt)
+      if (imagesProducts[0].file) {
 
-          await api.post('/home/images',
-            objImage,
-            {
-              headers: { 
+        imagesProducts.map(async (item) => {
+          if (!item.file.includes(bucketAWS)) {
+            let objImage = new FormData();
+            objImage.append("file", item.imgSrc);
+            objImage.append("imgPlace", item.imgPlace);
+            objImage.append("imgSrc", item.imgAlt);
+            objImage.append("imgAlt", item.imgAlt);
+
+            await api.post("/home/images", objImage, {
+              headers: {
                 "Content-Type": "multipart/form-data",
-                authorization: `bearer ${token}` },
+                authorization: `bearer ${token}`,
+              },
             });
+          }
         });
       }
-      // if(imagesCarousel[0].file){
-
-      //   // console.log(imagesHome)
-      //   imagesCarousel.map( async (item) => {
-      //     console.log('item', item)
-
-      //     let objImage = new FormData()
-      //     objImage.append("file", item.imgSrc)
-      //     objImage.append("imgPlace", item.imgPlace)
-      //     objImage.append("imgSrc", item.file)
-      //     objImage.append("imgAlt", item.imgAlt)
-
-      //     const response = await api.post('/home/images',
-      //       objImage,
-      //       {
-      //         headers: { 
-      //           "Content-Type": "multipart/form-data",
-      //           authorization: `bearer ${token}` },
-      //       });
-      //       console.log('respostaaa',response)
-      //   });
-      // }
 
       setTimeout(() => setLoading(false), 3000);
-      
-    }catch(err){
-      console.log(err.message)
-      return err.message
+    } catch (err) {
+      console.log(err.message);
+      return err.message;
     }
-
   }
 
   return (
     <div className="HomeEditableContent">
       <div className="carouselPart">
-        
         <div className="titleArea">
           <h1>
             CARROSSEL
@@ -496,39 +564,48 @@ function HomeEditable(){
         <div className="changeImagesPart">
           <h2>ALTERAR IMAGENS</h2>
           <div className="boxChangeImages">
-            {imagesCarousel.map( (item, index) => item ?
-              <SelectedImages key={index} srcImg={item.file} 
-                altImg={item.imgAlt}
-                setSelectedImage={arrayStateImages[index]}
-                SelectedImage={arrayImages[index]} 
-              />: null
+            {imagesCarousel.map((item, index) =>
+              item ? (
+                <SelectedImages
+                  key={index}
+                  srcImg={item.file}
+                  altImg={item.imgAlt}
+                  setSelectedImage={arrayStateImages[index]}
+                  SelectedImage={arrayImages[index]}
+                />
+              ) : null
             )}
           </div>
           <div className="buttonsCarouselPart">
-            <Button className="firstButton"
-              onClick={handleAddImageCarousel}
-            >
-              <input type="file" hidden ref={inputCarousel} 
+            <Button className="firstButton" onClick={handleAddImageCarousel}>
+              <input
+                type="file"
+                hidden
+                ref={inputCarousel}
                 onChange={(e) => handleAddImageCarouselFileInput()}
               />
               ADICIONAR NOVAS IMAGENS
             </Button>
-            <Button className="secondButton"
+            <Button
+              className="secondButton"
               onClick={handleDeleteImageCarousel}
             >
-              DELETAR IMAGENS SELECIONADAS</Button>
+              DELETAR IMAGENS SELECIONADAS
+            </Button>
           </div>
 
           <div className="iconsCarouselPart">
-            <Button className="firstButton"
-              onClick={handleAddImageCarousel}
-            >
-              <input type="file" hidden ref={inputCarousel} 
+            <Button className="firstButton" onClick={handleAddImageCarousel}>
+              <input
+                type="file"
+                hidden
+                ref={inputCarousel}
                 onChange={(e) => handleAddImageCarouselFileInput()}
               />
-              <AddCircleIcon/>
+              <AddCircleIcon />
             </Button>
-            <Button className="secondButton"
+            <Button
+              className="secondButton"
               onClick={handleDeleteImageCarousel}
             >
               <DeleteIcon />
@@ -538,7 +615,6 @@ function HomeEditable(){
       </div>
 
       <div className="whoWeArePart">
-        
         <div className="titleArea">
           <h1>
             QUEM SOMOS
@@ -549,29 +625,38 @@ function HomeEditable(){
         <div className="changeTextArea">
           <h2>ALTERAR TEXTO</h2>
           <div className="textWhoWeAre">
-            <textarea defaultValue={textoQuemSomos} onChange={ (e) => setTextoQuemSomos(e.target.value) } />
+            <textarea
+              defaultValue={textoQuemSomos}
+              onChange={(e) => setTextoQuemSomos(e.target.value)}
+            />
           </div>
         </div>
         <div className="changeImageArea">
           <h2>ALTERAR IMAGEM</h2>
           <div className="imageWhoWeAre">
             <div className="boxChangeImageWhoWeAre">
-              {imagesWhoWeAre.file ? <SelectedImages srcImg={imagesWhoWeAre.file} 
-                                  altImg={imagesWhoWeAre.imgAlt}
-                                />:
+              {imagesWhoWeAre.file ? (
+                <SelectedImages
+                  srcImg={imagesWhoWeAre.file}
+                  altImg={imagesWhoWeAre.imgAlt}
+                  whoWeAre={true}
+                />
+              ) : (
                 <span>Sem imagem</span>
-              }
+              )}
             </div>
             <div className="buttonsWhoWeArePart">
-              <Button  className="firstButton" 
-                onClick={handleAddImageWhoWeAre}
-              >
-                <input type="file" hidden ref={inputWhoWeAre} 
+              <Button className="firstButton" onClick={handleAddImageWhoWeAre}>
+                <input
+                  type="file"
+                  hidden
+                  ref={inputWhoWeAre}
                   onChange={(e) => handleAddImageWhoWeAreFileInput()}
                 />
                 ALTERAR IMAGEM
               </Button>
-              <Button  className="secondButton" 
+              <Button
+                className="secondButton"
                 onClick={handleDeleteImageWhoWeAre}
               >
                 DELETAR IMAGEM
@@ -579,21 +664,22 @@ function HomeEditable(){
             </div>
 
             <div className="iconsWhoWeArePart">
-              <Button className="firstButton"
-                onClick={handleAddImageWhoWeAre}
-              >
-                <input type="file" hidden ref={inputWhoWeAre} 
+              <Button className="firstButton" onClick={handleAddImageWhoWeAre}>
+                <input
+                  type="file"
+                  hidden
+                  ref={inputWhoWeAre}
                   onChange={(e) => handleAddImageWhoWeAreFileInput()}
                 />
-                <AddCircleIcon/>
+                <AddCircleIcon />
               </Button>
-              <Button className="secondButton"
+              <Button
+                className="secondButton"
                 onClick={handleDeleteImageWhoWeAre}
               >
                 <DeleteIcon />
               </Button>
             </div>
-
           </div>
         </div>
       </div>
@@ -609,31 +695,40 @@ function HomeEditable(){
         <div className="changeTextArea">
           <h2>ALTERAR TEXTO</h2>
           <div className="textProducts">
-            <textarea defaultValue={textoProdutos} onChange={ (e) => setTextoProdutos(e.target.value) } />
+            <textarea
+              defaultValue={textoProdutos}
+              onChange={(e) => setTextoProdutos(e.target.value)}
+            />
           </div>
         </div>
-        
+
         <div className="changeImagesPart">
           <h2>ALTERAR PRODUTOS - UNIVERSITÁRIOS</h2>
           <div className="boxChangeImages">
-          {imagesProducts.map( (item, index) => item ?
-              <SelectedImages key={index} srcImg={item.file} 
-                altImg={item.imgAlt}
-                setSelectedImage={arrayStateImagesProducts[index]}
-                SelectedImage={arrayImagesProducts[index]} 
-              />: null
+            {imagesProducts.map((item, index) =>
+              item ? (
+                <SelectedImages
+                  key={index}
+                  srcImg={item.file}
+                  altImg={item.imgAlt}
+                  setSelectedImage={arrayStateImagesProducts[index]}
+                  SelectedImage={arrayImagesProducts[index]}
+                />
+              ) : null
             )}
           </div>
           <div className="buttonsCarouselPart">
-            <Button  className="firstButton" 
-              onClick={handleAddImageProducts}
-            >
-              <input type="file" hidden ref={inputProducts} 
-                  onChange={(e) => handleAddImageProductsFileInput()}
+            <Button className="firstButton" onClick={handleAddImageProducts}>
+              <input
+                type="file"
+                hidden
+                ref={inputProducts}
+                onChange={(e) => handleAddImageProductsFileInput()}
               />
               ADICIONAR NOVAS IMAGENS
             </Button>
-            <Button  className="secondButton" 
+            <Button
+              className="secondButton"
               onClick={handleDeleteImageProducts}
             >
               DELETAR IMAGENS SELECIONADAS
@@ -641,21 +736,22 @@ function HomeEditable(){
           </div>
 
           <div className="iconsCarouselPart">
-            <Button className="firstButton"
-              onClick={handleAddImageProducts}
-            >
-              <input type="file" hidden ref={inputProducts} 
+            <Button className="firstButton" onClick={handleAddImageProducts}>
+              <input
+                type="file"
+                hidden
+                ref={inputProducts}
                 onChange={(e) => handleAddImageProductsFileInput()}
               />
-              <AddCircleIcon/>
+              <AddCircleIcon />
             </Button>
-            <Button className="secondButton"
+            <Button
+              className="secondButton"
               onClick={handleDeleteImageProducts}
             >
               <DeleteIcon />
             </Button>
           </div>
-
         </div>
       </div>
 
@@ -668,50 +764,67 @@ function HomeEditable(){
         </div>
 
         <div className="changeInfoArea">
-            <InputsOrIconWithInput label={"TELEFONE"} 
-              placeholderInfo={"(XX) XXXX-XXXX"} icon={<FacebookIcon/>}
-              defaultValue={telephoneInfo}
-              hasIcon={false}
-              setInfo={setTelephoneInfo} 
-            />
-            <InputsOrIconWithInput label={"ENDEREÇO"} 
-              placeholderInfo={"Rua ABC"} icon={<FacebookIcon/>} 
-              defaultValue={enderecoInfo}
-              hasIcon={false}
-              setInfo={setEnderecoInfo}
+          <InputsOrIconWithInput
+            label={"TELEFONE"}
+            placeholderInfo={"(XX) XXXX-XXXX"}
+            icon={<FacebookIcon />}
+            defaultValue={telephoneInfo}
+            hasIcon={false}
+            setInfo={setTelephoneInfo}
           />
-            <div className="socialMediaInfo" style={{marginTop: '24px'}}>
-              <h2>REDES SOCIAIS</h2>
-              <InputsOrIconWithInput label={"FACEBOOK"} 
-                placeholderInfo={"testeholder"} icon={<FacebookIcon style={{fontSize: '45px', marginRight: '16px'}}/>} 
-                defaultValue={facebookInfo}
-                hasIcon={true}
-                setInfo={setFacebookInfo}
+          <InputsOrIconWithInput
+            label={"ENDEREÇO"}
+            placeholderInfo={"Rua ABC"}
+            icon={<FacebookIcon />}
+            defaultValue={enderecoInfo}
+            hasIcon={false}
+            setInfo={setEnderecoInfo}
+          />
+          <div className="socialMediaInfo" style={{ marginTop: "24px" }}>
+            <h2>REDES SOCIAIS</h2>
+            <InputsOrIconWithInput
+              label={"FACEBOOK"}
+              placeholderInfo={"testeholder"}
+              icon={
+                <FacebookIcon
+                  style={{ fontSize: "45px", marginRight: "16px" }}
+                />
+              }
+              defaultValue={facebookInfo}
+              hasIcon={true}
+              setInfo={setFacebookInfo}
             />
-              <InputsOrIconWithInput label={"INSTAGRAM"} 
-                placeholderInfo={"testeholder"} icon={<InstagramIcon style={{fontSize: '45px', marginRight: '16px'}}/>} 
-                defaultValue={instagramInfo}
-                hasIcon={true}
-                setInfo={setInstagramInfo}
+            <InputsOrIconWithInput
+              label={"INSTAGRAM"}
+              placeholderInfo={"testeholder"}
+              icon={
+                <InstagramIcon
+                  style={{ fontSize: "45px", marginRight: "16px" }}
+                />
+              }
+              defaultValue={instagramInfo}
+              hasIcon={true}
+              setInfo={setInstagramInfo}
             />
-              <InputsOrIconWithInput label={"WHATSAPP"} 
-                placeholderInfo={"testeholder"} icon={<WhatsAppIcon  style={{fontSize: '45px', marginRight: '16px'}}/>}
-                defaultValue={whatsappInfo}
-                hasIcon={true}
-                setInfo={setWhatsappInfo}
-              />
-            </div>
+            <InputsOrIconWithInput
+              label={"WHATSAPP"}
+              placeholderInfo={"testeholder"}
+              icon={
+                <WhatsAppIcon
+                  style={{ fontSize: "45px", marginRight: "16px" }}
+                />
+              }
+              defaultValue={whatsappInfo}
+              hasIcon={true}
+              setInfo={setWhatsappInfo}
+            />
+          </div>
         </div>
-
       </div>
 
-      <Button 
-        className="saveChangesButton"
-        onClick={handleSaveChanges}
-      >
-        {loading ? <CircularProgress />: 'SALVAR ALTERAÇÕES'}
-      </Button> 
-
+      <Button className="saveChangesButton" onClick={handleSaveChanges}>
+        {loading ? <CircularProgress /> : "SALVAR ALTERAÇÕES"}
+      </Button>
     </div>
   );
 }

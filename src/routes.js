@@ -14,6 +14,7 @@ import EspecificEmployee  from "./Pages/Administrador/EmployeeAdm/EspecificEmplo
 import Loja from "./Pages/Loja";
 import Produto from "./Pages/Produto";
 import Perfil from "./Pages/Perfil";
+import Login from "./Pages/Login";
 import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
 import SignUp from "./Pages/Sign_Up";
@@ -78,7 +79,7 @@ function MenuRoutes() {
                     path="/login"
                     export
                     exact
-                    component={() => <h1>Página Login</h1>}
+                    component={Login}
                 />
                 <Route path="/cart" export exact component={Carrinho} />
                 <Route path="/contact" export exact component={Contato} />

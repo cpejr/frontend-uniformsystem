@@ -9,8 +9,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-// import Snackbar from '@material-ui/core/Snackbar';
-// import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import Button from "@material-ui/core/Button";
 
@@ -87,15 +87,12 @@ function HomeEditable() {
 
   // Estado para armazenar Imagens do Carrossel
   const [imagesCarousel, setImagesCarousel] = useState([]);
-  // const [newImagesCarousel, setNewImagesCarousel] = useState([]);
 
   // Estado para armazenar Imagem de Quem Somos
   const [imagesWhoWeAre, setImagesWhoWeAre] = useState({});
-  // const [newImagesWhoWeAre, setNewImagesWhoWeAre] = useState({});
 
   // Estado para armazenar Imagens de Produtos
   const [imagesProducts, setImagesProducts] = useState([]);
-  // const [newImagesProducts, setNewImagesProducts] = useState([]);
 
   // Estados para armazenar imagens selecionadas do Carrossel
   const [imagemCarousel01, setImagemCarousel01] = useState(false);
@@ -544,12 +541,27 @@ function HomeEditable() {
         });
       }
 
-      setTimeout(() => setLoading(false), 3000);
+      setTimeout(() => {
+        setLoading(false)
+        setOpen(true);
+      }
+      , 3000);
+
     } catch (err) {
       console.log(err.message);
       return err.message;
     }
   }
+
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <div className="HomeEditableContent">
@@ -825,6 +837,11 @@ function HomeEditable() {
       <Button className="saveChangesButton" onClick={handleSaveChanges}>
         {loading ? <CircularProgress /> : "SALVAR ALTERAÇÕES"}
       </Button>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <MuiAlert onClose={handleClose} elevation={6} variant="filled" severity="success">
+          Alterações realizadas com sucesso!
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 }

@@ -547,6 +547,9 @@ function HomeEditable() {
       }
       , 3000);
 
+      // Refresh da página
+      window.location.reload();
+
     } catch (err) {
       console.log(err.message);
       return err.message;

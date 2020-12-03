@@ -8,6 +8,7 @@ function ProductCard (props){
             <div className = "productImage">
                 <img className = "imageProduct" src = "blusa1.png"></img>
             </div>
+            <div className = "productName">{props.product.name}</div>
             <div className = "productDescription">{props.product.model_description}</div>
             <div className = "productPrice">{(props.product.price).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</div>
             <div className="Button">

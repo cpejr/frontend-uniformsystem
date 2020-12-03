@@ -22,11 +22,20 @@
     padding-left: 5%;
 }
 
+#search:focus{
+    border-color: #3696e4;
+}
+
 .searchButton{
     color: #201F24;
     margin-left: 3vh;
     margin-top: 1vh;
     font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.searchButton:hover{
+    color:  #3696e4;
 }
 
 .shopContainer{

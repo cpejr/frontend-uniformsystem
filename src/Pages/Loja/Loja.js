@@ -32,6 +32,8 @@ function Loja() {
   const page = useRef(1);
   const pageLoading = useRef(false);
 
+  const inputSearch = useRef(null);
+
   async function getProducts() { //fazendo a requisição pro back
     try {
 
@@ -54,13 +56,17 @@ function Loja() {
         const param = 'minprice=' + filter.min;
         query.push(param);
       }
+      if (filter.name) {
+        const param = 'name=' + filter.name;
+        query.push(param);
+      }
       if (page.current !== 1) {
         const param = 'page=' + page.current;
         query.push(param);
       }
 
       const response = await api.get(`/productmodels?${query.join('&')}`);
-      console.log(response);
+      console.log('resposta', response);
       return (response.data.models);
     }
     catch (error) {
@@ -71,6 +77,7 @@ function Loja() {
 
   useEffect(() => {
     page.current = 1;
+    console.log('filtro atualizado', filter)
     getProducts().then(newProducts => {
       setProducts(newProducts);
     });
@@ -122,7 +129,6 @@ function Loja() {
         _.remove(newFilter.gender, (el) => el === fieldGender);
     }
     setFilter(newFilter);
-
   }
 
   function handlePriceChange(e) {
@@ -134,6 +140,7 @@ function Loja() {
 
     switch (e.target.value) {
       case 'Até R$25,00':
+        min = 0;
         max = 25;
         break;
       case 'R$25,00 - R$50,00':
@@ -170,8 +177,20 @@ function Loja() {
 
   }
 
+
   function findProduct() {
-    alert("Você está pesquisando!")
+
+    console.log('valor input',inputSearch.current.value)
+    const nameToSearch = inputSearch.current.value;
+
+    const filterWithName = { ...filter }
+
+    filterWithName.name = nameToSearch;
+    
+    setFilter(filterWithName)
+    console.log('filtro', filter)
+
+    // alert("Você está pesquisando!")
   }
 
   useEffect(() => {
@@ -224,6 +243,7 @@ function Loja() {
         <input
           id='search'
           type='text'
+          ref={inputSearch}
           placeholder="O que você precisa?"
         />
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import { Carousel } from 'react-bootstrap';
 
@@ -6,11 +6,11 @@ import camisa from '../../Assets/camisa.jpg';
 
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
+import api from "../../services/api";
 
 import './Home.css'
 
 const CardProdutosHome = ({ imgSrcProduto, imgAltProduto, nomeProduto}) => {
-  console.log(imgSrcProduto)
   return (
     <div className="divCardProdutos">
       <img src={imgSrcProduto} alt={imgAltProduto} />
@@ -63,34 +63,159 @@ function Home(){
     }
   }
 
+  // Estado para armazenar Imagens do Carrossel
+  const [imagesCarousel, setImagesCarousel] = useState([]);
+  
+  // Estado para armazenar Imagem de Quem Somos
+  const [imagesWhoWeAre, setImagesWhoWeAre] = useState({});
+  
+  // Estado para armazenar Imagens de Produtos
+  const [imagesProducts, setImagesProducts] = useState([]);
+
+  // Estados para armazenar textos
+  const [textoQuemSomos, setTextoQuemSomos] = useState('');
+  const [textoProdutos, setTextoProdutos] = useState('');
+
+  const [telephoneInfo, setTelephoneInfo] = useState('');
+  const [enderecoInfo, setEnderecoInfo] = useState('');
+  const [facebookInfo, setFacebookInfo] = useState('');
+  const [instagramInfo, setInstagramInfo] = useState('');
+  const [whatsappInfo, setWhatsappInfo] = useState('');
+
+
+  const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
+
+  const token = '';
+
+  // UseEffect para inicializar as informações da Home
+  useEffect(() => {
+    
+    async function getHomeInfo(){
+      const response = await api.get('/home/info',
+      {
+        headers: { authorization: `bearer ${token}` },
+      });
+
+      const textWhoWeAre = response.data.filter(item => item.key === 'textWhoWeAre'? item.data: null)[0]; 
+      const textProducts = response.data.filter(item => item.key === 'textProducts'? item.data: null)[0]; 
+      const cellphone = response.data.filter(item => item.key === 'cellphone'? item.data: null)[0]; 
+      const address = response.data.filter(item => item.key === 'address'? item.data: null)[0]; 
+      const facebookLink = response.data.filter(item => item.key === 'facebookLink'? item.data: null)[0]; 
+      const instagramLink = response.data.filter(item => item.key === 'instagramLink'? item.data: null)[0]; 
+      const whatsAppNumber = response.data.filter(item => item.key === 'whatsAppNumber'? item.data: null)[0];
+  
+      setTextoQuemSomos(textWhoWeAre.data);
+      setTextoProdutos(textProducts.data);
+      setTelephoneInfo(cellphone.data);
+      setEnderecoInfo(address.data);
+      setFacebookInfo(facebookLink.data);
+      setInstagramInfo(instagramLink.data);
+      setWhatsappInfo(whatsAppNumber.data);
+    }
+
+    getHomeInfo();
+
+  }, []);
+
+  // UseEffect para inicializar as imagens da Home
+  useEffect(() => {
+    
+    async function getHomeImages(){
+      const responseCarousel = await api.get('/home/images?img_place=carousel',
+      {
+        headers: { authorization: `bearer ${token}` },
+      });
+
+      let imagesCarousel = []
+      if(responseCarousel.data){
+        imagesCarousel = responseCarousel.data.map(item => ({
+          file: `${bucketAWS}${item.image_id}`,
+          imgSrc: item.imgSrc, 
+          imgAlt: item.imgAlt, 
+          imgPlace: item.imgPlace
+        }));
+      }
+
+      const responseWhoWeAre = await api.get('/home/images?img_place=whoWeAre',
+      {
+        headers: { authorization: `bearer ${token}` },
+      });
+
+      
+      let imagesWhoWeAre = {}
+      if(responseWhoWeAre.data[0]){
+        const { image_id, imgSrc, imgAlt, imgPlace } = responseWhoWeAre.data[0];
+        imagesWhoWeAre = {
+          file: `${bucketAWS}${image_id}`,
+          imgSrc: imgSrc, 
+          imgAlt: imgAlt, 
+          imgPlace: imgPlace
+        };
+      }
+
+      const responseProducts = await api.get('/home/images?img_place=products',
+      {
+        headers: { authorization: `bearer ${token}` },
+      });
+      // const imagesProducts = responseProducts.data;
+      let imagesProducts = []
+      if(responseProducts.data){
+        imagesProducts = responseProducts.data.map(item => ({
+          file: `${bucketAWS}${item.image_id}`,
+          imgSrc: item.imgSrc, 
+          imgAlt: item.imgAlt, 
+          imgPlace: item.imgPlace
+        }));
+      }
+
+      console.log(imagesCarousel);
+      setImagesCarousel([...imagesCarousel])
+      setImagesWhoWeAre(imagesWhoWeAre)
+      setImagesProducts([...imagesProducts])
+    
+    }
+
+    getHomeImages();
+
+  }, []);
 
   return (
     <div className="fullContent">
       <div className="divCarousel">
-        <Carousel 
-          controls={true}
-          indicators={true}
-          interval={1000}
-          prevIcon={<MdKeyboardArrowLeft />}
-          nextIcon={<MdKeyboardArrowRight />}
-        >
-                <Carousel.Item>
-                  <div className="teste">
-                    <img src={conteudoHome.Carrossel[0].imgSrc} alt={conteudoHome.Carrossel[0].imgAlt} />
-                  </div>
+        {imagesCarousel.length > 0? 
+          <Carousel 
+            controls={true}
+            indicators={true}
+            interval={1000}
+            prevIcon={<MdKeyboardArrowLeft />}
+            nextIcon={<MdKeyboardArrowRight />}
+          >
+            {
+              imagesCarousel.map(item => {
+                return (
+                  <Carousel.Item>
+                    <div className="teste">
+                      <img src={item.file} alt={item.imgAlt} />
+                    </div>
+                  </Carousel.Item>
+                );
+              })
+            }
+              {/* <Carousel.Item>
+                <div className="teste">
+                <img src={imagesCarousel[1].imgSrc} alt={imagesCarousel[1].imgAlt} />
+                </div>
                 </Carousel.Item>
                 <Carousel.Item>
-                  <div className="teste">
-                    <img src={conteudoHome.Carrossel[1].imgSrc} alt={conteudoHome.Carrossel[1].imgAlt} />
-                  </div>
-                </Carousel.Item>
-                <Carousel.Item>
-                  <div className="teste">
-                    <img src={conteudoHome.Carrossel[2].imgSrc} alt={conteudoHome.Carrossel[2].imgAlt} />
-                  </div>
-                </Carousel.Item>
-        </Carousel>
-      </div>
+                <div className="teste">
+                <img src={imagesCarousel[2].imgSrc} alt={imagesCarousel[2].imgAlt} />
+                </div>
+              </Carousel.Item> */}
+          </Carousel>
+          :
+            <span style={{alignSelf: 'center'}}>Sem imagem</span>
+          }
+        </div>
       <div className="divQuemSomos">
         <h2>
           Quem Somos
@@ -98,18 +223,12 @@ function Home(){
         </h2>
         <div className="conteudoQuemSomos">
           <span>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy 
-            eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam 
-            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita 
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy 
-            eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam 
-            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita 
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy 
-            eirmod tempor invidunt ut labore et.
+            {textoQuemSomos}
           </span>
-          <img src={conteudoHome.QuemSomos.imgSrc} alt={conteudoHome.QuemSomos.imgAlt} />
+          {imagesWhoWeAre.file ? 
+            <img src={imagesWhoWeAre.file} alt={imagesWhoWeAre.imgAlt} />
+            : <span style={{textAlign: 'center'}}>Sem imagem</span>
+          }
         </div>
       </div>
       <div className="divNossosProdutos">
@@ -118,27 +237,20 @@ function Home(){
             <div className="lineUnderTitle" />
           </h2>
           <span>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy 
-            eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam 
-            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita 
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy 
-            eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam 
-            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita 
-            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy 
-            eirmod tempor invidunt ut labore et.
+            {textoQuemSomos}
           </span>
           <div className="divCardsExterna">
             { 
-              conteudoHome.NossosProdutos.Cards.map( item => {
+            imagesProducts.length > 0 ? 
+              imagesProducts.map( item => {
                 return (
-                  <CardProdutosHome imgSrcProduto={item.imgSrc} 
+                  <CardProdutosHome imgSrcProduto={item.file} 
                     imgAltProduto={item.imgAlt} 
-                    nomeProduto={item.NomeProduto} 
+                    nomeProduto={item.imgAlt} 
                   />
                 );
-              })
+              }) :
+              <span style={{textAlign: 'center'}}>Sem imagem</span>
             }
           </div>
       </div>

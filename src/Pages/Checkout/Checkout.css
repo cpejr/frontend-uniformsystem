@@ -2,7 +2,7 @@ h1, h2, button, span, strong, label {
     font-family: 'Century Gothic';
 }
 
-input{
+.mainContent input{
     outline: none;
     max-width: 70%;
 }
@@ -13,14 +13,10 @@ label{
 }
 
 .fullContent{
-
     width: 90%;
     height: 100%;
-
     padding: 20px 0;
-
     margin: 20px auto;
-
 }
 
 .fullContent h1{
@@ -308,7 +304,7 @@ label{
     margin-top: 16px;
 }
 
-.MuiSvgIcon-root{
+.aboutPayment .MuiSvgIcon-root{
     font-size: 50px !important;
 }
 

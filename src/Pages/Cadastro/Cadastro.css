@@ -7,7 +7,7 @@ label {
   font-family: "Century Gothic";
 }
 
-input {
+.divInputLabelError input {
   outline: none;
   max-width: 70%;
 }

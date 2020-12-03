@@ -104,7 +104,7 @@ function AdmRoutes() {
                 <Route path="/adm/produtos" export exact component={ProductsAdm} />
                 <Route path="/adm/funcionarios" export exact component={EmployeeAdm} />
                 <Route path="/adm/funcionarios/funcionarioEspecifico" export exact component={EspecificEmployee} />
-                <Route path="*" component={() => <h1>Page not found</h1>} />
+                <Route path="*" component={() => <h1>Page not Found</h1>} />
             </Switch>
             </SidebarAdm>
             <FooterAdm />

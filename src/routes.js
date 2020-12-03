@@ -6,6 +6,8 @@ import Home from "./Pages/Home";
 import HomeEditable from "./Pages/Administrador/HomeEditable";
 import OrdersAdm from "./Pages/Administrador/OrdersAdm";
 import ProductsAdm from "./Pages/Administrador/ProductsAdm";
+import RegisterProduct from "./Pages/Administrador/ProductsAdm/RegisterProduct";
+
 import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
 import EspecificEmployee  from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
 
@@ -51,11 +53,10 @@ export default function Routes() {
     return (
         <BrowserRouter>
             <Switch>
-                <Route render={(path) => 
-                        path.location.pathname.includes("/adm/") ?(
-                        <AdmRoutes /> ): (
-                        <MenuRoutes/>)
-                    } />:
+                <Route render={(path) => path.location.pathname.includes("/adm/") ?
+                            ( <AdmRoutes />) :
+                            ( <MenuRoutes/> )
+                        } />
             </Switch>
         </BrowserRouter>
     );
@@ -103,6 +104,7 @@ function AdmRoutes() {
                 <Route path="/adm/pedidos" export exact component={OrdersAdm} />
                 <Route path="/adm/produtos" export exact component={ProductsAdm} />
                 <Route path="/adm/funcionarios" export exact component={EmployeeAdm} />
+                <Route path="/adm/produtos/cadastrar" export exact component={RegisterProduct} />
                 <Route path="/adm/funcionarios/funcionarioEspecifico" export exact component={EspecificEmployee} />
                 <Route path="*" component={() => <h1>Page not found</h1>} />
             </Switch>
@@ -111,3 +113,4 @@ function AdmRoutes() {
         </div>
     );
 }
+

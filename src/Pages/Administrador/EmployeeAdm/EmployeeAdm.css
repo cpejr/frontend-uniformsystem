@@ -1,0 +1,21 @@
+.buttonEmployee {
+    width: 30%;
+    height: 50px;
+    background-color: #0EC4AB;
+    margin-top: 16px;
+    border: 1px solid #707070;
+    border-radius: 5vh;
+    min-width: 100px;
+    float: right;
+    margin-bottom: 40px;
+}
+
+.header-table {
+    background-color: #ccc;
+}
+
+.trash{
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+}

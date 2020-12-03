@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../../services/api';
 import ProductCardAdm from '../../../components/ProductCardAdm';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaSearch } from 'react-icons/fa';
 import _ from 'lodash';
 import './ProductsAdm.css';
 
@@ -21,6 +21,7 @@ function ProductsAdm() {
   const [filter, setFilter] = useState({ product_type: [], gender: [] });
   const page = useRef(1);
   const pageLoading = useRef(false);
+  const inputSearchAdm = useRef(null);
 
   async function getProducts() {
     try {
@@ -40,10 +41,14 @@ function ProductsAdm() {
         const param = 'page=' + page.current;
         query.push(param);
       }
+      if(filter.name){
+        const param = 'name=' + filter.name;
+        query.push(param);
+      }
       console.log(query);
       const response = await api.get(`/product?${query.join('&')}`);
       console.log(response);
-      return(response.data.products);
+      return (response.data.products);
     }
     catch (error) {
       console.warn(error);
@@ -107,49 +112,17 @@ function ProductsAdm() {
 
   }
 
-  function handlePriceChange(e) {
-    let min = 0;
-    let max = 0;
-    const newFilter = { ...filter };
-    delete newFilter.min;
-    delete newFilter.max;
 
-    switch (e.target.value) {
-      case 'Até R$25,00':
-        max = 25;
-        break;
-      case 'R$25,00 - R$50,00':
-        min = 25;
-        max = 50;
-        break;
-      case 'R$50,00 - R$100,00':
-        min = 50;
-        max = 100;
-        break;
-      case 'R$100,00 - R$150,00':
-        min = 100;
-        max = 150;
-        break;
-      case 'Acima de R$150,00':
-        min = 150;
-        break;
+  function handleNameChange(){
+    console.log('input', inputSearchAdm.current.value);
+    const product_name = inputSearchAdm.current.value;
 
-      case 'Qualquer valor':
-        min = 0;
-        max = 0;
-        break;
+    const filterName = {...filter}
+    filterName.name = product_name;
 
-      default: break;
-
-    }
-
-    if (min > 0)
-      newFilter.min = min;
-    if (max > 0)
-      newFilter.max = max;
-
-    setFilter(newFilter);
-
+    setFilter(filterName)
+    console.log('filtro', filter)
+    //alert('vc está procurando');
   }
 
   useEffect(() => {
@@ -197,36 +170,47 @@ function ProductsAdm() {
 
 
   return (
-    <div className="products-adm-container">
+    <div className="products-adm">
+      <div className="search-products-name">
+        <input
+          id='search-name'
+          type='text'
+          ref={inputSearchAdm}
+          placeholder="Digite o nome do produto"
+        />
+        <FaSearch  onClick = {handleNameChange} className="search-button-adm" />
+      </div>
+      <div className="products-container">
 
-      <div className="sidebar-container">
-        <Link className="button-content" to="/"> CADASTRAR NOVO PRODUTO</Link>
+        <div className="sidebar-container">
+          <Link className="button-content" to="/"> CADASTRAR NOVO PRODUTO</Link>
 
-        <div className="filter-container">
-          <div className="filterTitleProducts">
-            <FaFilter />  FILTRAR
+          <div className="filter-container">
+            <div className="filterTitleProducts">
+              <FaFilter />  FILTRAR
           </div>
-          <div className="filter-content">
-            {FILTER_OPTIONS.map((option, index) => {
-              return (
-                <div className="filters-products">
-                  <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange} className="checkbox" />
-                  <label for={`filter-${index}`} >{option}</label>
-                </div>
-              )
-            })
-            }
+            <div className="filter-content">
+              {FILTER_OPTIONS.map((option, index) => {
+                return (
+                  <div className="filters-products">
+                    <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange} className="checkbox" />
+                    <label for={`filter-${index}`} >{option}</label>
+                  </div>
+                )
+              })
+              }
+            </div>
           </div>
+
+        </div>
+
+        <div className="cards-products">
+          {products.map(product =>
+            <ProductCardAdm key={product.product_model_id} product={product} />
+          )}
         </div>
 
       </div>
-
-      <div className="cards-products">
-        {products.map(product =>
-          <ProductCardAdm key={product.product_model_id} product={product} />
-        )}
-      </div>
-
     </div>
   );
 }

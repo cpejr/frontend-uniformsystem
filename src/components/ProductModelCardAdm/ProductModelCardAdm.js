@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 
 import { FaEdit, FaStar, FaTrashAlt } from 'react-icons/fa';
 
-function ProductModelCardAdm({productModelID, imgSrc, imgAlt, productModelName}) {
+function ProductModelCardAdm({productModelID, handleClose, handleSelectToEdit,
+    imgSrc, imgAlt, productModelName}) {
 
 
     const handleIsMain = () => {
@@ -25,11 +26,11 @@ function ProductModelCardAdm({productModelID, imgSrc, imgAlt, productModelName})
 
             <div className="iconWithText">
                 <FaEdit className="iconProductModelCard" onClick={handleEditModel} />
-                <span>EDITAR MODELO</span>
+                <span onClick={handleClose}>EDITAR MODELO</span>
             </div>
             <div className="iconWithText">
                 <FaStar className="iconProductModelCard" onClick={handleIsMain} />
-                <span>ADICIONAR COMO MODELO PRINCIPAL</span>
+                <span onClick={() => handleSelectToEdit(productModelID)} >ADICIONAR COMO MODELO PRINCIPAL</span>
             </div>
         </div>
     );

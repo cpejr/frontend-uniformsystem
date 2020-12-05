@@ -5,7 +5,7 @@
     position: relative;
 }
 
-.registerProductFullContent a .iconToReturn{
+.registerProductFullContent .iconToReturn{
 
     position: absolute;
     font-size: 35px;

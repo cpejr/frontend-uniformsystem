@@ -174,10 +174,12 @@ input[type=radio]:checked + label::after {
     #search{
         width:90vw;
     }
+    
     .shopContainer{
         display: flex;
         flex-direction: column;
     }
+
     .filterContainer{
         position: relative;
         top: 3vh;

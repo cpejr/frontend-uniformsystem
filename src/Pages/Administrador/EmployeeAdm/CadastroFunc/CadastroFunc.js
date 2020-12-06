@@ -45,6 +45,7 @@ function CadastroFunc() {
         width={200}
         setInfo={setPassword}
         maxLenght={50}
+        type="password"
       />
       <label for="tipodefunc">Tipo de Funcionário:</label>
       <select className="divInputLabelError">

@@ -1,31 +1,51 @@
 .titleCad2 {
-    display: flex;
-    justify-content: flex-start;
-    margin-top: 0%;
-  }
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0%;
+}
 
-  .titleLineExp2 {
-    border-top: 3px solid #4dcdbc;
-    border-radius: 20px;
-    width: 52%;
-    margin-left: 0.5%;
-    margin-top: -1%;
-    margin-bottom: 5%;
+.titleLineExp2 {
+  border-top: 3px solid #4dcdbc;
+  border-radius: 20px;
+  width: 52%;
+  margin-left: 0.5%;
+  margin-top: -1%;
+  margin-bottom: 5%;
+}
+
+.buttonCad2 {
+  display: flex;
+  align-items: center;
+  margin-top: 3%;
+  margin-left: 25%;
+
+  background-color: #0ec4ab;
+  padding: 8px 70px;
+  outline: none;
+  border: 1px solid rgb(167, 162, 162);
+  border-radius: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 800px) {
+  .titleCad2 {
+    display: flex;
+    justify-content: center;
+    max-width: 300px;
   }
 
   .buttonCad2 {
-    display: flex;
-    align-items: center;
-    margin-top: 3%;
-    margin-left: 25%;
-  
-    background-color: #0ec4ab;
-    padding: 8px 70px;
-    outline: none;
-    border: 1px solid rgb(167, 162, 162);
-    border-radius: 43px;
-  
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      margin-left: 15%;
   }
+
+  .divInputLabelError{
+      max-width: fit-content;
+  }
+
+  .titleLineExp2{
+      width: 68%;
+  }
+}

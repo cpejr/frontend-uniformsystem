@@ -12,3 +12,20 @@
     margin-top: -1%;
     margin-bottom: 5%;
   }
+
+  .buttonCad2 {
+    display: flex;
+    align-items: center;
+    margin-top: 3%;
+    margin-left: 25%;
+  
+    background-color: #0ec4ab;
+    padding: 8px 70px;
+    outline: none;
+    border: 1px solid rgb(167, 162, 162);
+    border-radius: 43px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

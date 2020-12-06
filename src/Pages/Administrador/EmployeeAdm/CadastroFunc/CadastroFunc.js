@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./CadastroFunc.css";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
-
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
     <div className="divInputLabelError">
@@ -29,7 +28,6 @@ function CadastroFunc() {
       <ArrowBackIosIcon className="setaVoltar"></ArrowBackIosIcon>
       <h1 className="titleCad2">CADASTRAR NOVO FUNCIONÁRIO</h1>
       <hr className="titleLineExp2"></hr>
-
       <InputWithLabel
         label="Nome Completo:"
         width={500}
@@ -48,7 +46,15 @@ function CadastroFunc() {
         setInfo={setPassword}
         maxLenght={50}
       />
-      <button className="buttonCad">CADASTRAR</button>
+      <label for="tipodefunc">Tipo de Funcionário:</label>
+      <select className="divInputLabelError">
+        <option value="vazio"> </option>
+        <option value="func1">Funcionário 1</option>
+        <option value="func2">Funcionário 2</option>
+        <option value="func3">Funcionário 3</option>
+        <option value="func4">Funcionário 4</option>
+      </select>
+      <button className="buttonCad2">CADASTRAR</button>
     </div>
   );
 }

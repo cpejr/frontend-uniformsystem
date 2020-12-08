@@ -42,12 +42,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 const PopUpProductModel = ({open, handleClose, titleModal, isEdit, 
-    existingInfo, setExistingInfo, setNewInfo}) => {
-
-    // const handleCloseModal = () => {
-    //     handleClose(false);
-    // }
-    const [infoProductModel, setInfoProductModel] = useState({});
+    productModelIDFromExistingInfo, setProductModelIDFromExistingInfo, setProductModelArray,
+    productModelArray }) => {
 
     const inputDescription = useRef(null);
     const inputPrice = useRef(null);
@@ -56,31 +52,59 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
 
     const handleChange = (event) => {
         console.log(event.target.value);
+
+        handleClose();
     };
 
     const handleSave = (event) => {
         console.log(event.target.value);
         
         const objInfo = {
-            description: inputDescription.current.value,
-            price: inputPrice.current.value,
             isMain: inputIsMain.current.value,
             imgLink: inputImg.current.value,
+            price: inputPrice.current.value,
+            modelDescription: inputDescription.current.value,
+            gender: 'M',
+        }
+        console.log('iteravel', objInfo)
+
+        setProductModelArray([...productModelArray , objInfo])
+        handleClose();
+    };
+
+    const handleSaveChanges = (event) => {
+        
+        const oldObjInfo = {
+            ...productModelArray[productModelIDFromExistingInfo],
+            isMain: inputIsMain.current.value === 'Sim' ? true: false,
+            imgLink: inputImg.current.value,
+            price: inputPrice.current.value,
+            modelDescription: inputDescription.current.value,
+            gender: 'M',
         }
 
-        setInfoProductModel(objInfo)
+        console.log('depois do obj')
+
+        const copyProductModelsArray = [...productModelArray]
+        copyProductModelsArray.splice(productModelIDFromExistingInfo, 1, oldObjInfo)
+
+        setProductModelArray([...copyProductModelsArray])
+
+        setProductModelIDFromExistingInfo('')
+        handleClose();
     };
     
     const classes = useStyles();
 
-    if(isEdit){
-        const { isMain, imgLink, price, modelDescription, gender } = existingInfo;
+    if(isEdit && productModelIDFromExistingInfo !== ''){
+        const { isMain, imgLink, price, modelDescription, gender } = productModelArray[productModelIDFromExistingInfo];
         
+        console.log('ENTROU EDIT', productModelArray[productModelIDFromExistingInfo])
         return (
             <Dialog open={open} onClose={handleClose} className={classes.dialog}>
                 <DialogTitle>{titleModal}</DialogTitle>
-                <TextField required label="Descrição" defaultValue={modelDescription} />
-                <TextField required label="Preço" defaultValue={price} />
+                <TextField required label="Descrição" inputRef={inputDescription} defaultValue={modelDescription} />
+                <TextField required label="Preço" inputRef={inputPrice} defaultValue={price} />
                 <Select label="Gênero" value={gender} 
                 displayEmpty
                 onChange={handleChange}
@@ -88,9 +112,9 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
                     <MenuItem value={"M"}>Masculino</MenuItem>
                     <MenuItem value={"F"}>Feminino</MenuItem>
                 </Select>
-                <TextField required label="Modelo principal" defaultValue={isMain} />
-                <TextField required label="Link Imagem" defaultValue={imgLink} />
-                <Button onClick={handleClose} >Salvar alterações</Button>
+                <TextField required label="Modelo principal" inputRef={inputIsMain} defaultValue={isMain ? 'Sim': 'Não'} />
+                <TextField required label="Link Imagem" inputRef={inputImg} defaultValue={imgLink} />
+                <Button onClick={handleSaveChanges} >Salvar alterações</Button>
             </Dialog>
         );
     }else{
@@ -99,11 +123,11 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
                 <DialogTitle className={classes.title}>{titleModal}</DialogTitle>
                 <TextField required label="Descrição" 
                     type="text" className={classes.textInput} 
-                    ref={inputDescription} 
+                    inputRef={inputDescription} 
                 />
                 <TextField required label="Preço" 
                     type="text"  className={classes.textInput} 
-                    ref={inputPrice}
+                    inputRef={inputPrice}
                 />
                 <InputLabel id="demo-simple-select-required-label" className={classes.textInput}>Gênero</InputLabel>
                 <Select value={"Gênero"} 
@@ -115,13 +139,13 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
                 </Select>
                 <TextField required label="Modelo principal" 
                     type="text"  className={classes.textInput}
-                    ref={inputIsMain}
+                    inputRef={inputIsMain}
                 />
                 <TextField required label="Link Imagem" 
                     type="text"  className={classes.textInput} 
-                    ref={inputImg}
+                    inputRef={inputImg}
                 />
-                <Button onClick={handleClose} className={classes.button}> Salvar modelo</Button>
+                <Button onClick={handleSave} className={classes.button}>Salvar modelo</Button>
             </Dialog>
         );
     }

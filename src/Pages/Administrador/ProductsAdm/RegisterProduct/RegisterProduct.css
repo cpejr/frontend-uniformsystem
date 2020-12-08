@@ -108,7 +108,7 @@
 }
 
 .registerProductFullContent .mainContent .formRegisterProduct .spanWithInput > input{
-    
+    width: 100%;
     outline: none;
     padding: 5px 10px;
     border: 1px solid #9EE7DD;
@@ -198,4 +198,19 @@
 }
 .registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .finalButtonToRegister:hover{
     background-color: #71d3c6;
+}
+
+@media(max-width: 1000px){
+
+    .registerProductFullContent .mainContent .formRegisterProduct .spanWithInput .manyRadioButtons{
+        width: 100%;
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 16px;
+        justify-items: center;
+    }
+
+    .registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .finalButtonToRegister{
+        width: 80%;
+    }
 }

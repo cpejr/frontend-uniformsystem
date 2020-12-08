@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import api from '../../../../services/api';
 
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
+
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import ProductModelCardAdm from '../../../../components/ProductModelCardAdm';
 import PopUpProductModel from '../../../../components/PopUpProductModel';
@@ -19,7 +22,7 @@ const productModels = [
     productID: '',
     imgSrc: camisa,
     imgAlt: 'Teste',
-    productModelName: 'MODELO 1',
+    productModelName: 'Um modelo de camisa bonita',
     
   },
   {
@@ -40,10 +43,54 @@ const productModels = [
 
 function RegisterProduct({history}) {
 
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMDg2YThhMS1lZWZlLTRiZmMtZTcxZS1hMTY0MWYwYWU2ZjQiLCJuYW1lIjoiRGlvZ28gQWRtaW4gMSIsImZpcmViYXNlX3VpZCI6Ill1MUkyTzJHNnJibnRjQnVyczZ6YXZSYkVPZDIiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImRpb2dvYWRtMTNAZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5MTgiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMi0wOCAwNToxMDoyOCIsInVwZGF0ZWRfYXQiOiIyMDIwLTEyLTA4IDA1OjEwOjI4In1dLCJpYXQiOjE2MDc0MDQyNDQsImV4cCI6MTYwOTk5NjI0NH0.z5raD9BSVlas7DheRJFuEAw3TW64Wxr4N7sjy4xV9lI';
+  
+  const [loading, setLoading] = useState(false);
+
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+
   const [openToRegister, setOpenToRegister] = useState(false);
   const [openToEdit, setOpenToEdit] = useState(false);
 
   const [productModelIdToEdit, setProductModelIdToEdit] = useState('');
+
+  const [productInfo, setProductInfo] = useState({});
+
+  const [productModelsArray, setProductModelsArray] = useState([
+    {
+      productID: '',
+      modelDescription: 'Um modelo de camisa bonita',
+      imgSrc: camisa,
+      isMain: false,
+      imgLink: 'google.com',
+      imgAlt: 'Teste',
+      price: '30,00',
+      gender: 'M',
+      
+    },
+    {
+      productID: '',
+      modelDescription: 'MODELO 2',
+      imgSrc: camisa,
+      isMain: false,
+      imgLink: 'google.com',
+      imgAlt: 'Teste',
+      price: '31,00',
+      gender: 'M',
+  
+    },
+    {
+      productID: '',
+      modelDescription: 'MODELO 3',
+      imgSrc: camisa,
+      isMain: false,
+      imgLink: 'google.com',
+      imgAlt: 'Teste',
+      price: '32,00',
+      gender: 'M',
+  
+    }
+  ]);
 
   const handleCreate = () => {
     setOpenToRegister(true);
@@ -60,6 +107,98 @@ function RegisterProduct({history}) {
   const handleCloseEdit = () => {
     setOpenToEdit(false);
   }
+
+  const handleCompleteProductInfo = (e, type) => {
+
+    let newObjProductInfo
+
+    if(type === 'name'){
+      newObjProductInfo = {
+        name: e.target.value,
+      }
+      
+    }else if (type === 'description'){
+        newObjProductInfo = {
+          description: e.target.value,
+        }
+        
+      }else{
+          newObjProductInfo = {
+            product_type: e.target.value,
+          }
+    }
+
+    setProductInfo({...productInfo, ...newObjProductInfo, models: []});
+  }
+
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackBar(false);
+  };
+
+  const handleSubmitNewProduct = async (event) => {
+    event.preventDefault();
+
+    console.log('produto aqui', productInfo);
+    
+    try{
+      setLoading(true);
+      const response = await api.post("/product",
+        productInfo
+        ,
+        {
+          headers: { authorization: `bearer ${token}` },
+        }
+      );
+      console.log('response', response);
+
+      // Caso tenha product_models
+      // if(productModelsArray.length > 0){
+        
+        productModelsArray.map(async (item) => {
+
+          delete item.imgAlt;
+          delete item.imgSrc;
+          delete item.productID;
+
+          // let responseProductModels = await api.post(`/newmodels/${response.data.productId}`,
+          let responseProductModels = await api.post(`/newmodels/36`,
+            {
+              is_main: item.isMain,
+              img_link: item.imgLink,
+              price: item.price,
+              model_description: item.modelDescription,
+              gender: item.gender,
+            }
+            ,
+            {
+              headers: { authorization: `bearer ${token}` },
+            }
+          );
+
+          console.log('responseProductModels', responseProductModels)
+
+        });
+
+      // }
+      
+      setTimeout(() => {
+        setLoading(false);
+        setOpenSnackBar(true);
+      }
+      , 3000);
+
+    }catch(err){
+      console.log(err.message);
+    }
+  }
+
+  useEffect(() => {
+    console.log('productModels', productModelsArray)
+  }, [productModelsArray]);
 
 
   return (
@@ -81,70 +220,106 @@ function RegisterProduct({history}) {
             <div className="manyRadioButtons">
               <div className="radioButtonWithLabel">
                 <label htmlFor="bone">BONÉ</label>
-                <input type="radio" name="estiloProduto" id="bone"/>
+                <input type="radio" name="estiloProduto" 
+                onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                id="bone" value="cap"/>
               </div>
               <div className="radioButtonWithLabel">
                 <label htmlFor="camisa" >CAMISA</label>
-                <input type="radio" name="estiloProduto" id="camisa" />
+                <input type="radio" name="estiloProduto" 
+                onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                id="camisa" value="shirt" />
               </div>
               <div className="radioButtonWithLabel">
                 <label htmlFor="empresarial" >EMPRESARIAL</label>
-                <input type="radio" name="estiloProduto" id="empresarial" />
+                <input type="radio" name="estiloProduto" 
+                onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                id="empresarial" value="company" />
               </div>
               <div className="radioButtonWithLabel">
                 <label htmlFor="esportivo" >ESPORTIVO</label>
-                <input type="radio" name="estiloProduto" id="esportivo" />
+                <input type="radio" name="estiloProduto" 
+                onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                id="esportivo" value="sport" />
               </div>
               <div className="radioButtonWithLabel">
                 <label htmlFor="universitario" >UNIVERSITÁRIO</label>
-                <input type="radio" name="estiloProduto" id="universitario" />
+                <input type="radio" name="estiloProduto" 
+                onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                id="universitario" value="university" />
               </div>
             </div>
           </div>
 
           <div className="spanWithInput">
             <span>NOME:</span>
-            <input type="text" style={{width: '100%'}} />
+            <input type="text"  
+              onChange={(e) => handleCompleteProductInfo(e, 'name')}
+            />
           </div>
           <div className="spanWithInput">
             <span>DESCRIÇÃO:</span>
-            <input type="text" style={{width: '100%'}} />
+            <input type="text" 
+              onChange={(e) => handleCompleteProductInfo(e, 'description')}
+            />
           </div>
 
           <div className="boxToManipulateProductModel">
             <div className="labelAndButtonAboveBox"> 
               <span>MODELOS:</span>
 
-              <button type="button" 
+              <Button type="button" 
                 onClick={handleCreate}
-              >ADICIONAR NOVO MODELO</button>
+              >
+                ADICIONAR NOVO MODELO
+              </Button>
             </div>
 
             <div className="boxManipulateModels">
-            {productModels.map((item, index) =>
+            {productModelsArray.map((item, index) =>
               item ? (
                 <ProductModelCardAdm
                   key={index}
+                  productModelID={index}
                   handleClose={handleEdit}
-                  productModelID={item.productModelID}
+                  handleSelectToEdit={setProductModelIdToEdit}
+                  productModelArray={productModelsArray}
+                  setProductModelArray={setProductModelsArray}
                   imgSrc={item.imgSrc}
                   imgAlt={item.imgAlt}
-                  productModelName={item.productModelName}
+                  productModelName={item.modelDescription}
+                  price={item.price}
+                  gender={item.gender}
                 />
               ) : null
             )}
             </div>
 
-            <button type="submit" className="finalButtonToRegister">CADASTRAR</button>
+            <Button type="submit" className="finalButtonToRegister"
+              onClick={handleSubmitNewProduct}
+            >
+              {loading ? <CircularProgress /> : "CADASTRAR"}
+            </Button>
           </div>
         </form>
       </div>
       <PopUpProductModel open={openToRegister} handleClose={handleCloseRegister} 
-        titleModal={"Cadastro de modelo"}
+        titleModal={"Cadastro de modelo"} isEdit={false} setProductModelArray={setProductModelsArray}
+        productModelArray={productModelsArray}
       />
       <PopUpProductModel open={openToEdit} handleClose={handleCloseEdit} 
-        titleModal={"Edição de modelo"}
+        titleModal={"Edição de modelo"} isEdit={true} 
+        productModelIDFromExistingInfo={productModelIdToEdit} 
+        setProductModelIDFromExistingInfo={setProductModelIdToEdit}
+        setProductModelArray={setProductModelsArray}
+        productModelArray={productModelsArray}
       />
+
+      <Snackbar open={openSnackBar} autoHideDuration={5000} onClose={handleCloseSnackBar}>
+        <MuiAlert onClose={handleCloseSnackBar} elevation={6} variant="filled" severity="success">
+          Produto cadastrado com sucesso!
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 }

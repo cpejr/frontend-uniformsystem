@@ -2,8 +2,8 @@
 .productModelCardAdmFullContent{
 
     width: 350px;
-    height: 400px;
-    padding: 30px 25px 10px 25px;
+    height: 415px;
+    padding: 30px 25px 25px 25px;
 
     border: 1px solid #9EE7DD;
 
@@ -34,14 +34,26 @@
 
 .productModelCardAdmFullContent img{
     width: 70%;
-    margin-top: 35px;
+    margin-top: 30px;
 
 }
 
 .productModelCardAdmFullContent .modelName{
     font-size: 18px;
 
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+}
+
+.productModelCardAdmFullContent .priceAndGender{
+    width:  90%;
+
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.productModelCardAdmFullContent .priceAndGender span{
+    font-size: 18px;
 }
 
 .productModelCardAdmFullContent .iconWithText{
@@ -55,6 +67,11 @@
 
     cursor: pointer;
 
+}
+
+.productModelCardAdmFullContent .selected{
+    color: #007bff;
+    background-color: transparent;
 }
 
 .productModelCardAdmFullContent .iconWithText:hover{

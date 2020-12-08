@@ -21,7 +21,6 @@
 }
 
 table, td, th{
-  border:1px solid #4dcdbc !important;
+  border:1px solid #4dcdbc;
   font-weight: normal;
-
 }

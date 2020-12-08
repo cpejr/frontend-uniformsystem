@@ -5,6 +5,7 @@ import Home from "./Pages/Home";
 
 import HomeEditable from "./Pages/Administrador/HomeEditable";
 import OrdersAdm from "./Pages/Administrador/OrdersAdm";
+import EspecificOrderAdm from "./Pages/Administrador/OrdersAdm/EspecificOrderAdm";
 import ProductsAdm from "./Pages/Administrador/ProductsAdm";
 import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
 import EspecificEmployee  from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
@@ -101,6 +102,7 @@ function AdmRoutes() {
             <Switch>
                 <Route path="/adm/home" export exact component={HomeEditable} />
                 <Route path="/adm/pedidos" export exact component={OrdersAdm} />
+                <Route path="/adm/pedidoespecifico" export exact component={EspecificOrderAdm} />
                 <Route path="/adm/produtos" export exact component={ProductsAdm} />
                 <Route path="/adm/funcionarios" export exact component={EmployeeAdm} />
                 <Route path="/adm/funcionarios/funcionarioEspecifico" export exact component={EspecificEmployee} />

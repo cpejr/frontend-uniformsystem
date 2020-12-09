@@ -22,11 +22,26 @@
     margin-left: 0!important;
     font-size: 2rem;
     margin-right: 15%;
-    border-bottom: 2px solid #0EC4AB
+    border-bottom: 2px solid #0EC4AB;
+}
+
+.status{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .status span{
     font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.status div{
+    background-color: #F94444;
+    color: white;
+    font-size: 1.1rem;
+    padding: 0 20px 0 20px;
+    border-radius: 9px;
 }
 
 
@@ -47,6 +62,11 @@
     border: 1px solid #0EC4AB;
     border-radius: 33px;
     padding: 10px 20px;
+}
+
+.button-status:hover{
+    background-color: white;
+    border: 3px solid #0EC4AB;
 }
 
 .especific-info{
@@ -79,4 +99,37 @@
     border-right: 1px solid #7FA5A0;
 }
 
+@media (max-width: 810px){
+    .title-status{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: auto;
+    }
+    .title{
+        font-size: 1.5rem;
+        margin-right: 0;
+        margin-bottom: 10% !important;
+    }
+    .id-button{
+        display: flex;
+        flex-direction: column;
+    }
+    .button-status{
+        margin: 10% 0 10% 0;
+    }
+    .image-product{
+        width: 80%;
+    }
+    .amount, .products, .logo {
+        border: 1px solid #7FA5A0;
+    }
+}
 
+@media (max-width: 911px), (min-width: 431px){
+    .title{
+        font-size: 1.5rem;
+    }
+}

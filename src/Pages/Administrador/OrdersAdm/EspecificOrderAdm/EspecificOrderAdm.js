@@ -15,13 +15,14 @@ function EspecificOrderAdm() {
                     <span className="title">DETALHES DO PEDIDO</span>
                     <div className="status">
                         <span>STATUS: </span>
+                        <div>Pendente</div> 
                     </div>
                 </div>
 
                 <div className="id-button">
                     <div className="especific-info">
                         <span className="id">ID: 002</span>
-                        <span className="date">Data do pedido: 01/1/2021</span>
+                        <span className="date">Data do pedido: 01/01/2021</span>
                         <span className="price">Valor do pedido: R$1000,00</span>
                     </div>
                     <button className="button-status">Mudar status para "Em produção"</button>
@@ -46,7 +47,7 @@ function EspecificOrderAdm() {
                         </td>
                         <td className="logo">Baixar imagem</td>
                     </tr>
-                    <tr className="teste">
+                    <tr className="oder-tr-content">
                         <td className="amount">10</td>
                         <td className="products">
                             <img src={camisa} className="image-product" />

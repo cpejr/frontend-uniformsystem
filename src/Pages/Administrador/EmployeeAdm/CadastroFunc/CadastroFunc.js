@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./CadastroFunc.css";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
+import api from "../../../../services/api";
+
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
     <div className="divInputLabelError">
@@ -23,6 +25,65 @@ function CadastroFunc() {
   const [cpfStored, setCpf] = useState("");
   const [passwordStored, setPassword] = useState("");
 
+  const [errorInputCpf, setErrorInputCpf] = useState("");
+  const [errorInputPassword, setErrorInputPassword] = useState("");
+
+  function validateInput(type) {
+    if (type === "cpf") {
+      if (
+        !isNaN(Number(cpfStored)) &&
+        cpfStored.length >= 11 ||
+        cpfStored.length == 0
+      ) {
+        setErrorInputCpf("");
+      } else {
+        setErrorInputCpf("Número de cpf incorreto");
+      }
+    }
+    if (type === "password") {
+      if (
+        !isNaN(Number(passwordStored)) &&
+        passwordStored.length >= 6 ||
+        passwordStored.length == 0
+      ) {
+        setErrorInputPassword("");
+      } else {
+        setErrorInputPassword("Senha inválida");
+      }
+    }
+  }
+
+  useEffect(() => {
+    validateInput("cpf");
+  }, [cpfStored]);
+
+  useEffect(() => {
+    validateInput("password");
+  }, [passwordStored]);
+
+  // const handleSubmit = ()=>{
+
+  // }
+
+  // async function handlePostOrder() {
+  //   try{
+  //     const address_id = address.address_id;
+  //     await api.post(`/order`, {
+  //       address_id: address_id,
+  //       service_code: serviceCode,
+  //       products: products,
+  //     },
+  //     {
+  //       headers: { authorization: `bearer ${token}` },
+
+  //     });
+  //   }
+  //   catch(error){
+  //     console.warn(error);
+  //     alert("Erro ao criar um pedido.");
+  //   }
+  // }
+
   return (
     <div className="fullPage">
       <ArrowBackIosIcon className="setaVoltar"></ArrowBackIosIcon>
@@ -39,6 +100,7 @@ function CadastroFunc() {
         width={200}
         setInfo={setCpf}
         maxLenght={11}
+        error={errorInputCpf}
       />{" "}
       <InputWithLabel
         label="Senha:"
@@ -46,6 +108,7 @@ function CadastroFunc() {
         setInfo={setPassword}
         maxLenght={50}
         type="password"
+        error={errorInputPassword}
       />
       <label for="tipodefunc">Tipo de Funcionário:</label>
       <select className="divInputLabelError">
@@ -56,6 +119,7 @@ function CadastroFunc() {
         <option value="func4">Funcionário 4</option>
       </select>
       <button className="buttonCad2">CADASTRAR</button>
+      {/* onClick={handleSubmit} */}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './PopUpProductModel.css';
 
 import { Dialog, DialogTitle, TextField, Button, 
@@ -71,6 +71,14 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
     const [saveFileFromImgLink, setSaveFileFromImgLink] = useState(null);
 
     const [genderState, setGenderState] = useState('');
+    const [storedProductInfo, setStoredProductInfo] = useState({})
+
+    // useEffect(() => {
+    //     setStoredProductInfo({
+    //         productModelStored: productModelArray[productModelIDFromExistingInfo],
+    //         idProductModelStored: productModelIDFromExistingInfo
+    //     })
+    // }, [])
 
     const inputDescription = useRef(null);
     const inputPrice = useRef(null);
@@ -79,10 +87,6 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
     const handleChangeGenderState = (event) => {
         setGenderState(event.target.value);
     };
-
-    // const handleChangeIsMainState = (event) => {
-    //     setIsMainState(event.target.value);
-    // };
 
     const handleSave = (event) => {
         console.log(event.target.value);
@@ -105,7 +109,6 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
         
         const oldObjInfo = {
             ...productModelArray[productModelIDFromExistingInfo],
-            // isMain: inputIsMain.current.value === 'Sim' ? true: false,
             isMain: false,
             imgLink: saveFileFromImgLink.imgFile,
             fileToShow: saveFileFromImgLink.fileToShow,
@@ -116,12 +119,12 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
 
         console.log('depois do obj')
 
-        const copyProductModelsArray = [...productModelArray]
+        const copyProductModelsArray = [...productModelArray];
         copyProductModelsArray.splice(productModelIDFromExistingInfo, 1, oldObjInfo)
 
         setProductModelArray([...copyProductModelsArray])
 
-        setProductModelIDFromExistingInfo('')
+        // setProductModelIDFromExistingInfo('')
         handleClose();
     };
 
@@ -150,6 +153,9 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
     const classes = useStyles();
 
     if(isEdit && productModelIDFromExistingInfo !== ''){
+
+        console.log('id auqi', productModelIDFromExistingInfo)
+        console.log('coisas', productModelArray[productModelIDFromExistingInfo])
         const { imgLink, price, modelDescription, gender } = productModelArray[productModelIDFromExistingInfo];
         
         console.log(' genero', gender)
@@ -173,8 +179,12 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
     
         };
 
+        
         console.log('ENTROU EDIT', productModelArray[productModelIDFromExistingInfo])
+        setProductModelIDFromExistingInfo('');
+
         return (
+
             <Dialog open={open} onClose={handleClose} className={classes.dialog}>
                 <DialogTitle>
                     <Typography variant="h2" className={classes.title}>

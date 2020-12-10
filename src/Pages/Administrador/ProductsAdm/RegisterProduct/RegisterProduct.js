@@ -10,6 +10,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 import ProductModelCardAdm from '../../../../components/ProductModelCardAdm';
 import PopUpProductModel from '../../../../components/PopUpProductModel';
 
+import AddIcon from '@material-ui/icons/Add';
+
 import { FaChevronLeft } from 'react-icons/fa';
 
 import camisa from '../../../../Assets/camisa.jpg';
@@ -57,39 +59,39 @@ function RegisterProduct({history}) {
   const [productInfo, setProductInfo] = useState({});
 
   const [productModelsArray, setProductModelsArray] = useState([
-    {
-      productID: '',
-      modelDescription: 'Um modelo de camisa bonita',
-      imgSrc: camisa,
-      isMain: false,
-      imgLink: 'google.com',
-      imgAlt: 'Teste',
-      price: '30,00',
-      gender: 'M',
+    // {
+    //   productID: '',
+    //   modelDescription: 'Um modelo de camisa bonita',
+    //   imgSrc: camisa,
+    //   isMain: false,
+    //   imgLink: 'google.com',
+    //   imgAlt: 'Teste',
+    //   price: '30,00',
+    //   gender: 'M',
       
-    },
-    {
-      productID: '',
-      modelDescription: 'MODELO 2',
-      imgSrc: camisa,
-      isMain: false,
-      imgLink: 'google.com',
-      imgAlt: 'Teste',
-      price: '31,00',
-      gender: 'M',
+    // },
+    // {
+    //   productID: '',
+    //   modelDescription: 'MODELO 2',
+    //   imgSrc: camisa,
+    //   isMain: false,
+    //   imgLink: 'google.com',
+    //   imgAlt: 'Teste',
+    //   price: '31,00',
+    //   gender: 'M',
   
-    },
-    {
-      productID: '',
-      modelDescription: 'MODELO 3',
-      imgSrc: camisa,
-      isMain: false,
-      imgLink: 'google.com',
-      imgAlt: 'Teste',
-      price: '32,00',
-      gender: 'M',
+    // },
+    // {
+    //   productID: '',
+    //   modelDescription: 'MODELO 3',
+    //   imgSrc: camisa,
+    //   isMain: false,
+    //   imgLink: 'google.com',
+    //   imgAlt: 'Teste',
+    //   price: '32,00',
+    //   gender: 'M',
   
-    }
+    // }
   ]);
 
   const handleCreate = () => {
@@ -153,7 +155,6 @@ function RegisterProduct({history}) {
           headers: { authorization: `bearer ${token}` },
         }
       );
-      console.log('response', response);
 
       // Caso tenha product_models
       // if(productModelsArray.length > 0){
@@ -164,22 +165,22 @@ function RegisterProduct({history}) {
           delete item.imgSrc;
           delete item.productID;
 
+          let objImage = new FormData();
+          objImage.append("file", item.imgLink);
+          objImage.append("is_main", item.isMain);
+          objImage.append("img_link", ".");
+          objImage.append("price", item.price);
+          objImage.append("model_description", item.modelDescription);
+          objImage.append("gender", item.gender);
+
           // let responseProductModels = await api.post(`/newmodels/${response.data.productId}`,
-          let responseProductModels = await api.post(`/newmodels/36`,
-            {
-              is_main: item.isMain,
-              img_link: item.imgLink,
-              price: item.price,
-              model_description: item.modelDescription,
-              gender: item.gender,
-            }
+          await api.post(`/newmodel/${response.data.product_id}`,
+            objImage
             ,
             {
               headers: { authorization: `bearer ${token}` },
             }
           );
-
-          console.log('responseProductModels', responseProductModels)
 
         });
 
@@ -271,7 +272,8 @@ function RegisterProduct({history}) {
               <Button type="button" 
                 onClick={handleCreate}
               >
-                ADICIONAR NOVO MODELO
+                <span className="textAddProduct">ADICIONAR NOVO MODELO</span>
+                <AddIcon className="iconAddProduct" />
               </Button>
             </div>
 
@@ -285,8 +287,8 @@ function RegisterProduct({history}) {
                   handleSelectToEdit={setProductModelIdToEdit}
                   productModelArray={productModelsArray}
                   setProductModelArray={setProductModelsArray}
-                  imgSrc={item.imgSrc}
-                  imgAlt={item.imgAlt}
+                  imgSrc={item.fileToShow}
+                  imgAlt={"item.imgAlt"}
                   productModelName={item.modelDescription}
                   price={item.price}
                   gender={item.gender}

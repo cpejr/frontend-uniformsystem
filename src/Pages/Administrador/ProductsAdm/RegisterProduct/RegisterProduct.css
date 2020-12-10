@@ -149,15 +149,25 @@
 }
 
 .registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .labelAndButtonAboveBox > button{
-    font-size: 18px;
+    /* font-size: 18px;
     font-weight: 600;
-    color: #000000;
+    color: #000000; */
     padding: 10px 20px; 
     outline: none;
     border: none;
     border-radius: 20px;
 
     background-color: #8ED7CD;
+}
+
+.registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .labelAndButtonAboveBox button .textAddProduct{
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .labelAndButtonAboveBox button .iconAddProduct{
+    display: none;
 }
 
 .registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .labelAndButtonAboveBox > button:hover{
@@ -208,6 +218,16 @@
         grid-template-columns: 1fr 1fr;
         grid-gap: 16px;
         justify-items: center;
+    }
+
+    .registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .labelAndButtonAboveBox button .textAddProduct{
+        display: none;
+    }
+    
+    .registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .labelAndButtonAboveBox button .iconAddProduct{
+        display: block;
+        font-size: 40px;
+        color: #212529;
     }
 
     .registerProductFullContent .mainContent .formRegisterProduct .boxToManipulateProductModel .finalButtonToRegister{

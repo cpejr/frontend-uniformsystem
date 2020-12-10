@@ -26,9 +26,9 @@ function ProductModelCardAdm({productModelID, handleClose, handleSelectToEdit,
     }
 
     const handleDeleteModel = (productModelID) => {
-        const copyProductModelArray = [...productModelArray]
+        const copyProductModelArray = [...productModelArray];
         copyProductModelArray.splice(productModelID, 1);
-        setProductModelArray(copyProductModelArray)
+        setProductModelArray(copyProductModelArray);
     }
 
     return (

@@ -45,9 +45,7 @@ function ProductsAdm() {
         const param = 'name=' + filter.name;
         query.push(param);
       }
-      console.log(query);
       const response = await api.get(`/product?${query.join('&')}`);
-      console.log(response);
       return (response.data.products);
     }
     catch (error) {
@@ -114,14 +112,12 @@ function ProductsAdm() {
 
 
   function handleNameChange(){
-    console.log('input', inputSearchAdm.current.value);
     const product_name = inputSearchAdm.current.value;
 
     const filterName = {...filter}
     filterName.name = product_name;
 
     setFilter(filterName)
-    console.log('filtro', filter)
     //alert('vc está procurando');
   }
 
@@ -154,7 +150,6 @@ function ProductsAdm() {
         pageLoading.current = true;
         page.current++;
         getProducts().then(newProducts => {
-          console.log(newProducts);
           setProducts([...products, ...newProducts]);
           pageLoading.current = false;
         })

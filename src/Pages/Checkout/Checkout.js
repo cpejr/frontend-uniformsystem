@@ -14,6 +14,7 @@ import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import Button from '@material-ui/core/Button';
 
 import './Checkout.css'
+import { useHistory } from 'react-router-dom';
 
 function InputWithLabel({label, width, setInfo, error, maxLenght}){
   
@@ -39,7 +40,7 @@ function InputWithLabel({label, width, setInfo, error, maxLenght}){
 }
 
 function Checkout(){
-
+  const history = useHistory();
   
   const [cardNumberStored, setCardNumber] = useState("");
   const [securityNumberStored, setSecurityNumber] = useState('');
@@ -157,13 +158,21 @@ useEffect(() => {
   
   // Lista dos produtos para finalizar pedido 
   async function getProducts() {
-    const response = await api.get("/cart", {
-      headers: {
-        authorization: `bearer ${token}` 
-      },
-    });
-
-    setProducts([...response.data]);
+    try {
+      const response = await api.get("/cart", {
+        headers: {
+          authorization: `bearer ${token}` 
+        },
+      });
+      if(response.data.length>0){
+        setProducts([...response.data]);
+      }
+      else{
+        history.push('/')
+      }
+    } catch (error) {
+      console.warn(error);
+    }
   }
   
   useEffect(() => {

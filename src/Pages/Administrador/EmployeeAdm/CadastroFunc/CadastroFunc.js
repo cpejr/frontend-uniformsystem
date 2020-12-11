@@ -20,6 +20,22 @@ function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   );
 }
 
+function PasswordInputWithLabel({ label, width, setInfo, error, maxLenght }) {
+  return (
+    <div className="divInputLabelError">
+      <label>{label}</label>
+      <input
+        type="password"
+        name="input"
+        style={{ width: `${width}px` }}
+        maxLength={`${maxLenght}`}
+        onChange={(e) => setInfo(e.target.value)}
+      />
+      <span style={{ color: "#ff0033", fontSize: "15px" }}>{error}</span>
+    </div>
+  );
+}
+
 function CadastroFunc() {
   const [nameStored, setName] = useState("");
   const [cpfStored, setCpf] = useState("");
@@ -37,7 +53,7 @@ function CadastroFunc() {
       ) {
         setErrorInputCpf("");
       } else {
-        setErrorInputCpf("Número de cpf incorreto");
+        setErrorInputCpf("Número de CPF incorreto");
       }
     }
     if (type === "password") {
@@ -102,7 +118,7 @@ function CadastroFunc() {
         maxLenght={11}
         error={errorInputCpf}
       />{" "}
-      <InputWithLabel
+      <PasswordInputWithLabel
         label="Senha:"
         width={200}
         setInfo={setPassword}

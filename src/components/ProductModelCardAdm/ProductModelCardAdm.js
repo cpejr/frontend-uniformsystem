@@ -3,9 +3,10 @@ import './ProductModelCardAdm.css';
 
 import { FaEdit, FaStar, FaTrashAlt } from 'react-icons/fa';
 
-function ProductModelCardAdm({productModelID, handleClose, handleSelectToEdit,
-    productModelArray, setProductModelArray, imgSrc, imgAlt, productModelName, price, gender}) {
+function ProductModelCardAdm({productModelID, handleSelectToEdit,
+    productModelArray, setProductModelArray, fullProduct}) {
 
+    const {fileToShow, imgAlt, modelDescription, price, gender} = fullProduct;
 
     const handleIsMain = () => {
 
@@ -22,7 +23,7 @@ function ProductModelCardAdm({productModelID, handleClose, handleSelectToEdit,
 
     const handleEditModel = () => {
         handleSelectToEdit(productModelID);
-        handleClose();
+        // handleClose();
     }
 
     const handleDeleteModel = (productModelID) => {
@@ -34,24 +35,25 @@ function ProductModelCardAdm({productModelID, handleClose, handleSelectToEdit,
     return (
         <div className="productModelCardAdmFullContent">
             <FaTrashAlt className="iconGarbage" onClick={() => handleDeleteModel(productModelID)}/>
-            <img src={imgSrc} alt={imgAlt} />
-            <span className="modelName">{productModelName}</span>
+            <img src={fileToShow} alt={imgAlt} />
+            <span className="modelName">{modelDescription}</span>
 
             <div className="priceAndGender">
                 <span>{`R$ ${price}`}</span>
                 <span>{gender === 'M'? 'Masculino': 'Feminino'}</span>
             </div>
 
-            <div className="iconWithText">
-                <FaEdit className="iconProductModelCard" onClick={handleEditModel} />
-                <span onClick={handleEditModel}>EDITAR MODELO</span>
+            <div className="iconWithText" onClick={() => handleEditModel()}>
+                <FaEdit className="iconProductModelCard" />
+                <span>EDITAR MODELO</span>
             </div>
             <div className={productModelArray[productModelID].isMain ? 
                     "iconWithText selected"
                     : "iconWithText"}
+                    onClick={() => handleIsMain()}
             >
-                <FaStar className="iconProductModelCard" onClick={handleIsMain} />
-                <span onClick={handleIsMain} >ADICIONAR COMO MODELO PRINCIPAL</span>
+                <FaStar className="iconProductModelCard" />
+                <span >ADICIONAR COMO MODELO PRINCIPAL</span>
             </div>
         </div>
     );

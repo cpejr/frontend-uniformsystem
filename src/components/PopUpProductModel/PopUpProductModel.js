@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import './PopUpProductModel.css';
 
 import { Dialog, DialogTitle, TextField, Button, 
-    makeStyles, Select, MenuItem, InputLabel, Typography  } from '@material-ui/core';
+    makeStyles, MenuItem, Typography  } from '@material-ui/core';
 
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import SaveIcon from '@material-ui/icons/Save';
@@ -63,68 +63,89 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
-const PopUpProductModel = ({open, handleClose, titleModal, isEdit, 
+const PopUpProductModel = ({open, handleClose, isEdit, 
     productModelIDFromExistingInfo, setProductModelIDFromExistingInfo, setProductModelArray,
     productModelArray }) => {
 
-    const [saveFileFromImgLink, setSaveFileFromImgLink] = useState(null);
+    const [saveFileFromImgLink, setSaveFileFromImgLink] = useState({
+        imgFile: '',
+        fileToShow: null
+    });
 
     const [genderState, setGenderState] = useState('');
     const [storedProductInfo, setStoredProductInfo] = useState({})
-
-    // useEffect(() => {
-    //     setStoredProductInfo({
-    //         productModelStored: productModelArray[productModelIDFromExistingInfo],
-    //         idProductModelStored: productModelIDFromExistingInfo
-    //     })
-    // }, [])
 
     const inputDescription = useRef(null);
     const inputPrice = useRef(null);
     const inputImg = useRef(null);
 
+    const classes = useStyles();
+
+    useEffect(() => {
+
+        setStoredProductInfo({
+            imgLink: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].imgLink, 
+            fileToShow: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].fileToShow , 
+            price: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].price, 
+            modelDescription: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].modelDescription, 
+            gender: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].gender
+        })
+    
+        setSaveFileFromImgLink({
+            imgFile: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].imgLink, 
+            fileToShow: productModelArray[productModelIDFromExistingInfo] === undefined ? null : productModelArray[productModelIDFromExistingInfo].fileToShow,
+        });
+
+        setGenderState(productModelArray[productModelIDFromExistingInfo]? productModelArray[productModelIDFromExistingInfo].gender : '');
+
+        console.log('produto selecionado', productModelArray[productModelIDFromExistingInfo])
+        console.log('info', storedProductInfo)
+        console.log('arquivo', saveFileFromImgLink)
+        
+    }, [open]);
+
+    
     const handleChangeGenderState = (event) => {
         setGenderState(event.target.value);
     };
 
     const handleSave = (event) => {
-        console.log(event.target.value);
         
-        const objInfo = {
-            isMain: false,
-            imgLink: saveFileFromImgLink.imgFile,
-            fileToShow: saveFileFromImgLink.fileToShow,
-            price: inputPrice.current.value,
-            modelDescription: inputDescription.current.value,
-            gender: genderState,
+        if(isEdit){
+            const oldObjInfo = {
+                ...productModelArray[productModelIDFromExistingInfo],
+                isMain: false,
+                imgLink: saveFileFromImgLink.imgFile,
+                fileToShow: saveFileFromImgLink.fileToShow,
+                price: inputPrice.current.value,
+                modelDescription: inputDescription.current.value,
+                gender: genderState,
+            }
+    
+            console.log('depois do obj')
+    
+            const copyProductModelsArray = [...productModelArray];
+            copyProductModelsArray.splice(productModelIDFromExistingInfo, 1, oldObjInfo)
+    
+            setProductModelArray([...copyProductModelsArray])
+    
+            setProductModelIDFromExistingInfo('')
+
+        }else{
+            const objInfo = {
+                isMain: false,
+                imgLink: saveFileFromImgLink.imgFile,
+                fileToShow: saveFileFromImgLink.fileToShow,
+                price: inputPrice.current.value,
+                modelDescription: inputDescription.current.value,
+                gender: genderState,
+            }
+            console.log('iteravel', objInfo)
+    
+            setProductModelArray([...productModelArray , objInfo])
+
         }
-        console.log('iteravel', objInfo)
 
-        setProductModelArray([...productModelArray , objInfo])
-        handleClose();
-    };
-
-    const handleSaveChanges = (event) => {
-        
-        const oldObjInfo = {
-            ...productModelArray[productModelIDFromExistingInfo],
-            isMain: false,
-            imgLink: saveFileFromImgLink.imgFile,
-            fileToShow: saveFileFromImgLink.fileToShow,
-            price: inputPrice.current.value,
-            modelDescription: inputDescription.current.value,
-            gender: genderState,
-        }
-
-        console.log('depois do obj')
-
-        const copyProductModelsArray = [...productModelArray];
-        copyProductModelsArray.splice(productModelIDFromExistingInfo, 1, oldObjInfo)
-
-        setProductModelArray([...copyProductModelsArray])
-
-        // setProductModelIDFromExistingInfo('')
         handleClose();
     };
 
@@ -146,70 +167,36 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
             imgFile: inputImg.current.files[0],
             fileToShow: fileLoaded
         });
-    
         };
     }
-    
-    const classes = useStyles();
-
-    if(isEdit && productModelIDFromExistingInfo !== ''){
-
-        console.log('id auqi', productModelIDFromExistingInfo)
-        console.log('coisas', productModelArray[productModelIDFromExistingInfo])
-        const { imgLink, price, modelDescription, gender } = productModelArray[productModelIDFromExistingInfo];
         
-        console.log(' genero', gender)
-        console.log(' genero tipo', typeof gender)
-        console.log(genderState)
-        // setGenderState(gender);
-        console.log('passou aqui')
-
-        let fileData = new FileReader();
-        fileData.readAsDataURL(imgLink);
-    
-        console.log(imgLink);
-    
-        fileData.onload = function () {
-        const fileLoaded = fileData.result;
-    
-        setSaveFileFromImgLink({
-            imgFile: imgLink,
-            fileToShow: fileLoaded
-        });
-    
-        };
-
-        
-        console.log('ENTROU EDIT', productModelArray[productModelIDFromExistingInfo])
-        setProductModelIDFromExistingInfo('');
-
         return (
 
             <Dialog open={open} onClose={handleClose} className={classes.dialog}>
                 <DialogTitle>
                     <Typography variant="h2" className={classes.title}>
-                    {titleModal}
+                    {isEdit? "Edição de Modelo": "Cadastro de modelo"}
                     </Typography>
                 </DialogTitle>
                 <TextField required error label="Descrição" inputRef={inputDescription} 
                     className={classes.textInput}
-                    defaultValue={modelDescription} 
+                    defaultValue={isEdit? storedProductInfo.modelDescription : ''} 
                 />
                 <TextField required label="Preço" inputRef={inputPrice} 
                     className={classes.textInput}
-                    defaultValue={price}
+                    defaultValue={isEdit? storedProductInfo.price: ''}
                 />
-                <InputLabel id="demo-simple-select-label" className={classes.label} >Gênero</InputLabel>
-                <Select
-                    labelId="demo-simple-select-label"
+                <TextField
+                    label="Gênero"
+                    select
                     value={genderState}
                     className={classes.textInput}
                     onChange={(e) => handleChangeGenderState(e)}
                 >
                     <MenuItem value={"M"}>Masculino</MenuItem>
                     <MenuItem value={"F"}>Feminino</MenuItem>
-                </Select>
-                <Button className={classes.inputFile} onClick={handleAddImgLink}>
+                </TextField>
+                <Button className={classes.inputFile} onClick={(e) => handleAddImgLink()}>
                     <input
                         type="file"
                         hidden
@@ -217,7 +204,7 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
                         onChange={(e) => handleAddImageLink()}
                     />
                     {
-                        saveFileFromImgLink ? saveFileFromImgLink.imgFile.name : 
+                        saveFileFromImgLink.imgFile !== '' ? saveFileFromImgLink.imgFile.name : 
                         (
                             <>
                                 <AddAPhotoIcon />   
@@ -226,65 +213,12 @@ const PopUpProductModel = ({open, handleClose, titleModal, isEdit,
                         )
                     }
                 </Button>
-                <Button onClick={handleSaveChanges} className={classes.saveButton} >
+                <Button onClick={(e) => handleSave()} className={classes.saveButton} >
                     <SaveIcon />
-                    Salvar alterações
+                    {isEdit? 'Salvar alterações': 'Salvar modelo'}
                 </Button>
             </Dialog>
         );
-    }else{
-        return (
-            <Dialog open={open} onClose={handleClose} className={classes.dialog}>
-                <DialogTitle>
-                    <Typography variant="h2" className={classes.title}>
-                    {titleModal}
-                    </Typography>
-                </DialogTitle>
-                <TextField required label="Descrição" 
-                    inputRef={inputDescription} 
-                    inputProps={{maxLength: 50}}
-                    type="text" 
-                    className={classes.textInput} 
-                />
-                <TextField required label="Preço" 
-                    inputRef={inputPrice}
-                    type="text"  
-                    className={classes.textInput} 
-                />
-                <InputLabel id="demo-simple-select-label" className={classes.label} >Gênero</InputLabel>
-                <Select
-                    labelId="demo-simple-select-label"
-                    value={genderState}
-                    onChange={(e) => handleChangeGenderState(e)}
-                    className={classes.textInput}
-                >
-                    <MenuItem value={"M"}>Masculino</MenuItem>
-                    <MenuItem value={"F"}>Feminino</MenuItem>
-                </Select>
-                <Button className={classes.inputFile} onClick={handleAddImgLink}>
-                    <input
-                        type="file"
-                        hidden
-                        ref={inputImg}
-                        onChange={(e) => handleAddImageLink(e)}
-                    />
-                    {
-                        saveFileFromImgLink ? saveFileFromImgLink.imgFile.name : 
-                        (
-                            <>
-                                <AddAPhotoIcon />   
-                                ADICIONAR IMAGEM
-                            </>
-                        )
-                    }
-                </Button>
-                <Button onClick={handleSave} className={classes.saveButton}>
-                    <SaveIcon />
-                    Salvar modelo
-                </Button>
-            </Dialog>
-        );
-    }
 
 }
 

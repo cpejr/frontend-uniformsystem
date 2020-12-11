@@ -26,63 +26,40 @@ function RegisterProduct({history}) {
 
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
-  const [openToRegister, setOpenToRegister] = useState(false);
-  const [openToEdit, setOpenToEdit] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  // const [openToEdit, setOpenToEdit] = useState(false);
 
-  const [productModelIdToEdit, setProductModelIdToEdit] = useState('');
+  const [productModelIdToEdit, setProductModelIdToEdit] = useState(null);
 
   const [productInfo, setProductInfo] = useState({});
 
-  const [productModelsArray, setProductModelsArray] = useState([
-    // {
-    //   productID: '',
-    //   modelDescription: 'Um modelo de camisa bonita',
-    //   imgSrc: camisa,
-    //   isMain: false,
-    //   imgLink: 'google.com',
-    //   imgAlt: 'Teste',
-    //   price: '30,00',
-    //   gender: 'M',
-      
-    // },
-    // {
-    //   productID: '',
-    //   modelDescription: 'MODELO 2',
-    //   imgSrc: camisa,
-    //   isMain: false,
-    //   imgLink: 'google.com',
-    //   imgAlt: 'Teste',
-    //   price: '31,00',
-    //   gender: 'M',
-  
-    // },
-    // {
-    //   productID: '',
-    //   modelDescription: 'MODELO 3',
-    //   imgSrc: camisa,
-    //   isMain: false,
-    //   imgLink: 'google.com',
-    //   imgAlt: 'Teste',
-    //   price: '32,00',
-    //   gender: 'M',
-  
-    // }
-  ]);
+  const [isEditProduct, setIsEditProduct] = useState(false);
 
-  const handleCreate = () => {
-    setOpenToRegister(true);
+  const [productModelsArray, setProductModelsArray] = useState([]);
+
+  const handleCreateModal = () => {
+    setOpenModal(true);
   }
   
-  const handleCloseRegister = () => {
-    setOpenToRegister(false);
+  const handleCloseModal = () => {
+    setOpenModal(false);
   }
   
-  const handleEdit = () => {
-    setOpenToEdit(true);
+  const handleNewProduct = () => {
+    setIsEditProduct(false);
+    handleCreateModal();
   }
 
-  const handleCloseEdit = () => {
-    setOpenToEdit(false);
+  // const handleCloseEdit = () => {
+  //   setOpenToEdit(false);
+  // }
+
+
+  const handleOpenToEdit = (productModelID) => {
+    setIsEditProduct(true);
+    handleCreateModal();
+    setProductModelIdToEdit(productModelID);
+
   }
 
   const handleCompleteProductInfo = (e, type) => {
@@ -245,7 +222,7 @@ function RegisterProduct({history}) {
               <span>MODELOS:</span>
 
               <Button type="button" 
-                onClick={handleCreate}
+                onClick={handleNewProduct}
               >
                 <span className="textAddProduct">ADICIONAR NOVO MODELO</span>
                 <AddIcon className="iconAddProduct" />
@@ -258,15 +235,16 @@ function RegisterProduct({history}) {
                 <ProductModelCardAdm
                   key={index}
                   productModelID={index}
-                  handleClose={handleEdit}
-                  handleSelectToEdit={setProductModelIdToEdit}
+                  // handleClose={handleCloseModal}
+                  handleSelectToEdit={handleOpenToEdit}
                   productModelArray={productModelsArray}
                   setProductModelArray={setProductModelsArray}
-                  imgSrc={item.fileToShow}
-                  imgAlt={"item.imgAlt"}
-                  productModelName={item.modelDescription}
-                  price={item.price}
-                  gender={item.gender}
+                  fullProduct={item}
+                  // imgSrc={item.fileToShow}
+                  // imgAlt={"item.imgAlt"}
+                  // productModelName={item.modelDescription}
+                  // price={item.price}
+                  // gender={item.gender}
                 />
               ) : null
             )}
@@ -280,17 +258,18 @@ function RegisterProduct({history}) {
           </div>
         </form>
       </div>
-      <PopUpProductModel open={openToRegister} handleClose={handleCloseRegister} 
-        titleModal={"Cadastro de modelo"} isEdit={false} setProductModelArray={setProductModelsArray}
-        productModelArray={productModelsArray}
-      />
-      <PopUpProductModel open={openToEdit} handleClose={handleCloseEdit} 
-        titleModal={"Edição de modelo"} isEdit={true} 
-        productModelIDFromExistingInfo={productModelIdToEdit} 
-        setProductModelIDFromExistingInfo={setProductModelIdToEdit}
-        setProductModelArray={setProductModelsArray}
-        productModelArray={productModelsArray}
-      />
+
+            {/* <PopUpProductModel open={openToRegister} handleClose={handleCloseRegister} 
+              titleModal={"Cadastro de modelo"} isEdit={false} setProductModelArray={setProductModelsArray}
+              productModelArray={productModelsArray}
+            /> */}
+            <PopUpProductModel open={openModal} handleClose={handleCloseModal} 
+              isEdit={isEditProduct} 
+              productModelIDFromExistingInfo={productModelIdToEdit} 
+              setProductModelIDFromExistingInfo={setProductModelIdToEdit}
+              setProductModelArray={setProductModelsArray}
+              productModelArray={productModelsArray}
+            />
 
       <Snackbar open={openSnackBar} autoHideDuration={5000} onClose={handleCloseSnackBar}>
         <MuiAlert onClose={handleCloseSnackBar} elevation={6} variant="filled" severity="success">

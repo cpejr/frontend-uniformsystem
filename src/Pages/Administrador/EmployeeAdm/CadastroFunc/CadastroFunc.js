@@ -48,7 +48,7 @@ function CadastroFunc() {
       ) {
         setErrorInputPassword("");
       } else {
-        setErrorInputPassword("Senha inválida");
+        setErrorInputPassword("Senha inválida (min. 6 dígitos)");
       }
     }
   }

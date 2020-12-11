@@ -32,9 +32,9 @@
 
 @media (max-width: 800px) {
   .titleCad2 {
-    display: flex;
-    justify-content: center;
-    max-width: 300px;
+    max-width: 150px;
+    margin-right: 0px;
+    margin-bottom: 0%;
   }
 
   .buttonCad2 {

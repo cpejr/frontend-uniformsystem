@@ -35,7 +35,7 @@ function ProductModelCardAdm({productModelID, handleSelectToEdit,
     return (
         <div className="productModelCardAdmFullContent">
             <FaTrashAlt className="iconGarbage" onClick={() => handleDeleteModel(productModelID)}/>
-            <img src={fileToShow} alt={imgAlt} />
+            { fileToShow ? <img src={fileToShow} alt={imgAlt} />: 'Sem imagem' }
             <span className="modelName">{modelDescription}</span>
 
             <div className="priceAndGender">

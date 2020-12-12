@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import api from '../../../../services/api';
 
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button, CircularProgress, makeStyles, Snackbar, TextField } from '@material-ui/core';
 
-import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import ProductModelCardAdm from '../../../../components/ProductModelCardAdm';
@@ -14,9 +13,17 @@ import AddIcon from '@material-ui/icons/Add';
 
 import { FaChevronLeft } from 'react-icons/fa';
 
-import camisa from '../../../../Assets/camisa.jpg';
-
 import './RegisterProduct.css';
+
+function validateInputWithTypeText(valueFromInput){
+  let isValid;
+  if(valueFromInput === ""){
+      isValid = false;
+  }else{
+      isValid = true;
+  }
+  return isValid;
+}
 
 function RegisterProduct({history}) {
 
@@ -27,7 +34,6 @@ function RegisterProduct({history}) {
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
-  // const [openToEdit, setOpenToEdit] = useState(false);
 
   const [productModelIdToEdit, setProductModelIdToEdit] = useState(null);
 
@@ -36,6 +42,14 @@ function RegisterProduct({history}) {
   const [isEditProduct, setIsEditProduct] = useState(false);
 
   const [productModelsArray, setProductModelsArray] = useState([]);
+
+  const [errorNameProduct, setErrorNameProduct] = useState(false);
+  const [errorNameProductMessage, setErrorNameProductMessage] = useState('');
+
+  const inputName = useRef(null);
+  // const inputDescription = useRef(null);
+
+  const classes = useStyles();
 
   const handleCreateModal = () => {
     setOpenModal(true);
@@ -50,11 +64,6 @@ function RegisterProduct({history}) {
     handleCreateModal();
   }
 
-  // const handleCloseEdit = () => {
-  //   setOpenToEdit(false);
-  // }
-
-
   const handleOpenToEdit = (productModelID) => {
     setIsEditProduct(true);
     handleCreateModal();
@@ -63,9 +72,7 @@ function RegisterProduct({history}) {
   }
 
   const handleCompleteProductInfo = (e, type) => {
-
     let newObjProductInfo
-
     if(type === 'name'){
       newObjProductInfo = {
         name: e.target.value,
@@ -81,7 +88,6 @@ function RegisterProduct({history}) {
             product_type: e.target.value,
           }
     }
-
     setProductInfo({...productInfo, ...newObjProductInfo, models: []});
   }
 
@@ -89,7 +95,6 @@ function RegisterProduct({history}) {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpenSnackBar(false);
   };
 
@@ -97,56 +102,68 @@ function RegisterProduct({history}) {
     event.preventDefault();
 
     console.log('produto aqui', productInfo);
+
+    const resultValidateName = validateInputWithTypeText(inputName.current.value);
+    // const resultValidateDescription = validateInputWithTypeText(inputDescription.current.value);
     
-    try{
-      setLoading(true);
-      const response = await api.post("/product",
-        productInfo
-        ,
-        {
-          headers: { authorization: `bearer ${token}` },
+    if(!resultValidateName){
+      setErrorNameProduct(true);
+      setErrorNameProductMessage('Digite um nome.');
+    }else{
+      setErrorNameProduct(false);
+      setErrorNameProductMessage('');
+
+      try{
+        setLoading(true);
+        const response = await api.post("/product",
+          productInfo
+          ,
+          {
+            headers: { authorization: `bearer ${token}` },
+          }
+        );
+  
+        // Caso tenha product_models
+        if(productModelsArray.length > 0){
+          
+          productModelsArray.map(async (item) => {
+  
+            delete item.imgAlt;
+            delete item.imgSrc;
+            delete item.productID;
+  
+            let objImage = new FormData();
+            objImage.append("file", item.imgLink);
+            objImage.append("is_main", item.isMain);
+            objImage.append("img_link", ".");
+            objImage.append("price", item.price.replace(',', '.'));    // substitui "," por ".", pois backend tem validação por "." em price
+            objImage.append("model_description", item.modelDescription);
+            objImage.append("gender", item.gender);
+  
+            await api.post(`/newmodel/${response.data.product_id}`,
+              objImage
+              ,
+              {
+                headers: { authorization: `bearer ${token}` },
+              }
+            );
+  
+          });
+  
         }
-      );
-
-      // Caso tenha product_models
-      // if(productModelsArray.length > 0){
         
-        productModelsArray.map(async (item) => {
-
-          delete item.imgAlt;
-          delete item.imgSrc;
-          delete item.productID;
-
-          let objImage = new FormData();
-          objImage.append("file", item.imgLink);
-          objImage.append("is_main", item.isMain);
-          objImage.append("img_link", ".");
-          objImage.append("price", item.price);
-          objImage.append("model_description", item.modelDescription);
-          objImage.append("gender", item.gender);
-
-          // let responseProductModels = await api.post(`/newmodels/${response.data.productId}`,
-          await api.post(`/newmodel/${response.data.product_id}`,
-            objImage
-            ,
-            {
-              headers: { authorization: `bearer ${token}` },
-            }
-          );
-
-        });
-
-      // }
-      
-      setTimeout(() => {
-        setLoading(false);
-        setOpenSnackBar(true);
+        setTimeout(() => {
+          setLoading(false);
+          setOpenSnackBar(true);
+        }
+        , 3000);
+  
+      }catch(err){
+        console.log(err.message);
       }
-      , 3000);
 
-    }catch(err){
-      console.log(err.message);
     }
+
   }
 
   useEffect(() => {
@@ -206,8 +223,17 @@ function RegisterProduct({history}) {
 
           <div className="spanWithInput">
             <span>NOME:</span>
-            <input type="text"  
+            {/* <input type="text"  
               onChange={(e) => handleCompleteProductInfo(e, 'name')}
+            /> */}
+            <TextField
+              required
+              inputRef={inputName}
+              className={classes.inputText}
+              error={errorNameProduct}
+              helperText={errorNameProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, 'name')}
+              variant="outlined"
             />
           </div>
           <div className="spanWithInput">
@@ -240,11 +266,6 @@ function RegisterProduct({history}) {
                   productModelArray={productModelsArray}
                   setProductModelArray={setProductModelsArray}
                   fullProduct={item}
-                  // imgSrc={item.fileToShow}
-                  // imgAlt={"item.imgAlt"}
-                  // productModelName={item.modelDescription}
-                  // price={item.price}
-                  // gender={item.gender}
                 />
               ) : null
             )}
@@ -259,10 +280,6 @@ function RegisterProduct({history}) {
         </form>
       </div>
 
-            {/* <PopUpProductModel open={openToRegister} handleClose={handleCloseRegister} 
-              titleModal={"Cadastro de modelo"} isEdit={false} setProductModelArray={setProductModelsArray}
-              productModelArray={productModelsArray}
-            /> */}
             <PopUpProductModel open={openModal} handleClose={handleCloseModal} 
               isEdit={isEditProduct} 
               productModelIDFromExistingInfo={productModelIdToEdit} 
@@ -279,5 +296,28 @@ function RegisterProduct({history}) {
     </div>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+  inputText: {
+    width: '100%',
+    outline: 'none',
+    padding: '5px 10px',
+    '&:focus': {
+      width: '70%',
+    },
+    borderRadius: '7px',
+  },
+  saveButton: {
+      width: '85%',
+      marginTop: '30px',
+      outline: 'none',
+      backgroundColor: '#4BB543',
+      display: 'flex',
+      justifyContent: 'space-evenly',
+      fontSize: '18px',
+      fontWeight: 600,
+
+  }
+}));
 
 export default withRouter(RegisterProduct);

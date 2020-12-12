@@ -8,6 +8,16 @@ import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import SaveIcon from '@material-ui/icons/Save';
 
 
+function validateDescription(description){
+    let isValid;
+    if(description === ""){
+        isValid = false;
+    }else{
+        isValid = true;
+    }
+    return isValid;
+}
+
 function validatePrice(priceString){
     let isValid;
     const regex  = /^\d+(?:\,\d{2})$/;
@@ -41,13 +51,17 @@ const PopUpProductModel = ({open, handleClose, isEdit,
 
     const [genderState, setGenderState] = useState('');
     
-    const [errorPrice, setErrorPrice] = useState(false);
-    const [errorPriceMessage, setErrorPriceMessage] = useState('');
+    // Estados voltados para gerenciar erros no campo Description
+    const [errorDescription, setErrorDescription] = useState(false);
+    const [errorDescriptionMessage, setErrorDescriptionMessage] = useState('');
 
+    // Estados voltados para gerenciar erros no campo Gender
     const [errorGender, setErrorGender] = useState(false);
     const [errorGenderMessage, setErrorGenderMessage] = useState('');
 
-
+    // Estados voltados para gerenciar erros no campo Price
+    const [errorPrice, setErrorPrice] = useState(false);
+    const [errorPriceMessage, setErrorPriceMessage] = useState('');
 
     const [storedProductInfo, setStoredProductInfo] = useState({})
 
@@ -77,6 +91,16 @@ const PopUpProductModel = ({open, handleClose, isEdit,
         console.log('produto selecionado', productModelArray[productModelIDFromExistingInfo])
         console.log('info', storedProductInfo)
         console.log('arquivo', saveFileFromImgLink)
+
+        // Seta valores de erros para ok qunado abrir popUp
+        setErrorDescription( false )
+        setErrorDescriptionMessage('');
+
+        setErrorPrice( false )
+        setErrorPriceMessage('')
+
+        setErrorGender( false )
+        setErrorGenderMessage('')
         
     }, [open]);
 
@@ -87,36 +111,88 @@ const PopUpProductModel = ({open, handleClose, isEdit,
 
     const handleSave = (event) => {
 
+        const resultValidateDescription = validateDescription(inputDescription.current.value);
         const resultValidatePrice = validatePrice(inputPrice.current.value);
         const resultValidateGender = validateGender(genderState);
 
-        if(!resultValidatePrice && resultValidateGender){
-            setErrorPrice( !resultValidatePrice )
+        // Cobre as opções dos diferentes erros no PopUp
+        if(resultValidateDescription && !resultValidatePrice && resultValidateGender){   // description ok, price errado, gender ok
+            setErrorDescription( false )
+            setErrorDescriptionMessage('');
+            
+            setErrorPrice( true )
             setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
 
-            setErrorGender( !resultValidateGender )
+            setErrorGender( false )
             setErrorGenderMessage('');
-        }else if(resultValidatePrice && !resultValidateGender){
-            
-            setErrorPrice( !resultValidatePrice );
+        }else if(resultValidateDescription && resultValidatePrice && !resultValidateGender){ // description ok, price ok, gender errado
+            setErrorDescription( false )
+            setErrorDescriptionMessage('');
+
+            setErrorPrice(false);
             setErrorPriceMessage('');
 
-            setErrorGender(!resultValidateGender);
+            setErrorGender(true);
             setErrorGenderMessage('Selecione um gênero.')
             
-        }else if(!resultValidatePrice && !resultValidateGender){
-            setErrorPrice( !resultValidatePrice );
+        }else if(!resultValidateDescription && resultValidatePrice && resultValidateGender){   // description errado, price ok, gender ok
+            setErrorDescription( true )
+            setErrorDescriptionMessage('Campo requerido.');
+            
+            setErrorPrice( false )
+            setErrorPriceMessage('');
+
+            setErrorGender( false )
+            setErrorGenderMessage('');
+        }else if(!resultValidateDescription && !resultValidatePrice && resultValidateGender){ // description errado, price errado, gender ok
+            setErrorDescription( true )
+            setErrorDescriptionMessage('Campo requerido.');
+
+            setErrorPrice( true )
             setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
 
-            setErrorGender(!resultValidateGender);
+            setErrorGender(false);
+            setErrorGenderMessage('')
+            
+        }else if(!resultValidateDescription && resultValidatePrice && !resultValidateGender){ // description errado, price ok, gender errado
+            setErrorDescription( true )
+            setErrorDescriptionMessage('Campo requerido.');
+            
+            setErrorPrice( false );
+            setErrorPriceMessage('');
+
+            setErrorGender(true);
             setErrorGenderMessage('Selecione um gênero.')
 
-        }else{
-            setErrorPrice( !resultValidatePrice )
-            setErrorPriceMessage('')
+        }else if(resultValidateDescription && !resultValidatePrice && !resultValidateGender){ // description ok, price errado, gender errado
+            setErrorDescription( false )
+            setErrorDescriptionMessage('');
+            
+            setErrorPrice( true );
+            setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
 
-            setErrorGender( !resultValidateGender )
-            setErrorGenderMessage('')
+            setErrorGender(true);
+            setErrorGenderMessage('Selecione um gênero.')
+
+        }else if(!resultValidateDescription && !resultValidatePrice && !resultValidateGender){ // description errado, price errado, gender errado
+            setErrorDescription( true )
+            setErrorDescriptionMessage('Campo requerido.');
+            
+            setErrorPrice( true );
+            setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
+
+            setErrorGender(true);
+            setErrorGenderMessage('Selecione um gênero.')
+
+        }else{ // description ok, price ok, gender ok
+            setErrorDescription( false );
+            setErrorDescriptionMessage('');
+
+            setErrorPrice( false );
+            setErrorPriceMessage('');
+
+            setErrorGender( false );
+            setErrorGenderMessage('');
             if(isEdit){
                 const oldObjInfo = {
                     ...productModelArray[productModelIDFromExistingInfo],
@@ -127,8 +203,6 @@ const PopUpProductModel = ({open, handleClose, isEdit,
                     modelDescription: inputDescription.current.value,
                     gender: genderState,
                 }
-        
-                console.log('depois do obj')
         
                 const copyProductModelsArray = [...productModelArray];
                 copyProductModelsArray.splice(productModelIDFromExistingInfo, 1, oldObjInfo)
@@ -196,7 +270,9 @@ const PopUpProductModel = ({open, handleClose, isEdit,
                     {isEdit? "Edição de Modelo": "Cadastro de modelo"}
                     </Typography>
                 </DialogTitle>
-                <TextField required label="Descrição" inputRef={inputDescription} 
+                <TextField required label="Descrição" inputRef={inputDescription}
+                    error={errorDescription}
+                    helperText={errorDescriptionMessage} 
                     className={classes.textInput}
                     defaultValue={isEdit? storedProductInfo.modelDescription : ''} 
                 />
@@ -244,12 +320,6 @@ const PopUpProductModel = ({open, handleClose, isEdit,
 }
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      '& > *': {
-            margin: theme.spacing(1),
-            width: '30ch',
-        },
-    },
     title: {
         fontSize: '28px',
         fontWeight: 500,
@@ -268,14 +338,10 @@ const useStyles = makeStyles((theme) => ({
     },
     textInput: {
         width: '85%',
-        // '& + &': {
-        //     marginTop: '12px',
-        // },
         marginBottom: '16px',
     },
     labelInput: {
         alignSelf: 'flex-start',
-        
     },
     inputFile: {
         width: '70%',

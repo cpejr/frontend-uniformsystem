@@ -15,6 +15,16 @@ import { FaChevronLeft } from 'react-icons/fa';
 
 import './RegisterProduct.css';
 
+function validateInputWithTypeRadio(valueFromInputCap, valueFromInputShirt, valueFromInputBusiness, valueFromInputSport, valueFromInputUniversity){
+  let isValid;
+  if(valueFromInputCap === false && valueFromInputShirt === false && valueFromInputBusiness === false && valueFromInputSport === false && valueFromInputUniversity === false){
+      isValid = false;
+  }else{
+      isValid = true;
+  }
+  return isValid;
+}
+
 function validateInputWithTypeText(valueFromInput){
   let isValid;
   if(valueFromInput === ""){
@@ -43,11 +53,26 @@ function RegisterProduct({history}) {
 
   const [productModelsArray, setProductModelsArray] = useState([]);
 
+  // Estados voltados para gerenciar erros no campo Type
+  const [errorTypeProduct, setErrorTypeProduct] = useState(false);
+  const [errorTypeProductMessage, setErrorTypeProductMessage] = useState('');
+
+  // Estados voltados para gerenciar erros no campo Name
   const [errorNameProduct, setErrorNameProduct] = useState(false);
   const [errorNameProductMessage, setErrorNameProductMessage] = useState('');
 
+  // Estados voltados para gerenciar erros no campo Description
+  const [errorDescriptionProduct, setErrorDescriptionProduct] = useState(false);
+  const [errorDescriptionProductMessage, setErrorDescriptionProductMessage] = useState('');
+
+  const inputTypeCap = useRef(null);
+  const inputTypeShirt = useRef(null);
+  const inputTypeBusiness = useRef(null);
+  const inputTypeSport = useRef(null);
+  const inputTypeUniversity = useRef(null);
+
   const inputName = useRef(null);
-  // const inputDescription = useRef(null);
+  const inputDescription = useRef(null);
 
   const classes = useStyles();
 
@@ -68,7 +93,6 @@ function RegisterProduct({history}) {
     setIsEditProduct(true);
     handleCreateModal();
     setProductModelIdToEdit(productModelID);
-
   }
 
   const handleCompleteProductInfo = (e, type) => {
@@ -82,7 +106,6 @@ function RegisterProduct({history}) {
         newObjProductInfo = {
           description: e.target.value,
         }
-        
       }else{
           newObjProductInfo = {
             product_type: e.target.value,
@@ -103,15 +126,80 @@ function RegisterProduct({history}) {
 
     console.log('produto aqui', productInfo);
 
+    const resultValidateType = validateInputWithTypeRadio(inputTypeCap.current.checked, 
+      inputTypeShirt.current.checked,
+      inputTypeBusiness.current.checked,
+      inputTypeSport.current.checked,
+      inputTypeUniversity.current.checked
+    );
     const resultValidateName = validateInputWithTypeText(inputName.current.value);
-    // const resultValidateDescription = validateInputWithTypeText(inputDescription.current.value);
+    const resultValidateDescription = validateInputWithTypeText(inputDescription.current.value);
     
-    if(!resultValidateName){
+    // Cobre as opções dos diferentes erros no Cadastro de um porduto novo
+    if(resultValidateType && !resultValidateName && resultValidateDescription){ // tipo ok, nome errado, descrição ok
+      setErrorTypeProduct(false);
+      setErrorTypeProductMessage('');
+
       setErrorNameProduct(true);
       setErrorNameProductMessage('Digite um nome.');
-    }else{
+
+      setErrorDescriptionProduct(false);
+      setErrorDescriptionProductMessage('');
+    }else if(resultValidateType && resultValidateName && !resultValidateDescription){  // tipo ok, nome ok, descrição errado
+      setErrorTypeProduct(false);
+      setErrorTypeProductMessage('');
+      
       setErrorNameProduct(false);
       setErrorNameProductMessage('');
+
+      setErrorDescriptionProduct(true);
+      setErrorDescriptionProductMessage('Digite uma descrição.');
+    }else if(!resultValidateType && resultValidateName && resultValidateDescription){  // tipo errado, nome ok, descrição errado
+      setErrorTypeProduct(true);
+      setErrorTypeProductMessage('Escolha um tipo.');
+      
+      setErrorNameProduct(false);
+      setErrorNameProductMessage('');
+
+      setErrorDescriptionProduct(false);
+      setErrorDescriptionProductMessage('');
+    }else if(!resultValidateType && !resultValidateName && resultValidateDescription){  // tipo errado, nome errado, descrição ok
+      setErrorTypeProduct(true);
+      setErrorTypeProductMessage('Escolha um tipo.');
+      
+      setErrorNameProduct(true);
+      setErrorNameProductMessage('Digite um nome.');
+
+      setErrorDescriptionProduct(false);
+      setErrorDescriptionProductMessage('');
+    }else if(!resultValidateType && resultValidateName && !resultValidateDescription){  // tipo errado, nome ok, descrição errado
+      setErrorTypeProduct(true);
+      setErrorTypeProductMessage('Escolha um tipo.');
+      
+      setErrorNameProduct(false);
+      setErrorNameProductMessage('');
+
+      setErrorDescriptionProduct(true);
+      setErrorDescriptionProductMessage('Digite uma descrição.');
+    }else if(resultValidateType && !resultValidateName && !resultValidateDescription){  // tipo ok, nome errado, descrição errado
+      setErrorTypeProduct(false);
+      setErrorTypeProductMessage('');
+      
+      setErrorNameProduct(true);
+      setErrorNameProductMessage('Digite um nome.');
+
+      setErrorDescriptionProduct(true);
+      setErrorDescriptionProductMessage('Digite uma descrição.');
+    }else if(!resultValidateType && !resultValidateName && !resultValidateDescription){  // tipo errado, nome errado, descrição errado
+        setErrorTypeProduct(true);
+        setErrorTypeProductMessage('Escolha um tipo.');
+
+        setErrorNameProduct(true);
+        setErrorNameProductMessage('Digite um nome.');
+  
+        setErrorDescriptionProduct(true);
+        setErrorDescriptionProductMessage('Digite uma descrição.');
+    }else{  // tipo ok, nome ok, descrição ok
 
       try{
         setLoading(true);
@@ -147,9 +235,7 @@ function RegisterProduct({history}) {
                 headers: { authorization: `bearer ${token}` },
               }
             );
-  
           });
-  
         }
         
         setTimeout(() => {
@@ -192,33 +278,41 @@ function RegisterProduct({history}) {
                 <label htmlFor="bone">BONÉ</label>
                 <input type="radio" name="estiloProduto" 
                 onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                ref={inputTypeCap}
                 id="bone" value="cap"/>
               </div>
               <div className="radioButtonWithLabel">
                 <label htmlFor="camisa" >CAMISA</label>
                 <input type="radio" name="estiloProduto" 
                 onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                ref={inputTypeShirt}
                 id="camisa" value="shirt" />
               </div>
               <div className="radioButtonWithLabel">
                 <label htmlFor="empresarial" >EMPRESARIAL</label>
                 <input type="radio" name="estiloProduto" 
                 onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                ref={inputTypeBusiness}
                 id="empresarial" value="company" />
               </div>
               <div className="radioButtonWithLabel">
                 <label htmlFor="esportivo" >ESPORTIVO</label>
                 <input type="radio" name="estiloProduto" 
                 onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                ref={inputTypeSport}
                 id="esportivo" value="sport" />
               </div>
               <div className="radioButtonWithLabel">
                 <label htmlFor="universitario" >UNIVERSITÁRIO</label>
                 <input type="radio" name="estiloProduto" 
                 onClick={(e) => handleCompleteProductInfo(e, 'radio') }
+                ref={inputTypeUniversity}
                 id="universitario" value="university" />
               </div>
             </div>
+            <span style={{fontSize: '0.75rem', color: '#f44336', fontFamily: 'Roboto', marginLeft: '14px'}}>
+              {errorTypeProductMessage}
+            </span>
           </div>
 
           <div className="spanWithInput">
@@ -238,8 +332,17 @@ function RegisterProduct({history}) {
           </div>
           <div className="spanWithInput">
             <span>DESCRIÇÃO:</span>
-            <input type="text" 
+            {/* <input type="text" 
               onChange={(e) => handleCompleteProductInfo(e, 'description')}
+            /> */}
+            <TextField
+              required
+              inputRef={inputDescription}
+              className={classes.inputText}
+              error={errorDescriptionProduct}
+              helperText={errorDescriptionProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, 'description')}
+              variant="outlined"
             />
           </div>
 
@@ -316,7 +419,6 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'space-evenly',
       fontSize: '18px',
       fontWeight: 600,
-
   }
 }));
 

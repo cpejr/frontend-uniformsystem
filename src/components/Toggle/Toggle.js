@@ -1,29 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 
 import './Toggle.css'
 
-export default class Toggle extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isChecked: props.isChecked || false,
-        };
+export default function Toggle(props){
 
-        this.handleChange = this.handleChange.bind(this);
+    const [IsChecked, setIsChecked]=useState(props.isChecked || false)
+
+    function handleChange() {
+        setIsChecked(!IsChecked);
+        props.Status(!IsChecked);
     }
-    handleChange() {
-        this.setState({ isChecked: !this.state.isChecked });
-    }
-    render() {
-        return (
+
+    return (
             <label className='switch'>
                 <input
                     type='checkbox'
-                    value={this.state.isChecked}
-                    onChange={this.handleChange}
+                    value={IsChecked}
+                    onChange={handleChange}
                 />
                 <div className='slider'></div>
             </label>
         );
-    }
 }

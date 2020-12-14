@@ -5,16 +5,16 @@
   overflow: hidden;
 }
 
-body {
+body{
 
   margin: 0;
-  font-family: Roboto Condensed, sans-serif;
+  font-family: Roboto Condensed, sans-serif !important; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */

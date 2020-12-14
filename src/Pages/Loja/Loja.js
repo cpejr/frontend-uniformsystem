@@ -66,7 +66,6 @@ function Loja() {
       }
 
       const response = await api.get(`/productmodels?${query.join('&')}`);
-      console.log('resposta', response);
       return (response.data.models);
     }
     catch (error) {
@@ -77,7 +76,6 @@ function Loja() {
 
   useEffect(() => {
     page.current = 1;
-    console.log('filtro atualizado', filter)
     getProducts().then(newProducts => {
       setProducts(newProducts);
     });
@@ -179,8 +177,6 @@ function Loja() {
 
 
   function findProduct() {
-
-    console.log('valor input',inputSearch.current.value)
     const nameToSearch = inputSearch.current.value;
 
     const filterWithName = { ...filter }
@@ -188,7 +184,6 @@ function Loja() {
     filterWithName.name = nameToSearch;
     
     setFilter(filterWithName)
-    console.log('filtro', filter)
 
     // alert("Você está pesquisando!")
   }

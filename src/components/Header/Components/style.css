@@ -140,7 +140,7 @@
     border: solid 0.5px #ccc;
     border-radius: 10px;
     width: 300px;
-    height: 250px;
+    /*height: 250px;*/
     background-color: #fff;
     position: absolute;
     top: 23px;

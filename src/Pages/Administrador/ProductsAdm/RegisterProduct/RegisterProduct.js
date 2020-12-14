@@ -124,8 +124,6 @@ function RegisterProduct({history}) {
   const handleSubmitNewProduct = async (event) => {
     event.preventDefault();
 
-    console.log('produto aqui', productInfo);
-
     const resultValidateType = validateInputWithTypeRadio(inputTypeCap.current.checked, 
       inputTypeShirt.current.checked,
       inputTypeBusiness.current.checked,
@@ -201,6 +199,15 @@ function RegisterProduct({history}) {
         setErrorDescriptionProductMessage('Digite uma descrição.');
     }else{  // tipo ok, nome ok, descrição ok
 
+      setErrorTypeProduct(false);
+      setErrorTypeProductMessage('');
+
+      setErrorNameProduct(false);
+      setErrorNameProductMessage('');
+
+      setErrorDescriptionProduct(false);
+      setErrorDescriptionProductMessage('');
+
       try{
         setLoading(true);
         const response = await api.post("/product",
@@ -215,10 +222,6 @@ function RegisterProduct({history}) {
         if(productModelsArray.length > 0){
           
           productModelsArray.map(async (item) => {
-  
-            delete item.imgAlt;
-            delete item.imgSrc;
-            delete item.productID;
   
             let objImage = new FormData();
             objImage.append("file", item.imgLink);
@@ -241,8 +244,20 @@ function RegisterProduct({history}) {
         setTimeout(() => {
           setLoading(false);
           setOpenSnackBar(true);
+
+          // reseta as informações depois do envio
+          inputTypeCap.current.checked = false;
+          inputTypeShirt.current.checked = false;
+          inputTypeBusiness.current.checked = false;
+          inputTypeSport.current.checked = false;
+          inputTypeUniversity.current.checked = false;
+          inputName.current.value = '';
+          inputDescription.current.value = '';
+          setProductModelsArray([]);
+
         }
         , 3000);
+
   
       }catch(err){
         console.log(err.message);
@@ -252,8 +267,8 @@ function RegisterProduct({history}) {
 
   }
 
+  // Re-renderiza a tela depois que productModelsArray foi atualizado 
   useEffect(() => {
-    console.log('productModels', productModelsArray)
   }, [productModelsArray]);
 
 
@@ -317,9 +332,6 @@ function RegisterProduct({history}) {
 
           <div className="spanWithInput">
             <span>NOME:</span>
-            {/* <input type="text"  
-              onChange={(e) => handleCompleteProductInfo(e, 'name')}
-            /> */}
             <TextField
               required
               inputRef={inputName}
@@ -332,9 +344,6 @@ function RegisterProduct({history}) {
           </div>
           <div className="spanWithInput">
             <span>DESCRIÇÃO:</span>
-            {/* <input type="text" 
-              onChange={(e) => handleCompleteProductInfo(e, 'description')}
-            /> */}
             <TextField
               required
               inputRef={inputDescription}
@@ -364,7 +373,6 @@ function RegisterProduct({history}) {
                 <ProductModelCardAdm
                   key={index}
                   productModelID={index}
-                  // handleClose={handleCloseModal}
                   handleSelectToEdit={handleOpenToEdit}
                   productModelArray={productModelsArray}
                   setProductModelArray={setProductModelsArray}

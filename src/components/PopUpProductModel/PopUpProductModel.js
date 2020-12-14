@@ -88,10 +88,6 @@ const PopUpProductModel = ({open, handleClose, isEdit,
 
         setGenderState(productModelArray[productModelIDFromExistingInfo]? productModelArray[productModelIDFromExistingInfo].gender : '');
 
-        console.log('produto selecionado', productModelArray[productModelIDFromExistingInfo])
-        console.log('info', storedProductInfo)
-        console.log('arquivo', saveFileFromImgLink)
-
         // Seta valores de erros para ok qunado abrir popUp
         setErrorDescription( false )
         setErrorDescriptionMessage('');
@@ -220,8 +216,6 @@ const PopUpProductModel = ({open, handleClose, isEdit,
                     modelDescription: inputDescription.current.value,
                     gender: genderState,
                 }
-                console.log('iteravel', objInfo)
-        
                 setProductModelArray([...productModelArray , objInfo])
     
             }
@@ -236,14 +230,13 @@ const PopUpProductModel = ({open, handleClose, isEdit,
         inputImg.current.click();
     }
 
+    // Função para adicionar imagem
     function handleAddImageLink() {
 
         if( inputImg.current.files[0] ){
         
             let fileData = new FileReader();
             fileData.readAsDataURL(inputImg.current.files[0]);
-        
-            console.log(inputImg.current.files[0]);
         
             fileData.onload = function () {
                 const fileLoaded = fileData.result;

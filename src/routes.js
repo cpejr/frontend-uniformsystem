@@ -7,6 +7,8 @@ import HomeEditable from "./Pages/Administrador/HomeEditable";
 import OrdersAdm from "./Pages/Administrador/OrdersAdm";
 import EspecificOrderAdm from "./Pages/Administrador/OrdersAdm/EspecificOrderAdm";
 import ProductsAdm from "./Pages/Administrador/ProductsAdm";
+import RegisterProduct from "./Pages/Administrador/ProductsAdm/RegisterProduct";
+
 import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
 import EspecificEmployee  from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
 
@@ -21,6 +23,8 @@ import Contato from "./Pages/Contato";
 import SignUp from "./Pages/Sign_Up";
 import Checkout from "./Pages/Checkout";
 import Cadastro from "./Pages/Cadastro";
+import Pedidos from "./Pages/Pedidos";
+
 
 
 
@@ -52,11 +56,10 @@ export default function Routes() {
     return (
         <BrowserRouter>
             <Switch>
-                <Route render={(path) => 
-                        path.location.pathname.includes("/adm/") ?(
-                        <AdmRoutes /> ): (
-                        <MenuRoutes/>)
-                    } />:
+                <Route render={(path) => path.location.pathname.includes("/adm/") ?
+                            ( <AdmRoutes />) :
+                            ( <MenuRoutes/> )
+                        } />
             </Switch>
         </BrowserRouter>
     );
@@ -72,7 +75,7 @@ function MenuRoutes() {
 
                 <Route path="/shop" export exact component={Loja} />
                 <Route path="/checkout" export exact component={Checkout} />
-                <Route path="/product/:product_id" export exact component={Produto} />
+                <Route path="/product/:product_id" export component={Produto} />
                 {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                 logado, você será redirecionado para a página Login. */}
                 <Route path="/perfil" export exact component={Perfil} />
@@ -86,6 +89,7 @@ function MenuRoutes() {
                 <Route path="/contact" export exact component={Contato} />
                 <Route path="/signUp" export exact component={SignUp} />
                 <Route path="/cadastro" export exact component={Cadastro} />
+                <Route path="/orders" export exact component={Pedidos} />
                 {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
                 <Route path="*" component={() => <h1>Page not found</h1>} />
             </Switch>
@@ -105,6 +109,7 @@ function AdmRoutes() {
                 <Route path="/adm/pedidoespecifico" export exact component={EspecificOrderAdm} />
                 <Route path="/adm/produtos" export exact component={ProductsAdm} />
                 <Route path="/adm/funcionarios" export exact component={EmployeeAdm} />
+                <Route path="/adm/produtos/cadastro" export exact component={RegisterProduct} />
                 <Route path="/adm/funcionarios/funcionarioEspecifico" export exact component={EspecificEmployee} />
                 <Route path="*" component={() => <h1>Page not Found</h1>} />
             </Switch>
@@ -113,3 +118,4 @@ function AdmRoutes() {
         </div>
     );
 }
+

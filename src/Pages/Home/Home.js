@@ -23,6 +23,21 @@ const CardProdutosHome = ({ imgSrcProduto, imgAltProduto, nomeProduto}) => {
 
 function Home(){
 
+//   function login(){
+//     var username = prompt('Digite nome de usuario');
+//     var password = prompt("Digite a senha");
+//     if(username=="teste" && password=="teste")
+//         window.location.pathname = "/checkout";
+//     else
+//         alert("Senha invalida nome de usuario");
+// }
+
+    
+//         useEffect(() => {
+//             login()
+//             console.log('TESTE', window.location.pathname)
+//         }, [])
+
   const conteudoHome = {
       Carrossel: [
         {
@@ -91,26 +106,37 @@ function Home(){
   useEffect(() => {
     
     async function getHomeInfo(){
-      const response = await api.get('/home/info',
-      {
-        headers: { authorization: `bearer ${token}` },
-      });
+      try {
+        const response = await api.get('/home/info',
+        {
+          headers: { authorization: `bearer ${token}` },
+        });
 
-      const textWhoWeAre = response.data.filter(item => item.key === 'textWhoWeAre'? item.data: null)[0]; 
-      const textProducts = response.data.filter(item => item.key === 'textProducts'? item.data: null)[0]; 
-      const cellphone = response.data.filter(item => item.key === 'cellphone'? item.data: null)[0]; 
-      const address = response.data.filter(item => item.key === 'address'? item.data: null)[0]; 
-      const facebookLink = response.data.filter(item => item.key === 'facebookLink'? item.data: null)[0]; 
-      const instagramLink = response.data.filter(item => item.key === 'instagramLink'? item.data: null)[0]; 
-      const whatsAppNumber = response.data.filter(item => item.key === 'whatsAppNumber'? item.data: null)[0];
-  
-      setTextoQuemSomos(textWhoWeAre.data);
-      setTextoProdutos(textProducts.data);
-      setTelephoneInfo(cellphone.data);
-      setEnderecoInfo(address.data);
-      setFacebookInfo(facebookLink.data);
-      setInstagramInfo(instagramLink.data);
-      setWhatsappInfo(whatsAppNumber.data);
+        if (response.data.length===0){
+          throw new Error('Home info is Empty')
+        }
+
+        const textWhoWeAre = response.data.filter(item => item.key === 'textWhoWeAre'? item.data: null)[0]; 
+        const textProducts = response.data.filter(item => item.key === 'textProducts'? item.data: null)[0]; 
+        const cellphone = response.data.filter(item => item.key === 'cellphone'? item.data: null)[0]; 
+        const address = response.data.filter(item => item.key === 'address'? item.data: null)[0]; 
+        const facebookLink = response.data.filter(item => item.key === 'facebookLink'? item.data: null)[0]; 
+        const instagramLink = response.data.filter(item => item.key === 'instagramLink'? item.data: null)[0]; 
+        const whatsAppNumber = response.data.filter(item => item.key === 'whatsAppNumber'? item.data: null)[0];
+    
+        setTextoQuemSomos(textWhoWeAre.data);
+        setTextoProdutos(textProducts.data);
+        setTelephoneInfo(cellphone.data);
+        setEnderecoInfo(address.data);
+        setFacebookInfo(facebookLink.data);
+        setInstagramInfo(instagramLink.data);
+        setWhatsappInfo(whatsAppNumber.data);
+        
+      } catch (error) {
+        console.warn(error);
+        alert(error.message);
+      }
+
     }
 
     getHomeInfo();
@@ -168,7 +194,6 @@ function Home(){
         }));
       }
 
-      console.log(imagesCarousel);
       setImagesCarousel([...imagesCarousel])
       setImagesWhoWeAre(imagesWhoWeAre)
       setImagesProducts([...imagesProducts])

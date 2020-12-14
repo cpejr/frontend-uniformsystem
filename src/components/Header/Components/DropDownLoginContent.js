@@ -59,13 +59,9 @@ export default function DropDownLoginContent(props) {
                 password: Password,
             });
 
-            console.log(response, "o response");
-
             localStorage.setItem("accessToken", response.data.accessToken);
 
             const user = response.data.user[0];
-
-            console.log(user);
 
         } catch (error) {
             console.error(error);
@@ -79,9 +75,8 @@ export default function DropDownLoginContent(props) {
             const response = await api.post("sendpassword", {
                 email: Email,
             });
-            console.log("response:", response);
         }catch(error){
-            console.log(error);
+            console.warn(error);
             alert("E-mail não reconhecido. Verifique se escreveu corretamete ou faça o cadastro! :) ");
         }
     }

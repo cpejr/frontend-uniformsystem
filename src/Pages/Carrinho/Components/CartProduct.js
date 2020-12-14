@@ -10,7 +10,7 @@ function CartProduct({ handleDelete, index, changeAmount, product }) {
     <tr>
       <td className="productInfo">
         <div className="productName">
-          <img src="/blusa1.png" className="productImg" alt="productImg" />
+          <img src="/images/blusa1.png" className="productImg" alt="productImg" />
           {product.name}
         </div>
       </td>

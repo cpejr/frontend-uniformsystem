@@ -23,6 +23,21 @@ const CardProdutosHome = ({ imgSrcProduto, imgAltProduto, nomeProduto}) => {
 
 function Home(){
 
+//   function login(){
+//     var username = prompt('Digite nome de usuario');
+//     var password = prompt("Digite a senha");
+//     if(username=="teste" && password=="teste")
+//         window.location.pathname = "/checkout";
+//     else
+//         alert("Senha invalida nome de usuario");
+// }
+
+    
+//         useEffect(() => {
+//             login()
+//             console.log('TESTE', window.location.pathname)
+//         }, [])
+
   const conteudoHome = {
       Carrossel: [
         {

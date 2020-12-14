@@ -1,0 +1,91 @@
+
+.productModelCardAdmFullContent{
+
+    width: 350px;
+    height: 415px;
+    padding: 30px 25px 25px 25px;
+
+    border: 1px solid #9EE7DD;
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.productModelCardAdmFullContent .iconGarbage{
+    font-size: 30px;
+    position: absolute;
+
+    color: rgb(230, 18, 18);
+
+    top: 20px;
+    right: 20px;
+
+    cursor: pointer;
+}
+
+.productModelCardAdmFullContent .iconGarbage:hover{
+    color: rgb(236, 85, 85);
+}
+
+.productModelCardAdmFullContent img{
+    width: 70%;
+    margin-top: 30px;
+
+}
+
+.productModelCardAdmFullContent .modelName{
+    font-size: 18px;
+
+    margin-bottom: 5px;
+}
+
+.productModelCardAdmFullContent .priceAndGender{
+    width:  90%;
+
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.productModelCardAdmFullContent .priceAndGender span{
+    font-size: 18px;
+}
+
+.productModelCardAdmFullContent .iconWithText{
+    width: auto;
+
+    align-self: flex-start;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    cursor: pointer;
+
+}
+
+.productModelCardAdmFullContent .selected{
+    color: #007bff;
+    background-color: transparent;
+}
+
+.productModelCardAdmFullContent .iconWithText:hover{
+    color: #007bff;
+}
+
+.productModelCardAdmFullContent .iconWithText + .iconWithText{
+    margin-top: 10px;
+}
+
+.productModelCardAdmFullContent .iconWithText .iconProductModelCard{
+    margin-right: 10px;
+}
+
+.productModelCardAdmFullContent .iconWithText span{
+    font-size: 14px;
+}

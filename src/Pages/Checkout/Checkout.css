@@ -2,7 +2,7 @@ h1, h2, button, span, strong, label {
     font-family: 'Century Gothic';
 }
 
-.mainContent input{
+.fullContent .mainContent input{
     outline: none;
     max-width: 70%;
 }

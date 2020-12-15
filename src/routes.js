@@ -109,7 +109,7 @@ function AdmRoutes() {
                 <Route path="/adm/produtos" export exact component={ProductsAdm} />
                 <Route path="/adm/funcionarios" export exact component={EmployeeAdm} />
                 <Route path="/adm/produtos/cadastro" export exact component={RegisterProduct} />
-                <Route path="/adm/produtos/edicao" export exact component={EditProduct} />
+                <Route path="/adm/produtos/:product_id" export exact component={EditProduct} />
                 <Route path="/adm/funcionarios/funcionarioEspecifico" export exact component={EspecificEmployee} />
                 <Route path="*" component={() => <h1>Page not Found</h1>} />
             </Switch>

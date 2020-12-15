@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useParams } from 'react-router-dom';
 import api from '../../../../services/api';
 
 import { Button, CircularProgress, makeStyles, Snackbar, TextField } from '@material-ui/core';
@@ -29,6 +29,8 @@ function EditProduct({history}) {
 
   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMDg2YThhMS1lZWZlLTRiZmMtZTcxZS1hMTY0MWYwYWU2ZjQiLCJuYW1lIjoiRGlvZ28gQWRtaW4gMSIsImZpcmViYXNlX3VpZCI6Ill1MUkyTzJHNnJibnRjQnVyczZ6YXZSYkVPZDIiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImRpb2dvYWRtMTNAZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5MTgiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMi0wOCAwNToxMDoyOCIsInVwZGF0ZWRfYXQiOiIyMDIwLTEyLTA4IDA1OjEwOjI4In1dLCJpYXQiOjE2MDc0MDQyNDQsImV4cCI6MTYwOTk5NjI0NH0.z5raD9BSVlas7DheRJFuEAw3TW64Wxr4N7sjy4xV9lI';
   
+  const bucketAWS = "https://profit-uniformes.s3.amazonaws.com/";
+
   const [loading, setLoading] = useState(false);
 
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -37,15 +39,19 @@ function EditProduct({history}) {
 
   const [productModelIdToEdit, setProductModelIdToEdit] = useState(null);
 
-  const [productInfo, setProductInfo] = useState({});
+  const [productInfo, setProductInfo] = useState();
 
   const [isEditProduct, setIsEditProduct] = useState(false);
+
+  const [oldProductModelsArray, setOldProductModelsArray] = useState([]);
 
   const [productModelsArray, setProductModelsArray] = useState([]);
 
   // Estados voltados para gerenciar erros no campo Name
   const [errorNameProduct, setErrorNameProduct] = useState(false);
   const [errorNameProductMessage, setErrorNameProductMessage] = useState('');
+
+  const { product_id } = useParams();
 
   // Estados voltados para gerenciar erros no campo Description
   const [errorDescriptionProduct, setErrorDescriptionProduct] = useState(false);
@@ -56,28 +62,58 @@ function EditProduct({history}) {
 
   const classes = useStyles();
 
-  // useEffect(async () => {
-  //   const responseProduct = await api.get(`/product/${response.data.product_id}`,
-  //         {
-  //           headers: { authorization: `bearer ${token}` },
-  //         }
-  //       );
-    
-  //   setProductInfo({...responseProduct.data});
+  useEffect( () => {
 
-  //   if(responseProduct.data){
-  //     const responseProductModels = await api.get(`/productmodels/${responseProduct.data.product_id}`,
-  //           {
-  //             headers: { authorization: `bearer ${token}` },
-  //           }
-  //         );
+    async function getProductInfo(){
+      const responseProduct = await api.get(`/product/${product_id}`,
+            {
+              headers: { authorization: `bearer ${token}` },
+            }
+          );
+      
+      setProductInfo({...responseProduct.data.product[0]});
+
+      if(responseProduct.data){
+        let productModelInfo;
+        
+        const responseProductModels = await api.get(`/productmodels/${responseProduct.data.product[0].product_id}`,
+              {
+                headers: { authorization: `bearer ${token}` },
+              }
+            );
+        
+
+        const productModelsAuxiliar = [];      
+        responseProductModels.data.models.map( item => {
+          
+          const {gender, img_link, is_main, model_description, price, product_model_id} = item;
   
-  //     setProductModelsArray([...responseProductModels.data]);
-  //   }else{
-  //     setProductModelsArray([]);
-  //   }
+          productModelInfo = {
+            product_model_id: product_model_id,
+            gender: gender, 
+            imgLink: img_link !== 'Sem imagem' ? `${bucketAWS}${img_link}`: 'Sem imagem', 
+            isMain: is_main === 0? false: true, 
+            modelDescription: model_description, 
+            price: price, 
+          }
+          productModelsAuxiliar.push(productModelInfo);
 
-  // }, []);
+        });
+    
+        setProductModelsArray([...productModelsAuxiliar]);
+
+        setOldProductModelsArray([...productModelsAuxiliar]);
+        
+      }else{
+        setProductModelsArray([]);
+        setOldProductModelsArray([]);
+      }
+
+    }
+
+    getProductInfo();
+
+  }, []);
 
   const handleCreateModal = () => {
     setOpenModal(true);
@@ -111,6 +147,7 @@ function EditProduct({history}) {
         }
     }
     setProductInfo({...productInfo, ...newObjProductInfo, models: []});
+
   }
 
   const handleCloseSnackBar = (event, reason) => {
@@ -128,17 +165,16 @@ function EditProduct({history}) {
     
     // Cobre as opções dos diferentes erros no Cadastro de um porduto novo
     if(!resultValidateName && resultValidateDescription){ // nome errado, descrição ok
-
       setErrorNameProduct(true);
       setErrorNameProductMessage('Digite um nome.');
-
+      
       setErrorDescriptionProduct(false);
       setErrorDescriptionProductMessage('');
-    }else if(resultValidateName && resultValidateDescription){  // nome ok, descrição errado
+    }else if(resultValidateName && !resultValidateDescription){  // nome ok, descrição errado
       
       setErrorNameProduct(false);
       setErrorNameProductMessage('');
-
+      
       setErrorDescriptionProduct(false);
       setErrorDescriptionProductMessage('');
     }else if(!resultValidateName && !resultValidateDescription){  // nome errado, descrição errado
@@ -158,27 +194,64 @@ function EditProduct({history}) {
 
       try{
         setLoading(true);
-        const response = await api.post("/product",
-          productInfo
+
+        const updated_fields = {
+          "updated_fields": {
+            name: productInfo.name,
+            description: productInfo.description,
+          }
+        }
+        const response = await api.put(`/product/${productInfo.product_id}`,
+          updated_fields
           ,
           {
             headers: { authorization: `bearer ${token}` },
           }
         );
-  
+
+        // Deleto todos os product models de início
+        if(oldProductModelsArray.length > 0){
+
+          let params;
+
+          oldProductModelsArray.map(async (item) => {
+            
+            if(item.imgLink !== 'Sem imagem'){
+              let nameWithType = item.imgLink.split(bucketAWS)[1]
+              params = {
+                name: nameWithType.split('.')[0],
+                type: nameWithType.split('.')[1]
+              }
+            }else{
+              params = {
+                name: 'Sem imagem',
+                type: null,
+              }
+            }
+            
+
+            await api.delete(`/model/${item.product_model_id}`,
+              {
+                headers: { authorization: `bearer ${token}` },
+                params
+              }
+            );
+          });
+        }
+
         // Caso tenha product_models
         if(productModelsArray.length > 0){
           
           productModelsArray.map(async (item) => {
             let objImage = new FormData();
-            objImage.append("file", item.imgLink);
+            objImage.append("file", item.imgLink.name !== undefined ? item.imgLink : null );
             objImage.append("is_main", item.isMain);
-            objImage.append("img_link", ".");
+            objImage.append("img_link", item.imgLink.name ? '.' : item.imgLink);
             objImage.append("price", item.price.replace(',', '.'));    // substitui "," por ".", pois backend tem validação por "." em price
             objImage.append("model_description", item.modelDescription);
             objImage.append("gender", item.gender);
-  
-            await api.post(`/newmodel/${response.data.product_id}`,
+
+            await api.post(`/newmodel/${productInfo.product_id}`,
               objImage
               ,
               {
@@ -191,19 +264,13 @@ function EditProduct({history}) {
         setTimeout(() => {
           setLoading(false);
           setOpenSnackBar(true);
-          // reseta as informações depois do envio
-          inputName.current.value = '';
-          inputDescription.current.value = '';
-          setProductModelsArray([]);
         }
         , 3000);
 
       }catch(err){
         console.log(err.message);
       }
-
     }
-
   }
 
   // Re-renderiza a tela depois que productModelsArray foi atualizado 
@@ -226,29 +293,35 @@ function EditProduct({history}) {
 
           <div className="spanWithInput">
             <span>NOME:</span>
-            <TextField
-              required
-              defaultValue={productInfo.name}
-              inputRef={inputName}
-              className={classes.inputText}
-              error={errorNameProduct}
-              helperText={errorNameProductMessage}
-              onChange={(e) => handleCompleteProductInfo(e, 'name')}
-              variant="outlined"
-            />
+            {
+              productInfo &&
+                <TextField
+                  required
+                  inputRef={inputName}
+                  defaultValue={productInfo.name}
+                  className={classes.inputText}
+                  error={errorNameProduct}
+                  helperText={errorNameProductMessage}
+                  onChange={(e) => handleCompleteProductInfo(e, 'name')}
+                  variant="outlined"
+                />
+            }
           </div>
           <div className="spanWithInput">
             <span>DESCRIÇÃO:</span>
-            <TextField
-              required
-              defaultValue={productInfo.modelDescription}
-              inputRef={inputDescription}
-              className={classes.inputText}
-              error={errorDescriptionProduct}
-              helperText={errorDescriptionProductMessage}
-              onChange={(e) => handleCompleteProductInfo(e, 'description')}
-              variant="outlined"
-            />
+            {
+              productInfo && 
+                <TextField
+                  required
+                  defaultValue={productInfo.description}
+                  inputRef={inputDescription}
+                  className={classes.inputText}
+                  error={errorDescriptionProduct}
+                  helperText={errorDescriptionProductMessage}
+                  onChange={(e) => handleCompleteProductInfo(e, 'description')}
+                  variant="outlined"
+                />
+            }
           </div>
 
           <div className="boxToManipulateProductModel">

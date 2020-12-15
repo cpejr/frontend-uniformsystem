@@ -6,7 +6,9 @@ import { FaEdit, FaStar, FaTrashAlt } from 'react-icons/fa';
 function ProductModelCardAdm({productModelID, handleSelectToEdit,
     productModelArray, setProductModelArray, fullProduct}) {
 
-    const {fileToShow, imgAlt, modelDescription, price, gender} = fullProduct;
+    const bucketAWS = "https://profit-uniformes.s3.amazonaws.com/";
+
+    const {fileToShow, imgLink, modelDescription, price, gender} = fullProduct;
 
     const handleIsMain = () => {
 
@@ -35,7 +37,9 @@ function ProductModelCardAdm({productModelID, handleSelectToEdit,
     return (
         <div className="productModelCardAdmFullContent">
             <FaTrashAlt className="iconGarbage" onClick={() => handleDeleteModel(productModelID)}/>
-            { fileToShow ? <img src={fileToShow} alt={imgAlt} />: 'Sem imagem' }
+            { fileToShow ? <img src={fileToShow} alt={modelDescription} />: 
+                imgLink.includes(bucketAWS) ? <img src={imgLink} alt={modelDescription} /> :
+                'Sem imagem' }
             <span className="modelName">{modelDescription}</span>
 
             <div className="priceAndGender">

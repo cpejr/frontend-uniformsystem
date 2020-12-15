@@ -6,12 +6,15 @@
 }
 
 body{
-
   margin: 0;
   font-family: Roboto Condensed, sans-serif !important; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+}
+
+body input, body button{
+  outline: none !important;
 }
 
 /* code {

@@ -204,6 +204,12 @@
     cursor: pointer;
 }
 
+.drop_content .MuiAlert-icon {
+    margin-right: 2px;
+    font-size: 1.1rem;
+    padding: 9px 0 0 0;
+}
+
 /* Fim LoginContent -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 /*Começo Modal ForgetPassword*/

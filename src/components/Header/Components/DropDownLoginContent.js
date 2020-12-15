@@ -28,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
         margin: '0',
         padding: '0',
         color: 'red',
-    }
+        fontSize: '0.8rem',
+    },
 }));
 
 
@@ -39,6 +40,7 @@ export default function DropDownLoginContent(props) {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [submit, setSubmit] = useState(false);
 
     /* Modal esqueci minha senha */
     const classes = useStyles();
@@ -61,25 +63,27 @@ export default function DropDownLoginContent(props) {
     async function handleLogin(e) {
         e.preventDefault();
 
+        setSubmit(true);
         //handleClickAway();
+        if (User.length > 0 && Password.length > 6) {
+            try {
+                setLoading(true);
+                const response = await api.post("login", {
+                    email: User,
+                    password: Password,
+                });
 
-        try {
-            setLoading(true);
-            const response = await api.post("login", {
-                email: User,
-                password: Password,
-            });
+                localStorage.setItem("accessToken", response.data.accessToken);
 
-            localStorage.setItem("accessToken", response.data.accessToken);
+                const user = response.data.user[0];
+                setError(false);
 
-            const user = response.data.user[0];
-            setError(false);
-
-        } catch (error) {
-            console.error(error);
-            setError(true);
-            //alert(error.response.data.message);
-            //<Alert severity="error">This is an error alert — check it out!</Alert>
+            } catch (error) {
+                console.error(error);
+                setError(true);
+                //alert(error.response.data.message);
+                //<Alert severity="error">This is an error alert — check it out!</Alert>
+            }
         }
         setLoading(false);
     }
@@ -106,9 +110,14 @@ export default function DropDownLoginContent(props) {
                         className="input_login"
                         type="text"
                         onChange={(e) => {
-                            setUser(e.target.value);
+                            setUser(e.target.value)
                         }}
                     />
+                    {User.length === 0 && submit &&
+                        <Alert className={classes.alertStyle} variant="outlined" severity="error">
+                            Digite um usuário.
+                        </Alert>}
+
                     SENHA
                     <input
                         className="input_password"
@@ -117,20 +126,26 @@ export default function DropDownLoginContent(props) {
                             setPassword(e.target.value);
                         }}
                     />
+                    {Password.length < 6 && submit &&
+                        <Alert className={classes.alertStyle} variant="outlined" severity="error">
+                            Digite uma senha com no mínimo 6 caracteres.
+                        </Alert>}
+
                 </div>
                 <div className="buttons">
                     <button className="b_login" onClick={(e) => handleLogin(e)} >
-                        {loading ? <CircularProgress color = 'black' size={25} /> : "ACESSAR"}
+                        {loading ? <CircularProgress color='black' size={25} /> : "ACESSAR"}
                     </button>
 
                     <button className="b_register">CADASTRAR</button>
                 </div>
 
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {error &&
-                    <Alert className={classes.alertStyle} variant="outlined" severity="error">
-                        Usuário e/ou senha incorretos.
-                    </Alert>}
+                        <Alert className={classes.alertStyle} variant="outlined" severity="error">
+                            Usuário e/ou senha incorretos.
+                        </Alert>
+                    }
                 </div>
 
                 <div className="forgetPassword" onClick={handleOpen}>

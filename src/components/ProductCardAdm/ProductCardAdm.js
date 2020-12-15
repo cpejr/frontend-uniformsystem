@@ -8,7 +8,7 @@ import { size } from 'lodash';
 function ProductCardAdm(props) {
 
     return (
-        <Link className="product-adm" to={`/adm/product/${props.product.product_id}`}>
+        <Link className="product-adm" to={`/adm/produtos/${props.product.product_id}`}>
             <div className="edit-button">
                 <MdCreate color="black" size="24px" />
             </div>

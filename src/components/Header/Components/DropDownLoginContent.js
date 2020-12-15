@@ -7,6 +7,8 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { MdVpnKey } from 'react-icons/md';
+import { CircularProgress } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,14 +23,24 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(4, 4, 4),
     },
+    alertStyle: {
+        border: 'none',
+        margin: '0',
+        padding: '0',
+        color: 'red',
+        fontSize: '0.8rem',
+    },
 }));
 
 
 export default function DropDownLoginContent(props) {
     const [User, setUser] = useState("");
     const [Password, setPassword] = useState("");
-
     const [Email, setEmail] = useState(""); //e-mail esqueci minha senha
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
+    const [submit, setSubmit] = useState(false);
 
     /* Modal esqueci minha senha */
     const classes = useStyles();
@@ -51,31 +63,38 @@ export default function DropDownLoginContent(props) {
     async function handleLogin(e) {
         e.preventDefault();
 
-        handleClickAway();
+        setSubmit(true);
+        //handleClickAway();
+        if (User.length > 0 && Password.length > 6) {
+            try {
+                setLoading(true);
+                const response = await api.post("login", {
+                    email: User,
+                    password: Password,
+                });
 
-        try {
-            const response = await api.post("login", {
-                email: User,
-                password: Password,
-            });
+                localStorage.setItem("accessToken", response.data.accessToken);
 
-            localStorage.setItem("accessToken", response.data.accessToken);
+                const user = response.data.user[0];
+                setError(false);
 
-            const user = response.data.user[0];
-
-        } catch (error) {
-            console.error(error);
-            alert(error.response.data.message);
+            } catch (error) {
+                console.error(error);
+                setError(true);
+                //alert(error.response.data.message);
+                //<Alert severity="error">This is an error alert — check it out!</Alert>
+            }
         }
+        setLoading(false);
     }
 
 
-    async function handleForgot(e){
+    async function handleForgot(e) {
         try {
             const response = await api.post("sendpassword", {
                 email: Email,
             });
-        }catch(error){
+        } catch (error) {
             console.warn(error);
             alert("E-mail não reconhecido. Verifique se escreveu corretamete ou faça o cadastro! :) ");
         }
@@ -91,9 +110,14 @@ export default function DropDownLoginContent(props) {
                         className="input_login"
                         type="text"
                         onChange={(e) => {
-                            setUser(e.target.value);
+                            setUser(e.target.value)
                         }}
                     />
+                    {User.length === 0 && submit &&
+                        <Alert className={classes.alertStyle} variant="outlined" severity="error">
+                            Digite um usuário.
+                        </Alert>}
+
                     SENHA
                     <input
                         className="input_password"
@@ -102,17 +126,32 @@ export default function DropDownLoginContent(props) {
                             setPassword(e.target.value);
                         }}
                     />
+                    {Password.length < 6 && submit &&
+                        <Alert className={classes.alertStyle} variant="outlined" severity="error">
+                            Digite uma senha com no mínimo 6 caracteres.
+                        </Alert>}
+
                 </div>
                 <div className="buttons">
-                    <button className="b_login" onClick={(e) => handleLogin(e)}>
-                        ACESSAR
+                    <button className="b_login" onClick={(e) => handleLogin(e)} >
+                        {loading ? <CircularProgress color='black' size={25} /> : "ACESSAR"}
                     </button>
 
                     <button className="b_register">CADASTRAR</button>
                 </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {error &&
+                        <Alert className={classes.alertStyle} variant="outlined" severity="error">
+                            Usuário e/ou senha incorretos.
+                        </Alert>
+                    }
+                </div>
+
                 <div className="forgetPassword" onClick={handleOpen}>
                     Esqueceu sua senha?
                 </div>
+
                 <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
@@ -135,7 +174,7 @@ export default function DropDownLoginContent(props) {
                                 <input
                                     type="text"
                                     placeholder="DIGITE SEU E-MAIL"
-                                    onChange = {(e) => setEmail(e.target.value)}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <button className="modalbutton" onClick={(e) => handleForgot(e)}>ENVIAR</button>
                                 <p>Um e-mail será enviado para este endereço para alteração de senha.</p>

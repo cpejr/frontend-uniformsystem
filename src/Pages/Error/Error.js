@@ -1,7 +1,13 @@
 import React from 'react';
+import error404 from '../../../src/Assets/error_404.png';
+import './Error.css';
 
 function Error() {
-  return <h1>Error</h1>;
+  return (
+    <div className="Imagem">
+      <img src={error404} />
+    </div>
+  );
 }
 
 export default Error;

@@ -1,0 +1,5 @@
+.Imagem {
+  display: flex;
+  justify-content: center;
+  padding: 20vh;
+}

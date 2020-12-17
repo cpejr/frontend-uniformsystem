@@ -68,7 +68,6 @@ function Produto() {
     useEffect(() => {
         getProduto(product_id).then((response) => {
             setProduto(response);
-            console.log(response);
         });
     }, []);
 
@@ -258,7 +257,6 @@ function Produto() {
                                     {Produto.models?.map(
                                         
                                         (model, index) => {
-                                            // console.log(Produto.models)
                                             return (
                                                 <img
                                                     key={index}

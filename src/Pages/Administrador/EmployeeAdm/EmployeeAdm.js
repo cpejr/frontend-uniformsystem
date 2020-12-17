@@ -1,70 +1,129 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import { BsFillCaretRightFill, BsFillTrashFill } from 'react-icons/bs';
-import { IconButton } from '@material-ui/core';
+import React, { useEffect, useState } from "react";
+import api from "../../../services/api";
 
-import './EmployeeAdm.css';
+import {
+  makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+} from "@material-ui/core";
+import { BsInfoCircle, BsFillTrashFill } from "react-icons/bs";
+import ExcludeDialog from "../../../components/ExcludeDialog/ExcludeDialog";
+
+import "./EmployeeAdm.css";
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  actions: {
+    display: 'flex',
+    justifyContent: 'space-around',
+  }
 });
 
-function createData(ID, NOME) {
-  return { ID, NOME };
-}
+const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYTUxY2M4Ny03MmI3LWM0Yy1iZDUzLWViODZjZDQzYTYiLCJuYW1lIjoiQXJ0IEFkbWluIDAiLCJmaXJlYmFzZV91aWQiOiJCUjdVVTZlUEJiZWtBTHdjQmN2dG51UUhIVGcxIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJhcnRodUBlbWFpbC5jb20iLCJjcGYiOiIxMjM0NTYxMTExMSIsImNyZWF0ZWRfYXQiOiIyMDIwLTEyLTE1IDE5OjM1OjM5IiwidXBkYXRlZF9hdCI6IjIwMjAtMTItMTUgMTk6MzU6MzkifV0sImlhdCI6MTYwODA2MTI2MiwiZXhwIjoxNjEwNjUzMjYyfQ.oMwUXvSkuA9SuuSZ-S5IM9--4DEq2ZFSfYUvUBM6MC4";
 
-const rows = [
-  createData('01', 'JOÃO'),
-  createData('02', 'MARIA'),
-];
-
-function EmployeeAdm(){
+function EmployeeAdm() {
   const classes = useStyles();
+  const [employees, setEmployees] = useState([]);
+  const [dialogItem, setDialogItem] = useState({open: false, item: null});
+
+  function handleClose(){
+    setDialogItem({open: false, item: null});
+  }
+
+  function handleOpen(item){
+    setDialogItem({open: true, item: item});
+  }
+
+  async function getEmployees() {
+    try {
+      const response = await api.get("/employees", {
+        headers: { authorization: token },
+      });
+      setEmployees([...response.data.employees]);
+    } catch (error) {
+      console.warn(error);
+      alert("Erro ao buscar funcionários");
+    }
+  }
+
+  async function deleteEmployee(){
+    try {
+      await api.delete(`/delAdmOrEmployee/${dialogItem.item.user_id}`, {
+        headers: { authorization: token },
+      });
+      handleClose();
+      getEmployees();
+    } catch (error) {
+      console.warn(error);
+      handleClose();
+      alert("Erro ao excluir funcionário");
+    }
+  }
+
+  useEffect(() => {
+    getEmployees();
+  }, []);
+
   return (
     <div>
       <div>
-        <button className= "buttonEmployee" type="submit">CADASTRAR FUNCIONÁRIO</button>
+        <button className="buttonEmployee" type="submit">
+          CADASTRAR FUNCIONÁRIO
+        </button>
       </div>
       <TableContainer component={Paper}>
-      <Table className={classes.table} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center" className="header-table">ID</TableCell>
-            <TableCell align="center" className="header-table">NOME COMPLETO</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.ID}
-                <IconButton>
-                  <BsFillCaretRightFill/>
-                </IconButton>
+        <Table
+          className={classes.table}
+          size="small"
+          aria-label="a dense table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell align="center" className="header-table">
+                NOME COMPLETO
               </TableCell>
-              <TableCell align="left" className="trash">
-                {row.NOME}
-                <IconButton>
-                  <BsFillTrashFill/>
-                </IconButton>
-                </TableCell>
+              <TableCell align="center" className="header-table">
+                EMAIL
+              </TableCell>
+              <TableCell align="center" className="header-table">
+                AÇÕES
+              </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </div>  
+          </TableHead>
+          <TableBody>
+            {employees.map((employee) => (
+              <TableRow key={employee.user_id}>
+                <TableCell component="td" scope="row">
+                  {employee.name}
+                </TableCell>
+                <TableCell component="td" scope="row" >
+                  {employee.email}
+                </TableCell>
+                <TableCell component="td" scope="row" className={classes.actions}>
+                  <IconButton onClick={()=>handleOpen(employee)}>
+                    <BsFillTrashFill />
+                  </IconButton>
+                  <IconButton>
+                    <BsInfoCircle />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <ExcludeDialog open={dialogItem.open} handleClose={handleClose} title={dialogItem.item?.name} callback={deleteEmployee} />
+    </div>
   );
 }
 
 export default EmployeeAdm;
-

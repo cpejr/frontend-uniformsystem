@@ -1,11 +1,22 @@
 import React from 'react';
 
+
 import './OrdersAdm.css'
+
+async function getOrders(){
+  try {
+   
+  } catch (err) {
+
+  }
+}
 
 function OrdersAdm(){
 
   return (
-    <h1>Pedidos ADM</h1>
+    <div>
+      <h1>Pedidos ADM</h1>
+      </div>
   );
 }
 

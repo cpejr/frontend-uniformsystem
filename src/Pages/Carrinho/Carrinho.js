@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import api from "../../services/api";
 import "./Carrinho.css";
 import CartProduct from "./Components/CartProduct";
@@ -8,6 +9,8 @@ const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiNmIxZWMtMzU1Yi03ZjZjLWFjMzYtMmNjNzhiNjY0MGRmIiwibmFtZSI6IkFydGh1ciIsImZpcmViYXNlX3VpZCI6IlA4U3NCQ1l2VWZiY0VDTGJHZkN2N29qaXpIOTIiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImFydGh1cmxpbWFAY3BlanIuY29tLmJyIiwiY3BmIjoiMTIzNDU2Nzg5MDMiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMS0xOCAyMToyNTo0MiIsInVwZGF0ZWRfYXQiOiIyMDIwLTExLTE4IDIxOjI1OjQyIn1dLCJpYXQiOjE2MDU4MjE4ODIsImV4cCI6MTYwODQxMzg4Mn0.OdkhbKw9_q5IzvlZBxG5OGYr1V1q4-0-GP_ZrhvY3P8";
 
 function Carrinho() {
+  const history = useHistory();
+
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
   const [shipping, setShipping] = useState();
@@ -119,7 +122,10 @@ function Carrinho() {
           </tr>
         </tbody>
       </table>
-      <button className="checkoutButton">Finalizar Compra</button>
+      {
+        (products.length>0) &&
+        <button className="checkoutButton" onClick={() => history.push('checkout')}>Finalizar Compra</button>
+      }
     </div>
   );
 }

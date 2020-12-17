@@ -19,11 +19,11 @@ import api from "../../../services/api";
 import camisa from "../../../Assets/camisa.jpg";
 
 import "./HomeEditable.css";
+import { useHistory } from "react-router-dom";
 
 function SelectedImages({ srcImg, altImg, whoWeAre = false, setSelectedImage, SelectedImage }) {
   const handleClick = () => {
     setSelectedImage(!SelectedImage);
-    console.log(SelectedImage);
   };
   
   if(!whoWeAre){
@@ -76,7 +76,8 @@ function InputsOrIconWithInput({
 }
 
 function HomeEditable() {
-  const token = "";
+  const history = useHistory();
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYTM0MWQzMi1iMTMtNGY0Mi1jYTNlLTIwNTc4NGMxYzU2IiwibmFtZSI6Ikd1c3Rhdm8gQWRtaW4gMSIsImZpcmViYXNlX3VpZCI6IkNwNWNDUUlwVHpacHJJUXd0WFBUWXF4SVpXeDEiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6Imd1c3Rhdm9AZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5NjYiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMi0xNSAyMDozMDo0OCIsInVwZGF0ZWRfYXQiOiIyMDIwLTEyLTE1IDIwOjMwOjQ4In1dLCJpYXQiOjE2MDgwNjQzOTEsImV4cCI6MTYxMDY1NjM5MX0.VPOhngRZnI42o344HpJM3CCCE4STSYbHHTC-nICDGzM";
 
   const bucketAWS = "https://profit-uniformes.s3.amazonaws.com/";
 
@@ -149,40 +150,47 @@ function HomeEditable() {
   // UseEffect para inicializar as informações da Home
   useEffect(() => {
     async function getHomeInfo() {
-      const response = await api.get("/home/info", {
-        headers: { authorization: `bearer ${token}` },
-      });
 
-      const textWhoWeAre = response.data.filter((item) =>
-        item.key === "textWhoWeAre" ? item.data : null
-      )[0];
-      const textProducts = response.data.filter((item) =>
-        item.key === "textProducts" ? item.data : null
-      )[0];
-      const cellphone = response.data.filter((item) =>
-        item.key === "cellphone" ? item.data : null
-      )[0];
-      const address = response.data.filter((item) =>
-        item.key === "address" ? item.data : null
-      )[0];
-      const facebookLink = response.data.filter((item) =>
-        item.key === "facebookLink" ? item.data : null
-      )[0];
-      const instagramLink = response.data.filter((item) =>
-        item.key === "instagramLink" ? item.data : null
-      )[0];
-      const whatsAppNumber = response.data.filter((item) =>
-        item.key === "whatsAppNumber" ? item.data : null
-      )[0];
-
-      setTextoQuemSomos(textWhoWeAre.data);
-      setTextoProdutos(textProducts.data);
-      setTelephoneInfo(cellphone.data);
-      setEnderecoInfo(address.data);
-      setFacebookInfo(facebookLink.data);
-      setInstagramInfo(instagramLink.data);
-      setWhatsappInfo(whatsAppNumber.data);
+      try {
+        const response = await api.get("/home/info", {
+          headers: { authorization: `bearer ${token}` },
+        });
+  
+        const textWhoWeAre = response.data.filter((item) =>
+          item.key === "textWhoWeAre" ? item.data : null
+        )[0];
+        const textProducts = response.data.filter((item) =>
+          item.key === "textProducts" ? item.data : null
+        )[0];
+        const cellphone = response.data.filter((item) =>
+          item.key === "cellphone" ? item.data : null
+        )[0];
+        const address = response.data.filter((item) =>
+          item.key === "address" ? item.data : null
+        )[0];
+        const facebookLink = response.data.filter((item) =>
+          item.key === "facebookLink" ? item.data : null
+        )[0];
+        const instagramLink = response.data.filter((item) =>
+          item.key === "instagramLink" ? item.data : null
+        )[0];
+        const whatsAppNumber = response.data.filter((item) =>
+          item.key === "whatsAppNumber" ? item.data : null
+        )[0];
+  
+        setTextoQuemSomos(textWhoWeAre.data);
+        setTextoProdutos(textProducts.data);
+        setTelephoneInfo(cellphone.data);
+        setEnderecoInfo(address.data);
+        setFacebookInfo(facebookLink.data);
+        setInstagramInfo(instagramLink.data);
+        setWhatsappInfo(whatsAppNumber.data);
+      } catch (error) {
+        history.push("/errorPage");
+        console.warn(error);
+      }
     }
+
 
     getHomeInfo();
   }, []);
@@ -263,11 +271,8 @@ function HomeEditable() {
     let fileData = new FileReader();
     fileData.readAsDataURL(inputCarousel.current.files[0]);
 
-    console.log(inputCarousel.current.files[0]);
-
     fileData.onload = function () {
       const fileLoaded = fileData.result;
-      console.log("imagem upada", fileLoaded);
 
       setImagesCarousel([
         ...imagesCarousel,
@@ -431,7 +436,7 @@ function HomeEditable() {
         }
       );
     } catch (err) {
-      console.log(err.message);
+      console.warn(err.message);
     }
 
     // Salva mudanças de Home Images
@@ -551,7 +556,7 @@ function HomeEditable() {
       window.location.reload();
 
     } catch (err) {
-      console.log(err.message);
+      console.warn(err.message);
       return err.message;
     }
   }

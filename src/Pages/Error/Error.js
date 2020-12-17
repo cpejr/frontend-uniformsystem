@@ -5,7 +5,7 @@ import './Error.css';
 function Error() {
   return (
     <div className="Imagem">
-      <img src={error404} />
+      <img width="100%" src={error404} />
     </div>
   );
 }

@@ -1,48 +1,48 @@
-import React from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
-import Home from './Pages/Home';
+import Home from "./Pages/Home";
 
-import HomeEditable from './Pages/Administrador/HomeEditable';
-import OrdersAdm from './Pages/Administrador/OrdersAdm';
-import EspecificOrderAdm from './Pages/Administrador/OrdersAdm/EspecificOrderAdm';
-import ProductsAdm from './Pages/Administrador/ProductsAdm';
-import RegisterProduct from './Pages/Administrador/ProductsAdm/RegisterProduct';
-import EditProduct from './Pages/Administrador/ProductsAdm/EditProduct';
+import HomeEditable from "./Pages/Administrador/HomeEditable";
+import OrdersAdm from "./Pages/Administrador/OrdersAdm";
+import EspecificOrderAdm from "./Pages/Administrador/OrdersAdm/EspecificOrderAdm";
+import ProductsAdm from "./Pages/Administrador/ProductsAdm";
+import RegisterProduct from "./Pages/Administrador/ProductsAdm/RegisterProduct";
+import EditProduct from "./Pages/Administrador/ProductsAdm/EditProduct";
 
-import EmployeeAdm from './Pages/Administrador/EmployeeAdm';
-import EspecificEmployee from './Pages/Administrador/EmployeeAdm/EspecificEmployee';
+import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
+import EspecificEmployee from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
 
-import Loja from './Pages/Loja';
-import Produto from './Pages/Produto';
-import Perfil from './Pages/Perfil';
-import Login from './Pages/Login';
-import Carrinho from './Pages/Carrinho';
-import Contato from './Pages/Contato';
-import SignUp from './Pages/Sign_Up';
-import Checkout from './Pages/Checkout';
-import Cadastro from './Pages/Cadastro';
-import Pedidos from './Pages/Pedidos';
-import Error from './Pages/Error';
+import Loja from "./Pages/Loja";
+import Produto from "./Pages/Produto";
+import Perfil from "./Pages/Perfil";
+import Login from "./Pages/Login";
+import Carrinho from "./Pages/Carrinho";
+import Contato from "./Pages/Contato";
+import SignUp from "./Pages/Sign_Up";
+import Checkout from "./Pages/Checkout";
+import Cadastro from "./Pages/Cadastro";
+import Pedidos from "./Pages/Pedidos";
+import Error from "./Pages/Error";
 
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
-import HeaderAdm from './components/HeaderAdm';
-import FooterAdm from './components/FooterAdm';
-import SidebarAdm from './components/SidebarAdm';
+import HeaderAdm from "./components/HeaderAdm";
+import FooterAdm from "./components/FooterAdm";
+import SidebarAdm from "./components/SidebarAdm";
 
-import { isAuthenticated } from './services/auth';
+import { isAuthenticated } from "./services/auth";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
+    render={(props) =>
       isAuthenticated() ? (
         <Component {...props} />
       ) : (
         <Redirect
-          to={{ pathname: '/login', state: { from: props.location } }}
+          to={{ pathname: "/login", state: { from: props.location } }}
         />
       )
     }
@@ -54,8 +54,8 @@ export default function Routes() {
     <BrowserRouter>
       <Switch>
         <Route
-          render={path =>
-            path.location.pathname.includes('/adm/') ? (
+          render={(path) =>
+            path.location.pathname.includes("/adm/") ? (
               <AdmRoutes />
             ) : (
               <MenuRoutes />

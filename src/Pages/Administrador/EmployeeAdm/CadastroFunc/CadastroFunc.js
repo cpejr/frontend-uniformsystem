@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./CadastroFunc.css";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
-import api from "../../../../services/api";
 
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
@@ -49,7 +48,7 @@ function CadastroFunc() {
       if (
         !isNaN(Number(cpfStored)) &&
         cpfStored.length >= 11 ||
-        cpfStored.length == 0
+        cpfStored.length === 0
       ) {
         setErrorInputCpf("");
       } else {
@@ -60,7 +59,7 @@ function CadastroFunc() {
       if (
         !isNaN(Number(passwordStored)) &&
         passwordStored.length >= 6 ||
-        passwordStored.length == 0
+        passwordStored.length === 0
       ) {
         setErrorInputPassword("");
       } else {

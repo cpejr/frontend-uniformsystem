@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
-import camisa from '../../Assets/camisa.jpg';
-
 import api from "../../services/api";
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import PopUpChangeAddress from './PopUpChangeAddress';
 
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 
 import Button from '@material-ui/core/Button';
 
-import './Checkout.css'
+
+import './Checkout.css';
+
 import { useHistory } from 'react-router-dom';
 
 function InputWithLabel({label, width, setInfo, error, maxLenght}){
@@ -61,10 +62,12 @@ function Checkout(){
 
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState({});
+  
+  const [openModal, setOpenModal] = useState(false);
 
   const user_id = '534a5d-8e8d-0e50-4db-88b45325ae1d'
 
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiNTM0YTVkLThlOGQtMGU1MC00ZGItODhiNDUzMjVhZTFkIiwibmFtZSI6IkRpb2dvIEFkbWluIDEiLCJmaXJlYmFzZV91aWQiOiI3SndrSGl0VmR2Y1NoU3ptV2NzTExpb2VqZG8xIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJkaW9nb2FkbTEyQGVtYWlsLmNvbSIsImNwZiI6IjEyMzQ1Njc4OTEyIiwiY3JlYXRlZF9hdCI6IjIwMjAtMTEtMzAgMjM6NDc6NDEiLCJ1cGRhdGVkX2F0IjoiMjAyMC0xMS0zMCAyMzo0Nzo0MSJ9XSwiaWF0IjoxNjA2NzgwMDcyLCJleHAiOjE2MDkzNzIwNzJ9.6_OAGKyrXfQ9kfvq-EQWZzpS0G2CIDF1grmCH708Wbs';
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMDZlZTg2Ny0wZGEtYjJkOC1lNDQ1LTdlNWI3YTA0ZTQiLCJuYW1lIjoiQWRtYSIsImZpcmViYXNlX3VpZCI6InpqN01ZWmx1TURlaHlHSEttQzRaUHpYeVdNdTIiLCJ1c2VyX3R5cGUiOiJjbGllbnQiLCJlbWFpbCI6ImFkbWFjYW5lc2NoaUBnbWFpbC5jb20iLCJjcGYiOiIxMjM0NTY3ODkxMSIsImNyZWF0ZWRfYXQiOiIyMDIwLTExLTIwIDEyOjM4OjQ4IiwidXBkYXRlZF9hdCI6IjIwMjAtMTEtMjAgMTI6Mzg6NDgifV0sImlhdCI6MTYwODUwNTIxNywiZXhwIjoxNjExMDk3MjE3fQ.VKTYkgQtJ9F--XwbQAYF6_l179bWVn5zIIK8AIyvqEI';
 
   const serviceCode = '04014';
 
@@ -164,12 +167,12 @@ useEffect(() => {
           authorization: `bearer ${token}` 
         },
       });
-      if(response.data.length>0){
+      // if(response.data.length>0){
         setProducts([...response.data]);
-      }
-      else{
-        history.push('/')
-      }
+      // }
+      // else{
+      //   history.push('/')
+      // }
     } catch (error) {
       console.warn(error);
     }
@@ -201,6 +204,10 @@ useEffect(() => {
     }
   }, []);
 
+  // Chamado quando address atualiza (depois do popUp fechar)
+  useEffect(() => {
+  }, [address]);
+
 
   function validateInput(type){
 
@@ -221,7 +228,6 @@ useEffect(() => {
       }
 
     }else{
-
       if(!isNaN(Number(cardNameStored) )){
         setErrorInputCardName('Nome inválido')
       }
@@ -229,7 +235,14 @@ useEffect(() => {
         setErrorInputCardName('')
       }
     }
+  }
 
+  function handleCloseModal(){
+    setOpenModal(false);
+  }
+
+  function handleOpenModal(){
+    setOpenModal(true);
   }
 
   return (
@@ -388,7 +401,7 @@ useEffect(() => {
 
               <div className="changeAddressArea">
                 <span>Quer receber seus produtos em outro endereço?</span>
-                <Button type="button">Alterar endereço</Button>
+                <Button type="button" onClick={() => handleOpenModal()} >Alterar endereço</Button>
               </div>
             </div>
 
@@ -421,6 +434,11 @@ useEffect(() => {
       >
         Finalizar Compra
       </Button>
+      <PopUpChangeAddress 
+        open={openModal} handleClose={handleCloseModal} 
+        setAddress={setAddress}
+        address={address}
+      />
     </div>
   );
 }

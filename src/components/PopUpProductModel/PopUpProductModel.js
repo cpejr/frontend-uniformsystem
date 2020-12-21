@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import './PopUpProductModel.css';
 
 import { Dialog, DialogTitle, TextField, Button, 
     makeStyles, MenuItem, Typography  } from '@material-ui/core';
@@ -315,7 +314,8 @@ const PopUpProductModel = ({open, handleClose, isEdit,
 const useStyles = makeStyles((theme) => ({
     title: {
         fontSize: '28px',
-        fontWeight: 500,
+        fontWeight: 600,
+        padding: '0px 10px 15px 10px',
     },
     dialog: {
         '& .MuiPaper-root': {

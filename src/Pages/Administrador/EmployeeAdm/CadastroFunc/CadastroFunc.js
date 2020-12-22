@@ -1,142 +1,345 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
+
+import { withRouter } from 'react-router-dom';
+
+import { Button, CircularProgress, makeStyles, MenuItem, Snackbar, TextField } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+
+import { FaChevronLeft } from 'react-icons/fa';
+
+import api from "../../../../services/api";
+
 import "./CadastroFunc.css";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
-
-function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
-  return (
-    <div className="divInputLabelError">
-      <label>{label}</label>
-      <input
-        type="text"
-        name="input"
-        style={{ width: `${width}px` }}
-        maxLength={`${maxLenght}`}
-        onChange={(e) => setInfo(e.target.value)}
-      />
-      <span style={{ color: "#ff0033", fontSize: "15px" }}>{error}</span>
-    </div>
-  );
+function validateInput(type, value) {
+  let isValid;
+  if (type === "name") {
+    if (value === ''){
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+  }
+  if (type === "cpf") {
+    if ( isNaN(Number(value)) || value.length < 11 || value === ''){
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+  }
+  if (type === "email") {
+    if ( !value.includes('@') || !value.includes('.com') || value === ''){
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+  }
+  if (type === "password") {
+    if (
+      value.length < 6
+      || value === ''
+    ) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+  }
+  if (type === "type employee") {
+    if ( value === "") {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+  }
+  return isValid;
 }
 
-function PasswordInputWithLabel({ label, width, setInfo, error, maxLenght }) {
-  return (
-    <div className="divInputLabelError">
-      <label>{label}</label>
-      <input
-        type="password"
-        name="input"
-        style={{ width: `${width}px` }}
-        maxLength={`${maxLenght}`}
-        onChange={(e) => setInfo(e.target.value)}
-      />
-      <span style={{ color: "#ff0033", fontSize: "15px" }}>{error}</span>
-    </div>
-  );
-}
+function CadastroFunc({history}) {
 
-function CadastroFunc() {
-  const [nameStored, setName] = useState("");
-  const [cpfStored, setCpf] = useState("");
-  const [passwordStored, setPassword] = useState("");
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMzYwZTg0LWNjM2MtMzhmMi1jZmI1LTc3MzhiNjZmZDJhIiwibmFtZSI6IkRpb2dvIEFkbWluIDEiLCJmaXJlYmFzZV91aWQiOiJFS2xOY05NdjBiVXZKQTVaR2xXZDEzZXZIMjYyIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJkaW9nb2FkbTIwQGVtYWlsLmNvbSIsImNwZiI6IjEyMzQ1Njc4OTIwIiwiY3JlYXRlZF9hdCI6IjIwMjAtMTItMjIgMjM6MTM6MDEiLCJ1cGRhdGVkX2F0IjoiMjAyMC0xMi0yMiAyMzoxMzowMSJ9XSwiaWF0IjoxNjA4Njc5MjA1LCJleHAiOjE2MTEyNzEyMDV9.jJk7yPBwjDCdJPb-JIzj9ealrhMVGMNGwL1vRjyiEq8';
 
-  const [errorInputCpf, setErrorInputCpf] = useState("");
-  const [errorInputPassword, setErrorInputPassword] = useState("");
+  const [typeEmployeeState, setTypeEmployeeState] = useState("");
 
-  function validateInput(type) {
-    if (type === "cpf") {
-      if (
-        !isNaN(Number(cpfStored)) &&
-        cpfStored.length >= 11 ||
-        cpfStored.length === 0
-      ) {
-        setErrorInputCpf("");
-      } else {
-        setErrorInputCpf("Número de CPF incorreto");
+  const classes = useStyles();
+
+  const [errorName, setErrorName] = useState(false);
+  const [errorNameMessage, setErrorNameMessage] = useState("");
+
+  const [errorCPF, setErrorCPF] = useState(false);
+  const [errorCPFMessage, setErrorCPFMessage] = useState("");
+
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorEmailMessage, setErrorEmailMessage] = useState("");
+
+  const [errorPassword, setErrorPassword] = useState(false);
+  const [errorPasswordMessage, setErrorPasswordMessage] = useState("");
+
+  const [errorTypeEmployee, setErrorTypeEmployee] = useState(false);
+  const [errorTypeEmployeeMessage, setErrorTypeEmployeeMessage] = useState("");
+
+  const inputName = useRef(null);
+  const inputCPF = useRef(null);
+  const inputEmail = useRef(null);
+  const inputPassword = useRef(null);
+
+  const [loading, setLoading] = useState(false);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackBar(false);
+  };
+
+  const handleChangeTypeEmployee = (e) => {
+    setTypeEmployeeState(e.target.value)
+  }
+
+
+  const handleSubmit = async () => {
+
+    const resultValidateName = validateInput('name', inputName.current.value);
+    const resultValidateCPF = validateInput('cpf', inputCPF.current.value);
+    const resultValidateEmail = validateInput('email', inputEmail.current.value);
+    const resultValidatePassword = validateInput('password', inputPassword.current.value);
+    const resultValidateTypeEmployee = validateInput('type employee', typeEmployeeState);
+
+    if(!resultValidateName || !resultValidateCPF || !resultValidateEmail || !resultValidatePassword || !resultValidateTypeEmployee){
+
+      if(!resultValidateName){
+        setErrorName(true);
+        setErrorNameMessage('Digite um nome.')
+      }else{
+        setErrorName(false);
+        setErrorNameMessage('');
+      }
+
+      if(!resultValidateCPF){
+        setErrorCPF(true);
+        setErrorCPFMessage('CPF inválido.')
+      }else{
+        setErrorCPF(false);
+        setErrorCPFMessage('');
+      }
+
+      if(!resultValidateEmail){
+        setErrorEmail(true);
+        setErrorEmailMessage('Email inválido.')
+      }else{
+        setErrorEmail(false);
+        setErrorEmailMessage('');
+      }
+
+      if(!resultValidatePassword){
+        setErrorPassword(true);
+        setErrorPasswordMessage('Senha inválida.')
+      }else{
+        setErrorPassword(false);
+        setErrorPasswordMessage('');
+      }
+
+      if(!resultValidateTypeEmployee){
+        setErrorTypeEmployee(true);
+        setErrorTypeEmployeeMessage('Selecione uma opção.')
+      }else{
+        setErrorTypeEmployee(false);
+        setErrorTypeEmployeeMessage('');
       }
     }
-    if (type === "password") {
-      if (
-        !isNaN(Number(passwordStored)) &&
-        passwordStored.length >= 6 ||
-        passwordStored.length === 0
-      ) {
-        setErrorInputPassword("");
-      } else {
-        setErrorInputPassword("Senha inválida (min. 6 dígitos)");
+    else{
+      setErrorName(false);
+      setErrorNameMessage('');
+      setErrorCPF(false);
+      setErrorCPFMessage('');
+      setErrorEmail(false);
+      setErrorEmailMessage('');
+      setErrorPassword(false);
+      setErrorPasswordMessage('');
+      setErrorTypeEmployee(false);
+      setErrorTypeEmployeeMessage('');
+
+      try{
+
+        setLoading(true);
+
+        const newUserObj = {
+          name: inputName.current.value,
+          user_type: typeEmployeeState,
+          email: inputEmail.current.value,
+          cpf: inputCPF.current.value,
+          password: inputPassword.current.value,
+        };
+
+        // const response = await api.post("http://localhost:3333/user",
+        //   newUserObj
+        //   ,
+        //   {
+        //     headers: { authorization: `Bearer ${token}`,
+        //               "Content-Type": "application/json"},
+        //   }
+        // );
+
+        setTimeout(() => {
+          setLoading(false);
+          setOpenSnackBar(true);
+        }, 2000);
+
+        // Reseta as informações nos campos
+        inputName.current.value = '';
+        inputCPF.current.value = '';
+        inputEmail.current.value = '';
+        inputPassword.current.value = '';
+        setTypeEmployeeState("");
+
+      }catch(err){
+        console.log(err.message);
       }
     }
   }
 
-  useEffect(() => {
-    validateInput("cpf");
-  }, [cpfStored]);
-
-  useEffect(() => {
-    validateInput("password");
-  }, [passwordStored]);
-
-  // const handleSubmit = ()=>{
-
-  // }
-
-  // async function handlePostOrder() {
-  //   try{
-  //     const address_id = address.address_id;
-  //     await api.post(`/order`, {
-  //       address_id: address_id,
-  //       service_code: serviceCode,
-  //       products: products,
-  //     },
-  //     {
-  //       headers: { authorization: `bearer ${token}` },
-
-  //     });
-  //   }
-  //   catch(error){
-  //     console.warn(error);
-  //     alert("Erro ao criar um pedido.");
-  //   }
-  // }
-
   return (
-    <div className="fullPage">
-      <ArrowBackIosIcon className="setaVoltar"></ArrowBackIosIcon>
-      <h1 className="titleCad2">CADASTRAR NOVO FUNCIONÁRIO</h1>
-      <hr className="titleLineExp2"></hr>
-      <InputWithLabel
-        label="Nome Completo:"
-        width={500}
-        setInfo={setName}
-        maxLenght={50}
-      />{" "}
-      <InputWithLabel
-        label="CPF:"
-        width={200}
-        setInfo={setCpf}
-        maxLenght={11}
-        error={errorInputCpf}
-      />{" "}
-      <PasswordInputWithLabel
-        label="Senha:"
-        width={200}
-        setInfo={setPassword}
-        maxLenght={50}
-        type="password"
-        error={errorInputPassword}
+    <div className="registerEmployeeFullContent">
+      <FaChevronLeft className={classes.icon} onClick={() => history.goBack()} />
+      <h1 className={classes.mainTitle}>
+          CADASTRAR NOVO FUNCIONÁRIO
+          <span className={classes.spanInsideTitle}/>
+      </h1>
+      <TextField
+        required 
+        inputRef={inputName}
+        error={errorName}
+        label="Nome Completo"
+        helperText={errorNameMessage}
+        className={classes.inputText}
+        variant="outlined"
+        />
+      <TextField
+        required 
+        label="CPF"
+        inputRef={inputCPF}
+        error={errorCPF}
+        inputProps={{maxLength: 11}}
+        helperText={errorCPFMessage}
+        className={classes.inputText}
+        variant="outlined"
       />
-      <label for="tipodefunc">Tipo de Funcionário:</label>
-      <select className="divInputLabelError">
-        <option value="vazio"> </option>
-        <option value="func1">Funcionário 1</option>
-        <option value="func2">Funcionário 2</option>
-        <option value="func3">Funcionário 3</option>
-        <option value="func4">Funcionário 4</option>
-      </select>
-      <button className="buttonCad2">CADASTRAR</button>
-      {/* onClick={handleSubmit} */}
+      <TextField
+        required 
+        label="E-mail"
+        inputRef={inputEmail}
+        error={errorEmail}
+        helperText={errorEmailMessage}
+        className={classes.inputText}
+        variant="outlined"
+      />
+      <TextField
+        required 
+        label="Senha"
+        inputRef={inputPassword}
+        error={errorPassword}
+        helperText={errorPasswordMessage}
+        className={classes.inputText}
+        variant="outlined"
+      />
+      <TextField
+        required 
+        select
+        value={typeEmployeeState}
+        label="Tipo de Funcionário"
+        error={errorTypeEmployee}
+        helperText={errorTypeEmployeeMessage}
+        className={classes.inputText}
+        onChange={(e) => handleChangeTypeEmployee(e)}
+        variant="outlined"
+      >
+        <MenuItem value="">
+          Selecione uma opção
+        </MenuItem>
+        <MenuItem value="employee">
+          Funcionário
+        </MenuItem>
+        <MenuItem value="adm">
+          Adminstrador
+        </MenuItem>
+      </TextField>
+
+      <div className={classes.divButtons}>
+        <Button className={classes.saveButton} onClick={() => handleSubmit()} >
+          {loading ? <CircularProgress /> : "CADASTRAR"}
+        </Button>
+      </div>
+
+      <Snackbar open={openSnackBar} autoHideDuration={5000} onClose={handleCloseSnackBar}>
+        <MuiAlert onClose={handleCloseSnackBar} elevation={6} variant="filled" severity="success">
+          Funcionário cadastrado com sucesso!
+        </MuiAlert>
+      </Snackbar>
+
     </div>
   );
-}
+};
 
-export default CadastroFunc;
+const useStyles = makeStyles((theme) => ({
+  icon: {
+    position: 'absolute',
+    fontSize: '35px',
+    top: '10px',
+    left: '5px',
+    color: '#666',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#007bff',
+    }
+  },
+  mainTitle:{
+    width: 'fit-content',
+    fontSize: '32px',
+    lineHeight: '49px',
+    marginTop: '35px',
+    marginBottom: '30px',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  spanInsideTitle:{
+      width: '90%',
+      height: '2px',
+      margin: '0 auto',
+      borderBottom: '2px solid #0EC4AB',
+  },
+  inputText: {
+    width: '100%',
+    outline: 'none',
+    padding: '5px 10px',
+    '&:focus': {
+      width: '70%',
+    },
+    borderRadius: '7px',
+    '& + &': {
+      marginTop: '16px',
+    },
+    '& > label': {
+      paddingLeft: '14px',
+    }
+  },
+  divButtons: {
+    width: '100%',
+    marginTop: '30px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  saveButton: {
+      width: '85%',
+      outline: 'none',
+      backgroundColor: '#4BB543',
+      fontSize: '18px',
+      fontWeight: 600,
+      transition: 'background 0.6s',
+      '&:hover': {
+        backgroundColor: '#4BB543AA',
+      }
+  }
+}));
+
+export default withRouter(CadastroFunc);

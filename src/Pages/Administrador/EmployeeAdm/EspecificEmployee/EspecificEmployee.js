@@ -1,6 +1,8 @@
 import React from "react";
 import TabelaFuncionarios from "../../../../components/TabelaFuncionario/TabelaFuncionario";
 
+import { withRouter } from 'react-router-dom';
+
 import "./EspecificEmployee.css";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
@@ -30,10 +32,10 @@ const orderHistory = [
   },
 ];
 
-function EspecificEmployee() {
+function EspecificEmployee({history}) {
   return (
     <div>
-      <ArrowBackIosIcon className="setaVoltar"></ArrowBackIosIcon>
+      <ArrowBackIosIcon className="setaVoltar" onClick={() => history.goBack()}></ArrowBackIosIcon>
       <div className="boxTitle">
         <h1 className="titleFuncExp">FUNCIONÁRIO ESPECÍFICO</h1>
         <hr className="titleLineExp"></hr>
@@ -45,7 +47,7 @@ function EspecificEmployee() {
   );
 }
 
-export default EspecificEmployee;
+export default withRouter(EspecificEmployee);
 
 /*todo: arrowback funcional
         tamanho arrowback

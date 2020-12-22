@@ -11,6 +11,7 @@ import RegisterProduct from "./Pages/Administrador/ProductsAdm/RegisterProduct";
 import EditProduct from "./Pages/Administrador/ProductsAdm/EditProduct";
 
 import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
+import CadastroFunc from "./Pages/Administrador/EmployeeAdm/CadastroFunc";
 import EspecificEmployee from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
 
 import Loja from "./Pages/Loja";
@@ -114,6 +115,12 @@ function AdmRoutes() {
             export
             exact
             component={EmployeeAdm}
+          />
+          <Route
+            path="/adm/funcionarios/cadastro"
+            export
+            exact
+            component={CadastroFunc}
           />
           <Route
             path="/adm/produtos/cadastro"

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../services/api";
 
+import { Link } from 'react-router-dom';
+
 import {
+  Button,
   makeStyles,
   Table,
   TableBody,
@@ -12,6 +15,7 @@ import {
   Paper,
   IconButton,
 } from "@material-ui/core";
+
 import { BsInfoCircle, BsFillTrashFill } from "react-icons/bs";
 import ExcludeDialog from "../../../components/ExcludeDialog/ExcludeDialog";
 
@@ -75,9 +79,11 @@ function EmployeeAdm() {
   return (
     <div>
       <div>
-        <button className="buttonEmployee" type="submit">
-          CADASTRAR FUNCIONÁRIO
-        </button>
+        <Link className="buttonEmployee" to="/adm/funcionarios/cadastro">
+          <Button type="button">
+            CADASTRAR FUNCIONÁRIO
+          </Button>
+        </Link>
       </div>
       <TableContainer component={Paper}>
         <Table
@@ -112,7 +118,9 @@ function EmployeeAdm() {
                     <BsFillTrashFill />
                   </IconButton>
                   <IconButton>
-                    <BsInfoCircle />
+                    <Link to="/adm/funcionarios/funcionarioEspecifico">
+                      <BsInfoCircle />
+                    </Link>
                   </IconButton>
                 </TableCell>
               </TableRow>

@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 import { withRouter } from 'react-router-dom';
 
 import { Button, CircularProgress, makeStyles, MenuItem, Snackbar, TextField } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
-
-// import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import { FaChevronLeft } from 'react-icons/fa';
 
 import api from "../../../../services/api";
@@ -173,19 +171,26 @@ function CadastroFunc({history}) {
           password: inputPassword.current.value,
         };
 
-        const response = await api.post("http://localhost:3333/user",
-          newUserObj
-          ,
-          {
-            headers: { authorization: `Bearer ${token}`,
-                      "Content-Type": "application/json"},
-          }
-        );
+        // const response = await api.post("http://localhost:3333/user",
+        //   newUserObj
+        //   ,
+        //   {
+        //     headers: { authorization: `Bearer ${token}`,
+        //               "Content-Type": "application/json"},
+        //   }
+        // );
 
         setTimeout(() => {
           setLoading(false);
           setOpenSnackBar(true);
         }, 2000);
+
+        // Reseta as informações nos campos
+        inputName.current.value = '';
+        inputCPF.current.value = '';
+        inputEmail.current.value = '';
+        inputPassword.current.value = '';
+        setTypeEmployeeState("");
 
       }catch(err){
         console.log(err.message);
@@ -240,6 +245,7 @@ function CadastroFunc({history}) {
       <TextField
         required 
         select
+        value={typeEmployeeState}
         label="Tipo de Funcionário"
         error={errorTypeEmployee}
         helperText={errorTypeEmployeeMessage}
@@ -258,9 +264,11 @@ function CadastroFunc({history}) {
         </MenuItem>
       </TextField>
 
-      <Button className={classes.saveButton} onClick={() => handleSubmit()} >
-        {loading ? <CircularProgress /> : "CADASTRAR"}
-      </Button>
+      <div className={classes.divButtons}>
+        <Button className={classes.saveButton} onClick={() => handleSubmit()} >
+          {loading ? <CircularProgress /> : "CADASTRAR"}
+        </Button>
+      </div>
 
       <Snackbar open={openSnackBar} autoHideDuration={5000} onClose={handleCloseSnackBar}>
         <MuiAlert onClose={handleCloseSnackBar} elevation={6} variant="filled" severity="success">
@@ -314,10 +322,15 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: '14px',
     }
   },
+  divButtons: {
+    width: '100%',
+    marginTop: '30px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   saveButton: {
       width: '85%',
-      margin: '0 auto',
-      marginTop: '30px',
       outline: 'none',
       backgroundColor: '#4BB543',
       fontSize: '18px',

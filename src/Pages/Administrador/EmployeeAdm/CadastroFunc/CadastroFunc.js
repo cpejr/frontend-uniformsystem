@@ -171,14 +171,14 @@ function CadastroFunc({history}) {
           password: inputPassword.current.value,
         };
 
-        // const response = await api.post("http://localhost:3333/user",
-        //   newUserObj
-        //   ,
-        //   {
-        //     headers: { authorization: `Bearer ${token}`,
-        //               "Content-Type": "application/json"},
-        //   }
-        // );
+        const response = await api.post("http://localhost:3333/user",
+          newUserObj
+          ,
+          {
+            headers: { authorization: `Bearer ${token}`,
+                      "Content-Type": "application/json"},
+          }
+        );
 
         setTimeout(() => {
           setLoading(false);

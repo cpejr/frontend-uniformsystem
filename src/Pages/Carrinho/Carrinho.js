@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import api from "../../services/api";
-import "./Carrinho.css";
-import CartProduct from "./Components/CartProduct";
-import ShippingCalc from "./Components/ShippingCalc";
-
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import api from '../../services/api';
+import './Carrinho.css';
+import CartProduct from './Components/CartProduct';
+import ShippingCalc from './Components/ShippingCalc';
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiNmIxZWMtMzU1Yi03ZjZjLWFjMzYtMmNjNzhiNjY0MGRmIiwibmFtZSI6IkFydGh1ciIsImZpcmViYXNlX3VpZCI6IlA4U3NCQ1l2VWZiY0VDTGJHZkN2N29qaXpIOTIiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImFydGh1cmxpbWFAY3BlanIuY29tLmJyIiwiY3BmIjoiMTIzNDU2Nzg5MDMiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMS0xOCAyMToyNTo0MiIsInVwZGF0ZWRfYXQiOiIyMDIwLTExLTE4IDIxOjI1OjQyIn1dLCJpYXQiOjE2MDU4MjE4ODIsImV4cCI6MTYwODQxMzg4Mn0.OdkhbKw9_q5IzvlZBxG5OGYr1V1q4-0-GP_ZrhvY3P8";
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiNmIxZWMtMzU1Yi03ZjZjLWFjMzYtMmNjNzhiNjY0MGRmIiwibmFtZSI6IkFydGh1ciIsImZpcmViYXNlX3VpZCI6IlA4U3NCQ1l2VWZiY0VDTGJHZkN2N29qaXpIOTIiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImFydGh1cmxpbWFAY3BlanIuY29tLmJyIiwiY3BmIjoiMTIzNDU2Nzg5MDMiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMS0xOCAyMToyNTo0MiIsInVwZGF0ZWRfYXQiOiIyMDIwLTExLTE4IDIxOjI1OjQyIn1dLCJpYXQiOjE2MDU4MjE4ODIsImV4cCI6MTYwODQxMzg4Mn0.OdkhbKw9_q5IzvlZBxG5OGYr1V1q4-0-GP_ZrhvY3P8';
 
 function Carrinho() {
   const history = useHistory();
@@ -16,22 +15,24 @@ function Carrinho() {
   const [shipping, setShipping] = useState();
 
   async function handleChangeAmount(number, product_key) {
-    try{
+    try {
       const id = products[product_key].product_in_cart_id;
       const newAmount = products[product_key].amount + number;
-      await api.put(`/cart/${id}`, {
-        amount: newAmount,
-      },
-      {
-        headers: { authorization: `bearer ${token}` },
-
-      });
+      await api.put(
+        `/cart/${id}`,
+        {
+          amount: newAmount,
+        },
+        {
+          headers: { authorization: `bearer ${token}` },
+        },
+      );
       products[product_key].amount = newAmount;
       setProducts([...products]);
-    }
-    catch(error){
+    } catch (error) {
       console.warn(error);
       alert(error);
+      history.push('Error');
     }
   }
 
@@ -46,30 +47,34 @@ function Carrinho() {
     } catch (error) {
       console.warn(error);
       alert(error);
+      history.push('Error');
     }
   }
 
   async function getProducts() {
-    const response = await api.get("/cart", {
+    const response = await api.get('/cart', {
       headers: { authorization: `bearer ${token}` },
     });
     setProducts([...response.data]);
   }
 
-  useEffect(() => {
-    let aux = 0;
-    products.forEach((product) => {
-      aux += product.price * product.amount;
-    });
-    setSubTotal(aux);
-  }, [products]);
+  useEffect(
+    () => {
+      let aux = 0;
+      products.forEach(product => {
+        aux += product.price * product.amount;
+      });
+      setSubTotal(aux);
+    },
+    [products],
+  );
 
   useEffect(() => {
     try {
       getProducts();
     } catch (error) {
       console.warn(error);
-      alert("Erro ao Buscar carrinho");
+      alert('Erro ao Buscar carrinho');
     }
   }, []);
 
@@ -98,10 +103,10 @@ function Carrinho() {
           ))}
           <tr>
             <td colSpan="3" className="subTotal">
-              Subtotal:{" "}
+              Subtotal:{' '}
             </td>
             <td colSpan="2" className="subTotal">
-              R${subTotal.toFixed(2).replace(".", ",")}
+              R${subTotal.toFixed(2).replace('.', ',')}
             </td>
           </tr>
           <tr>
@@ -109,23 +114,27 @@ function Carrinho() {
               <ShippingCalc setShipping={setShipping} />
             </td>
             <td colSpan="3">
-              {shipping && `R$${shipping.toFixed(2).replace(".", ",")}`}
+              {shipping && `R$${shipping.toFixed(2).replace('.', ',')}`}
             </td>
           </tr>
           <tr>
             <td colSpan="5" className="total">
               R$
               {shipping
-                ? (subTotal + shipping).toFixed(2).replace(".", ",")
-                : subTotal.toFixed(2).replace(".", ",")}
+                ? (subTotal + shipping).toFixed(2).replace('.', ',')
+                : subTotal.toFixed(2).replace('.', ',')}
             </td>
           </tr>
         </tbody>
       </table>
-      {
-        (products.length>0) &&
-        <button className="checkoutButton" onClick={() => history.push('checkout')}>Finalizar Compra</button>
-      }
+      {products.length > 0 && (
+        <button
+          className="checkoutButton"
+          onClick={() => history.push('checkout')}
+        >
+          Finalizar Compra
+        </button>
+      )}
     </div>
   );
 }

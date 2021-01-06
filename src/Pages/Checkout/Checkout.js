@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import api from "../../services/api";
+import api from '../../services/api';
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -12,38 +12,31 @@ import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 
 import Button from '@material-ui/core/Button';
 
-
 import './Checkout.css';
 
 import { useHistory } from 'react-router-dom';
 
-function InputWithLabel({label, width, setInfo, error, maxLenght}){
-  
+function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
-    <div className="divInputLabelError" >
-      <label >{label}</label>
-      <input 
-        type="text" 
-        name="input" 
-        style={{width: `${width}px`}}
+    <div className="divInputLabelError">
+      <label>{label}</label>
+      <input
+        type="text"
+        name="input"
+        style={{ width: `${width}px` }}
         maxLength={`${maxLenght}`}
-        onChange={(e) => setInfo(e.target.value)} 
-        // onChange={(e) => validateInput(e, type)} 
+        onChange={e => setInfo(e.target.value)}
+        // onChange={(e) => validateInput(e, type)}
       />
-      <span
-        style={{color: '#ff0033', fontSize: '15px'}}
-      >
-        {error}
-      </span>
+      <span style={{ color: '#ff0033', fontSize: '15px' }}>{error}</span>
     </div>
-
   );
 }
 
-function Checkout(){
+function Checkout() {
   const history = useHistory();
-  
-  const [cardNumberStored, setCardNumber] = useState("");
+
+  const [cardNumberStored, setCardNumber] = useState('');
   const [securityNumberStored, setSecurityNumber] = useState('');
   const [cardNameStored, setCardName] = useState('');
 
@@ -62,128 +55,152 @@ function Checkout(){
 
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState({});
-  
+
   const [openModal, setOpenModal] = useState(false);
 
-  const user_id = '534a5d-8e8d-0e50-4db-88b45325ae1d'
+  const user_id = '534a5d-8e8d-0e50-4db-88b45325ae1d';
 
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMDZlZTg2Ny0wZGEtYjJkOC1lNDQ1LTdlNWI3YTA0ZTQiLCJuYW1lIjoiQWRtYSIsImZpcmViYXNlX3VpZCI6InpqN01ZWmx1TURlaHlHSEttQzRaUHpYeVdNdTIiLCJ1c2VyX3R5cGUiOiJjbGllbnQiLCJlbWFpbCI6ImFkbWFjYW5lc2NoaUBnbWFpbC5jb20iLCJjcGYiOiIxMjM0NTY3ODkxMSIsImNyZWF0ZWRfYXQiOiIyMDIwLTExLTIwIDEyOjM4OjQ4IiwidXBkYXRlZF9hdCI6IjIwMjAtMTEtMjAgMTI6Mzg6NDgifV0sImlhdCI6MTYwODUwNTIxNywiZXhwIjoxNjExMDk3MjE3fQ.VKTYkgQtJ9F--XwbQAYF6_l179bWVn5zIIK8AIyvqEI';
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMDZlZTg2Ny0wZGEtYjJkOC1lNDQ1LTdlNWI3YTA0ZTQiLCJuYW1lIjoiQWRtYSIsImZpcmViYXNlX3VpZCI6InpqN01ZWmx1TURlaHlHSEttQzRaUHpYeVdNdTIiLCJ1c2VyX3R5cGUiOiJjbGllbnQiLCJlbWFpbCI6ImFkbWFjYW5lc2NoaUBnbWFpbC5jb20iLCJjcGYiOiIxMjM0NTY3ODkxMSIsImNyZWF0ZWRfYXQiOiIyMDIwLTExLTIwIDEyOjM4OjQ4IiwidXBkYXRlZF9hdCI6IjIwMjAtMTEtMjAgMTI6Mzg6NDgifV0sImlhdCI6MTYwODUwNTIxNywiZXhwIjoxNjExMDk3MjE3fQ.VKTYkgQtJ9F--XwbQAYF6_l179bWVn5zIIK8AIyvqEI';
 
   const serviceCode = '04014';
 
   const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
 
-  useEffect(() => {
-
-    function validateBirthInput(type){
-      
-      if(type === 'day'){
-        if( (parseInt(dayStored, 10) <= 31) && (parseInt(dayStored, 10) > 0) && (!isNaN(Number(dayStored)))){
-          setErrorBirthInput('')
-        }else{
-          setErrorBirthInput('Data inválida')
-        }
-        
-      }
-      else if(type === 'month'){
-          if( (Number(monthStored) <= 12) && (Number(monthStored) > 0) && (!isNaN(Number(monthStored)))){
-            setErrorBirthInput('')
-          }else{
-            setErrorBirthInput('Data inválida')
+  useEffect(
+    () => {
+      function validateBirthInput(type) {
+        if (type === 'day') {
+          if (
+            parseInt(dayStored, 10) <= 31 &&
+            parseInt(dayStored, 10) > 0 &&
+            !isNaN(Number(dayStored))
+          ) {
+            setErrorBirthInput('');
+          } else {
+            setErrorBirthInput('Data inválida');
           }
-          
-        }else{
-          var today = new Date()
-          if( (parseInt(yearStored, 10) <= today.getFullYear()) && (parseInt(yearStored, 10) > 0) && (!isNaN(Number(yearStored)))){
-            setErrorBirthInput('')
-          }else{
-            setErrorBirthInput('Data inválida')
+        } else if (type === 'month') {
+          if (
+            Number(monthStored) <= 12 &&
+            Number(monthStored) > 0 &&
+            !isNaN(Number(monthStored))
+          ) {
+            setErrorBirthInput('');
+          } else {
+            setErrorBirthInput('Data inválida');
+          }
+        } else {
+          var today = new Date();
+          if (
+            parseInt(yearStored, 10) <= today.getFullYear() &&
+            parseInt(yearStored, 10) > 0 &&
+            !isNaN(Number(yearStored))
+          ) {
+            setErrorBirthInput('');
+          } else {
+            setErrorBirthInput('Data inválida');
           }
         }
-        
       }
-      
-      validateBirthInput('day')
-      validateBirthInput('month')
-      validateBirthInput('year')
-      
-  }, [dayStored, monthStored, yearStored]);
 
-useEffect(() => {
+      validateBirthInput('day');
+      validateBirthInput('month');
+      validateBirthInput('year');
+    },
+    [dayStored, monthStored, yearStored],
+  );
 
-  const maximumInstallment = 10
+  useEffect(
+    () => {
+      const maximumInstallment = 10;
 
-  function validateInstallmentOptions(){
-    if( (parseInt(installmentOptions,10) >= 0) && (parseInt(installmentOptions,10) <= maximumInstallment) && (!isNaN(parseInt(installmentOptions,10)))){
-      setErrorInstallmentOptions('')
-    }
-    else{
-      setErrorInstallmentOptions('Parcelamento inválido')
-    }
-  }
+      function validateInstallmentOptions() {
+        if (
+          parseInt(installmentOptions, 10) >= 0 &&
+          parseInt(installmentOptions, 10) <= maximumInstallment &&
+          !isNaN(parseInt(installmentOptions, 10))
+        ) {
+          setErrorInstallmentOptions('');
+        } else {
+          setErrorInstallmentOptions('Parcelamento inválido');
+        }
+      }
 
-  validateInstallmentOptions()
+      validateInstallmentOptions();
+    },
+    [installmentOptions],
+  );
 
-}, [installmentOptions]);
+  useEffect(
+    () => {
+      validateInput('cardNumber');
+    },
+    [cardNumberStored],
+  );
 
+  useEffect(
+    () => {
+      validateInput('securityNumber');
+    },
+    [securityNumberStored],
+  );
 
-  useEffect(() => {
-    validateInput('cardNumber')
-  }, [cardNumberStored]);
-  
-  useEffect(() => {
-    validateInput('securityNumber')
-  }, [securityNumberStored]);
-  
-  useEffect(() => {
-    validateInput('cardName')
-  }, [cardNameStored]);
+  useEffect(
+    () => {
+      validateInput('cardName');
+    },
+    [cardNameStored],
+  );
 
   // Post order
   async function handlePostOrder() {
-    try{
+    try {
       const address_id = address.address_id;
-      await api.post(`/order`, {
-        address_id: address_id,
-        service_code: serviceCode,
-        products: products,
-      },
-      {
-        headers: { authorization: `bearer ${token}` },
-
-      });
-    }
-    catch(error){
+      await api.post(
+        `/order`,
+        {
+          address_id: address_id,
+          service_code: serviceCode,
+          products: products,
+        },
+        {
+          headers: { authorization: `bearer ${token}` },
+        },
+      );
+    } catch (error) {
       console.warn(error);
-      alert("Erro ao criar um pedido.");
+      alert('Erro ao criar um pedido.');
+      history.push('Error');
     }
   }
-  
-  // Lista dos produtos para finalizar pedido 
+
+  // Lista dos produtos para finalizar pedido
   async function getProducts() {
     try {
-      const response = await api.get("/cart", {
+      const response = await api.get('/cart', {
         headers: {
-          authorization: `bearer ${token}` 
+          authorization: `bearer ${token}`,
         },
       });
       // if(response.data.length>0){
-        setProducts([...response.data]);
+      setProducts([...response.data]);
       // }
       // else{
       //   history.push('/')
       // }
     } catch (error) {
       console.warn(error);
+      history.push('Error');
     }
   }
-  
+
   useEffect(() => {
     try {
       getProducts();
     } catch (error) {
       console.warn(error);
-      alert("Erro ao buscar os produtos.");
+      alert('Erro ao buscar os produtos.');
     }
   }, []);
 
@@ -192,187 +209,179 @@ useEffect(() => {
     const response = await api.get(`/address/${user_id}`, {
       headers: { authorization: `bearer ${token}` },
     });
-    setAddress({...response.data.adresses[0]});
+    setAddress({ ...response.data.adresses[0] });
   }
-  
+
   useEffect(() => {
     try {
       getAddress();
     } catch (error) {
       console.warn(error);
-      alert("Erro ao buscar o endereço.");
+      alert('Erro ao buscar o endereço.');
+      history.push('Error');
     }
   }, []);
 
   // Chamado quando address atualiza (depois do popUp fechar)
-  useEffect(() => {
-  }, [address]);
+  useEffect(() => {}, [address]);
 
-
-  function validateInput(type){
-
-    if(type === 'cardNumber'){
-      
-      if(!isNaN(Number(cardNumberStored)) ){
-        setErrorInputCardNumber('')
+  function validateInput(type) {
+    if (type === 'cardNumber') {
+      if (!isNaN(Number(cardNumberStored))) {
+        setErrorInputCardNumber('');
+      } else {
+        setErrorInputCardNumber('Número de cartão incorreto');
       }
-      else{
-        setErrorInputCardNumber('Número de cartão incorreto')
+    } else if (type === 'securityNumber') {
+      if (!isNaN(Number(securityNumberStored))) {
+        setErrorInputSecurityNumber('');
+      } else {
+        setErrorInputSecurityNumber('Código incorreto');
       }
-    }else if(type ==='securityNumber'){
-
-      if(!isNaN(Number(securityNumberStored) )){
-        setErrorInputSecurityNumber('')
-      }else{
-        setErrorInputSecurityNumber('Código incorreto')
-      }
-
-    }else{
-      if(!isNaN(Number(cardNameStored) )){
-        setErrorInputCardName('Nome inválido')
-      }
-      else{
-        setErrorInputCardName('')
+    } else {
+      if (!isNaN(Number(cardNameStored))) {
+        setErrorInputCardName('Nome inválido');
+      } else {
+        setErrorInputCardName('');
       }
     }
   }
 
-  function handleCloseModal(){
+  function handleCloseModal() {
     setOpenModal(false);
   }
 
-  function handleOpenModal(){
+  function handleOpenModal() {
     setOpenModal(true);
   }
 
   return (
     <div className="fullContent">
-
       <h1>Lista de Produtos</h1>
       <div className="mainContent">
         <div className="leftSide">
-
           <div className="aboutListProducts">
-            { products.length == 0 ? 
-                  <div className="aboutProduct">
-                    <div className="infoProduct">
-                      <span>
-                        Sem produtos
-                      </span>
-                    </div>
-                  </div>
-              :
-              products.map( (product, index) => {
+            {products.length == 0 ? (
+              <div className="aboutProduct">
+                <div className="infoProduct">
+                  <span>Sem produtos</span>
+                </div>
+              </div>
+            ) : (
+              products.map((product, index) => {
                 return (
                   <div className="aboutProduct" key={index}>
-                    <img src={bucketAWS+product.img_link} alt={product.name}/>
+                    <img
+                      src={bucketAWS + product.img_link}
+                      alt={product.name}
+                    />
                     <div className="infoProduct">
-                      <span>
-                        Nome do produto: {product.name}
-                      </span>
-                      <span>
-                        Quantidade total: {product.amount} uni.
-                      </span>
-                      <span>
-                        Tamanho: {product.size}
-                      </span>
-                      <span>
-                        Preço único: R$ {product.price}
-                      </span>
-                      <span>
-                        Total: R$ {product.amount * product.price}
-                      </span>
+                      <span>Nome do produto: {product.name}</span>
+                      <span>Quantidade total: {product.amount} uni.</span>
+                      <span>Tamanho: {product.size}</span>
+                      <span>Preço único: R$ {product.price}</span>
+                      <span>Total: R$ {product.amount * product.price}</span>
                     </div>
                   </div>
                 );
               })
-            }
+            )}
           </div>
-            <div className="aboutPayment">
-              <h2>Pagamento</h2>
+          <div className="aboutPayment">
+            <h2>Pagamento</h2>
 
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                >
-                  Cartão de Crédito
-                </AccordionSummary>
-                <AccordionDetails>
-
-                  <div className="creditCardInfo">
-                    <div className="inputsTogether">
-                      <InputWithLabel label="Número do Cartão" width={280} 
-                        setInfo={setCardNumber} 
-                        maxLenght={16}
-                        error={cardNumberStored? errorInputCardNumber: ''}
-                      />
-                      <InputWithLabel label="Código de segurança" 
-                        width={70}
-                        setInfo={setSecurityNumber}
-                        maxLenght={3}
-                        error={securityNumberStored? errorInputSecurityNumber: ''}
-                      />
-                    </div>
-                    <div className="inputsTogether">
-                      <InputWithLabel label="Nome gravado no cartão" 
-                        width={280}
-                        setInfo={setCardName}
-                        maxLenght={50}
-                        error={cardNameStored? errorInputCardName: ''}
-                      />
-                      <div className="divInputLabelError" >
-                        <label htmlFor="input" >Data de Nascimento</label>
-                        <div className="inputsBirthday" >
-                          <input type="text" name="dayBirth" onChange={(e) => setDayStored(e.target.value)} />
-                          <input type="text" name="monthBirth" onChange={(e) => setMonthStored(e.target.value)} />
-                          <input type="text" name="yearBirth" onChange={(e) => setYearStored(e.target.value)} />
-                        </div>
-                        <span style={{color: '#ff0033', fontSize: '15px'}}>
-                          {errorBirthInput}
-                        </span>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                Cartão de Crédito
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className="creditCardInfo">
+                  <div className="inputsTogether">
+                    <InputWithLabel
+                      label="Número do Cartão"
+                      width={280}
+                      setInfo={setCardNumber}
+                      maxLenght={16}
+                      error={cardNumberStored ? errorInputCardNumber : ''}
+                    />
+                    <InputWithLabel
+                      label="Código de segurança"
+                      width={70}
+                      setInfo={setSecurityNumber}
+                      maxLenght={3}
+                      error={
+                        securityNumberStored ? errorInputSecurityNumber : ''
+                      }
+                    />
+                  </div>
+                  <div className="inputsTogether">
+                    <InputWithLabel
+                      label="Nome gravado no cartão"
+                      width={280}
+                      setInfo={setCardName}
+                      maxLenght={50}
+                      error={cardNameStored ? errorInputCardName : ''}
+                    />
+                    <div className="divInputLabelError">
+                      <label htmlFor="input">Data de Nascimento</label>
+                      <div className="inputsBirthday">
+                        <input
+                          type="text"
+                          name="dayBirth"
+                          onChange={e => setDayStored(e.target.value)}
+                        />
+                        <input
+                          type="text"
+                          name="monthBirth"
+                          onChange={e => setMonthStored(e.target.value)}
+                        />
+                        <input
+                          type="text"
+                          name="yearBirth"
+                          onChange={e => setYearStored(e.target.value)}
+                        />
                       </div>
+                      <span style={{ color: '#ff0033', fontSize: '15px' }}>
+                        {errorBirthInput}
+                      </span>
                     </div>
-
-                    <div className="inputsTogether">
-
-                      <div className="divInputLabelError" >
-                        <label >Opções de Parcelamento</label>
-                        <div className="inputsInstallment" >
-                          <input type="text" name="input" 
-                            style={{width: '150px'}}
-                            onChange={(e) => setInstallmentOptions(e.target.value)} />
-                        </div>
-                        <span style={{color: '#ff0033', fontSize: '15px'}}>
-                          {errorInstallmentOptions}
-                        </span>
-                      </div>
-                    </div>
-
                   </div>
 
-                  <Button variant="contained" color="#8ED7CD">
-                    Adicionar
-                  </Button>
+                  <div className="inputsTogether">
+                    <div className="divInputLabelError">
+                      <label>Opções de Parcelamento</label>
+                      <div className="inputsInstallment">
+                        <input
+                          type="text"
+                          name="input"
+                          style={{ width: '150px' }}
+                          onChange={e => setInstallmentOptions(e.target.value)}
+                        />
+                      </div>
+                      <span style={{ color: '#ff0033', fontSize: '15px' }}>
+                        {errorInstallmentOptions}
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
-                </AccordionDetails>
-              </Accordion>
-              <Accordion>
-              <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                >
-                  Boleto
-                </AccordionSummary>
-                <AccordionDetails>
-                  Boleto aqui BLABLABLA
-
-                  <Button variant="contained" color="#8ED7CD">
-                    Gerar Boleto
-                  </Button>
-
-                </AccordionDetails>
-              </Accordion>
-
-            </div>
+                <Button variant="contained" color="#8ED7CD">
+                  Adicionar
+                </Button>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                Boleto
+              </AccordionSummary>
+              <AccordionDetails>
+                Boleto aqui BLABLABLA
+                <Button variant="contained" color="#8ED7CD">
+                  Gerar Boleto
+                </Button>
+              </AccordionDetails>
+            </Accordion>
+          </div>
         </div>
 
         <div className="rightSide">
@@ -382,26 +391,23 @@ useEffect(() => {
             </div>
 
             <div className="addressInfo">
-
               <div className="addressConfirmation">
                 <strong>Endereço de entrega</strong>
                 <span>
                   {address.street}/ {address.complement}
                 </span>
-                <span>
-                  Bairro: {address.neighborhood}
-                </span>
+                <span>Bairro: {address.neighborhood}</span>
                 <span>
                   Cidade: {address.city} - {address.state} - {address.country}
                 </span>
-                <span>
-                  CEP: {address.zip_code}
-                </span>
+                <span>CEP: {address.zip_code}</span>
               </div>
 
               <div className="changeAddressArea">
                 <span>Quer receber seus produtos em outro endereço?</span>
-                <Button type="button" onClick={() => handleOpenModal()} >Alterar endereço</Button>
+                <Button type="button" onClick={() => handleOpenModal()}>
+                  Alterar endereço
+                </Button>
               </div>
             </div>
 
@@ -411,10 +417,10 @@ useEffect(() => {
                 <div className="leftValueShipping">
                   <LocalShippingIcon />
                   <span>Valor</span>
-                </div> 
+                </div>
                 <div className="rightValueShipping">
                   <span>R$25,00</span>
-                </div> 
+                </div>
               </div>
             </div>
 
@@ -422,20 +428,20 @@ useEffect(() => {
               <strong>Total</strong>
               <strong>R$525,00</strong>
             </div>
-
           </div>
         </div>
-
       </div>
 
-      <Button type="button" 
+      <Button
+        type="button"
         className="purchaseFinished"
         onClick={() => handlePostOrder()}
       >
         Finalizar Compra
       </Button>
-      <PopUpChangeAddress 
-        open={openModal} handleClose={handleCloseModal} 
+      <PopUpChangeAddress
+        open={openModal}
+        handleClose={handleCloseModal}
         setAddress={setAddress}
         address={address}
       />

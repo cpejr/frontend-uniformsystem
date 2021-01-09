@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
+import { useHistory } from 'react-router-dom';
 
 import { FaFilter, FaSearch, FaTruckLoading } from 'react-icons/fa';
 import _ from 'lodash';
-
 
 const FILTER_OPTIONS = [
   'FEMININO',
@@ -14,29 +14,27 @@ const FILTER_OPTIONS = [
   'UNIVERSITÁRIO',
   'EMPRESARIAL',
   'BONÉS',
-]
+];
 const PRICE_OPTIONS = [
   'Até R$25,00',
   'R$25,00 - R$50,00',
   'R$50,00 - R$100,00',
   'R$100,00 - R$150,00',
   'Acima de R$150,00',
-  'Qualquer valor'
-]
-
+  'Qualquer valor',
+];
 
 function Loja() {
-
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState({ product_type: [], gender: [] });
   const page = useRef(1);
   const pageLoading = useRef(false);
 
   const inputSearch = useRef(null);
-
-  async function getProducts() { //fazendo a requisição pro back
+  const history = useHistory();
+  async function getProducts() {
+    //fazendo a requisição pro back
     try {
-
       let query = [];
       if (filter.product_type.length > 0) {
         let products_type = filter.product_type.join(',');
@@ -66,20 +64,23 @@ function Loja() {
       }
 
       const response = await api.get(`/productmodels?${query.join('&')}`);
-      return (response.data.models);
-    }
-    catch (error) {
-      console.warn(error)
-      alert("Erro no servidor.");
+      return response.data.models;
+    } catch (error) {
+      console.warn(error);
+      alert('Erro no servidor.');
+      history.push('Error');
     }
   }
 
-  useEffect(() => {
-    page.current = 1;
-    getProducts().then(newProducts => {
-      setProducts(newProducts);
-    });
-  }, [filter])
+  useEffect(
+    () => {
+      page.current = 1;
+      getProducts().then(newProducts => {
+        setProducts(newProducts);
+      });
+    },
+    [filter],
+  );
 
   function handleInputChange(e) {
     const newFilter = { ...filter };
@@ -91,7 +92,7 @@ function Loja() {
         break;
 
       case 'MASCULINO':
-        fieldGender = 'M'
+        fieldGender = 'M';
         break;
 
       case 'ESPORTIVO':
@@ -107,24 +108,22 @@ function Loja() {
         break;
 
       case 'BONÉS':
-        fieldProductType = 'cap'
+        fieldProductType = 'cap';
         break;
-      default: break;
+      default:
+        break;
     }
 
     const checked = e.target.checked;
 
     if (checked) {
+      if (fieldProductType) newFilter.product_type.push(fieldProductType);
+      else if (fieldGender) newFilter.gender.push(fieldGender);
+    } else {
       if (fieldProductType)
-        newFilter.product_type.push(fieldProductType);
+        _.remove(newFilter.product_type, el => el === fieldProductType);
       else if (fieldGender)
-        newFilter.gender.push(fieldGender);
-    }
-    else {
-      if (fieldProductType)
-        _.remove(newFilter.product_type, (el) => el === fieldProductType);
-      else if (fieldGender)
-        _.remove(newFilter.gender, (el) => el === fieldGender);
+        _.remove(newFilter.gender, el => el === fieldGender);
     }
     setFilter(newFilter);
   }
@@ -162,82 +161,79 @@ function Loja() {
         max = 0;
         break;
 
-      default: break;
-
+      default:
+        break;
     }
 
-    if (min > 0)
-      newFilter.min = min;
-    if (max > 0)
-      newFilter.max = max;
+    if (min > 0) newFilter.min = min;
+    if (max > 0) newFilter.max = max;
 
     setFilter(newFilter);
-
   }
-
 
   function findProduct() {
     const nameToSearch = inputSearch.current.value;
 
-    const filterWithName = { ...filter }
+    const filterWithName = { ...filter };
 
     filterWithName.name = nameToSearch;
-    
-    setFilter(filterWithName)
+
+    setFilter(filterWithName);
 
     // alert("Você está pesquisando!")
   }
 
-  useEffect(() => {
-    function handleScroll() {
-      const windowHeight =
-        "innerHeight" in window
-          ? window.innerHeight
-          : document.documentElement.offsetHeight;
-      const body = document.body;
-      const html = document.documentElement;
-      const docHeight = Math.max(
-        body.scrollHeight,
-        body.offsetHeight,
-        html.clientHeight,
-        html.scrollHeight,
-        html.offsetHeight
-      );
-      const windowBottom = windowHeight + window.pageYOffset;
-      if (windowBottom >= docHeight) {
-        //bottom reached
-        //Fuçã que faz requisição no back pela proxima pagina
-        loadNextPage();
-        //.then(setOngsData)
-        //.catch((error) => console.error(error));
+  useEffect(
+    () => {
+      function handleScroll() {
+        const windowHeight =
+          'innerHeight' in window
+            ? window.innerHeight
+            : document.documentElement.offsetHeight;
+        const body = document.body;
+        const html = document.documentElement;
+        const docHeight = Math.max(
+          body.scrollHeight,
+          body.offsetHeight,
+          html.clientHeight,
+          html.scrollHeight,
+          html.offsetHeight,
+        );
+        const windowBottom = windowHeight + window.pageYOffset;
+        if (windowBottom >= docHeight) {
+          //bottom reached
+          //Fuçã que faz requisição no back pela proxima pagina
+          loadNextPage();
+          //.then(setOngsData)
+          //.catch((error) => console.error(error));
+        }
       }
-    }
-    function loadNextPage() {
-      if (!pageLoading.current) {
-        pageLoading.current = true;
-        page.current++;
-        getProducts().then(newProducts => {
-          setProducts([...products, ...newProducts]);
-          pageLoading.current = false;
-        })
+      function loadNextPage() {
+        if (!pageLoading.current) {
+          pageLoading.current = true;
+          page.current++;
+          getProducts().then(newProducts => {
+            setProducts([...products, ...newProducts]);
+            pageLoading.current = false;
+          });
+        }
       }
-    }
-    window.addEventListener("scroll", handleScroll);
+      window.addEventListener('scroll', handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products]);
-
-
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [products],
+  );
 
   return (
     <div className="shop">
       <div className="search">
         <input
-          id='search'
-          type='text'
+          id="search"
+          type="text"
           ref={inputSearch}
           placeholder="O que você precisa?"
         />
@@ -246,54 +242,57 @@ function Loja() {
       </div>
 
       <div className="shopContainer">
-
         <div className="filterContainer">
           <div className="filterTitleProducts">
-            <FaFilter />  FILTRAR
+            <FaFilter /> FILTRAR
           </div>
           <div className="filterContent">
             {FILTER_OPTIONS.map((option, index) => {
-                return (
-                  <div className="filtersProducts">
-                    <input type="checkbox" id={`filter-${index}`} name={option} onChange={handleInputChange} className="checkbox"/>
-                    <label for={`filter-${index}`} >{option}</label>
-                  </div>
-                )
-              })
-            }
+              return (
+                <div className="filtersProducts">
+                  <input
+                    type="checkbox"
+                    id={`filter-${index}`}
+                    name={option}
+                    onChange={handleInputChange}
+                    className="checkbox"
+                  />
+                  <label for={`filter-${index}`}>{option}</label>
+                </div>
+              );
+            })}
 
             <div className="priceContainer">
-              <br></br>
+              <br />
               <p>PREÇO</p>
 
               {PRICE_OPTIONS.map((price, index) => {
                 return (
                   <div className="filterPrice">
-                    <input type="radio" id={`price-${index}`} name="price" onChange={handlePriceChange} value={price} className="radio"/>
+                    <input
+                      type="radio"
+                      id={`price-${index}`}
+                      name="price"
+                      onChange={handlePriceChange}
+                      value={price}
+                      className="radio"
+                    />
                     <label for={`price-${index}`}>{price}</label>
-                    
                   </div>
-                )
+                );
               })}
             </div>
           </div>
         </div>
 
         <div className="productContainer">
-          {products.map(product =>
+          {products.map(product => (
             <ProductCard key={product.product_model_id} product={product} />
-          )}
+          ))}
         </div>
       </div>
-
-
-
-
     </div>
-
   );
 }
 
-
 export default Loja;
-

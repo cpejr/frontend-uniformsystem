@@ -34,6 +34,7 @@ import FooterAdm from "./components/FooterAdm";
 import SidebarAdm from "./components/SidebarAdm";
 
 import { isAuthenticated } from "./services/auth";
+import LoginContext from "./contexts/LoginContext";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -96,54 +97,75 @@ function MenuRoutes() {
 }
 
 function AdmRoutes() {
+
+  const { user } = useContext(LoginContext);
+  if (user === "notYet") return <Loading/>;
+  if (user === null || user.type === "admin") return <Redirect to="/" />;
+  else
+    return (
+      <div>
+        <HeaderAdm />
+        <SidebarAdm>
+          <Switch>
+            <Route path="/adm/home" export exact component={HomeEditable} />
+            <Route path="/adm/pedidos" export exact component={OrdersAdm} />
+            <Route
+              path="/adm/pedidoespecifico"
+              export
+              exact
+              component={EspecificOrderAdm}
+            />
+            <Route path="/adm/produtos" export exact component={ProductsAdm} />
+            <Route
+              path="/adm/funcionarios"
+              export
+              exact
+              component={EmployeeAdm}
+            />
+            <Route
+              path="/adm/funcionarios/cadastro"
+              export
+              exact
+              component={CadastroFunc}
+            />
+            <Route
+              path="/adm/produtos/cadastro"
+              export
+              exact
+              component={RegisterProduct}
+            />
+            <Route
+              path="/adm/produtos/:product_id"
+              export
+              exact
+              component={EditProduct}
+            />
+            <Route
+              path="/adm/funcionarios/funcionarioEspecifico"
+              export
+              exact
+              component={EspecificEmployee}
+            />
+            <Route path="*" export exact component={Error} />
+          </Switch>
+        </SidebarAdm>
+        <FooterAdm />
+      </div>
+    );
+}
+
+function Loading(props){
+  const { user } = useContext(LoginContext);
+  useEffect(()=>{
+    console.log("UseEffect Loading: ", user);
+    if (user.type === "admin") return <Redirect to="/"/>;
+    if (user === null) return <Redirect to="/login" />;
+  },[user])
   return (
-    <div>
-      <HeaderAdm />
-      <SidebarAdm>
-        <Switch>
-          <Route path="/adm/home" export exact component={HomeEditable} />
-          <Route path="/adm/pedidos" export exact component={OrdersAdm} />
-          <Route
-            path="/adm/pedidoespecifico"
-            export
-            exact
-            component={EspecificOrderAdm}
-          />
-          <Route path="/adm/produtos" export exact component={ProductsAdm} />
-          <Route
-            path="/adm/funcionarios"
-            export
-            exact
-            component={EmployeeAdm}
-          />
-          <Route
-            path="/adm/funcionarios/cadastro"
-            export
-            exact
-            component={CadastroFunc}
-          />
-          <Route
-            path="/adm/produtos/cadastro"
-            export
-            exact
-            component={RegisterProduct}
-          />
-          <Route
-            path="/adm/produtos/:product_id"
-            export
-            exact
-            component={EditProduct}
-          />
-          <Route
-            path="/adm/funcionarios/funcionarioEspecifico"
-            export
-            exact
-            component={EspecificEmployee}
-          />
-          <Route path="*" export exact component={Error} />
-        </Switch>
-      </SidebarAdm>
-      <FooterAdm />
+    <div className="loading">
+      <div className="loading-logo">
+        <ClipLoader size={100} color={"#123abc"} loading={true} />
+      </div>
     </div>
   );
 }

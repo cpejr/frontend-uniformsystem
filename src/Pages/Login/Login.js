@@ -97,7 +97,7 @@ function Login(){
           //Aqui manda para a rota logo apos o login
           history.push("/adm/home");
         } else {
-          alert(`Usuario ou senha incorretos!`);
+          alert(`Email ou senha incorretos!`);
         }
         setLoading(false);
 

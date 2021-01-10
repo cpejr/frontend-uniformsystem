@@ -349,14 +349,20 @@ function Produto() {
                                 <div
                                     id='stylized_button'
                                     className='cart_button'
+                                    onClick={() => AddToCart()}
                                 >
-                                    <FaShoppingCart
-                                        className='icon'
-                                        size='35px'
-                                    />
-                                    <div className='text' onClick={() => AddToCart()}>
-                                        {loadingAddToCart ? <CircularProgress size={25} /> : "ADICIONAR AO CARRINHO"}
-                                    </div>
+                                    {
+                                        loadingAddToCart ? <CircularProgress size={35} color="red"/> :
+                                        <>
+                                            <FaShoppingCart
+                                                className='icon'
+                                                size='35px'
+                                            />
+                                            <div className='text'>
+                                                ADICIONAR AO CARRINHO
+                                            </div>
+                                        </>
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -16,6 +16,8 @@ import Camisa from "../../Assets/Foto_camisa.png";
 
 import { Carousel } from "react-bootstrap";
 
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 const secundary_images = [
     {
         src: Image,
@@ -57,6 +59,11 @@ function Produto() {
 
     const [Cep, setCep] = useState(null);
     const [Quantity, setQuantity] = useState(null);
+
+    const [loadingCep, setLoadingCep] = useState(false);
+    const [loadingLogo, setLoadingLogo] = useState(false);
+    const [loadingAddToCart, setLoadingAddToCart] = useState(false);
+
 
     //Pegando o id do produto pelo link
     const { product_id } = useParams();
@@ -192,15 +199,33 @@ function Produto() {
     }
     
     function AddToCart(){
-        window.alert('Voce AddToCart !!')
+        // window.alert('Voce AddToCart !!');
+
+        setLoadingAddToCart(true);
+
+        setTimeout(() => {
+            setLoadingAddToCart(false);
+        }, 3000);
     }
 
     function CalculateCEP(){
-        window.alert('Voce CalculateCEP !!')
+        // window.alert('Voce CalculateCEP !!');
+
+        setLoadingCep(true);
+
+        setTimeout(() => {
+            setLoadingCep(false);
+        }, 3000);
     }
 
     function AddALogo(){
-        window.alert('Voce AddALogo !!')
+        // window.alert('Voce AddALogo !!');
+
+        setLoadingLogo(true);
+
+        setTimeout(() => {
+            setLoadingLogo(false);
+        }, 3000);
     }
 
     return (
@@ -277,8 +302,8 @@ function Produto() {
                                         placeholder=' CEP'
                                         onChange={(e) => setCep(e.target.value)}
                                     />{" "}
-                                    <button id='stylized_button' onClick={()=>CalculateCEP()}>
-                                        Calcular
+                                    <button id='stylized_button' onClick={() => CalculateCEP()}>
+                                        {loadingCep ? <CircularProgress size={15} /> : "Calcular"}
                                     </button>
                                 </div>
 
@@ -315,9 +340,9 @@ function Produto() {
                                 <button
                                     id='stylized_button'
                                     className='send_logo'
-                                    onClick={()=>AddALogo()}
+                                    onClick={() => AddALogo()}
                                 >
-                                    Carregue a sua logo!
+                                    {loadingLogo ? <CircularProgress size={15} /> : "Carregue a sua logo!"}
                                 </button>
                             </div>
                             <div className='div_cart_button'>
@@ -329,8 +354,8 @@ function Produto() {
                                         className='icon'
                                         size='35px'
                                     />
-                                    <div className='text' onClick={()=>AddToCart()}>
-                                        <p>ADICIONAR AO CARRINHO</p>
+                                    <div className='text' onClick={() => AddToCart()}>
+                                        {loadingAddToCart ? <CircularProgress size={25} /> : "ADICIONAR AO CARRINHO"}
                                     </div>
                                 </div>
                             </div>

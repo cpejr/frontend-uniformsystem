@@ -6,6 +6,7 @@ import camisa from '../../../../Assets/camisa.jpg';
 
 
 function EspecificOrderAdm() {
+    var status = "delivered";
 
     return (
         <div className="order-container">
@@ -15,7 +16,7 @@ function EspecificOrderAdm() {
                     <span className="title">DETALHES DO PEDIDO</span>
                     <div className="status">
                         <span>STATUS: </span>
-                        <div>Pendente</div> 
+                        <div>{status}</div> 
                     </div>
                 </div>
 
@@ -25,7 +26,25 @@ function EspecificOrderAdm() {
                         <span className="date">Data do pedido: 01/01/2021</span>
                         <span className="price">Valor do pedido: R$1000,00</span>
                     </div>
-                    <button className="button-status">Mudar status para "Em produção"</button>
+                    {
+                        (status === "pending") &&
+                        <div>
+                            <button className="button-status">Mudar status para "Em produção"</button>
+                        </div>
+                    }
+                    {
+                        (status === "preparing") &&
+                        <div>
+                            <input placeholder="código de rastramento" style={{marginRight: "10px"}}></input>
+                            <button className="button-status">Entregar pedido</button>
+                        </div>
+                    }
+                    {
+                        (status === "delivered") &&
+                        <div>
+                            <span className="deliveryman">Entregador: 007</span>
+                        </div>
+                    }
                 </div>
 
             </div>
@@ -39,6 +58,22 @@ function EspecificOrderAdm() {
                     </tr>
                 </thead>
                 <tbody>
+                    <tr className="oder-tr-content">
+                        <td className="amount">10</td>
+                        <td className="products">
+                            <img src={camisa} className="image-product" />
+                            <span className="product-name">Camisa Personalisada 1</span>
+                        </td>
+                        <td className="logo">Baixar imagem</td>
+                    </tr>
+                    <tr className="oder-tr-content">
+                        <td className="amount">10</td>
+                        <td className="products">
+                            <img src={camisa} className="image-product" />
+                            <span className="product-name">Camisa Personalisada 1</span>
+                        </td>
+                        <td className="logo">Baixar imagem</td>
+                    </tr>
                     <tr className="oder-tr-content">
                         <td className="amount">10</td>
                         <td className="products">

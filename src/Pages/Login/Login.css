@@ -1,19 +1,19 @@
 /* Ajustes TextField Material UI */
-.MuiOutlinedInput-root{
+.login .MuiOutlinedInput-root{
     border-radius: 0px;
 }
 /* Ajustes TextField Material UI */
-.MuiInputBase-root{
+.login .MuiInputBase-root{
     border-radius: 20px;
 } 
 /* Ajustes no botão do Material UI */
-.MuiButton-root  {
+.login .MuiButton-root  {
     margin-top: 24px !important;
     background: #3f51b5 !important;
     color: #fafafa !important;
 }
 
-.MuiButton-root:hover{
+.login .MuiButton-root:hover{
     background: #6777d3 !important;
 }
 

@@ -53,7 +53,6 @@ const LoginContextProvider = (props) => {
     localStorage.removeItem("accessToken");
     setUser(null);
     setToken(null);
-    history.push('/');
   }
 
   return (

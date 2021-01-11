@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
 
+import { LoginContext } from '../../../contexts/LoginContext';
 import Logo from "../../../Assets/Logo_1.png";
 
 //importando icones:
@@ -13,6 +14,9 @@ import DropDownCartContent from "../Components/DropDownCartContent";
 function MobileHeader() {
     const [ClickLogin, setClickLogin] = useState(false);
     const [ClickCart, setClickCart] = useState(false);
+
+    const { user } = useContext(LoginContext);
+    const currentUser = !user || user === 'notYet' ? null : user[0];
 
     return (
         <div className="cell_header">
@@ -53,24 +57,29 @@ function MobileHeader() {
                             />
                         )}
                     </div>
-
-                    <div
-                        className="all_cart"
-                        style={{ position: "relative", margin: 0 }}
-                    >
-                        <div
-                            className="cart"
-                            onClick={() => setClickCart(!ClickCart)}
-                        >
-                            <FaShoppingCart
-                                className="cart_icon"
-                                style={{ margin: "0 30px" }}
-                            />
-                        </div>
-                        {ClickCart && (
-                            <DropDownCartContent setClickCart={setClickCart} />
-                        )}
-                    </div>
+                    {
+                        currentUser ? 
+                            <div
+                                className="all_cart"
+                                style={{ position: "relative", margin: 0 }}
+                            >
+                                <div
+                                    className="cart"
+                                    onClick={() => setClickCart(!ClickCart)}
+                                >
+                                    <FaShoppingCart
+                                        className="cart_icon"
+                                        style={{ margin: "0 30px" }}
+                                    />
+                                </div>
+                                {ClickCart && (
+                                    <DropDownCartContent setClickCart={setClickCart} />
+                                )}
+                            </div>
+                        :
+                            <>
+                            </>
+                    }
                 </div>
             </div>
         </div>

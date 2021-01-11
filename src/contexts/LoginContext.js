@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { useHistory } from 'react-router-dom';
 import api from "../services/api";
 
 export const LoginContext = createContext();
@@ -8,6 +9,8 @@ const LoginContextProvider = (props) => {
   const [user, setUser] = useState("notYet");
   //Esses not yet sao gambiarra, por algum motivo o context ta renderizando de novo na atualizacao de pagina
   //Nao era pra fazer isso.
+
+  const history = useHistory();
 
   useEffect(() => {
     
@@ -50,6 +53,7 @@ const LoginContextProvider = (props) => {
     localStorage.removeItem("accessToken");
     setUser(null);
     setToken(null);
+    history.push('/');
   }
 
   return (

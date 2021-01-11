@@ -68,7 +68,7 @@ export default function DropDownLoginContent(props) {
         if (User.length > 0 && Password.length > 6) {
             try {
                 setLoading(true);
-                const response = await api.post("login", {
+                const response = await api.post("/login", {
                     email: User,
                     password: Password,
                 });
@@ -91,9 +91,10 @@ export default function DropDownLoginContent(props) {
 
     async function handleForgot(e) {
         try {
-            const response = await api.post("sendpassword", {
+            const response = await api.post("/sendpassword", {
                 email: Email,
             });
+            console.log('aqui', response);
         } catch (error) {
             console.warn(error);
             alert("E-mail não reconhecido. Verifique se escreveu corretamete ou faça o cadastro! :) ");

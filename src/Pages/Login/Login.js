@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link, Route } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, TextField, CircularProgress } from '@material-ui/core';
 import { LoginContext } from "../../contexts/LoginContext";
 import api from "../../services/api";
@@ -9,7 +9,7 @@ import './Login.css';
 function Login(){
 
   const { signIn } = useContext(LoginContext);
-  const { history } = Route;
+  const history = useHistory();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -89,11 +89,17 @@ function Login(){
       setErrorPasswordMessage('');
 
       try {
-        const response = await api.post("login", {email, password});
+        const response = await api.post("/login", {
+          "email": email, 
+          "password": password
+        });
+        console.log('resposta', response)
         if (response.data && response.data.accessToken) {
+          console.log('entou aqui')
           const token = response.data.accessToken;
           const user = response.data.user;
           signIn(token, user);
+          console.log('auiq foi')
           //Aqui manda para a rota logo apos o login
           history.push("/adm/home");
         } else {
@@ -101,10 +107,10 @@ function Login(){
         }
         setLoading(false);
 
-      } catch (error) {
+      }catch(err) {
         setLoading(false);
         alert(`Acesso negado!`);
-        console.warn(error);
+        console.warn(err);
       }
 
     }

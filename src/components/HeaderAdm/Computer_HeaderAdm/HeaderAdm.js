@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./HeaderAdm.css";
 import { Link } from "react-router-dom";
 
 import Logo from "../../../Assets/Logo_1.png";
 
+import { LoginContext } from '../../../contexts/LoginContext';
+
 //importando icones:
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 
 function HeaderAdm() {
+
+    const { user, logOut } = useContext(LoginContext);
+
+    const currentUser = user[0];
 
     return (
         <div className="all_header">
@@ -22,12 +28,15 @@ function HeaderAdm() {
                     <div className="aboutTheUser">
                         <FaUserCircle />
                         <div className="divNameFunction" >
-                            <span>Algum Fulano Aí</span>
-                            <p>Administrador</p>
+                            <span>{currentUser.name}</span>
+                            <p>{currentUser.user_type === 'adm' ? "Administrador"
+                            :
+                                "Funcionário"
+                            }</p>
                         </div>
                     </div>
 
-                    <div className="logoutPart">
+                    <div className="logoutPart" onClick={() => logOut()}>
                         <span>Logout</span>
                         <FaSignOutAlt/>
                     </div>

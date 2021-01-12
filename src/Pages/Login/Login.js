@@ -100,7 +100,13 @@ function Login(){
           const user = response.data.user;
           signIn(token, user);
           //Aqui manda para a rota logo apos o login
-          history.push("/adm/home");
+          if(user[0].user_type === process.env.REACT_APP_ADM_ROLE){
+            history.push("/adm/home");
+          }else if(user[0].user_type === process.env.REACT_APP_EMPLOYEE_ROLE){
+            history.push("/adm/pedidos");
+          }else{
+            history.push("/");
+          }
         } else {
           alert(`Email ou senha incorretos!`);
         }

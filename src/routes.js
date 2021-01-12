@@ -34,7 +34,7 @@ import HeaderAdm from "./components/HeaderAdm";
 import FooterAdm from "./components/FooterAdm";
 import SidebarAdm from "./components/SidebarAdm";
 
-import { isAuthenticated, isADM, isADMOrEmployee, isClient } from "./services/auth";
+import { isAuthenticated, isADM, isADMOrEmployee, isClientOrADMOrEmployee } from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
 
 
@@ -46,7 +46,7 @@ const PrivateClientRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        isAuthenticated() && isClient(currentUser) ? (
+        isAuthenticated() && isClientOrADMOrEmployee(currentUser) ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -163,7 +163,7 @@ function AdmRoutes() {
               path="/adm/pedidos"  
               component={OrdersAdm} 
             />
-            <PrivateADMRoute
+            <PrivateADMOrEmployeeRoute
               path="/adm/pedidoespecifico"
               export
               component={EspecificOrderAdm}
@@ -211,16 +211,15 @@ function AdmRoutes() {
 
 function Loading(props){
   const { user } = useContext(LoginContext);
-  useEffect(()=>{
     console.log("UseEffect Loading: ", user);
     if (user.type === "adm") return <Redirect to="/adm/home"/>;
-    if (user === null) return <Redirect to="/login" />;
-  },[user])
-  return (
-    <div className="loading">
-      <div className="loading-logo">
-        <ClipLoader size={100} color={"#123abc"} loading={true} />
-      </div>
-    </div>
+    if ((user === null) || (user === 'notYet')) return <Redirect to="/login" />;
+    else 
+      return (
+        <div className="loading">
+          <div className="loading-logo">
+            <ClipLoader size={100} color={"#123abc"} loading={true} />
+          </div>
+        </div>
   );
 }

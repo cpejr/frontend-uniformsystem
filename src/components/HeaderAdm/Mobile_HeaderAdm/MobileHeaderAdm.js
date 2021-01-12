@@ -9,10 +9,8 @@ import { LoginContext } from '../../../contexts/LoginContext';
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 
 function MobileHeaderAdm() {
-
     const history = useHistory();
     const { user, logOut } = useContext(LoginContext);
-
     const currentUser = user[0];
 
     const handleLogOut = () => {

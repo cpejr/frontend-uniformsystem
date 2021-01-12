@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AiOutlineLeft } from 'react-icons/ai';
 
 import './EspecificOrderAdm.css';
 import camisa from '../../../../Assets/camisa.jpg';
 
+import CircularProgress from "@material-ui/core/CircularProgress"
+import { functionsIn } from 'lodash';
 
 function EspecificOrderAdm() {
+    const [loadingStatus, setLoadingStatus] = useState(false);
+
+    function ChangeStatus() {
+        setLoadingStatus(true);
+
+        setTimeout(() => {
+            setLoadingStatus(false);
+        }, 3000)
+    }
 
     return (
         <div className="order-container">
@@ -25,7 +36,9 @@ function EspecificOrderAdm() {
                         <span className="date">Data do pedido: 01/01/2021</span>
                         <span className="price">Valor do pedido: R$1000,00</span>
                     </div>
-                    <button className="button-status">Mudar status para "Em produção"</button>
+                    <button className="button-status" onClick={ () => ChangeStatus() }>
+                        {loadingStatus ? <CircularProgress size={25} color="red" /> : "Mudar status para 'Em produção'"}
+                    </button>
                 </div>
 
             </div>

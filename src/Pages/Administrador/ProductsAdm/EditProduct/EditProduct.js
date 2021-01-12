@@ -354,7 +354,7 @@ function EditProduct({history}) {
             <Button type="submit" className="finalButtonToRegister"
               onClick={handleSubmitNewProduct}
             >
-              {loading ? <CircularProgress /> : "SALVAR ALTERAÇÕES"}
+              {loading ? <CircularProgress color='red' /> : "SALVAR ALTERAÇÕES"}
             </Button>
           </div>
         </form>

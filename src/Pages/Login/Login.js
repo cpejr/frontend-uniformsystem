@@ -95,7 +95,6 @@ function Login(){
         });
         console.log('resposta', response)
         if (response.data && response.data.accessToken) {
-          console.log('entou aqui')
           const token = response.data.accessToken;
           const user = response.data.user;
           signIn(token, user);

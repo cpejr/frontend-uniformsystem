@@ -99,7 +99,6 @@ function Login(){
           const token = response.data.accessToken;
           const user = response.data.user;
           signIn(token, user);
-          console.log('auiq foi')
           //Aqui manda para a rota logo apos o login
           history.push("/adm/home");
         } else {

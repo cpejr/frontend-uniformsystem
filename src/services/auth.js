@@ -7,3 +7,15 @@ export const login = (token) => {
 export const logout = () => {
     localStorage.removeItem(TOKEN_KEY);
 };
+
+export const isADM = (user) => {
+    return user.user_type ===  process.env.REACT_APP_ADM_ROLE;
+};
+
+export const isADMOrEmployee = (user) => {
+    return (user.user_type === process.env.REACT_APP_EMPLOYEE_ROLE || user.user_type === process.env.REACT_APP_ADM_ROLE);
+};
+
+export const isClient = (user) => {
+    return ( user.user_type === process.env.REACT_APP_CLIENT_ROLE || user.user_type === process.env.REACT_APP_EMPLOYEE_ROLE || user.user_type === process.env.REACT_APP_ADM_ROLE ) ;
+};

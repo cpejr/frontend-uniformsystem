@@ -41,6 +41,11 @@ const LoginContextProvider = (props) => {
   }, []);
 
   function signIn(token, user) {
+    const existsToken = localStorage.getItem("accessToken");
+
+    if(existsToken){
+      localStorage.removeItem("accessToken");
+    }
     localStorage.setItem("accessToken", token);
     setUser(user);
     setToken(token);

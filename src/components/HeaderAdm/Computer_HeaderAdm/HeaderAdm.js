@@ -23,7 +23,7 @@ function HeaderAdm() {
         <div className="all_header">
             <div className="header_content">
                 <div className="logo_container">
-                    <Link to="/adm">
+                    <Link to="/">
                         <img src={Logo} alt="Logo" className="Logo" />
                     </Link>
                 </div>

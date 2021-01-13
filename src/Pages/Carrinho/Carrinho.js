@@ -26,7 +26,7 @@ function Carrinho() {
           amount: newAmount,
         },
         {
-          headers: { authorization: `bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
       products[product_key].amount = newAmount;
@@ -42,7 +42,7 @@ function Carrinho() {
     try {
       const id = products[product_key].product_in_cart_id;
       await api.delete(`/cart/${id}`, {
-        headers: { authorization: `bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       products.splice(product_key, 1);
       setProducts([...products]);
@@ -55,7 +55,7 @@ function Carrinho() {
 
   async function getProducts() {
     const response = await api.get('/cart', {
-      headers: { authorization: `bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` },
     });
     setProducts([...response.data]);
   }

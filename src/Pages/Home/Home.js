@@ -215,37 +215,35 @@ function Home() {
   return (
     <div className="fullContent">
       <div className="divCarousel">
-        {imagesCarousel.length > 0 ? (
-          <Carousel
-            controls={true}
-            indicators={true}
-            interval={1000}
-            prevIcon={<MdKeyboardArrowLeft />}
-            nextIcon={<MdKeyboardArrowRight />}
-          >
-            {imagesCarousel.map(item => {
-              return (
-                <Carousel.Item>
-                  <div className="teste">
-                    <img src={item.file} alt={item.imgAlt} />
-                  </div>
-                </Carousel.Item>
-              );
-            })}
-            {/* <Carousel.Item>
-                <div className="teste">
-                <img src={imagesCarousel[1].imgSrc} alt={imagesCarousel[1].imgAlt} />
-                </div>
-                </Carousel.Item>
-                <Carousel.Item>
-                <div className="teste">
-                <img src={imagesCarousel[2].imgSrc} alt={imagesCarousel[2].imgAlt} />
-                </div>
-              </Carousel.Item> */}
-          </Carousel>
-        ) : (
-          <span style={{ alignSelf: 'center' }}>Sem imagem</span>
-        )}
+        {imagesCarousel.length > 0 ? 
+        
+        imagesCarousel.length === 1 ?
+          <div className="imgCarousel">
+            <img src={imagesCarousel[0].file} alt={imagesCarousel[0].imgAlt} />
+          </div>
+        :
+          (
+            <Carousel
+              controls={true}
+              indicators={true}
+              interval={1000}
+              prevIcon={<MdKeyboardArrowLeft />}
+              nextIcon={<MdKeyboardArrowRight />}
+            >
+              {imagesCarousel.map(item => {
+                return (
+                  <Carousel.Item>
+                    <div className="imgCarousel">
+                      <img src={item.file} alt={item.imgAlt} />
+                    </div>
+                  </Carousel.Item>
+                );
+              })}
+            </Carousel>
+          ) : (
+            <span style={{ alignSelf: 'center' }}>Sem imagem</span>
+          )
+        }
       </div>
       <div className="divQuemSomos">
         <h2>

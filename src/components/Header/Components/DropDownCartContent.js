@@ -8,44 +8,6 @@ import { useHistory } from "react-router-dom";
 import api from '../../../services/api';
 import { LoginContext } from '../../../contexts/LoginContext';
 
-const Products_in_Cart = [
-  {
-    name: "Camisa 1",
-    price: "15,00",
-    quantity: 10,
-    size: "P",
-    imgLink:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcROM5jiaPvJ6rmWc1OwhzHC8EdexGOEXSM9Y0IcwIHvI7mUQPoST6wHIFoSUpsx7qJusI5ly-DI&usqp=CAc",
-    color: "Branco",
-  },
-  {
-    name: "Camisa 1",
-    price: "15,00",
-    quantity: 10,
-    size: "P",
-    imgLink:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcROM5jiaPvJ6rmWc1OwhzHC8EdexGOEXSM9Y0IcwIHvI7mUQPoST6wHIFoSUpsx7qJusI5ly-DI&usqp=CAc",
-    color: "Branco",
-  },
-  {
-    name: "Camisa 1",
-    price: "15,00",
-    quantity: 10,
-    size: "P",
-    imgLink:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcROM5jiaPvJ6rmWc1OwhzHC8EdexGOEXSM9Y0IcwIHvI7mUQPoST6wHIFoSUpsx7qJusI5ly-DI&usqp=CAc",
-    color: "Branco",
-  },
-  {
-    name: "Camisa 1",
-    price: "15,00",
-    quantity: 10,
-    size: "P",
-    imgLink:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcROM5jiaPvJ6rmWc1OwhzHC8EdexGOEXSM9Y0IcwIHvI7mUQPoST6wHIFoSUpsx7qJusI5ly-DI&usqp=CAc",
-    color: "Branco",
-  },
-];
 
 export default function DropDownCartContent(props) {
   let Subtotal = 0;
@@ -59,7 +21,7 @@ export default function DropDownCartContent(props) {
     const response = await api.get('/cart', {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setProductsInCart([...response.data]);
+    setProductsInCart(response.data);
   }
 
   useEffect(() => {
@@ -71,56 +33,6 @@ export default function DropDownCartContent(props) {
     }
   }, []);
 
-  //essa funcao somente lista os produtos
-  function SingleProducts() {
-
-    if(productsInCart === 0){
-      return <span>Nenhum produto no carrinho</span> 
-    }else{
-      return (
-        productsInCart.map((produto) => {
-          Subtotal =
-            Subtotal + parseFloat(produto.price) * parseFloat(produto.quantity);
-  
-          return (
-            <>
-              <div className="singleProduct">
-                <div className="photo">
-                  <img
-                    src={produto.imgLink}
-                    alt="FotoCamisa"
-                    className="FotoCamisa"
-                  />
-                </div>
-                <div className="texts">
-                  <h4 className="Prod_Title">{produto.name}</h4>
-                  <div className="description">
-                    <div className="pt1">
-                      <p className="size">Tamanho: {produto.size}</p>
-                      <p>R$ {produto.price}</p>
-                    </div>
-                    <div className="pt2">
-                      <p className="color">Cor: Branca</p>
-                      <p className="total_price">
-                        {produto.quantity}xR$ {produto.price}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <hr
-                style={{
-                  width: "90%",
-                  margin: "-1px auto",
-                }}
-              />
-            </>
-          );
-        })
-      )
-    }
-      
-  }
 
   function handleClickAway() {
     props.setClickCart(false);
@@ -133,19 +45,19 @@ export default function DropDownCartContent(props) {
 
         <div className="products">
           {
-            productsInCart.lenght === 0 ?
-              <span>Nenhum produto</span>
+            productsInCart.length === 0 || productsInCart.length === undefined ?
+              <span style={{color: '#000'}}>Nenhum produto</span>
             :
               productsInCart.map((produto) => {
                 Subtotal =
-                  Subtotal + parseFloat(produto.price) * parseFloat(produto.quantity);
+                  Subtotal + parseFloat(produto.price) * parseFloat(produto.amount);
         
                 return (
                   <>
                     <div className="singleProduct">
                       <div className="photo">
                         <img
-                          src={produto.imgLink}
+                          src={produto.img_link}
                           alt="FotoCamisa"
                           className="FotoCamisa"
                         />
@@ -160,7 +72,7 @@ export default function DropDownCartContent(props) {
                           <div className="pt2">
                             <p className="color">Cor: Branca</p>
                             <p className="total_price">
-                              {produto.quantity}xR$ {produto.price}
+                              {produto.amount}xR$ {Number(produto.price).toFixed(2)}
                             </p>
                           </div>
                         </div>
@@ -193,7 +105,7 @@ export default function DropDownCartContent(props) {
             history.push("/cart");
           }}
         >
-          Ir para o carrinho {"  "}
+          Ir para o carrinho
           <FaShoppingCart className="cart_icon" style={{}} />
         </button>
       </div>

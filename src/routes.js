@@ -42,9 +42,6 @@ import { LoginContext } from "./contexts/LoginContext";
 const PrivateClientRoute = ({ component: Component, ...rest }) => {
   const { user } = useContext(LoginContext);
   const currentUser = user[0];
-
-  console.log('autenticado', isAuthenticated())
-  console.log('user', user)
   return (
     <Route
       {...rest}

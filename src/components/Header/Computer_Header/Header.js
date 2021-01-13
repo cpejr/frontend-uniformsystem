@@ -28,7 +28,7 @@ function Header() {
 
     return (
         <div className="all_header">
-            <div className="header_content">
+            <div className="header_content_comum">
                 <div className="logo_container">
                     <Link to="/">
                         <img src={Logo} alt="Logo" className="Logo" />

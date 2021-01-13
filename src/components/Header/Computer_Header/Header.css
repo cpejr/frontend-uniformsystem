@@ -11,31 +11,31 @@
     align-items: center;
 }
 
-.all_header .header_content {
+.all_header .header_content_comum {
     height: 100%;
     width: 90%;
 
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
-.all_header .header_content .logo_container {
+.all_header .header_content_comum .logo_container {
     width: fit-content;
     height: 100% !important;
 }
 
-.all_header .header_content .logo_container .Logo {
+.all_header .header_content_comum .logo_container .Logo {
     height: 100% !important;
 }
 
-.all_header .header_content .icons {
+.all_header .header_content_comum .icons {
     display: flex;
     height: 100%;
     align-items: center;
 }
 
-.all_header .header_content .icons .logoutPart{
+.all_header .header_content_comum .icons .logoutPart{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -43,14 +43,14 @@
     cursor: pointer;
 }
 
-.all_header .header_content .icons .logoutPart span{
+.all_header .header_content_comum .icons .logoutPart span{
     margin-right: 5px;
 }
-.all_header .header_content .icons .logoutPart svg{
+.all_header .header_content_comum .icons .logoutPart svg{
     font-size: 25px;
 }
 
-.all_header .header_content .icons .icon{
+.all_header .header_content_comum .icons .icon{
     cursor: pointer;
     color: white; 
    /*  height: 25px; */
@@ -58,11 +58,11 @@
     margin: 0 30px 0 0;
     text-decoration: none;
 }
-.all_header .header_content .icons .icon:hover{
+.all_header .header_content_comum .icons .icon:hover{
     color: #ede3d9 !important;
 }
 
-.all_header .header_content .icons .login {
+.all_header .header_content_comum .icons .login {
     height: 25px;
     width: fit-content;
     display: flex;
@@ -70,7 +70,7 @@
     font-weight: 100;
 }
 
-.all_header .header_content .icons .login .icons_log {
+.all_header .header_content_comum .icons .login .icons_log {
     height: 30px;
     width: 25px;
     display: flex;
@@ -81,23 +81,23 @@
     color: #fff;
 }
 
-.all_header .header_content .icons .login .icons_log .user_icon{
+.all_header .header_content_comum .icons .login .icons_log .user_icon{
     margin-right: 5px;
     font-size: 20px;
 }
 
-.all_header .header_content .icons .login .icons_log:hover{
+.all_header .header_content_comum .icons .login .icons_log:hover{
     color: #ede3d9 !important;
 }
 
-.all_header .header_content .icons .all_cart {
+.all_header .header_content_comum .icons .all_cart {
     cursor: pointer;
 }
 
-.all_header .header_content .icons .all_cart .cart .cart_icon{
+.all_header .header_content_comum .icons .all_cart .cart .cart_icon{
     font-size: 20px;
 }
 
-.all_header .header_content .icons .all_cart:hover{
+.all_header .header_content_comum .icons .all_cart:hover{
     color: #ede3d9 !important;
 }

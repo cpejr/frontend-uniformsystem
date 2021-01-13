@@ -6,7 +6,7 @@ import { LoginContext } from '../../../contexts/LoginContext';
 import Logo from "../../../Assets/Logo_1.png";
 
 //importando icones:
-import { FaShoppingCart, FaUser, FaAngleDown } from "react-icons/fa";
+import { FaShoppingCart, FaUser, FaAngleDown, FaSignOutAlt } from "react-icons/fa";
 
 import DropDownLoginContent from "../Components/DropDownLoginContent";
 import DropDownCartContent from "../Components/DropDownCartContent";
@@ -16,7 +16,7 @@ function MobileHeader() {
     const [ClickLogin, setClickLogin] = useState(false);
     const [ClickCart, setClickCart] = useState(false);
 
-    const { user } = useContext(LoginContext);
+    const { user, logOut } = useContext(LoginContext);
     const currentUser = !user || user === 'notYet' ? null : user[0];
 
     const handleLogOut = () => {
@@ -31,7 +31,7 @@ function MobileHeader() {
                         <img src={Logo} alt="Logo" className="Logo" />
                     </Link>
                 </div>
-            <div className="header_content">
+            <div className="header_content_comum">
                 <div className="icons">
                     <Link className="icon" to="/">
                         HOME

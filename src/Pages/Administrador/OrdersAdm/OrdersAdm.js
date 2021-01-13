@@ -17,7 +17,7 @@ const PEDIDOS = [
 ];
 
 function OrdersAdm() {
-  const [Orders, setOrders] = useState({});
+  const [Orders, setOrders] = useState([]);
   const [OnlyPending, setOnlyPending] = useState(false);
 
   const [InputID, setInputID] = useState(0);
@@ -127,15 +127,38 @@ function OrdersAdm() {
             <Toggle className="toggle_order" Status={setOnlyPending}></Toggle>
           </div>
         </div>
+
         <div className="adm_div_table">
           <table className="orders">
-            {/* Os <th> sao o cabeçalho da tabela. O tr é uma linha da tabela. */}
             <tr>
               <th>ID</th>
               <th>Status</th>
             </tr>
-            <tr>{AllData()}</tr>
+            <tr>
+              <td>
+                <tr>
+                  {Orders.map((pedido) => {
+                    const id = pedido.order_id;
+                    const colum = <tr>{id}</tr>;
+
+                    return colum;
+                  })}
+                </tr>
+              </td>
+
+              <td>
+                {Orders.map((pedido) => {
+                  const status = pedido.status;
+                  const colum = <tr>{status}</tr>;
+
+                  return colum;
+                })}
+              </td>
+            </tr>
           </table>
+          {/* Os <th> sao o cabeçalho da tabela. O tr é uma linha da tabela. */}
+
+          <tr></tr>
         </div>
       </div>
     </div>

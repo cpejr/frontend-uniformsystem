@@ -37,7 +37,7 @@ function EspecificOrderAdm() {
                         <span className="price">Valor do pedido: R$1000,00</span>
                     </div>
                     <button className="button-status" onClick={ () => ChangeStatus() }>
-                        {loadingStatus ? <CircularProgress size={25} color="red" /> : "Mudar status para 'Em produção'"}
+                        {loadingStatus ? <CircularProgress size={ 35 } color="secondary" className="circularProgress" /> : "Mudar status para ''Em produção''"}
                     </button>
                 </div>
 

@@ -447,7 +447,7 @@ function Checkout() {
         className="purchaseFinished"
         onClick={() => handlePostOrder()}
       >
-        {loadingPurchase ? <CircularProgress size={40} /> : "FINALIZAR COMPRA"}
+        {loadingPurchase ? <CircularProgress size={40} color='secondary' className="circular-progress" /> : "FINALIZAR COMPRA"}
       </Button>
       <PopUpChangeAddress
         open={openModal}

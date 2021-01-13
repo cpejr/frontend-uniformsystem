@@ -29,7 +29,7 @@ function Login(){
             <h5>Senha</h5>
             <input placeholder="Senha"></input>
             <button className= "button" type="submit" onClick={ handleEnter }>
-              { loading ? <CircularProgress size={25} color='red' /> : "Entrar" }
+              { loading ? <CircularProgress size={25} color='secondary' /> : "Entrar" }
             </button>
             <a href="/register">Esqueci minha senha</a>
           </form>

@@ -303,7 +303,7 @@ function Produto() {
                                         onChange={(e) => setCep(e.target.value)}
                                     />{" "}
                                     <button id='stylized_button' onClick={() => CalculateCEP()}>
-                                        {loadingCep ? <CircularProgress size={15} color="red" /> : "Calcular"}
+                                        {loadingCep ? <CircularProgress size={15} color="secondary" /> : "Calcular"}
                                     </button>
                                 </div>
 
@@ -342,7 +342,7 @@ function Produto() {
                                     className='send_logo'
                                     onClick={() => AddALogo()}
                                 >
-                                    {loadingLogo ? <CircularProgress size={15} color="red" /> : "Carregue a sua logo!"}
+                                    {loadingLogo ? <CircularProgress size={15} color="secondary" /> : "Carregue a sua logo!"}
                                 </button>
                             </div>
                             <div className='div_cart_button'>
@@ -352,7 +352,7 @@ function Produto() {
                                     onClick={() => AddToCart()}
                                 >
                                     {
-                                        loadingAddToCart ? <CircularProgress size={35} color="red"/> :
+                                        loadingAddToCart ? <CircularProgress size={35} color="secondary" /> :
                                         <>
                                             <FaShoppingCart
                                                 className='icon'

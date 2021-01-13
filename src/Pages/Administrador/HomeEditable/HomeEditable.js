@@ -843,7 +843,7 @@ function HomeEditable() {
       </div>
 
       <Button className="saveChangesButton" onClick={handleSaveChanges}>
-        {loading ? <CircularProgress /> : "SALVAR ALTERAÇÕES"}
+        {loading ? <CircularProgress color="secondary" /> : "SALVAR ALTERAÇÕES"}
       </Button>
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <MuiAlert onClose={handleClose} elevation={6} variant="filled" severity="success">

@@ -385,7 +385,7 @@ function RegisterProduct({history}) {
             <Button type="submit" className="finalButtonToRegister"
               onClick={handleSubmitNewProduct}
             >
-              {loading ? <CircularProgress color='red' /> : "CADASTRAR"}
+              {loading ? <CircularProgress color='secondary' /> : "CADASTRAR"}
             </Button>
           </div>
         </form>

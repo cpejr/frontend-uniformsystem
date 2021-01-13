@@ -294,6 +294,14 @@ label{
     background-color: #9ccac4;
 }
 
+.circular-progress{
+    margin-left: 100px;
+    margin-right: 100px;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .MuiAccordion-root{
     width: 90%;
     background-color: #8ED7CD !important;
@@ -409,6 +417,14 @@ label{
         width: 60%;
 
         font-size: 1.3rem;
+    }
+
+    .circular-progress{
+        margin-left: 20px;
+        margin-right: 20px;
+
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
 
     .MuiAccordion-root{

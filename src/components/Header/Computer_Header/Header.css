@@ -56,16 +56,19 @@
 }
 
 .all_header .header_content .icons .login .icons_log {
-    height: 25px;
-    width: 20px;
+    height: 30px;
+    width: 25px;
     display: flex;
     width: fit-content;
     font-weight: 100;
     align-items: center;
+    text-decoration: none;
+    color: #fff;
 }
 
-.all_header .header_content .icons .login .icons_log * {
-    margin: 0 !important;
+.all_header .header_content .icons .login .icons_log .user_icon{
+    margin-right: 5px;
+    font-size: 20px;
 }
 
 .all_header .header_content .icons .login .icons_log:hover{

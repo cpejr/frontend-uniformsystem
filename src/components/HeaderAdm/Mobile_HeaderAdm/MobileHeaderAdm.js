@@ -27,7 +27,7 @@ function MobileHeaderAdm() {
             </div>
             <div className="header_content">
                 <div className="rightSide">
-                    <div className="aboutTheUser">
+                    <Link className="aboutTheUser" style={{textDecoration: 'none', color: "#fff"}} to="/perfil">
                         <FaUserCircle />
                         <div className="divNameFunction" >
                             <span>{currentUser.name}</span>
@@ -36,7 +36,7 @@ function MobileHeaderAdm() {
                                 "Funcionário"
                             }</p>
                         </div>
-                    </div>
+                    </Link>
 
                     <div className="logoutPart" onClick={() => handleLogOut()}>
                         <span>Logout</span>

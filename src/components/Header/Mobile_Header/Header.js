@@ -41,21 +41,29 @@ function MobileHeader() {
                         className="login"
                         style={{ position: "relative", margin: 0 }}
                     >
-                        <div
-                            className="icons_log"
-                            onClick={() => {
-                                setClickLogin(!ClickLogin);
-                            }}
-                        >
-                            <FaUser className="user_icon" />{" "}
-                            <div style={{ width: "fit-content" }}>ENTRAR</div>
-                            <FaAngleDown className="arrow_icon" />
-                        </div>
-                        {ClickLogin && (
-                            <DropDownLoginContent
-                                setClickLogin={setClickLogin}
-                            />
-                        )}
+                        {
+                            currentUser ? 
+                            <Link
+                                className="icons_log"
+                                to="/perfil"
+                            >
+                                <FaUser className="user_icon" />
+                                <div style={{ width: "fit-content", cursor: "pointer"}}>{currentUser.name.toUpperCase()}</div>
+                            </Link>
+                            :
+                                <>
+                                    <div
+                                        className="icons_log"
+                                        onClick={() => {
+                                            setClickLogin(!ClickLogin);
+                                        }}
+                                    >
+                                        <div style={{ width: "fit-content", cursor: "pointer"}}> ENTRAR </div>
+                                        <FaAngleDown className="arrow_icon" />
+                                    </div>
+                                    {ClickLogin && <DropDownLoginContent setClickLogin={setClickLogin}/> }
+                                </>
+                        }
                     </div>
                     {
                         currentUser ? 

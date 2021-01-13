@@ -28,8 +28,7 @@ function HeaderAdm() {
                     </Link>
                 </div>
                 <div className="rightSide">
-                    
-                    <div className="aboutTheUser">
+                    <Link className="aboutTheUser" style={{textDecoration: 'none', color: "#fff"}} to="/perfil">
                         <FaUserCircle />
                         <div className="divNameFunction" >
                             <span>{currentUser.name}</span>
@@ -38,7 +37,7 @@ function HeaderAdm() {
                                 "Funcionário"
                             }</p>
                         </div>
-                    </div>
+                    </Link>
 
                     <div className="logoutPart" onClick={() => handleLogOut()}>
                         <span>Logout</span>

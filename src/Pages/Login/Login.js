@@ -110,15 +110,12 @@ function Login(){
           alert(`Email ou senha incorretos!`);
         }
         setLoading(false);
-
       }catch(err) {
         setLoading(false);
         alert(`Acesso negado!`);
         console.warn(err);
       }
-
     }
-
   }
   
   return (

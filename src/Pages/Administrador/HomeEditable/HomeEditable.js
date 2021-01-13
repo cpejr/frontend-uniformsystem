@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
@@ -15,8 +15,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Button from "@material-ui/core/Button";
 
 import api from "../../../services/api";
-
-import camisa from "../../../Assets/camisa.jpg";
+import { LoginContext } from "../../../contexts/LoginContext";
 
 import "./HomeEditable.css";
 import { useHistory } from "react-router-dom";
@@ -76,8 +75,10 @@ function InputsOrIconWithInput({
 }
 
 function HomeEditable() {
+
+  const { token } = useContext(LoginContext);
   const history = useHistory();
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYTM0MWQzMi1iMTMtNGY0Mi1jYTNlLTIwNTc4NGMxYzU2IiwibmFtZSI6Ikd1c3Rhdm8gQWRtaW4gMSIsImZpcmViYXNlX3VpZCI6IkNwNWNDUUlwVHpacHJJUXd0WFBUWXF4SVpXeDEiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6Imd1c3Rhdm9AZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5NjYiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMi0xNSAyMDozMDo0OCIsInVwZGF0ZWRfYXQiOiIyMDIwLTEyLTE1IDIwOjMwOjQ4In1dLCJpYXQiOjE2MDgwNjQzOTEsImV4cCI6MTYxMDY1NjM5MX0.VPOhngRZnI42o344HpJM3CCCE4STSYbHHTC-nICDGzM";
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYTM0MWQzMi1iMTMtNGY0Mi1jYTNlLTIwNTc4NGMxYzU2IiwibmFtZSI6Ikd1c3Rhdm8gQWRtaW4gMSIsImZpcmViYXNlX3VpZCI6IkNwNWNDUUlwVHpacHJJUXd0WFBUWXF4SVpXeDEiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6Imd1c3Rhdm9AZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5NjYiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMi0xNSAyMDozMDo0OCIsInVwZGF0ZWRfYXQiOiIyMDIwLTEyLTE1IDIwOjMwOjQ4In1dLCJpYXQiOjE2MDgwNjQzOTEsImV4cCI6MTYxMDY1NjM5MX0.VPOhngRZnI42o344HpJM3CCCE4STSYbHHTC-nICDGzM";
 
   const bucketAWS = "https://profit-uniformes.s3.amazonaws.com/";
 

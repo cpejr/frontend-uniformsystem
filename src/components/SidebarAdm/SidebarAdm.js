@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./SidebarAdm.css";
 
@@ -21,6 +21,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+
+import { LoginContext } from '../../contexts/LoginContext';
 
 const drawerWidth = 220;
 
@@ -58,6 +60,8 @@ export default function ComputerSidebar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { user } = useContext(LoginContext);
+  const currentUser = user[0];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -86,23 +90,44 @@ export default function ComputerSidebar(props) {
         }
     ]
 
+    const objListOptionsEmployee = [
+        {
+            itemName: 'PEDIDOS',
+            itemIcon: < FormatListBulletedIcon/>, 
+            path: '/adm/pedidos',
+        },
+    ]
+
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {objListOptionsAdm.map((item, index) => (
-        <Link to={`${item.path}`}>
-          <ListItem button key={index}>
-            <ListItemIcon>{item.itemIcon}</ListItemIcon>
-            <ListItemText primary={item.itemName} />
-          </ListItem>
-        </Link>
-        ))}
+        {
+          currentUser.user_type === 'adm' ?
+            objListOptionsAdm.map((item, index) => (
+              <Link to={`${item.path}`}>
+                <ListItem button key={index}>
+                  <ListItemIcon>{item.itemIcon}</ListItemIcon>
+                  <ListItemText primary={item.itemName} />
+                </ListItem>
+              </Link>
+            ))
+            :
+            objListOptionsEmployee.map((item, index) => (
+              <Link to={`${item.path}`}>
+                <ListItem button key={index}>
+                  <ListItemIcon>{item.itemIcon}</ListItemIcon>
+                  <ListItemText primary={item.itemName} />
+                </ListItem>
+              </Link>
+              
+          ))
+        }
       </List>
     </div>
   );
-
+  
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (

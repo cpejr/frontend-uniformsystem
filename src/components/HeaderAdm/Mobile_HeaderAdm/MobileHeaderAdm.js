@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./MobileHeaderAdm.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import Logo from "../../../Assets/Logo_1.png";
+import { LoginContext } from '../../../contexts/LoginContext';
 
 //importando icones:
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 
 function MobileHeaderAdm() {
+    const history = useHistory();
+    const { user, logOut } = useContext(LoginContext);
+    const currentUser = user[0];
+
+    const handleLogOut = () => {
+        logOut();
+        history.push('/');
+    }
 
     return (
         <div className="cell_header" >
@@ -18,15 +27,18 @@ function MobileHeaderAdm() {
             </div>
             <div className="header_content">
                 <div className="rightSide">
-                    <div className="aboutTheUser">
+                    <Link className="aboutTheUser" style={{textDecoration: 'none', color: "#fff"}} to="/perfil">
                         <FaUserCircle />
                         <div className="divNameFunction" >
-                            <span>Algum Fulano Aí</span>
-                            <p>Administrador</p>
+                            <span>{currentUser.name}</span>
+                            <p>{currentUser.user_type === 'adm' ? "Administrador"
+                            :
+                                "Funcionário"
+                            }</p>
                         </div>
-                    </div>
+                    </Link>
 
-                    <div className="logoutPart">
+                    <div className="logoutPart" onClick={() => handleLogOut()}>
                         <span>Logout</span>
                         <FaSignOutAlt/>
                     </div>

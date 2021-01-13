@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
+import { LoginContext } from '../../../contexts/LoginContext';
 
 import './OrdersAdm.css'
 
@@ -12,6 +13,8 @@ async function getOrders(){
 }
 
 function OrdersAdm(){
+
+  const { token } = useContext(LoginContext);
 
   return (
     <div>

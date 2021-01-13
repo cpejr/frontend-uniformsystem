@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { ClickAwayListener } from "@material-ui/core";
 import api from "../../../services/api";
 
@@ -137,8 +138,12 @@ export default function DropDownLoginContent(props) {
                     <button className="b_login" onClick={(e) => handleLogin(e)} >
                         {loading ? <CircularProgress color='black' size={25} /> : "ACESSAR"}
                     </button>
-
-                    <button className="b_register">CADASTRAR</button>
+                    
+                    <Link style={{textDecoration: 'none', color: '#000'}} to="/signup">
+                        <button>
+                            CADASTRAR
+                        </button>
+                    </Link>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -35,6 +35,21 @@
     align-items: center;
 }
 
+.all_header .header_content .icons .logoutPart{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.all_header .header_content .icons .logoutPart span{
+    margin-right: 5px;
+}
+.all_header .header_content .icons .logoutPart svg{
+    font-size: 25px;
+}
+
 .all_header .header_content .icons .icon{
     cursor: pointer;
     color: white; 

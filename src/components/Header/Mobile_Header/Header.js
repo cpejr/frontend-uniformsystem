@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import "./Header.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { LoginContext } from '../../../contexts/LoginContext';
 import Logo from "../../../Assets/Logo_1.png";
@@ -12,11 +12,17 @@ import DropDownLoginContent from "../Components/DropDownLoginContent";
 import DropDownCartContent from "../Components/DropDownCartContent";
 
 function MobileHeader() {
+    const history = useHistory();
     const [ClickLogin, setClickLogin] = useState(false);
     const [ClickCart, setClickCart] = useState(false);
 
     const { user } = useContext(LoginContext);
     const currentUser = !user || user === 'notYet' ? null : user[0];
+
+    const handleLogOut = () => {
+        logOut();
+        history.push('/');
+    }
 
     return (
         <div className="cell_header">
@@ -67,23 +73,29 @@ function MobileHeader() {
                     </div>
                     {
                         currentUser ? 
-                            <div
-                                className="all_cart"
-                                style={{ position: "relative", margin: 0 }}
-                            >
+                            <>
                                 <div
-                                    className="cart"
-                                    onClick={() => setClickCart(!ClickCart)}
+                                    className="all_cart"
+                                    style={{ position: "relative", margin: 0 }}
                                 >
-                                    <FaShoppingCart
-                                        className="cart_icon"
-                                        style={{ margin: "0 30px" }}
-                                    />
+                                    <div
+                                        className="cart"
+                                        onClick={() => setClickCart(!ClickCart)}
+                                    >
+                                        <FaShoppingCart
+                                            className="cart_icon"
+                                            style={{ margin: "0 30px" }}
+                                        />
+                                    </div>
+                                    {ClickCart && (
+                                        <DropDownCartContent setClickCart={setClickCart} />
+                                    )}
                                 </div>
-                                {ClickCart && (
-                                    <DropDownCartContent setClickCart={setClickCart} />
-                                )}
-                            </div>
+                                <div className="logoutPart" onClick={() => handleLogOut()}>
+                                    <span>LOGOUT</span>
+                                    <FaSignOutAlt/>
+                                </div>
+                            </>
                         :
                             <>
                             </>

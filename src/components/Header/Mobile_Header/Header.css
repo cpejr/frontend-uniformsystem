@@ -82,6 +82,14 @@
     color: #ede3d9 !important;
 }
 
+.cell_header .header_content .icons .all_cart {
+    cursor: pointer;
+}
+
+.cell_header .header_content .icons .all_cart .cart .cart_icon{
+    font-size: 20px;
+}
+
 .cell_header .header_content .icons .all_cart:hover{
     color: #ede3d9 !important;
 }

@@ -16,7 +16,7 @@
     width: 90%;
 
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
@@ -73,6 +73,14 @@
 
 .all_header .header_content .icons .login .icons_log:hover{
     color: #ede3d9 !important;
+}
+
+.all_header .header_content .icons .all_cart {
+    cursor: pointer;
+}
+
+.all_header .header_content .icons .all_cart .cart .cart_icon{
+    font-size: 20px;
 }
 
 .all_header .header_content .icons .all_cart:hover{

@@ -1,6 +1,7 @@
 import React from 'react';
+import { FaFacebook, FaWhatsapp, FaInstagram, FaMapMarkerAlt } from 'react-icons/fa';
+import { HiOutlineMail } from 'react-icons/hi';
 import './Contato.css'
-import camisa from '../../Assets/camisa.jpg';
 
 function Contato(){
   return (
@@ -11,15 +12,21 @@ function Contato(){
             <h1>Contato</h1>
           </div>
           <div className="divRedesSociais">
-            <h3>INSTAGRAM</h3>
-            <h3>wpp</h3>
-            <h3>Facebook</h3>
+            <a href="https://www.instagram.com" className="linksContato">
+              <FaInstagram className="iconsContato"/>
+            </a>
+            <a href="https://www.whatsapp.com" className="linksContato">
+              <FaWhatsapp className="iconsContato"/>
+            </a>
+            <a href="https://www.facebook.com" className="linksContato">
+              <FaFacebook className="iconsContato"/>
+            </a>
           </div>
           <div className="divEmail">
-            email
+            <HiOutlineMail className="iconsContato"/>
           </div>
           <div className="divLocal">
-            local
+            <FaMapMarkerAlt className="iconsContato"/>
           </div>
 
         </div>

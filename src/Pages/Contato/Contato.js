@@ -19,31 +19,54 @@ function Contato() {
           <div className="divisor"></div>
 
           <div className="divRedesSociais">
-            <a href="https://www.instagram.com" target="_blank"  rel="noreferrer"className="linksContato">
+            <a
+              href="https://www.instagram.com"
+              target="_blank"
+              rel="noreferrer"
+              className="linksContato"
+            >
               <FaInstagram className="iconsContato" />
               <h3 className="escritaContato">Instagram</h3>
             </a>
-            <a href="https://www.whatsapp.com" target="_blank"  rel="noreferrer"className="linksContato">
+            <a
+              href="https://www.whatsapp.com"
+              target="_blank"
+              rel="noreferrer"
+              className="linksContato"
+            >
               <FaWhatsapp className="iconsContato" />
               <h3 className="escritaContato">Whatsapp</h3>
             </a>
-            <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="linksContato">
+            <a
+              href="https://www.facebook.com"
+              target="_blank"
+              rel="noreferrer"
+              className="linksContato"
+            >
               <FaFacebook className="iconsContato" />
               <h3 className="escritaContato">Facebook</h3>
             </a>
           </div>
 
-
-          <a href="https://mail.google.com/" target="_blank" rel="noreferrer" className="aEmail">
+          <a
+            href="https://mail.google.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="aEmail"
+          >
             <HiOutlineMail className="envelopeContato" />
             <h3 className="escritaEmail">emailgenerico@gmail.com</h3>
           </a>
-            
-          <a href="https://www.google.com.br/maps" target="_blank" rel="noreferrer" className="aLocal">
+
+          <a
+            href="https://www.google.com.br/maps"
+            target="_blank"
+            rel="noreferrer"
+            className="aLocal"
+          >
             <FaMapMarkerAlt className="envelopeContato" />
-            <h3 className="escritaContato">Localização Genérica</h3>
+            <h3 className="escritaLocalização">Localização Genérica</h3>
           </a>
-          
         </div>
       </div>
     </div>

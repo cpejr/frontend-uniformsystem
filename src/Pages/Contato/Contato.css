@@ -23,20 +23,20 @@
   height: 65vh;
 }
 
-.tituloContato{
+.tituloContato {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.escritaTituloC{
+.escritaTituloC {
   font-size: 300%;
   color: #201f24;
 }
 
-.divisor{
-  border: 1px solid #201f24;;
+.divisor {
+  border: 1px solid #201f24;
   width: 80%;
   margin-bottom: 2%;
 }
@@ -64,7 +64,7 @@
   color: #201f24;
 }
 
-.escritaContato{
+.escritaContato {
   color: #201f24;
   font-size: 2.2vmax;
 }
@@ -74,6 +74,7 @@
   height: 10%;
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 12vh;
 }
 
@@ -83,18 +84,21 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   margin-top: 4vh;
 }
 
-.envelopeContato{
-
-  min-width: 35px;
-  height: 100%;
+.envelopeContato {
+  min-width: 55px;
+  height: 120%;
   color: #201f24;
 }
 
-.escritaEmail{
+.escritaEmail {
   color: #201f24;
   font-size: 2.2vmax;
-  
+}
+.escritaLocalização {
+  color: #201f24;
+  font-size: 2.2vmax;
 }

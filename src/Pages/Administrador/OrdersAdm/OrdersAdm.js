@@ -39,36 +39,6 @@ function OrdersAdm() {
 
   console.log(Orders.models);
 
-  const AllData = (Orders, index) => {
-    return (
-      <>
-        {Orders?.map((pedido) => {
-          return (
-            <tr key={index} className="singleOrder">
-              <td className="id_table">
-                <div className="id_camp">
-                  <div
-                    className="pedido_text"
-                    style={{
-                      width: "fit-content",
-                    }}
-                  >
-                    {pedido.product_model_id}
-                    {" teste"}
-                  </div>{" "}
-                  <FaAngleRight className="icon_table" />
-                </div>
-              </td>
-
-              <tr className="status_table">
-                <OrderTable Order={pedido.status} />{" "}
-              </tr>
-            </tr>
-          );
-        })}
-      </>
-    );
-  };
   function FilteredData() {
     return PEDIDOS.map((pedido, index) => {
       {
@@ -139,7 +109,17 @@ function OrdersAdm() {
                 <tr>
                   {Orders.map((pedido) => {
                     const id = pedido.order_id;
-                    const colum = <tr>{id}</tr>;
+                    const colum = (
+                      <div
+                        style={{
+                          paddingBottom: "1vh",
+                          borderBottom: "1px solid #000000",
+                          width: "120%",
+                        }}
+                      >
+                        <tr>{id}</tr>
+                      </div>
+                    );
 
                     return colum;
                   })}
@@ -149,8 +129,16 @@ function OrdersAdm() {
               <td>
                 {Orders.map((pedido) => {
                   const status = pedido.status;
-                  const colum = <tr>{status}</tr>;
-
+                  const colum = (
+                    <div
+                      style={{
+                        borderBottom: "1px solid #000000",
+                        width: "100%",
+                      }}
+                    >
+                      <tr>{<OrderTable status={status} />}</tr>
+                    </div>
+                  );
                   return colum;
                 })}
               </td>

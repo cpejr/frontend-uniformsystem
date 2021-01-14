@@ -1,44 +1,64 @@
 import React from "react";
 
-function OrderTable(Order) {
-  switch (Order) {
-    case "Entregue":
+function OrderTable(Props) {
+  switch (Props.status) {
+    case "delivered":
       return (
         <div
-          id="orderStyle"
-          style={{ backgroundColor: "#60F86A", color: "black" }}
+          className="container"
+          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
         >
-          Entregue
+          <div
+            id="orderStyle"
+            style={{ backgroundColor: "#60F86A", color: "black" }}
+          >
+            Entregue
+          </div>
         </div>
       );
 
-    case "Pendente":
+    case "pending":
       return (
         <div
-          id="orderStyle"
-          style={{ backgroundColor: "#F94444", color: "white" }}
+          className="container"
+          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
         >
-          Pendente
+          <div
+            id="orderStyle"
+            style={{ backgroundColor: "#F94444", color: "white" }}
+          >
+            Pendente
+          </div>
         </div>
       );
 
-    case "Em Andamento":
+    case "preparing":
       return (
         <div
-          id="orderStyle"
-          style={{ backgroundColor: "#FFE45A", color: "black" }}
+          className="container"
+          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
         >
-          Em Andamento
+          <div
+            id="orderStyle"
+            style={{ backgroundColor: "#FFE45A", color: "black" }}
+          >
+            Em Andamento
+          </div>
         </div>
       );
 
-    case "Aguardando Pagamento":
+    case "waitingPayment":
       return (
         <div
-          id="orderStyle"
-          style={{ backgroundColor: "#15B5DE", color: "black" }}
+          className="container"
+          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
         >
-          Aguardando Pagamento
+          <div
+            id="orderStyle"
+            style={{ backgroundColor: "#15B5DE", color: "black" }}
+          >
+            Aguardando Pagamento
+          </div>
         </div>
       );
     default:

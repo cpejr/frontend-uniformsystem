@@ -17,6 +17,7 @@ import EspecificEmployee from "./Pages/Administrador/EmployeeAdm/EspecificEmploy
 import Loja from "./Pages/Loja";
 import Produto from "./Pages/Produto";
 import Perfil from "./Pages/Perfil";
+import EditarPerfil from "./Pages/EditarPerfil";
 import Login from "./Pages/Login";
 import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
@@ -81,6 +82,7 @@ function MenuRoutes() {
         {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                 logado, você será redirecionado para a página Login. */}
         <Route path="/perfil" export exact component={Perfil} />
+        <Route path="/editarPerfil" export exact component={EditarPerfil} />
         <Route path="/login" export exact component={Login} />
         <Route path="/cart" export exact component={Carrinho} />
         <Route path="/contact" export exact component={Contato} />

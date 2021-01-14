@@ -14,35 +14,36 @@ function Contato() {
       <div className="fundoCinza">
         <div className="divFundoBrancoContato">
           <div className="tituloContato">
-            <h1>Contato</h1>
+            <h1 className="escritaTituloC">Contato</h1>
           </div>
+          <div className="divisor"></div>
+
           <div className="divRedesSociais">
-            <a href="https://www.instagram.com" className="linksContato">
+            <a href="https://www.instagram.com" target="_blank"  rel="noreferrer"className="linksContato">
               <FaInstagram className="iconsContato" />
+              <h3 className="escritaContato">Instagram</h3>
             </a>
-            <a href="https://www.whatsapp.com" className="linksContato">
+            <a href="https://www.whatsapp.com" target="_blank"  rel="noreferrer"className="linksContato">
               <FaWhatsapp className="iconsContato" />
+              <h3 className="escritaContato">Whatsapp</h3>
             </a>
-            <a href="https://www.facebook.com" className="linksContato">
+            <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="linksContato">
               <FaFacebook className="iconsContato" />
+              <h3 className="escritaContato">Facebook</h3>
             </a>
           </div>
-          <div className="divNomesCima">
-            <a>INSTAGRAM</a>
-            <a>(99)99999-9999</a>
-            <a>FACEBOOK</a>
-          </div>
-          <div className="divEmail">
-            <HiOutlineMail className="iconsContato" />
-          </div>
-          <div className="divLocal">
-            <FaMapMarkerAlt className="iconsContato" />
-          </div>
-          <div className="divNomesBaixo">
-            <a>E-mail</a>
-            <a>Rua Alguma Coisa, 100, Liberdade</a>
-            <a>Belo Horizonte - MG</a>
-          </div>
+
+
+          <a href="https://mail.google.com/" target="_blank" rel="noreferrer" className="aEmail">
+            <HiOutlineMail className="envelopeContato" />
+            <h3 className="escritaEmail">emailgenerico@gmail.com</h3>
+          </a>
+            
+          <a href="https://www.google.com.br/maps" target="_blank" rel="noreferrer" className="aLocal">
+            <FaMapMarkerAlt className="envelopeContato" />
+            <h3 className="escritaContato">Localização Genérica</h3>
+          </a>
+          
         </div>
       </div>
     </div>

@@ -110,13 +110,7 @@ function OrdersAdm() {
                   {Orders.map((pedido) => {
                     const id = pedido.order_id;
                     const colum = (
-                      <div
-                        style={{
-                          paddingBottom: "1vh",
-                          borderBottom: "1px solid #000000",
-                          width: "120%",
-                        }}
-                      >
+                      <div className="adm_orders_id">
                         <tr>{id}</tr>
                       </div>
                     );
@@ -130,12 +124,7 @@ function OrdersAdm() {
                 {Orders.map((pedido) => {
                   const status = pedido.status;
                   const colum = (
-                    <div
-                      style={{
-                        borderBottom: "1px solid #000000",
-                        width: "100%",
-                      }}
-                    >
+                    <div className="adm_orders_status">
                       <tr>{<OrderTable status={status} />}</tr>
                     </div>
                   );

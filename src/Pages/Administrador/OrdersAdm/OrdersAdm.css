@@ -121,6 +121,17 @@ table, td, th{
     margin-left: 20px;
 }
 
+.adm_orders_id{
+    padding-bottom: "1vh";
+    border-bottom: "1px solid #000000";
+    width: "120%";
+}
+
+.adm_orders_status{
+    border-bottom: "1px solid #000000";
+    width: "100%";
+}
+
 @media (max-width: 810px) {
 
     .search_order{
@@ -142,6 +153,18 @@ table, td, th{
     }
 
     .adm_div_table{
+        padding: 0px;
         padding-top: 120px;
+    }
+
+    .adm_orders_id{
+        padding-bottom: "1vh";
+        border-bottom: "1px solid #000000";
+        width: "60%";
+    }
+
+    .adm_orders_status{
+        border-bottom: "1px solid #000000";
+        width: "60%";
     }
 }

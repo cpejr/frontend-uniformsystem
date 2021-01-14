@@ -112,25 +112,23 @@ table, td, th{
 
 @media (max-width: 810px) {
 
-    .top_page{
-        flex-wrap: wrap;
-        align-items: center;
-        margin-left: 80px;
+    .search_order{
+        flex-direction: row;
     }
 
-    .search_order{
-        flex-wrap: wrap;
-        justify-items: center;
-        align-items: center;
+    .filterTitleProducts{
+        display: flex;
+        flex-direction: row;
     }
 
     .input_div{
-        padding-top: 15px;
-        padding-bottom: 15px;
+        display: flex;
+        flex-direction: row;
+        margin-left: 20px;
     }
 
-    .input_id{
-        width: 130px;
+    .div_pendente{
+        padding-top: 150px;
     }
 
     .adm_div_table{

@@ -110,6 +110,17 @@ table, td, th{
     padding: 50px;
 }
 
+.filterTitleProducts{
+    display: flex;
+    flex-direction: row;
+}
+
+.input_div{
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+}
+
 @media (max-width: 810px) {
 
     .search_order{
@@ -124,7 +135,6 @@ table, td, th{
     .input_div{
         display: flex;
         flex-direction: row;
-        margin-left: 20px;
     }
 
     .div_pendente{

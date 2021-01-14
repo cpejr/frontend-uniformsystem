@@ -99,6 +99,10 @@
     border-right: 1px solid #7FA5A0;
 }
 
+.order-table{
+    height: 100px;
+}
+
 @media (max-width: 810px){
     .title-status{
         display: flex;

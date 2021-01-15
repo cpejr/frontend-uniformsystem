@@ -112,7 +112,10 @@ function OrdersAdm() {
                     const id = pedido.order_id;
                     const colum = (
                       <div className="adm_orders_id">
-                        <tr>{id}</tr>
+                        <tr>
+                          {id}
+                          <FaAngleRight className="icon_table" />
+                        </tr>
                       </div>
                     );
 

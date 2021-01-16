@@ -80,7 +80,7 @@ function HomeEditable() {
   const history = useHistory();
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYTM0MWQzMi1iMTMtNGY0Mi1jYTNlLTIwNTc4NGMxYzU2IiwibmFtZSI6Ikd1c3Rhdm8gQWRtaW4gMSIsImZpcmViYXNlX3VpZCI6IkNwNWNDUUlwVHpacHJJUXd0WFBUWXF4SVpXeDEiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6Imd1c3Rhdm9AZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5NjYiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMi0xNSAyMDozMDo0OCIsInVwZGF0ZWRfYXQiOiIyMDIwLTEyLTE1IDIwOjMwOjQ4In1dLCJpYXQiOjE2MDgwNjQzOTEsImV4cCI6MTYxMDY1NjM5MX0.VPOhngRZnI42o344HpJM3CCCE4STSYbHHTC-nICDGzM";
 
-  const bucketAWS = "https://profit-uniformes.s3.amazonaws.com/";
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const [loading, setLoading] = useState(false);
 

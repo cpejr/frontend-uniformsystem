@@ -95,7 +95,7 @@ function Home() {
   const [instagramInfo, setInstagramInfo] = useState('');
   const [whatsappInfo, setWhatsappInfo] = useState('');
 
-  const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const token = '';
 

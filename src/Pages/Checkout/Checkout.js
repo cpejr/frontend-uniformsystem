@@ -68,7 +68,7 @@ function Checkout() {
 
   const serviceCode = '04014';
 
-  const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   useEffect(
     () => {

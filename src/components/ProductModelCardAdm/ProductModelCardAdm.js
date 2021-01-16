@@ -6,7 +6,7 @@ import { FaEdit, FaStar, FaTrashAlt } from 'react-icons/fa';
 function ProductModelCardAdm({productModelID, handleSelectToEdit,
     productModelArray, setProductModelArray, fullProduct}) {
 
-    const bucketAWS = "https://profit-uniformes.s3.amazonaws.com/";
+    const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
     const {fileToShow, imgLink, modelDescription, price, gender} = fullProduct;
 

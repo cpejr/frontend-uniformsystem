@@ -59,18 +59,18 @@ function Contato() {
 
           <div className="divRedesSociais">
             <a
-              href="https://www.instagram.com"
+              href= {`https://www.instagram.com/${InstagramInfo}`}
               target="_blank"
               rel="noreferrer"
               className="linksContato"
             >
               <FaInstagram className="iconsContato" />
               <h3 className="escritaContato">
-                {InstagramInfo === "" ? "Sem dados" : InstagramInfo}
+                {InstagramInfo === "" ? "Sem dados" : `@${InstagramInfo}`}
               </h3>
             </a>
             <a
-              href="https://www.whatsapp.com"
+              href={`https://www.whatsapp.com/${WhatsappInfo}`}
               target="_blank"
               rel="noreferrer"
               className="linksContato"
@@ -81,7 +81,7 @@ function Contato() {
               </h3>
             </a>
             <a
-              href="https://www.facebook.com"
+              href={`https://www.facebook.com/${FacebookInfo}`}
               target="_blank"
               rel="noreferrer"
               className="linksContato"
@@ -104,7 +104,7 @@ function Contato() {
           </a>
 
           <a
-            href="https://www.google.com.br/maps"
+            href={`https://www.google.com.br/maps/${EnderecoInfo}`}
             target="_blank"
             rel="noreferrer"
             className="aLocal"

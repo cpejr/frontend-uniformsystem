@@ -97,15 +97,11 @@ function Home() {
 
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
-  const token = '';
-
   // UseEffect para inicializar as informações da Home
   useEffect(() => {
     async function getHomeInfo() {
       try {
-        const response = await api.get('/home/info', {
-          headers: { authorization: `bearer ${token}` },
-        });
+        const response = await api.get('/home/info');
 
         if (response.data.length === 0) {
           throw new Error('Home info is Empty');
@@ -153,11 +149,7 @@ function Home() {
   useEffect(() => {
     async function getHomeImages() {
       const responseCarousel = await api.get(
-        '/home/images?img_place=carousel',
-        {
-          headers: { authorization: `bearer ${token}` },
-        },
-      );
+        '/home/images?img_place=carousel');
 
       let imagesCarousel = [];
       if (responseCarousel.data) {
@@ -170,11 +162,7 @@ function Home() {
       }
 
       const responseWhoWeAre = await api.get(
-        '/home/images?img_place=whoWeAre',
-        {
-          headers: { authorization: `bearer ${token}` },
-        },
-      );
+        '/home/images?img_place=whoWeAre');
 
       let imagesWhoWeAre = {};
       if (responseWhoWeAre.data[0]) {
@@ -188,11 +176,7 @@ function Home() {
       }
 
       const responseProducts = await api.get(
-        '/home/images?img_place=products',
-        {
-          headers: { authorization: `bearer ${token}` },
-        },
-      );
+        '/home/images?img_place=products');
       // const imagesProducts = responseProducts.data;
       let imagesProducts = [];
       if (responseProducts.data) {

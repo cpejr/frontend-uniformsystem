@@ -6,7 +6,7 @@ import camisa from '../../../../Assets/camisa.jpg';
 
 
 function EspecificOrderAdm() {
-    var status = "pending";
+    let status = "pending";
 
     return (
         <div className="order-container">

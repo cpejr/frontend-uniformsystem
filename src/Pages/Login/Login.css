@@ -1,3 +1,22 @@
+/* Ajustes TextField Material UI */
+.login .MuiOutlinedInput-root{
+    border-radius: 0px;
+}
+/* Ajustes TextField Material UI */
+.login .MuiInputBase-root{
+    border-radius: 20px;
+} 
+/* Ajustes no botão do Material UI */
+.login .MuiButton-root  {
+    margin-top: 24px !important;
+    background: #3f51b5 !important;
+    color: #fafafa !important;
+}
+
+.login .MuiButton-root:hover{
+    background: #6777d3 !important;
+}
+
 .login {
     width: 100%;
     max-width: 1120px;
@@ -43,8 +62,6 @@
     width: 100%;
     height: 50px;
     color: #201F24;
-    border: 1px solid #9EE7DD;
-    border-radius: 5vh;
     padding: 0 24px;
     min-width: 100px;
 }

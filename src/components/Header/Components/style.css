@@ -33,6 +33,10 @@
     width: 100%;
     margin: auto;
     padding: 10px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .all_window .subtotal_div {

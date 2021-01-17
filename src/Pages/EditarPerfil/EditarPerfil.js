@@ -5,8 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { Button, CircularProgress, makeStyles, MenuItem, Snackbar, TextField } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import { FaChevronLeft } from 'react-icons/fa';
-
 import api from "../../services/api";
 
 import "./EditarPerfil.css";
@@ -14,43 +12,57 @@ import "./EditarPerfil.css";
 function validateInput(type, value) {
     let isValid;
     if (type === "name") {
-        if (value === '') {
+        value === '' ? isValid = false : isValid = true;
+    }
+
+    if (type === "rua") {
+        value === '' ? isValid = false : isValid = true;
+    }
+
+    if (type === "numero") {
+        if (isNaN(Number(value)) || value === '') {
             isValid = false;
         } else {
             isValid = true;
         }
     }
-    if (type === "cpf") {
-        if (isNaN(Number(value)) || value.length < 11 || value === '') {
+
+    if (type === "complemento") {
+        value === '' ? isValid = false : isValid = true;
+    }
+
+    if (type === "bairro") {
+        value === '' ? isValid = false : isValid = true;
+    }
+
+    if (type === "CEP") {
+        if (isNaN(Number(value)) || value.length < 8 || value === '') {
             isValid = false;
         } else {
             isValid = true;
         }
     }
-    if (type === "email") {
-        if (!value.includes('@') || !value.includes('.com') || value === '') {
+
+    if (type === "cidade") {
+        value === '' ? isValid = false : isValid = true;
+    }
+
+    if (type === "estado") {
+        value === '' ? isValid = false : isValid = true;
+    }
+
+    if (type === "pontoRef") {
+        value === '' ? isValid = false : isValid = true;
+    }
+
+    if (type === "telefone") {
+        if (isNaN(Number(value)) || value.length < 8 || value === '') {
             isValid = false;
         } else {
             isValid = true;
         }
     }
-    if (type === "password") {
-        if (
-            value.length < 6
-            || value === ''
-        ) {
-            isValid = false;
-        } else {
-            isValid = true;
-        }
-    }
-    if (type === "type employee") {
-        if (value === "") {
-            isValid = false;
-        } else {
-            isValid = true;
-        }
-    }
+
     return isValid;
 }
 
@@ -58,30 +70,50 @@ function EditarPerfil({ history }) {
 
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMzYwZTg0LWNjM2MtMzhmMi1jZmI1LTc3MzhiNjZmZDJhIiwibmFtZSI6IkRpb2dvIEFkbWluIDEiLCJmaXJlYmFzZV91aWQiOiJFS2xOY05NdjBiVXZKQTVaR2xXZDEzZXZIMjYyIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJkaW9nb2FkbTIwQGVtYWlsLmNvbSIsImNwZiI6IjEyMzQ1Njc4OTIwIiwiY3JlYXRlZF9hdCI6IjIwMjAtMTItMjIgMjM6MTM6MDEiLCJ1cGRhdGVkX2F0IjoiMjAyMC0xMi0yMiAyMzoxMzowMSJ9XSwiaWF0IjoxNjA4Njc5MjA1LCJleHAiOjE2MTEyNzEyMDV9.jJk7yPBwjDCdJPb-JIzj9ealrhMVGMNGwL1vRjyiEq8';
 
-    const [typeEmployeeState, setTypeEmployeeState] = useState("");
-
     const classes = useStyles();
 
     const [errorName, setErrorName] = useState(false);
     const [errorNameMessage, setErrorNameMessage] = useState("");
 
-    const [errorCPF, setErrorCPF] = useState(false);
-    const [errorCPFMessage, setErrorCPFMessage] = useState("");
+    const [errorRua, setErrorRua] = useState(false);
+    const [errorRuaMessage, setErrorRuaMessage] = useState("");    
 
-    const [errorEmail, setErrorEmail] = useState(false);
-    const [errorEmailMessage, setErrorEmailMessage] = useState("");
+    const [errorNum, setErrorNum] = useState(false);
+    const [errorNumMessage, setErrorNumMessage] = useState("");    
 
-    const [errorPassword, setErrorPassword] = useState(false);
-    const [errorPasswordMessage, setErrorPasswordMessage] = useState("");
+    const [errorComplemento, setErrorComplemento] = useState(false);
+    const [errorComplementoMessage, setErrorComplementoMessage] = useState("");    
 
-    const [errorTypeEmployee, setErrorTypeEmployee] = useState(false);
-    const [errorTypeEmployeeMessage, setErrorTypeEmployeeMessage] = useState("");
+    const [errorBairro, setErrorBairro] = useState(false);
+    const [errorBairroMessage, setErrorBairroMessage] = useState("");    
+
+    const [errorCEP, setErrorCEP] = useState(false);
+    const [errorCEPMessage, setErrorCEPMessage] = useState("");    
+
+    const [errorCidade, setErrorCidade] = useState(false);
+    const [errorCidadeMessage, setErrorCidadeMessage] = useState(""); 
+
+    const [errorEstado, setErrorEstado] = useState(false);
+    const [errorEstadoMessage, setErrorEstadoMessage] = useState(""); 
+
+    const [errorPontoRef, setErrorPontoRef] = useState(false);
+    const [errorPontoRefMessage, setErrorPontoRefMessage] = useState("");
+
+    const [errorTelefone, setErrorTelefone] = useState(false);
+    const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
+
 
     const inputName = useRef(null);
-    const inputCPF = useRef(null);
-    const inputEmail = useRef(null);
-    const inputPassword = useRef(null);
-
+    const inputRua = useRef(null);
+    const inputNum = useRef(null);
+    const inputComplemento = useRef(null);
+    const inputBairro = useRef(null);
+    const inputCEP = useRef(null);
+    const inputCidade = useRef(null);
+    const inputPontoRef = useRef(null);
+    const inputTelefone = useRef(null);
+    const [estadoState, setEstadoState] = useState("");
+    
     const [loading, setLoading] = useState(false);
     const [openSnackBar, setOpenSnackBar] = useState(false);
 
@@ -92,20 +124,21 @@ function EditarPerfil({ history }) {
         setOpenSnackBar(false);
     };
 
-    const handleChangeTypeEmployee = (e) => {
-        setTypeEmployeeState(e.target.value)
-    }
-
-
     const handleSubmit = async () => {
 
         const resultValidateName = validateInput('name', inputName.current.value);
-        const resultValidateCPF = validateInput('cpf', inputCPF.current.value);
-        const resultValidateEmail = validateInput('email', inputEmail.current.value);
-        const resultValidatePassword = validateInput('password', inputPassword.current.value);
-        const resultValidateTypeEmployee = validateInput('type employee', typeEmployeeState);
+        const resultValidateRua = validateInput('rua', inputRua.current.value);
+        const resultValidateNum = validateInput('num', inputNum.current.value);
+        const resultValidateComplemento = validateInput('complemento', inputComplemento.current.value);
+        const resultValidateBairro = validateInput('bairro', inputBairro.current.value);
+        const resultValidateCEP = validateInput('CEP', inputCEP.current.value);
+        const resultValidateCidade = validateInput('cidade', inputCidade.current.value);
+        const resultValidateEstado = validateInput('estado', estadoState);
+        const resultValidatePontoRef = validateInput('pontoRef', inputPontoRef.current.value);
+        const resultValidateTelefone = validateInput('telefone', inputTelefone.current.value);
 
-        if (!resultValidateName || !resultValidateCPF || !resultValidateEmail || !resultValidatePassword || !resultValidateTypeEmployee) {
+        if (!resultValidateName || !resultValidateRua || !resultValidateNum || !resultValidateComplemento || !resultValidateBairro || !resultValidateCEP ||
+            !resultValidateCidade || !resultValidateEstado || !resultValidatePontoRef || !resultValidateTelefone) {
 
             if (!resultValidateName) {
                 setErrorName(true);
@@ -115,55 +148,105 @@ function EditarPerfil({ history }) {
                 setErrorNameMessage('');
             }
 
-            if (!resultValidateCPF) {
-                setErrorCPF(true);
-                setErrorCPFMessage('CPF inválido.')
+            if (!resultValidateRua) {
+                setErrorRua(true);
+                setErrorRuaMessage('Digite uma rua.')
             } else {
-                setErrorCPF(false);
-                setErrorCPFMessage('');
+                setErrorRua(false);
+                setErrorRuaMessage('');
             }
 
-            if (!resultValidateEmail) {
-                setErrorEmail(true);
-                setErrorEmailMessage('Email inválido.')
+            if (!resultValidateNum) {
+                setErrorNum(true);
+                setErrorNumMessage('Digite um número.')
             } else {
-                setErrorEmail(false);
-                setErrorEmailMessage('');
+                setErrorNum(false);
+                setErrorNumMessage('');
             }
 
-            if (!resultValidatePassword) {
-                setErrorPassword(true);
-                setErrorPasswordMessage('Senha inválida.')
+            if (!resultValidateComplemento) {
+                setErrorComplemento(true);
+                setErrorComplementoMessage('Digite um complemento.')
             } else {
-                setErrorPassword(false);
-                setErrorPasswordMessage('');
+                setErrorComplemento(false);
+                setErrorComplementoMessage('');
             }
 
-            if (!resultValidateTypeEmployee) {
-                setErrorTypeEmployee(true);
-                setErrorTypeEmployeeMessage('Selecione uma opção.')
+            if (!resultValidateBairro) {
+                setErrorBairro(true);
+                setErrorBairroMessage('Digite um bairro')
             } else {
-                setErrorTypeEmployee(false);
-                setErrorTypeEmployeeMessage('');
+                setErrorBairro(false);
+                setErrorBairroMessage('');
+            }
+
+            if (!resultValidateCEP) {
+                setErrorCEP(true);
+                setErrorCEPMessage('CEP inválido.')
+            } else {
+                setErrorCEP(false);
+                setErrorCEPMessage('');
+            }
+
+            if (!resultValidateCidade) {
+                setErrorCidade(true);
+                setErrorCidadeMessage('Digite uma cidade.')
+            } else {
+                setErrorCidade(false);
+                setErrorCidadeMessage('');
+            }
+
+            if (!resultValidateEstado) {
+                setErrorEstado(true);
+                setErrorEstadoMessage('Selecione um estado.')
+            } else {
+                setErrorEstado(false);
+                setErrorEstadoMessage('');
+            }
+
+            if (!resultValidatePontoRef) {
+                setErrorPontoRef(true);
+                setErrorPontoRefMessage('Digite um ponto de referência.')
+            } else {
+                setErrorPontoRef(false);
+                setErrorPontoRefMessage('');
+            }
+
+            if (!resultValidateTelefone) {
+                setErrorTelefone(true);
+                setErrorTelefoneMessage('Insira um telefone válido.')
+            } else {
+                setErrorTelefone(false);
+                setErrorTelefoneMessage('');
             }
         }
         else {
             setErrorName(false);
             setErrorNameMessage('');
-            setErrorCPF(false);
-            setErrorCPFMessage('');
-            setErrorEmail(false);
-            setErrorEmailMessage('');
-            setErrorPassword(false);
-            setErrorPasswordMessage('');
-            setErrorTypeEmployee(false);
-            setErrorTypeEmployeeMessage('');
+            setErrorRua(false);
+            setErrorRuaMessage('');
+            setErrorNum(false);
+            setErrorNumMessage('');
+            setErrorComplemento(false);
+            setErrorComplementoMessage('');
+            setErrorBairro(false);
+            setErrorBairroMessage('');
+            setErrorCEP(false);
+            setErrorCEPMessage('');
+            setErrorCidade(false);
+            setErrorCidadeMessage('');
+            setErrorEstado(false);
+            setErrorEstadoMessage('');
+            setErrorPontoRef(false);
+            setErrorPontoRefMessage('');
+            setErrorTelefone(false);
+            setErrorTelefoneMessage('');
 
             try {
 
                 setLoading(true);
 
-                const newUserObj = {
+                /*const newUserObj = {
                     name: inputName.current.value,
                     user_type: typeEmployeeState,
                     email: inputEmail.current.value,
@@ -172,8 +255,8 @@ function EditarPerfil({ history }) {
                 };
 
                 const response = await api.post("http://localhost:3333/user",
-                    newUserObj
-                    ,
+                    newUserObj,
+        
                     {
                         headers: {
                             authorization: `Bearer ${token}`,
@@ -192,7 +275,7 @@ function EditarPerfil({ history }) {
                 inputCPF.current.value = '';
                 inputEmail.current.value = '';
                 inputPassword.current.value = '';
-                setTypeEmployeeState("");
+                setTypeEmployeeState(""); */
 
             } catch (err) {
                 console.log(err.message);
@@ -200,80 +283,110 @@ function EditarPerfil({ history }) {
         }
     }
 
+    const estados = [ 
+        'AC',
+        'AL',
+        'AP',
+        'AM',
+        'BA',
+        'CE',
+        'DF',
+        'ES',
+        'GO',
+        'MA',
+        'MG',
+        'MS',
+        'MT',
+        'PA',
+        'PB',
+        'PR',
+        'PE',
+        'PI',
+        'RJ',
+        'RN',
+        'RO',
+        'RS',
+        'RR',
+        'SC',
+        'SP',
+        'SE',
+        'TO'
+    ];
+
     return (
         <div className="registerEmployeeFullContent">
             <h1 className={classes.mainTitle}>
                 EDITAR DADOS PESSOAIS
-          <span className={classes.spanInsideTitle} />
+            <span className={classes.spanInsideTitle} />
             </h1>
 
             <h1 className={classes.subTitle}>
                 NOME COMPLETO
-      </h1>
+            </h1>
             <TextField
                 required
                 inputRef={inputName}
                 error={errorName}
                 label="Nome Completo"
                 helperText={errorNameMessage}
-                className={classes.inputText}
+                className={classes.largeInput}
                 variant="outlined"
             />
 
             <h1 className={classes.subTitle}>
                 ENDEREÇO
-        </h1>
+            </h1>
             <div className="address01">
                 <h1 className={classes.caption} >
                     Rua
-            </h1>
+                </h1>
                 <TextField
                     required
                     label="Rua"
-                    inputRef={inputCPF}
-                    error={errorCPF}
-                    helperText={errorCPFMessage}
+                    inputRef={inputRua}
+                    error={errorRua}
+                    helperText={errorRuaMessage}
                     variant="outlined"
 
-                    className={classes.sideText}
+                    className={classes.mediumInput}
                 />
                 <h1 className={classes.caption} >
                     N°
-            </h1>
+                </h1>
 
                 <TextField
                     required
                     label="Número"
-                    inputRef={inputEmail}
-                    error={errorEmail}
-                    helperText={errorEmailMessage}
-                    className={classes.sideText}
+                    inputRef={inputNum}
+                    error={errorNum}
+                    helperText={errorNumMessage}
+                    className={classes.smallInput}
                     variant="outlined"
                 />
                 <h1 className={classes.caption} >
                     Complemento
-            </h1>
+                </h1>
 
                 <TextField
                     required
                     label="Complemento"
-                    inputRef={inputPassword}
-                    error={errorPassword}
-                    helperText={errorPasswordMessage}
-                    className={classes.sideText}
+                    inputRef={inputComplemento}
+                    error={errorComplemento}
+                    helperText={errorComplementoMessage}
+                    className={classes.mediumInput}
                     variant="outlined"
                 />
                 <h1 className={classes.caption} >
                     Bairro
-            </h1>
+                </h1>
 
                 <TextField
                     required
                     label="Bairro"
-                    inputRef={inputPassword}
-                    error={errorPassword}
-                    helperText={errorPasswordMessage}
-                    className={classes.sideText}
+                    inputRef={inputBairro}
+                    error={errorBairro}
+                    helperText={errorBairroMessage}
+                    className={classes.mediumInput}
                     variant="outlined"
                 />
             </div>
@@ -281,54 +394,77 @@ function EditarPerfil({ history }) {
             <div className="address01">
                 <h1 className={classes.caption} >
                     CEP
-            </h1>
+                </h1>
                 <TextField
                     required
                     label="CEP"
-                    inputRef={inputCPF}
-                    error={errorCPF}
-                    helperText={errorCPFMessage}
+                    inputRef={inputCEP}
+                    error={errorCEP}
+                    helperText={errorCEPMessage}
                     variant="outlined"
 
-                    className={classes.sideText}
+                    className={classes.mediumInput}
                 />
                 <h1 className={classes.caption} >
                     Cidade
-            </h1>
+                </h1>
                 <TextField
                     required
                     label="Cidade"
-                    inputRef={inputEmail}
-                    error={errorEmail}
-                    helperText={errorEmailMessage}
-                    className={classes.sideText}
+                    inputRef={inputCidade}
+                    error={errorCidade}
+                    helperText={errorCidadeMessage}
+                    className={classes.mediumInput}
                     variant="outlined"
                 />
                 <h1 className={classes.caption} >
                     Estado
-            </h1>
+                </h1>
                 <TextField
                     required
+                    select
+                    value={estadoState}
                     label="Estado"
-                    inputRef={inputEmail}
-                    error={errorEmail}
-                    helperText={errorEmailMessage}
+                    error={errorEstado}
+                    helperText={errorEstadoMessage}
+                    className={classes.smallInput}
+                    //onChange={(e) => handleChangeTypeEmployee(e)}
+                    variant="outlined"
+                >
+                    {estados.map(estado => (  
+                      <MenuItem value={estado}>  
+                        {estado}  
+                      </MenuItem>  
+                    ))} 
+                </TextField>
+
+            </div>
+
+            <div className="address01">
+                <h1 className={classes.caption}>
+                    Ponto de referência
+                </h1>
+                <TextField
+                    required
+                    label="Ponto de Referência"
+                    inputRef={inputPontoRef}
+                    error={errorPontoRef}
+                    helperText={errorPontoRefMessage}
                     className={classes.sideText}
                     variant="outlined"
                 />
-
             </div>
 
             <h1 className={classes.subTitle}>
                 TELEFONE DE CONTATO
-        </h1>
+            </h1>
             <TextField
                 required
                 label="Telefone"
-                inputRef={inputPassword}
-                error={errorPassword}
-                helperText={errorPasswordMessage}
-                className={classes.inputText}
+                inputRef={inputTelefone}
+                error={errorTelefone}
+                helperText={errorTelefoneMessage}
+                className={classes.root}
                 variant="outlined"
             />
 
@@ -338,18 +474,10 @@ function EditarPerfil({ history }) {
                 </Button>
             </div>
 
-            <Button
-                type="button"
-                className="purchaseFinished"
-                onClick={() => alert('1')}
-            >
-                {loading ? <CircularProgress size={40} color='secondary' className="circular-progress" /> : "SALVAR ALTERAÇÕES"}
-            </Button>
-
             <Snackbar open={openSnackBar} autoHideDuration={5000} onClose={handleCloseSnackBar}>
                 <MuiAlert onClose={handleCloseSnackBar} elevation={6} variant="filled" severity="success">
                     Funcionário cadastrado com sucesso!
-        </MuiAlert>
+                </MuiAlert>
             </Snackbar>
 
         </div>
@@ -361,7 +489,7 @@ const useStyles = makeStyles((theme) => ({
         width: 'fit-content',
         fontSize: '32px',
         lineHeight: '49px',
-        marginTop: '35px',
+        marginTop: '5px',
         marginBottom: '30px',
         display: 'flex',
         flexDirection: 'column',
@@ -412,8 +540,22 @@ const useStyles = makeStyles((theme) => ({
         }
     },
 
-    sideText: {
+    smallInput: {
+        width: '10%',
+
+        outline: 'none',
+        padding: '5px 10px',
+    },
+
+    mediumInput: {
         width: '20%',
+
+        outline: 'none',
+        padding: '5px 10px',
+    },
+
+    largeInput: {
+        width: '30%',
 
         outline: 'none',
         padding: '5px 10px',
@@ -428,16 +570,17 @@ const useStyles = makeStyles((theme) => ({
     },
 
     saveButton: {
-        width: '85%',
+        width: '25%',
         outline: 'none',
-        backgroundColor: '#4BB543',
-        fontSize: '18px',
-        fontWeight: 600,
+        backgroundColor: '#0EC4AB',
+        fontSize: '20px',
         transition: 'background 0.6s',
+
+        borderRadius: '40px',
         '&:hover': {
-            backgroundColor: '#4BB543AA',
-        }
-    }
+            backgroundColor: '#0EC4ABAA',
+        },
+    },
 }));
 
 export default withRouter(EditarPerfil);

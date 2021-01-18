@@ -4,7 +4,6 @@ import { AiOutlineLeft } from 'react-icons/ai';
 import './EspecificOrderAdm.css';
 import camisa from '../../../../Assets/camisa.jpg';
 
-
 function EspecificOrderAdm() {
     let status = "pending";
 

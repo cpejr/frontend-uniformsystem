@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import api from "../../../services/api";
+import { LoginContext } from "../../../contexts/LoginContext";
 
 import { Link } from 'react-router-dom';
 
@@ -31,10 +32,10 @@ const useStyles = makeStyles({
   }
 });
 
-const token = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYTUxY2M4Ny03MmI3LWM0Yy1iZDUzLWViODZjZDQzYTYiLCJuYW1lIjoiQXJ0IEFkbWluIDAiLCJmaXJlYmFzZV91aWQiOiJCUjdVVTZlUEJiZWtBTHdjQmN2dG51UUhIVGcxIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJhcnRodUBlbWFpbC5jb20iLCJjcGYiOiIxMjM0NTYxMTExMSIsImNyZWF0ZWRfYXQiOiIyMDIwLTEyLTE1IDE5OjM1OjM5IiwidXBkYXRlZF9hdCI6IjIwMjAtMTItMTUgMTk6MzU6MzkifV0sImlhdCI6MTYwODA2MTI2MiwiZXhwIjoxNjEwNjUzMjYyfQ.oMwUXvSkuA9SuuSZ-S5IM9--4DEq2ZFSfYUvUBM6MC4";
 
 function EmployeeAdm() {
   const classes = useStyles();
+  const { token } = useContext(LoginContext);
   const [employees, setEmployees] = useState([]);
   const [dialogItem, setDialogItem] = useState({open: false, item: null});
 
@@ -49,7 +50,7 @@ function EmployeeAdm() {
   async function getEmployees() {
     try {
       const response = await api.get("/employees", {
-        headers: { authorization: token },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setEmployees([...response.data.employees]);
     } catch (error) {

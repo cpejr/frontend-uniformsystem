@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import api from '../../services/api';
 
@@ -11,6 +11,8 @@ import PopUpChangeAddress from './PopUpChangeAddress';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 
 import Button from '@material-ui/core/Button';
+
+import { LoginContext } from '../../contexts/LoginContext'; 
 
 import './Checkout.css';
 
@@ -58,14 +60,15 @@ function Checkout() {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const user_id = '534a5d-8e8d-0e50-4db-88b45325ae1d';
+  
+  const { token, user } = useContext(LoginContext);
 
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMDZlZTg2Ny0wZGEtYjJkOC1lNDQ1LTdlNWI3YTA0ZTQiLCJuYW1lIjoiQWRtYSIsImZpcmViYXNlX3VpZCI6InpqN01ZWmx1TURlaHlHSEttQzRaUHpYeVdNdTIiLCJ1c2VyX3R5cGUiOiJjbGllbnQiLCJlbWFpbCI6ImFkbWFjYW5lc2NoaUBnbWFpbC5jb20iLCJjcGYiOiIxMjM0NTY3ODkxMSIsImNyZWF0ZWRfYXQiOiIyMDIwLTExLTIwIDEyOjM4OjQ4IiwidXBkYXRlZF9hdCI6IjIwMjAtMTEtMjAgMTI6Mzg6NDgifV0sImlhdCI6MTYwODUwNTIxNywiZXhwIjoxNjExMDk3MjE3fQ.VKTYkgQtJ9F--XwbQAYF6_l179bWVn5zIIK8AIyvqEI';
+  const currentUser = user[0];
+  const user_id = currentUser.user_id;
 
   const serviceCode = '04014';
 
-  const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   useEffect(
     () => {

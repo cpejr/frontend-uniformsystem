@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useContext} from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 import Home from "./Pages/Home";
 
@@ -33,22 +34,69 @@ import HeaderAdm from "./components/HeaderAdm";
 import FooterAdm from "./components/FooterAdm";
 import SidebarAdm from "./components/SidebarAdm";
 
-import { isAuthenticated } from "./services/auth";
+import { isAuthenticated, isADM, isADMOrEmployee, isClientOrADMOrEmployee } from "./services/auth";
+import { LoginContext } from "./contexts/LoginContext";
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{ pathname: "/login", state: { from: props.location } }}
-        />
-      )
-    }
-  />
-);
+
+// Controle de rotas para Cliente
+const PrivateClientRoute = ({ component: Component, ...rest }) => {
+  const { user } = useContext(LoginContext);
+  const currentUser = user[0];
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        isAuthenticated() && isClientOrADMOrEmployee(currentUser) ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{ pathname: "/login", state: { from: props.location } }}
+          />
+        )
+      }
+    />
+  );
+}
+
+// Controle de rotas para ADM
+const PrivateADMRoute = ({ component: Component, ...rest }) => {
+  const { user } = useContext(LoginContext);
+  const currentUser = user[0];
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        isAuthenticated() && isADM(currentUser) ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{ pathname: "/login", state: { from: props.location } }}
+          />
+        )
+      }
+    />
+  );
+}
+
+// Controle de rotas para Employee ou ADM
+const PrivateADMOrEmployeeRoute = ({ component: Component, ...rest }) => {
+  const { user } = useContext(LoginContext);
+  const currentUser = user[0];
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        isAuthenticated() && isADMOrEmployee(currentUser) ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{ pathname: "/login", state: { from: props.location } }}
+          />
+        )
+      }
+    />
+  );
+}
 
 export default function Routes() {
   return (
@@ -75,20 +123,20 @@ function MenuRoutes() {
       <Switch>
         <Route path="/" export exact component={Home} />
 
-        <Route path="/shop" export exact component={Loja} />
-        <Route path="/checkout" export exact component={Checkout} />
+        <Route path="/shop" export component={Loja} />
+        <PrivateClientRoute path="/checkout" export component={Checkout} />
         <Route path="/product/:product_id" export component={Produto} />
         {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                 logado, você será redirecionado para a página Login. */}
-        <Route path="/perfil" export exact component={Perfil} />
-        <Route path="/login" export exact component={Login} />
-        <Route path="/cart" export exact component={Carrinho} />
-        <Route path="/contact" export exact component={Contato} />
-        <Route path="/signUp" export exact component={SignUp} />
-        <Route path="/cadastro" export exact component={Cadastro} />
-        <Route path="/orders" export exact component={Pedidos} />
+        <PrivateClientRoute path="/perfil" export component={Perfil} />
+        <PrivateClientRoute path="/cart" export component={Carrinho} />
+        <Route path="/login" export component={Login} />
+        <Route path="/contact" export component={Contato} />
+        <Route path="/signUp" export component={SignUp} />
+        <Route path="/cadastro" export component={Cadastro} />
+        <Route path="/orders" export component={Pedidos} />
         {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
-        <Route path="*" export exact component={Error} />
+        <Route path='*' exact component={Error} />
       </Switch>
       <Footer />
     </div>
@@ -96,54 +144,82 @@ function MenuRoutes() {
 }
 
 function AdmRoutes() {
-  return (
-    <div>
-      <HeaderAdm />
-      <SidebarAdm>
-        <Switch>
-          <Route path="/adm/home" export exact component={HomeEditable} />
-          <Route path="/adm/pedidos" export exact component={OrdersAdm} />
-          <Route
-            path="/adm/pedidoespecifico"
-            export
-            exact
-            component={EspecificOrderAdm}
-          />
-          <Route path="/adm/produtos" export exact component={ProductsAdm} />
-          <Route
-            path="/adm/funcionarios"
-            export
-            exact
-            component={EmployeeAdm}
-          />
-          <Route
-            path="/adm/funcionarios/cadastro"
-            export
-            exact
-            component={CadastroFunc}
-          />
-          <Route
-            path="/adm/produtos/cadastro"
-            export
-            exact
-            component={RegisterProduct}
-          />
-          <Route
-            path="/adm/produtos/:product_id"
-            export
-            exact
-            component={EditProduct}
-          />
-          <Route
-            path="/adm/funcionarios/funcionarioEspecifico"
-            export
-            exact
-            component={EspecificEmployee}
-          />
-          <Route path="*" export exact component={Error} />
-        </Switch>
-      </SidebarAdm>
-      <FooterAdm />
-    </div>
+
+  const { user } = useContext(LoginContext);
+
+  if (user === "notYet") return <Loading/>;
+  if (user === null || user.user_type === "adm") return <Redirect to="/adm/home" />;
+  else
+    return (
+      <div>
+        <HeaderAdm />
+        <SidebarAdm>
+          <Switch>
+            <PrivateADMRoute 
+              path="/adm/home" 
+              component={HomeEditable} 
+            />
+            <PrivateADMOrEmployeeRoute 
+              path="/adm/pedidos"  
+              component={OrdersAdm} 
+            />
+            <PrivateADMOrEmployeeRoute
+              path="/adm/pedidoespecifico"
+              export
+              component={EspecificOrderAdm}
+            />
+            <PrivateADMRoute 
+              path="/adm/produtos"  
+              component={ProductsAdm} 
+            />
+            <PrivateADMRoute
+              path="/adm/funcionarios"
+              export
+              component={EmployeeAdm}
+            />
+            <PrivateADMRoute
+              path="/adm/funcionarios/cadastro"
+              export
+              component={CadastroFunc}
+            />
+            <PrivateADMRoute
+              path="/adm/produtos/cadastro"
+              export
+              component={RegisterProduct}
+            />
+            <PrivateADMRoute
+              path="/adm/produtos/:product_id"
+              export
+              component={EditProduct}
+            />
+            <PrivateADMRoute
+              path="/adm/funcionarios/funcionarioEspecifico"
+              export
+              component={EspecificEmployee}
+            />
+            <Route 
+              path='*' 
+              exact={true} 
+              component={Error} 
+            />
+          </Switch>
+        </SidebarAdm>
+        <FooterAdm />
+      </div>
+  );
+}
+
+function Loading(props){
+  const { user } = useContext(LoginContext);
+    console.log("UseEffect Loading: ", user);
+    if (user.type === "adm") return <Redirect to="/adm/home"/>;
+    if ((user === null) || (user === 'notYet')) return <Redirect to="/login" />;
+    else 
+      return (
+        <div className="loading">
+          <div className="loading-logo">
+            <ClipLoader size={100} color={"#123abc"} loading={true} />
+          </div>
+        </div>
   );
 }

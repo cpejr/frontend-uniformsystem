@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import api from "../../../services/api";
+import { LoginContext } from '../../../contexts/LoginContext';
 
 import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
@@ -72,6 +73,8 @@ function OrdersAdm() {
       }
     });
   }
+
+  const { token } = useContext(LoginContext);
 
   return (
     <div className="orders_page">

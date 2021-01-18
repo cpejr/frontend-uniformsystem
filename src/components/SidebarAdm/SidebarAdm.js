@@ -2,25 +2,25 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./SidebarAdm.css";
 
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
+import PropTypes from "prop-types";
+import AppBar from "@material-ui/core/AppBar";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import Hidden from "@material-ui/core/Hidden";
 
-import CreateIcon from '@material-ui/icons/Create';
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
-import GroupIcon from '@material-ui/icons/Group';
+import CreateIcon from "@material-ui/icons/Create";
+import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
+import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
+import GroupIcon from "@material-ui/icons/Group";
 
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import MenuIcon from "@material-ui/icons/Menu";
+import Toolbar from "@material-ui/core/Toolbar";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { LoginContext } from '../../contexts/LoginContext';
 
@@ -28,30 +28,31 @@ const drawerWidth = 220;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
       flexShrink: 0,
     },
   },
   appBar: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
     },
   },
   content: {
     flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(3),
+    width: "100%",
+    padding: 0,
+    paddingTop: theme.spacing(3),
   },
 }));
 
@@ -67,28 +68,28 @@ export default function ComputerSidebar(props) {
     setMobileOpen(!mobileOpen);
   };
 
-    const objListOptionsAdm = [
-        {
-            itemName: 'EDITAR PÁGINA HOME',
-            itemIcon: < CreateIcon/>, 
-            path: '/adm/home',
-        },
-        {
-            itemName: 'PEDIDOS',
-            itemIcon: < FormatListBulletedIcon/>, 
-            path: '/adm/pedidos',
-        },
-        {
-            itemName: 'PRODUTOS',
-            itemIcon: < CardGiftcardIcon/>, 
-            path: '/adm/produtos',
-        },
-        {
-            itemName: 'FUNCIONÁRIOS',
-            itemIcon: < GroupIcon/>, 
-            path: '/adm/funcionarios',
-        }
-    ]
+  const objListOptionsAdm = [
+    {
+      itemName: "EDITAR PÁGINA HOME",
+      itemIcon: <CreateIcon />,
+      path: "/adm/home",
+    },
+    {
+      itemName: "PEDIDOS",
+      itemIcon: <FormatListBulletedIcon />,
+      path: "/adm/pedidos",
+    },
+    {
+      itemName: "PRODUTOS",
+      itemIcon: <CardGiftcardIcon />,
+      path: "/adm/produtos",
+    },
+    {
+      itemName: "FUNCIONÁRIOS",
+      itemIcon: <GroupIcon />,
+      path: "/adm/funcionarios",
+    },
+  ];
 
     const objListOptionsEmployee = [
         {
@@ -130,6 +131,7 @@ export default function ComputerSidebar(props) {
   
   const container = window !== undefined ? () => window().document.body : undefined;
 
+
   return (
     <div className="sidebar">
       {/* <CssBaseline /> */}
@@ -152,7 +154,7 @@ export default function ComputerSidebar(props) {
           <Drawer
             container={container}
             variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            anchor={theme.direction === "rtl" ? "right" : "left"}
             open={mobileOpen}
             onClose={handleDrawerToggle}
             classes={{
@@ -192,4 +194,3 @@ ComputerSidebar.propTypes = {
    */
   window: PropTypes.func,
 };
-

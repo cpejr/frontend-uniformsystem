@@ -110,7 +110,7 @@ function EditarPerfil({ history }) {
     const inputBairro = useRef(null);
     const inputCEP = useRef(null);
     const inputCidade = useRef(null);
-    const inputPontoRef = useRef(null);
+    const inputPontoRef = useRef("MR TRAVIS");
     const inputTelefone = useRef(null);
     const [estadoState, setEstadoState] = useState("");
     
@@ -246,6 +246,14 @@ function EditarPerfil({ history }) {
 
                 setLoading(true);
 
+                const response = api.get("/address/2b2b31e-31e-d86-faf-5c478e7ef07", 
+                    {
+                        headers: { authorization: token }
+                    }
+                );
+
+                console.log(response);
+
                 /*const newUserObj = {
                     name: inputName.current.value,
                     user_type: typeEmployeeState,
@@ -280,6 +288,21 @@ function EditarPerfil({ history }) {
             } catch (err) {
                 console.log(err.message);
             }
+        }
+    }
+
+    const handleClick = async () => {
+        try {
+            const response = await api.get("/address/2b2b31e-31e-d86-faf-5c478e7ef07", 
+                {
+                    headers: { authorization: `bearer ${token}` }
+                }
+            );
+
+            console.log(response);
+        } catch (err) {
+            console.warn(err.message);
+            alert('Erro ao acessar dados do usuário!');
         }
     }
 
@@ -319,7 +342,7 @@ function EditarPerfil({ history }) {
                 EDITAR DADOS PESSOAIS
             <span className={classes.spanInsideTitle} />
             </h1>
-
+            
             <h1 className={classes.subTitle}>
                 NOME COMPLETO
             </h1>
@@ -451,6 +474,8 @@ function EditarPerfil({ history }) {
                     error={errorPontoRef}
                     helperText={errorPontoRefMessage}
                     className={classes.sideText}
+                    //InputLabelProps={{shrink: true}}
+                    //value="jj"
                     variant="outlined"
                 />
             </div>
@@ -469,7 +494,7 @@ function EditarPerfil({ history }) {
             />
 
             <div className={classes.divButtons}>
-                <Button className={classes.saveButton} onClick={() => handleSubmit()} >
+                <Button className={classes.saveButton} onClick={() => handleClick()} >
                     {loading ? <CircularProgress color='secondary' /> : "SALVAR ALTERAÇÕES"}
                 </Button>
             </div>

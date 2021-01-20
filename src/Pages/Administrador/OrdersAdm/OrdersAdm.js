@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import api from "../../../services/api";
-import { LoginContext } from '../../../contexts/LoginContext';
+import { LoginContext } from "../../../contexts/LoginContext";
+import { useHistory, Link } from "react-router-dom";
 
 import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
 
 import Toggle from "../../../components/Toggle";
+import EspecificOrderAdm from "../OrdersAdm/EspecificOrderAdm/EspecificOrderAdm";
 
 import { FaAngleRight, FaFilter } from "react-icons/fa";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -21,10 +23,9 @@ const PEDIDOS = [
 function OrdersAdm() {
   const [Orders, setOrders] = useState([]);
   const [OnlyPending, setOnlyPending] = useState(false);
-
+  //const { token } = useContext(LoginContext);
   const [InputID, setInputID] = useState(0);
-
-  //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiOGJmODMtOGUwZi02YjA3LTg3Yy0wNDRmM2EwMTNkM2MiLCJuYW1lIjoiQnJ5YW4iLCJmaXJlYmFzZV91aWQiOiJyZTRwc2pGNlR0aEhReXFpdjhyb2xYV2U0dWgxIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJicnlhbkBjcGUuY29tIiwiY3BmIjoiMDAwMDAwMDAwMDAiLCJjcmVhdGVkX2F0IjoiMjAyMS0wMS0xMSAxMjoxODo0NyIsInVwZGF0ZWRfYXQiOiIyMDIxLTAxLTExIDEyOjE4OjQ3In1dLCJpYXQiOjE2MTAzNjc1NTAsImV4cCI6MTYxMjk1OTU1MH0.czTnB8wKs6T0JIBF9T9dPz4YZmY3EXG8oW6ZOE1v6f8";
+  const history = useHistory();
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiOGJmODMtOGUwZi02YjA3LTg3Yy0wNDRmM2EwMTNkM2MiLCJuYW1lIjoiQnJ5YW4iLCJmaXJlYmFzZV91aWQiOiJyZTRwc2pGNlR0aEhReXFpdjhyb2xYV2U0dWgxIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJicnlhbkBjcGUuY29tIiwiY3BmIjoiMDAwMDAwMDAwMDAiLCJjcmVhdGVkX2F0IjoiMjAyMS0wMS0xMSAxMjoxODo0NyIsInVwZGF0ZWRfYXQiOiIyMDIxLTAxLTExIDEyOjE4OjQ3In1dLCJpYXQiOjE2MTAzNjc1NTAsImV4cCI6MTYxMjk1OTU1MH0.czTnB8wKs6T0JIBF9T9dPz4YZmY3EXG8oW6ZOE1v6f8";
 
@@ -41,6 +42,10 @@ function OrdersAdm() {
   }, []);
 
   console.log(Orders.models);
+
+  function especifico(id, date) {
+    <EspecificOrderAdm id={id} date={date} />;
+  }
 
   function FilteredData() {
     return PEDIDOS.map((pedido, index) => {
@@ -74,8 +79,6 @@ function OrdersAdm() {
     });
   }
 
-  const { token } = useContext(LoginContext);
-
   return (
     <div className="orders_page">
       <div className="orders_data">
@@ -99,7 +102,7 @@ function OrdersAdm() {
           </div>
           <div className="div_pendente">
             <div className="text_pendente">Pendente</div>
-            <Toggle className="toggle_order" Status={setOnlyPending}></Toggle>
+            <Toggle className="toggle_order" Status={setOnlyPending} />
           </div>
         </div>
 
@@ -114,11 +117,19 @@ function OrdersAdm() {
                 <tr>
                   {Orders.map((pedido) => {
                     const id = pedido.order_id;
+                    const date = pedido.created_at;
+
                     const colum = (
                       <div className="adm_orders_id">
                         <tr>
                           {id}
-                          <FaAngleRight className="icon_table" />
+                          <Link
+                            to="/adm/pedidoespecifico"
+                            style={{ color: "black" }}
+                            onClick={especifico(id, date)}
+                          >
+                            <FaAngleRight className="icon_table" />
+                          </Link>
                         </tr>
                       </div>
                     );
@@ -144,7 +155,7 @@ function OrdersAdm() {
 
           {/* Os <th> sao o cabeçalho da tabela. O tr é uma linha da tabela. */}
 
-          <tr></tr>
+          <tr />
         </div>
       </div>
     </div>

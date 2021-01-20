@@ -477,7 +477,7 @@ function EditarPerfil({ history }) {
                     inputRef={pontoRefInput}
                     error={errorPontoRef}
                     helperText={errorPontoRefMessage}
-                    className={classes.sideText}
+                    className={classes.mediumInput}
                     //InputLabelProps={{shrink: true}}
                     //value="jj"
                     variant="outlined"
@@ -580,7 +580,9 @@ const useStyles = makeStyles((theme) => ({
         outline: 'none',
         padding: '5px 10px',
         [`& fieldset`]:{
-            borderRadius: 40
+            borderRadius: 40,
+            borderColor: '#0EC4AB',
+            borderWidth: 2,
           }
     },
 
@@ -592,7 +594,9 @@ const useStyles = makeStyles((theme) => ({
         outline: 'none',
         padding: '5px 10px',
         [`& fieldset`]:{
-            borderRadius: 40
+            borderRadius: 40,
+            borderColor: '#0EC4AB',
+            borderWidth: 2,
           }
     },
 
@@ -604,8 +608,10 @@ const useStyles = makeStyles((theme) => ({
         outline: 'none',
         padding: '5px 10px',
         [`& fieldset`]:{
-            borderRadius: 40
-          }
+            borderRadius: 40,
+            borderColor: '#0EC4AB',
+            borderWidth: 2,
+          },
     },
 
     divButtons: {

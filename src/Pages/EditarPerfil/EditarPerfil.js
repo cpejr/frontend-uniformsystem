@@ -68,7 +68,7 @@ function validateInput(type, value) {
 
 function EditarPerfil({ history }) {
 
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMzYwZTg0LWNjM2MtMzhmMi1jZmI1LTc3MzhiNjZmZDJhIiwibmFtZSI6IkRpb2dvIEFkbWluIDEiLCJmaXJlYmFzZV91aWQiOiJFS2xOY05NdjBiVXZKQTVaR2xXZDEzZXZIMjYyIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJkaW9nb2FkbTIwQGVtYWlsLmNvbSIsImNwZiI6IjEyMzQ1Njc4OTIwIiwiY3JlYXRlZF9hdCI6IjIwMjAtMTItMjIgMjM6MTM6MDEiLCJ1cGRhdGVkX2F0IjoiMjAyMC0xMi0yMiAyMzoxMzowMSJ9XSwiaWF0IjoxNjA4Njc5MjA1LCJleHAiOjE2MTEyNzEyMDV9.jJk7yPBwjDCdJPb-JIzj9ealrhMVGMNGwL1vRjyiEq8';
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiM2JkNjczLTRmNjAtY2YyNC0wNGQ4LWRmNzcyNThkODAyIiwibmFtZSI6IkRpb2dvIiwiZmlyZWJhc2VfdWlkIjoiWmhydnV1T3ZkUFBDcFhtb0lGQXJSYjhBVEFZMiIsInVzZXJfdHlwZSI6ImFkbSIsImVtYWlsIjoiam9hb1BAdGVzdGUuY29tIiwiY3BmIjoiMDAwMDAwMDAwMDAiLCJjcmVhdGVkX2F0IjoiMjAyMS0wMS0xOSAyMjozMDozMSIsInVwZGF0ZWRfYXQiOiIyMDIxLTAxLTE5IDIyOjMwOjMxIn1dLCJpYXQiOjE2MTEwOTU0ODEsImV4cCI6MTYxMzY4NzQ4MX0.VWMZYdGt7HpCADt96NUmlrV9DShaK4g_GLoNAuIw-50";
 
     const classes = useStyles();
 
@@ -151,6 +151,7 @@ function EditarPerfil({ history }) {
         }
         setOpenSnackBar(false);
     };
+
 
     const handleSubmit = async () => {
 
@@ -276,7 +277,7 @@ function EditarPerfil({ history }) {
 
                 const response = await api.get("/address/2b2b31e-31e-d86-faf-5c478e7ef07",
                     {
-                        headers: { authorization: `bearer ${token}` }
+                        headers: { authorization: `Bearer ${token}` }
                     }
                 );
 
@@ -477,6 +478,8 @@ function EditarPerfil({ history }) {
                     error={errorPontoRef}
                     helperText={errorPontoRefMessage}
                     className={classes.sideText}
+                    //InputLabelProps={{shrink: true}}
+                    //value="jj"
                     variant="outlined"
                     defaultValue={addressInfo.complement}
                     onChange={(event) => setPontoRef(event.target.value)}
@@ -492,7 +495,7 @@ function EditarPerfil({ history }) {
                 inputRef={telefoneInput}
                 error={errorTelefone}
                 helperText={errorTelefoneMessage}
-                className={classes.root}
+                className={classes.mediumInput}
                 variant="outlined"
             />
 
@@ -547,7 +550,8 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '20px',
         lineHeight: '25px',
         marginTop: '10px',
-        marginBottom: '25px',
+        marginBottom: '10px',
+        marginRight: '5px',
         display: 'flex',
         flexDirection: 'row',
     },
@@ -569,24 +573,39 @@ const useStyles = makeStyles((theme) => ({
     },
 
     smallInput: {
-        width: '10%',
-
+        width: '50%',
+        [theme.breakpoints.up('800')]: {
+            width: '10%',
+        },
         outline: 'none',
         padding: '5px 10px',
+        [`& fieldset`]:{
+            borderRadius: 40
+          }
     },
 
     mediumInput: {
-        width: '20%',
-
+        width: '100%',
+        [theme.breakpoints.up('800')]: {
+            width: '20%',
+        },
         outline: 'none',
         padding: '5px 10px',
+        [`& fieldset`]:{
+            borderRadius: 40
+          }
     },
 
     largeInput: {
-        width: '30%',
-
+        width: '100%',
+        [theme.breakpoints.up('800')]: {
+            width: '30%',
+        },
         outline: 'none',
         padding: '5px 10px',
+        [`& fieldset`]:{
+            borderRadius: 40
+          }
     },
 
     divButtons: {
@@ -598,7 +617,10 @@ const useStyles = makeStyles((theme) => ({
     },
 
     saveButton: {
-        width: '25%',
+        width: '80%',
+        [theme.breakpoints.up('800')]: {
+            width: '35%',
+        },
         outline: 'none',
         backgroundColor: '#0EC4AB',
         fontSize: '20px',

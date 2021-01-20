@@ -85,4 +85,8 @@
   } */
 
 
-
+@media(max-width: 800px){
+  .address01 {
+    flex-direction: column;
+  }
+}

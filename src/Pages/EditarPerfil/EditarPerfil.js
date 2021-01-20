@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { withRouter } from 'react-router-dom';
 
@@ -76,25 +76,25 @@ function EditarPerfil({ history }) {
     const [errorNameMessage, setErrorNameMessage] = useState("");
 
     const [errorRua, setErrorRua] = useState(false);
-    const [errorRuaMessage, setErrorRuaMessage] = useState("");    
+    const [errorRuaMessage, setErrorRuaMessage] = useState("");
 
     const [errorNum, setErrorNum] = useState(false);
-    const [errorNumMessage, setErrorNumMessage] = useState("");    
+    const [errorNumMessage, setErrorNumMessage] = useState("");
 
     const [errorComplemento, setErrorComplemento] = useState(false);
-    const [errorComplementoMessage, setErrorComplementoMessage] = useState("");    
+    const [errorComplementoMessage, setErrorComplementoMessage] = useState("");
 
     const [errorBairro, setErrorBairro] = useState(false);
-    const [errorBairroMessage, setErrorBairroMessage] = useState("");    
+    const [errorBairroMessage, setErrorBairroMessage] = useState("");
 
     const [errorCEP, setErrorCEP] = useState(false);
-    const [errorCEPMessage, setErrorCEPMessage] = useState("");    
+    const [errorCEPMessage, setErrorCEPMessage] = useState("");
 
     const [errorCidade, setErrorCidade] = useState(false);
-    const [errorCidadeMessage, setErrorCidadeMessage] = useState(""); 
+    const [errorCidadeMessage, setErrorCidadeMessage] = useState("");
 
     const [errorEstado, setErrorEstado] = useState(false);
-    const [errorEstadoMessage, setErrorEstadoMessage] = useState(""); 
+    const [errorEstadoMessage, setErrorEstadoMessage] = useState("");
 
     const [errorPontoRef, setErrorPontoRef] = useState(false);
     const [errorPontoRefMessage, setErrorPontoRefMessage] = useState("");
@@ -102,20 +102,48 @@ function EditarPerfil({ history }) {
     const [errorTelefone, setErrorTelefone] = useState(false);
     const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
+    const [name, setName] = useState("");
+    const [rua, setRua] = useState("");
+    const [num, setNum] = useState(0);
+    const [complemento, setComplemento] = useState("");
+    const [bairro, setBairro] = useState("");
+    const [CEP, setCEP] = useState(0);
+    const [cidade, setCidade] = useState("");
+    const [estado, setEstado] = useState("");
+    const [pontoRef, setPontoRef] = useState("");
+    const [telefone, setTelefone] = useState(0);
 
-    const inputName = useRef(null);
-    const inputRua = useRef(null);
-    const inputNum = useRef(null);
-    const inputComplemento = useRef(null);
-    const inputBairro = useRef(null);
-    const inputCEP = useRef(null);
-    const inputCidade = useRef(null);
-    const inputPontoRef = useRef("MR TRAVIS");
-    const inputTelefone = useRef(null);
-    const [estadoState, setEstadoState] = useState("");
-    
+    const [addressInfo, setAddressInfo] = useState();
+
+    const nomeInput = useRef(null);
+    const ruaInput = useRef(null);
+    const numInput = useRef(null);
+    const complementoInput = useRef(null);
+    const bairroInput = useRef(null);
+    const CEPInput = useRef(null);
+    const cidadeInput = useRef(null);
+    const estadoInput = useRef(null);
+    const pontoRefInput = useRef(null);
+    const telefoneInput = useRef(null);
+
     const [loading, setLoading] = useState(false);
     const [openSnackBar, setOpenSnackBar] = useState(false);
+
+    useEffect(() => {
+        getUserData();
+    }, []);
+
+    async function getUserData() {
+        const response = await api.get("/address/2b2b31e-31e-d86-faf-5c478e7ef07",
+            {
+                headers: { authorization: `bearer ${token}` }
+            }
+        );
+        console.log(response.data.adresses[0]);
+
+        setAddressInfo({...response.data.adresses[0]});
+        //console.log(addressInfo.street);
+    }
 
     const handleCloseSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -126,16 +154,16 @@ function EditarPerfil({ history }) {
 
     const handleSubmit = async () => {
 
-        const resultValidateName = validateInput('name', inputName.current.value);
-        const resultValidateRua = validateInput('rua', inputRua.current.value);
-        const resultValidateNum = validateInput('num', inputNum.current.value);
-        const resultValidateComplemento = validateInput('complemento', inputComplemento.current.value);
-        const resultValidateBairro = validateInput('bairro', inputBairro.current.value);
-        const resultValidateCEP = validateInput('CEP', inputCEP.current.value);
-        const resultValidateCidade = validateInput('cidade', inputCidade.current.value);
-        const resultValidateEstado = validateInput('estado', estadoState);
-        const resultValidatePontoRef = validateInput('pontoRef', inputPontoRef.current.value);
-        const resultValidateTelefone = validateInput('telefone', inputTelefone.current.value);
+        const resultValidateName = validateInput('name', nomeInput.current.value);
+        const resultValidateRua = validateInput('rua', ruaInput.current.value);
+        const resultValidateNum = validateInput('numero', numInput.current.value);
+        const resultValidateComplemento = validateInput('complemento', complementoInput.current.value);
+        const resultValidateBairro = validateInput('bairro', bairroInput.current.value);
+        const resultValidateCEP = validateInput('CEP', CEPInput.current.value);
+        const resultValidateCidade = validateInput('cidade', cidadeInput.current.value);
+        const resultValidateEstado = true; //= validateInput('estado', estadoInput.current.value);
+        const resultValidatePontoRef = validateInput('pontoRef', pontoRefInput.current.value);
+        const resultValidateTelefone = validateInput('telefone', telefoneInput.current.value);
 
         if (!resultValidateName || !resultValidateRua || !resultValidateNum || !resultValidateComplemento || !resultValidateBairro || !resultValidateCEP ||
             !resultValidateCidade || !resultValidateEstado || !resultValidatePontoRef || !resultValidateTelefone) {
@@ -246,67 +274,25 @@ function EditarPerfil({ history }) {
 
                 setLoading(true);
 
-                const response = api.get("/address/2b2b31e-31e-d86-faf-5c478e7ef07", 
+                const response = await api.get("/address/2b2b31e-31e-d86-faf-5c478e7ef07",
                     {
-                        headers: { authorization: token }
+                        headers: { authorization: `bearer ${token}` }
                     }
                 );
 
                 console.log(response);
 
-                /*const newUserObj = {
-                    name: inputName.current.value,
-                    user_type: typeEmployeeState,
-                    email: inputEmail.current.value,
-                    cpf: inputCPF.current.value,
-                    password: inputPassword.current.value,
-                };
-
-                const response = await api.post("http://localhost:3333/user",
-                    newUserObj,
-        
-                    {
-                        headers: {
-                            authorization: `Bearer ${token}`,
-                            "Content-Type": "application/json"
-                        },
-                    }
-                );
-
                 setTimeout(() => {
                     setLoading(false);
                     setOpenSnackBar(true);
                 }, 2000);
-
-                // Reseta as informações nos campos
-                inputName.current.value = '';
-                inputCPF.current.value = '';
-                inputEmail.current.value = '';
-                inputPassword.current.value = '';
-                setTypeEmployeeState(""); */
-
             } catch (err) {
                 console.log(err.message);
             }
         }
     }
 
-    const handleClick = async () => {
-        try {
-            const response = await api.get("/address/2b2b31e-31e-d86-faf-5c478e7ef07", 
-                {
-                    headers: { authorization: `bearer ${token}` }
-                }
-            );
-
-            console.log(response);
-        } catch (err) {
-            console.warn(err.message);
-            alert('Erro ao acessar dados do usuário!');
-        }
-    }
-
-    const estados = [ 
+    const estados = [
         'AC',
         'AL',
         'AP',
@@ -342,18 +328,19 @@ function EditarPerfil({ history }) {
                 EDITAR DADOS PESSOAIS
             <span className={classes.spanInsideTitle} />
             </h1>
-            
+
             <h1 className={classes.subTitle}>
                 NOME COMPLETO
             </h1>
             <TextField
                 required
-                inputRef={inputName}
+                inputRef={nomeInput}
                 error={errorName}
                 label="Nome Completo"
                 helperText={errorNameMessage}
                 className={classes.largeInput}
                 variant="outlined"
+                defaultValue="blablaaa"
             />
 
             <h1 className={classes.subTitle}>
@@ -363,16 +350,19 @@ function EditarPerfil({ history }) {
                 <h1 className={classes.caption} >
                     Rua
                 </h1>
+                { addressInfo && 
                 <TextField
                     required
                     label="Rua"
-                    inputRef={inputRua}
+                    inputRef={ruaInput}
                     error={errorRua}
                     helperText={errorRuaMessage}
                     variant="outlined"
+                    defaultValue={addressInfo.street}
+                    onChange={(event) => setRua(event.target.value)}
 
                     className={classes.mediumInput}
-                />
+                />}
                 <h1 className={classes.caption} >
                     N°
                 </h1>
@@ -380,7 +370,7 @@ function EditarPerfil({ history }) {
                 <TextField
                     required
                     label="Número"
-                    inputRef={inputNum}
+                    inputRef={numInput}
                     error={errorNum}
                     helperText={errorNumMessage}
                     className={classes.smallInput}
@@ -390,76 +380,88 @@ function EditarPerfil({ history }) {
                     Complemento
                 </h1>
 
+                { addressInfo && 
                 <TextField
                     required
                     label="Complemento"
-                    inputRef={inputComplemento}
+                    inputRef={complementoInput}
                     error={errorComplemento}
                     helperText={errorComplementoMessage}
                     className={classes.mediumInput}
                     variant="outlined"
-                />
+                    defaultValue={addressInfo.complement}
+                    onChange={(event) => setComplemento(event.target.value)}
+                /> }
                 <h1 className={classes.caption} >
                     Bairro
                 </h1>
 
+                { addressInfo && 
                 <TextField
                     required
                     label="Bairro"
-                    inputRef={inputBairro}
+                    inputRef={bairroInput}
                     error={errorBairro}
                     helperText={errorBairroMessage}
                     className={classes.mediumInput}
                     variant="outlined"
-                />
+                    defaultValue={addressInfo.neighborhood}
+                    onChange={(event) => setBairro(event.target.value)}
+                /> }
             </div>
 
             <div className="address01">
                 <h1 className={classes.caption} >
                     CEP
                 </h1>
+                { addressInfo && 
                 <TextField
                     required
                     label="CEP"
-                    inputRef={inputCEP}
+                    inputRef={CEPInput}
                     error={errorCEP}
                     helperText={errorCEPMessage}
                     variant="outlined"
-
                     className={classes.mediumInput}
-                />
+                    defaultValue={addressInfo.zip_code}
+                    onChange={(event) => setCEP(event.target.value)}
+                />}
                 <h1 className={classes.caption} >
                     Cidade
                 </h1>
+                { addressInfo && 
                 <TextField
                     required
                     label="Cidade"
-                    inputRef={inputCidade}
+                    inputRef={cidadeInput}
                     error={errorCidade}
                     helperText={errorCidadeMessage}
                     className={classes.mediumInput}
                     variant="outlined"
-                />
+                    defaultValue={addressInfo.city}
+                    onChange={(event) => setCidade(event.target.value)}
+                />}
                 <h1 className={classes.caption} >
                     Estado
                 </h1>
+                { addressInfo && 
                 <TextField
                     required
                     select
-                    value={estadoState}
                     label="Estado"
                     error={errorEstado}
                     helperText={errorEstadoMessage}
                     className={classes.smallInput}
-                    //onChange={(e) => handleChangeTypeEmployee(e)}
+                    //defaultValue={addressInfo.state}
+                    onChange={(event) => setEstado(event.target.value)}
                     variant="outlined"
                 >
-                    {estados.map(estado => (  
-                      <MenuItem value={estado}>  
-                        {estado}  
-                      </MenuItem>  
-                    ))} 
-                </TextField>
+                    {estados.map(estado => (
+                        <MenuItem value={estado}>
+                            {estado}
+                        </MenuItem>
+                    ))}
+                </TextField>}
 
             </div>
 
@@ -467,17 +469,18 @@ function EditarPerfil({ history }) {
                 <h1 className={classes.caption}>
                     Ponto de referência
                 </h1>
+                { addressInfo && 
                 <TextField
                     required
                     label="Ponto de Referência"
-                    inputRef={inputPontoRef}
+                    inputRef={pontoRefInput}
                     error={errorPontoRef}
                     helperText={errorPontoRefMessage}
                     className={classes.sideText}
-                    //InputLabelProps={{shrink: true}}
-                    //value="jj"
                     variant="outlined"
-                />
+                    defaultValue={addressInfo.complement}
+                    onChange={(event) => setPontoRef(event.target.value)}
+                />}
             </div>
 
             <h1 className={classes.subTitle}>
@@ -486,7 +489,7 @@ function EditarPerfil({ history }) {
             <TextField
                 required
                 label="Telefone"
-                inputRef={inputTelefone}
+                inputRef={telefoneInput}
                 error={errorTelefone}
                 helperText={errorTelefoneMessage}
                 className={classes.root}
@@ -494,7 +497,7 @@ function EditarPerfil({ history }) {
             />
 
             <div className={classes.divButtons}>
-                <Button className={classes.saveButton} onClick={() => handleClick()} >
+                <Button className={classes.saveButton} onClick={() => handleSubmit()} >
                     {loading ? <CircularProgress color='secondary' /> : "SALVAR ALTERAÇÕES"}
                 </Button>
             </div>

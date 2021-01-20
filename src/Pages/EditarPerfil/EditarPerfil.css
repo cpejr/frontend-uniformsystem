@@ -75,5 +75,14 @@
     transition: background-color 0.6s ease;
   }
 
+  #texto2{
+    width: 3px solid;
+  }
+
+  /* html body div#root div div.registerEmployeeFullContent div.address01 div.MuiFormControl-root.MuiTextField-root div.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-formControl fieldset.PrivateNotchedOutline-root-11.MuiOutlinedInput-notchedOutline{
+    border: 3px solid;
+    border-radius: 20px;
+  } */
+
 
 

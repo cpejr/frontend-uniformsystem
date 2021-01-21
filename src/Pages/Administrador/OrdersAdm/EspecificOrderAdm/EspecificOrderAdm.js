@@ -10,6 +10,7 @@ function EspecificOrderAdm(props) {
   let status = "pending";
   var price = [];
   var total;
+  var id;
   const [Orders, setOrders] = useState([]);
 
   //const { token } = useContext(LoginContext);
@@ -32,7 +33,7 @@ function EspecificOrderAdm(props) {
     obterPedidos();
   }, []);
 
-  console.log(Orders);
+  console.log(props.date);
 
   return (
     <div className="order-container">
@@ -50,7 +51,7 @@ function EspecificOrderAdm(props) {
           <div className="id-button">
             <div className="especific-info">
               {Orders.map((pedido) => {
-                const id = pedido.order_id;
+                id = pedido.order_id;
                 const date = props.date;
 
                 const reducer = (accumulator, currentValue) => {
@@ -62,16 +63,23 @@ function EspecificOrderAdm(props) {
                 return "";
               })}
             </div>
-            <div className="adm_orders_id">
-              <span className="id">ID: {}</span>
+            <div className="adm_orders">
+              <span className="id">
+                <strong>ID:</strong> {id}
+              </span>
               <br />
-              <span className="date">Data do pedido:{}</span>
+              <span className="date">
+                <strong>Data do pedido:</strong>
+                {}
+              </span>
               <br />
-              <span className="price">Valor do pedido: R${total}</span>
+              <span className="price">
+                <strong>Valor do pedido:</strong> R${total}
+              </span>
             </div>
             {status === "pending" && (
               <div>
-                <button className="button-status">
+                <button className="button-status" style={{ width: "28vw" }}>
                   Mudar status para "Em produção"
                 </button>
               </div>
@@ -102,38 +110,19 @@ function EspecificOrderAdm(props) {
             </tr>
           </thead>
           <tbody>
-            <tr className="oder-tr-content">
-              <td className="amount">10</td>
-              <td className="products">
-                <img src={camisa} className="image-product" />
-                <span className="product-name">Camisa Personalisada 1</span>
-              </td>
-              <td className="logo">Baixar imagem</td>
-            </tr>
-            <tr className="oder-tr-content">
-              <td className="amount">10</td>
-              <td className="products">
-                <img src={camisa} className="image-product" />
-                <span className="product-name">Camisa Personalisada 1</span>
-              </td>
-              <td className="logo">Baixar imagem</td>
-            </tr>
-            <tr className="oder-tr-content">
-              <td className="amount">10</td>
-              <td className="products">
-                <img src={camisa} className="image-product" />
-                <span className="product-name">Camisa Personalisada 1</span>
-              </td>
-              <td className="logo">Baixar imagem</td>
-            </tr>
-            <tr className="oder-tr-content">
-              <td className="amount">10</td>
-              <td className="products">
-                <img src={camisa} className="image-product" />
-                <span className="product-name">Camisa Personalisada 1</span>
-              </td>
-              <td className="logo">Baixar imagem</td>
-            </tr>
+            {Orders.map((pedido) => {
+              const colum = (
+                <tr className="oder-tr-content">
+                  <td className="amount">{pedido.amount}</td>
+                  <td className="products">
+                    <img src={camisa} className="image-product" />
+                    <span className="product-name">Camisa Personalisada 1</span>
+                  </td>
+                  <td className="logo">Baixar imagem</td>
+                </tr>
+              );
+              return colum;
+            })}
           </tbody>
         </table>
       </div>

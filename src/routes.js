@@ -1,46 +1,46 @@
-import React, { useContext } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import ClipLoader from 'react-spinners/ClipLoader';
+import React, { useContext } from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
-import Home from './Pages/Home';
+import Home from "./Pages/Home";
 
-import HomeEditable from './Pages/Administrador/HomeEditable';
-import OrdersAdm from './Pages/Administrador/OrdersAdm';
-import EspecificOrderAdm from './Pages/Administrador/OrdersAdm/EspecificOrderAdm';
-import ProductsAdm from './Pages/Administrador/ProductsAdm';
-import RegisterProduct from './Pages/Administrador/ProductsAdm/RegisterProduct';
-import EditProduct from './Pages/Administrador/ProductsAdm/EditProduct';
+import HomeEditable from "./Pages/Administrador/HomeEditable";
+import OrdersAdm from "./Pages/Administrador/OrdersAdm";
+import EspecificOrderAdm from "./Pages/Administrador/OrdersAdm/EspecificOrderAdm";
+import ProductsAdm from "./Pages/Administrador/ProductsAdm";
+import RegisterProduct from "./Pages/Administrador/ProductsAdm/RegisterProduct";
+import EditProduct from "./Pages/Administrador/ProductsAdm/EditProduct";
 
-import EmployeeAdm from './Pages/Administrador/EmployeeAdm';
-import CadastroFunc from './Pages/Administrador/EmployeeAdm/CadastroFunc';
-import EspecificEmployee from './Pages/Administrador/EmployeeAdm/EspecificEmployee';
+import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
+import CadastroFunc from "./Pages/Administrador/EmployeeAdm/CadastroFunc";
+import EspecificEmployee from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
 
-import Loja from './Pages/Loja';
-import Produto from './Pages/Produto';
-import Perfil from './Pages/Perfil';
-import Login from './Pages/Login';
-import Carrinho from './Pages/Carrinho';
-import Contato from './Pages/Contato';
-import SignUp from './Pages/Sign_Up';
-import Checkout from './Pages/Checkout';
-import Cadastro from './Pages/Cadastro';
-import Pedidos from './Pages/Pedidos';
-import Error from './Pages/Error';
+import Loja from "./Pages/Loja";
+import Produto from "./Pages/Produto";
+import Perfil from "./Pages/Perfil";
+import Login from "./Pages/Login";
+import Carrinho from "./Pages/Carrinho";
+import Contato from "./Pages/Contato";
+import SignUp from "./Pages/Sign_Up";
+import Checkout from "./Pages/Checkout";
+import Cadastro from "./Pages/Cadastro";
+import Pedidos from "./Pages/Pedidos";
+import Error from "./Pages/Error";
 
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
-import HeaderAdm from './components/HeaderAdm';
-import FooterAdm from './components/FooterAdm';
-import SidebarAdm from './components/SidebarAdm';
+import HeaderAdm from "./components/HeaderAdm";
+import FooterAdm from "./components/FooterAdm";
+import SidebarAdm from "./components/SidebarAdm";
 
 import {
   isAuthenticated,
   isADM,
   isADMOrEmployee,
   isClientOrADMOrEmployee,
-} from './services/auth';
-import { LoginContext } from './contexts/LoginContext';
+} from "./services/auth";
+import { LoginContext } from "./contexts/LoginContext";
 
 // Controle de rotas para Cliente
 const PrivateClientRoute = ({ component: Component, ...rest }) => {
@@ -49,12 +49,12 @@ const PrivateClientRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         isAuthenticated() && isClientOrADMOrEmployee(currentUser) ? (
           <Component {...props} />
         ) : (
           <Redirect
-            to={{ pathname: '/login', state: { from: props.location } }}
+            to={{ pathname: "/login", state: { from: props.location } }}
           />
         )
       }
@@ -69,12 +69,12 @@ const PrivateADMRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         isAuthenticated() && isADM(currentUser) ? (
           <Component {...props} />
         ) : (
           <Redirect
-            to={{ pathname: '/login', state: { from: props.location } }}
+            to={{ pathname: "/login", state: { from: props.location } }}
           />
         )
       }
@@ -89,12 +89,12 @@ const PrivateADMOrEmployeeRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         isAuthenticated() && isADMOrEmployee(currentUser) ? (
           <Component {...props} />
         ) : (
           <Redirect
-            to={{ pathname: '/login', state: { from: props.location } }}
+            to={{ pathname: "/login", state: { from: props.location } }}
           />
         )
       }
@@ -107,8 +107,8 @@ export default function Routes() {
     <BrowserRouter>
       <Switch>
         <Route
-          render={path =>
-            path.location.pathname.includes('/adm/') ? (
+          render={(path) =>
+            path.location.pathname.includes("/adm/") ? (
               <AdmRoutes />
             ) : (
               <MenuRoutes />
@@ -197,14 +197,14 @@ function AdmRoutes() {
 
 function Loading(props) {
   const { user } = useContext(LoginContext);
-  console.log('UseEffect Loading: ', user);
-  if (user.type === 'adm') return <Redirect to="/adm/home" />;
-  if (user === null || user === 'notYet') return <Redirect to="/login" />;
+  console.log("UseEffect Loading: ", user);
+  if (user.type === "adm") return <Redirect to="/adm/home" />;
+  if (user === null || user === "notYet") return <Redirect to="/login" />;
   else
     return (
       <div className="loading">
         <div className="loading-logo">
-          <ClipLoader size={100} color={'#123abc'} loading={true} />
+          <ClipLoader size={100} color={"#123abc"} loading={true} />
         </div>
       </div>
     );

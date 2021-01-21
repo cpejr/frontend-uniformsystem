@@ -6,6 +6,8 @@ import {
     FaShoppingCart,
 } from "react-icons/fa";
 
+import { Button } from '@material-ui/core'
+
 import "./Produto.css";
 import "./Radio.css";
 
@@ -76,7 +78,6 @@ function Produto() {
     }, []);
 
 
-
     //essa funcao tem um CSS só pra ela, pois gastou uns esquemas diferenciados pra fazer
     function Radio(gender) {
         function Content() {
@@ -116,21 +117,8 @@ function Produto() {
         );
     }
 
-    function MainImage(indexImage = 0) {
-        //retorna uma imagem principal, com base no clique da imagem
-        return (
-            <img
-                className='main_image'
-                src={secundary_images[indexImage].src}
-                alt='main_imagem'
-            ></img>
-        );
-    }
 
     function AddToCart(){
-
-
-
         window.alert('Voce AddToCart !!')
     }
 
@@ -143,118 +131,81 @@ function Produto() {
     }
 
     return (
-        <div className='all_page'>
-            <div className='page_content'>
-                <div className='shirt_images'>
-                    <div className='div_main_image'>
-                        {MainImage(indexImage)}
-                    </div>
+        <div className='productPage'>
+
+            <div className='leftSide'>
+                <img src={Image} alt="imagem" />
+            </div>
+
+            <div className='rightSide'>
+                <h1 className='productsName'>{Produto.name}</h1>
+                <div className="titleArea">
+                    <strong>Descrição:</strong>
+                    <span>Uma descrição</span>
                 </div>
-
-                <div className='shirt_informations'>
-                    <div className='title_and_description'>
-                        <h1 className='title_shirt'>{Produto.name}</h1>
-                        <div className='div_descript'>
-                            <h6 className='small_title'>Descrição:</h6>
-                            <p className='descript_text'>
-                                {Produto.description}
-                            </p>
+                <div className='productsInfo'>
+                    <div className="leftSideInside">
+                        <div className="priceWIthPhotos">
+                            <strong>R$ 50,00</strong>
+                            <div className="productsPhotos">
+                                <img src={Image} alt="imagem" />
+                                <img src={Image} alt="imagem" />
+                            </div>
                         </div>
+
+                        <div className="shipSpace">
+                            <span>Calcule o CEP:</span>
+                            <div className="calculateCEPArea">
+                                <input type="text"/>
+                                <button>Calcular</button>
+                            </div>
+                            <span className="forgotPassword">Não sei meu CEP</span>
+                        </div>
+
                     </div>
-
-                    <div className='two_columns'>
-                        <div className='priceAndImages'>
-                            <div className='div_aux'>
-                                <div className='price'>
-                                    <h2>R${ProdutoEscolhido.price},00</h2>
-                                </div>
-                                <div className='images'>
-                                    {Produto.models?.map(
-                                        
-                                        (model, index) => {
-                                            return (
-                                                <img
-                                                    key={index}
-                                                    src={Image}
-                                                    alt={`alt_da_${index}`}
-                                                    className='image'
-                                                />
-                                            );
-                                        }
-                                    )}
-                                </div>
-                            </div>
-                            <div className='frete'>
-                                <div>
-                                    <h6>Calcule o frete:</h6>
-                                    <input
-                                        type='text'
-                                        placeholder=' CEP'
-                                        onChange={(e) => setCep(e.target.value)}
-                                    />{" "}
-                                    <button id='stylized_button' onClick={()=>CalculateCEP()}>
-                                        Calcular
-                                    </button>
-                                </div>
-
-                                <a href='http://www.google.com'>
-                                    Não sei meu cep
-                                </a>
-                            </div>
-                        </div>
-                        <div className='order_container'>
-                            <div className='sizes'>
-                                <h6 className='small_title'>Tamanho</h6>
+                    <div className="sizeAndQuantity">
+                        <strong>Tamanho</strong>
+                        <div className="divCheckboxes">
+                            <div className="genderCheckboxes">
                                 <h6>Feminino</h6>
                                 {Radio("Fem")}
+                            </div>
+                            <div className="genderCheckboxes">
                                 <h6>Masculino</h6>
                                 {Radio("Mas")}
                             </div>
-                            <div className='quantity'>
-                                <h6 className='small_title'>Quantidade:</h6>
-                                <input
-                                    type='number'
-                                    ref={inputQuantity}
-                                    onChange={(e) =>
-                                        setQuantity(e.target.value)
-                                    }
-                                />
+                        </div>
+
+                        <div className="quantity">
+                            <strong>Quantidade</strong>
+                            <input type="number" />
+                        </div>
+
+                        <div className="loadLogo">
+                            <div className="titleUploadLogo">
+                                <strong>
+                                    Logo da sua empresa
+                                </strong>
+                                <span>
+                                    Envie a logo da sua empresa abaixo e veja como fica:
+                                </span>
                             </div>
-                            <div className='interprise_logo'>
-                                <h6 className='small_title'>
-                                    Logo da sua empresa:
-                                </h6>
-                                <p>
-                                    Envie o logo da sua empresa abaixo e veja
-                                    como fica:
-                                </p>
-                                <button
-                                    id='stylized_button'
-                                    className='send_logo'
-                                    onClick={()=>AddALogo()}
-                                >
-                                    Carregue a sua logo!
-                                </button>
-                            </div>
-                            <div className='div_cart_button'>
-                                <div
-                                    id='stylized_button'
-                                    className='cart_button'
-                                >
-                                    <FaShoppingCart
-                                        className='icon'
-                                        size='35px'
-                                    />
-                                    <div className='text' onClick={()=>AddToCart()}>
-                                        <p>ADICIONAR AO CARRINHO</p>
-                                    </div>
-                                </div>
-                            </div>
+
+                            <Button>Carregue a sua logo!</Button>
                         </div>
                     </div>
-                    {/* <div className="final_page"></div> */}
+
                 </div>
+
+                <Button className="addToCart">
+                    <FaShoppingCart
+                        className='icon'
+                        size='35px'
+                    />
+                    ADICIONAR AO CARRINHO
+                </Button>
             </div>
+
         </div>
     );
 }

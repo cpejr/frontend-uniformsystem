@@ -44,7 +44,9 @@ function OrdersAdm() {
   console.log(Orders.models);
 
   function especifico(id, date) {
-    <EspecificOrderAdm id={id} date={date} />;
+    <div className="redirect">
+      <EspecificOrderAdm key={id} id={id} date={date} />;
+    </div>;
   }
 
   function FilteredData() {

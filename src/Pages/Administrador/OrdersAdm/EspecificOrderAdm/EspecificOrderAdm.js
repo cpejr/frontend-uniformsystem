@@ -8,6 +8,8 @@ import { LoginContext } from "../../../../contexts/LoginContext";
 
 function EspecificOrderAdm(props) {
   let status = "pending";
+  var price = [];
+  var total;
   const [Orders, setOrders] = useState([]);
 
   //const { token } = useContext(LoginContext);
@@ -50,18 +52,22 @@ function EspecificOrderAdm(props) {
               {Orders.map((pedido) => {
                 const id = pedido.order_id;
                 const date = props.date;
-                console.log(`teste ${props.date}`);
-                const price = pedido.product_price;
-                const colum = (
-                  <div className="adm_orders_id">
-                    <span className="id">ID: {id}</span>
-                    <span className="date">Data do pedido:{date}</span>
-                    <span className="price">Valor do pedido: R${price}</span>
-                  </div>
-                );
 
-                return colum;
+                const reducer = (accumulator, currentValue) => {
+                  return accumulator + currentValue;
+                };
+
+                price.push(pedido.product_price);
+                total = price.reduce(reducer);
+                return "";
               })}
+            </div>
+            <div className="adm_orders_id">
+              <span className="id">ID: {}</span>
+              <br />
+              <span className="date">Data do pedido:{}</span>
+              <br />
+              <span className="price">Valor do pedido: R${total}</span>
             </div>
             {status === "pending" && (
               <div>

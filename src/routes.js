@@ -10,10 +10,10 @@ import EspecificOrderAdm from "./Pages/Administrador/OrdersAdm/EspecificOrderAdm
 import ProductsAdm from "./Pages/Administrador/ProductsAdm";
 import RegisterProduct from "./Pages/Administrador/ProductsAdm/RegisterProduct";
 import EditProduct from "./Pages/Administrador/ProductsAdm/EditProduct";
-
 import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
 import CadastroFunc from "./Pages/Administrador/EmployeeAdm/CadastroFunc";
 import EspecificEmployee from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
+
 
 import Loja from "./Pages/Loja";
 import Produto from "./Pages/Produto";
@@ -124,12 +124,12 @@ function MenuRoutes() {
         <Route path="/" export exact component={Home} />
 
         <Route path="/shop" export component={Loja} />
-        <PrivateClientRoute path="/checkout" export component={Checkout} />
+        <Route path="/checkout" export component={Checkout} />
         <Route path="/product/:product_id" export component={Produto} />
         {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                 logado, você será redirecionado para a página Login. */}
-        <PrivateClientRoute path="/perfil" export component={Perfil} />
-        <PrivateClientRoute path="/cart" export component={Carrinho} />
+        <Route path="/perfil" export component={Perfil} />
+        <Route path="/cart" export component={Carrinho} />
         <Route path="/login" export component={Login} />
         <Route path="/contact" export component={Contato} />
         <Route path="/signUp" export component={SignUp} />
@@ -147,53 +147,53 @@ function AdmRoutes() {
 
   const { user } = useContext(LoginContext);
 
-  if (user === "notYet") return <Loading/>;
-  if (user === null || user.user_type === "adm") return <Redirect to="/adm/home" />;
-  else
+  // if (user === "notYet") return <Loading/>;
+  // if (user === null || user.user_type === "adm") return <Redirect to="/adm/home" />;
+  // else
     return (
       <div>
         <HeaderAdm />
         <SidebarAdm>
           <Switch>
-            <PrivateADMRoute 
+            <Route 
               path="/adm/home" 
               component={HomeEditable} 
             />
-            <PrivateADMOrEmployeeRoute 
+            <Route 
               path="/adm/pedidos"  
               component={OrdersAdm} 
             />
-            <PrivateADMOrEmployeeRoute
-              path="/adm/pedidoespecifico"
+            <Route
+              path="/adm/pedido/:id"
               export
               component={EspecificOrderAdm}
             />
-            <PrivateADMRoute 
+            <Route 
               path="/adm/produtos"  
               component={ProductsAdm} 
             />
-            <PrivateADMRoute
+            <Route
               path="/adm/funcionarios"
               export
               component={EmployeeAdm}
             />
-            <PrivateADMRoute
-              path="/adm/funcionarios/cadastro"
+            <Route
+              path="/adm/cadastrofuncionarios"
               export
               component={CadastroFunc}
             />
-            <PrivateADMRoute
+            <Route
               path="/adm/produtos/cadastro"
               export
               component={RegisterProduct}
             />
-            <PrivateADMRoute
+            <Route
               path="/adm/produtos/:product_id"
               export
               component={EditProduct}
             />
-            <PrivateADMRoute
-              path="/adm/funcionarios/funcionarioEspecifico"
+            <Route
+              path="/adm/funcionario/:id"
               export
               component={EspecificEmployee}
             />

@@ -172,7 +172,7 @@ function CadastroFunc({history}) {
           password: inputPassword.current.value,
         };
 
-        const response = await api.post("http://localhost:3333/user",
+        const response = await api.post("/user",
           newUserObj
           ,
           {

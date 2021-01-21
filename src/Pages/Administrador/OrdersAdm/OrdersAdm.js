@@ -25,6 +25,7 @@ function OrdersAdm() {
   const [InputID, setInputID] = useState(0);
 
   const { token } = useContext(LoginContext);
+
   const obterPedidos = async () => {
     const resultado = await api.get(`order`, {
       headers: { authorization: `bearer ${token}` },
@@ -70,7 +71,6 @@ function OrdersAdm() {
       }
     });
   }
-
 
 
   return (

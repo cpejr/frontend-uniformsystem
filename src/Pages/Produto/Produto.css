@@ -3,6 +3,10 @@
     border: 1px solid #76CCCC;
 }
 
+.productPage .MuiFormHelperText-contained{
+    margin: 2px 0px 0px 0px;
+}
+
 .productPage{
     min-height: 90vh;
     width: 90%;
@@ -126,6 +130,10 @@
     margin: 3px 0px;
 }
 
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .MuiTextField-root .MuiOutlinedInput-root{
+    width: 80%;
+}
+
 .productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .calculateCEPButton{
     font-size: 12px;
     border-radius: 10px;
@@ -195,8 +203,12 @@
 
 .productPage .rightSide .productsInfo .sizeAndQuantity .quantity input{
     width: 60px;
-
+    
     margin: 20px 0;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity .quantity .MuiOutlinedInput-root{
+    height: 35px;
 }
 
 .productPage .rightSide .productsInfo .loadLogo{

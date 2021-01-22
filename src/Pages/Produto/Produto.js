@@ -59,7 +59,9 @@ function Produto() {
     const [errorCEP, setErrorCEP] = useState(false);
     const [errorCEPMessage, setErrorCEPMessage] = useState('');
 
-    const [Cep, setCep] = useState(null);
+    const [errorQuantity, setErrorQuantity] = useState(false);
+    const [errorQuantityMessage, setErrorQuantityMessage] = useState('');
+
     const [Quantity, setQuantity] = useState(null);
 
     const inputQuantity = useRef(null);
@@ -136,8 +138,21 @@ function Produto() {
     }
 
 
-    function AddToCart(){
-        window.alert('Voce AddToCart !!')
+    const AddToCart = () => {
+
+        const quantityReceived = inputQuantity.current.value;
+
+        if(quantityReceived === '' || Number(quantityReceived) <= 0 || isNaN(Number(quantityReceived))){
+            setErrorQuantity(true);
+            setErrorQuantityMessage('Quantidade inválida.');
+        }else{
+            setErrorQuantity(false);
+            setErrorQuantityMessage('');
+
+            alert('Ola', quantityReceived);
+
+        }
+
     }
 
     function CalculateCEP(){
@@ -158,6 +173,7 @@ function Produto() {
 
     function AddALogo(){
         window.alert('Voce AddALogo !!')
+
     }
 
     const handleSelectModel = (product_model_id) => {
@@ -196,8 +212,6 @@ function Produto() {
                                     :
                                     <span>Sem modelo</span>
                                 }
-                                {/* <img src={Image} alt="imagem" />
-                                <img src={Image} alt="imagem" /> */}
                             </div>
                         </div>
 
@@ -207,7 +221,7 @@ function Produto() {
                                 <TextField
                                     variant="outlined" 
                                     type="text" 
-                                    inputProps={{maxLength: 8}}
+                                    inputProps={{maxLength: 8 }}
                                     inputRef={inputCEP}
                                     error={errorCEP} 
                                     helperText={errorCEPMessage}
@@ -233,7 +247,14 @@ function Produto() {
 
                         <div className="quantity">
                             <strong>Quantidade</strong>
-                            <input type="text" />
+                            <TextField 
+                                variant="outlined" 
+                                type="text" 
+                                inputProps={{maxLength: 5}}
+                                inputRef={inputQuantity}
+                                error={errorQuantity} 
+                                helperText={errorQuantityMessage}
+                            />
                         </div>
 
                         <div className="loadLogo">
@@ -248,7 +269,7 @@ function Produto() {
 
                             <Button>Carregue a sua logo!</Button>
                         </div>
-                        <Button className="addToCart">
+                        <Button className="addToCart" onClick={() => AddToCart()}>
                             <FaShoppingCart
                                 className='icon'
                                 size='35px'

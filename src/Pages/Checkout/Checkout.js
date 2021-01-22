@@ -18,6 +18,8 @@ import './Checkout.css';
 
 import { useHistory } from 'react-router-dom';
 
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
     <div className="divInputLabelError">
@@ -60,8 +62,10 @@ function Checkout() {
 
   const [openModal, setOpenModal] = useState(false);
 
-  
+  const [loadingPurchase, setLoadingPurchase] = useState(false);
+
   const { token, user } = useContext(LoginContext);
+
 
   const currentUser = user[0];
   const user_id = currentUser.user_id;
@@ -158,6 +162,8 @@ function Checkout() {
 
   // Post order
   async function handlePostOrder() {
+    setLoadingPurchase(true);
+    
     try {
       const address_id = address.address_id;
       await api.post(
@@ -171,6 +177,10 @@ function Checkout() {
           headers: { authorization: `bearer ${token}` },
         },
       );
+
+      setTimeout(() => {
+        setLoadingPurchase(false);
+      }, 3000);
     } catch (error) {
       console.warn(error);
       alert('Erro ao criar um pedido.');
@@ -440,7 +450,7 @@ function Checkout() {
         className="purchaseFinished"
         onClick={() => handlePostOrder()}
       >
-        Finalizar Compra
+        {loadingPurchase ? <CircularProgress size={40} color='secondary' className="circular-progress" /> : "FINALIZAR COMPRA"}
       </Button>
       <PopUpChangeAddress
         open={openModal}

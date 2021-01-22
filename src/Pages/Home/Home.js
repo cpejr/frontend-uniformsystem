@@ -95,17 +95,13 @@ function Home() {
   const [instagramInfo, setInstagramInfo] = useState('');
   const [whatsappInfo, setWhatsappInfo] = useState('');
 
-  const bucketAWS = 'https://profit-uniformes.s3.amazonaws.com/';
-
-  const token = '';
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   // UseEffect para inicializar as informações da Home
   useEffect(() => {
     async function getHomeInfo() {
       try {
-        const response = await api.get('/home/info', {
-          headers: { authorization: `bearer ${token}` },
-        });
+        const response = await api.get('/home/info');
 
         if (response.data.length === 0) {
           throw new Error('Home info is Empty');
@@ -153,11 +149,7 @@ function Home() {
   useEffect(() => {
     async function getHomeImages() {
       const responseCarousel = await api.get(
-        '/home/images?img_place=carousel',
-        {
-          headers: { authorization: `bearer ${token}` },
-        },
-      );
+        '/home/images?img_place=carousel');
 
       let imagesCarousel = [];
       if (responseCarousel.data) {
@@ -170,11 +162,7 @@ function Home() {
       }
 
       const responseWhoWeAre = await api.get(
-        '/home/images?img_place=whoWeAre',
-        {
-          headers: { authorization: `bearer ${token}` },
-        },
-      );
+        '/home/images?img_place=whoWeAre');
 
       let imagesWhoWeAre = {};
       if (responseWhoWeAre.data[0]) {
@@ -188,11 +176,7 @@ function Home() {
       }
 
       const responseProducts = await api.get(
-        '/home/images?img_place=products',
-        {
-          headers: { authorization: `bearer ${token}` },
-        },
-      );
+        '/home/images?img_place=products');
       // const imagesProducts = responseProducts.data;
       let imagesProducts = [];
       if (responseProducts.data) {
@@ -215,37 +199,35 @@ function Home() {
   return (
     <div className="fullContent">
       <div className="divCarousel">
-        {imagesCarousel.length > 0 ? (
-          <Carousel
-            controls={true}
-            indicators={true}
-            interval={1000}
-            prevIcon={<MdKeyboardArrowLeft />}
-            nextIcon={<MdKeyboardArrowRight />}
-          >
-            {imagesCarousel.map(item => {
-              return (
-                <Carousel.Item>
-                  <div className="teste">
-                    <img src={item.file} alt={item.imgAlt} />
-                  </div>
-                </Carousel.Item>
-              );
-            })}
-            {/* <Carousel.Item>
-                <div className="teste">
-                <img src={imagesCarousel[1].imgSrc} alt={imagesCarousel[1].imgAlt} />
-                </div>
-                </Carousel.Item>
-                <Carousel.Item>
-                <div className="teste">
-                <img src={imagesCarousel[2].imgSrc} alt={imagesCarousel[2].imgAlt} />
-                </div>
-              </Carousel.Item> */}
-          </Carousel>
-        ) : (
-          <span style={{ alignSelf: 'center' }}>Sem imagem</span>
-        )}
+        {imagesCarousel.length > 0 ? 
+        
+        imagesCarousel.length === 1 ?
+          <div className="imgCarousel">
+            <img src={imagesCarousel[0].file} alt={imagesCarousel[0].imgAlt} />
+          </div>
+        :
+          (
+            <Carousel
+              controls={true}
+              indicators={true}
+              interval={1000}
+              prevIcon={<MdKeyboardArrowLeft />}
+              nextIcon={<MdKeyboardArrowRight />}
+            >
+              {imagesCarousel.map(item => {
+                return (
+                  <Carousel.Item>
+                    <div className="imgCarousel">
+                      <img src={item.file} alt={item.imgAlt} />
+                    </div>
+                  </Carousel.Item>
+                );
+              })}
+            </Carousel>
+          ) : (
+            <span style={{ alignSelf: 'center' }}>Sem imagem</span>
+          )
+        }
       </div>
       <div className="divQuemSomos">
         <h2>

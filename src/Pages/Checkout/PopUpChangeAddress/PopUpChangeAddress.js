@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 
 import { CircularProgress, Dialog, DialogTitle, TextField, Button, 
     makeStyles, MenuItem, Typography  } from '@material-ui/core';
 
 import api from "../../../services/api";
+import { LoginContext } from "../../../contexts/LoginContext";
 
 import SaveIcon from '@material-ui/icons/Save';
 
@@ -44,7 +45,7 @@ const PopUpChangeAddress = ({open, handleClose,
     setAddress,
     address }) => {
 
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMDZlZTg2Ny0wZGEtYjJkOC1lNDQ1LTdlNWI3YTA0ZTQiLCJuYW1lIjoiQWRtYSIsImZpcmViYXNlX3VpZCI6InpqN01ZWmx1TURlaHlHSEttQzRaUHpYeVdNdTIiLCJ1c2VyX3R5cGUiOiJjbGllbnQiLCJlbWFpbCI6ImFkbWFjYW5lc2NoaUBnbWFpbC5jb20iLCJjcGYiOiIxMjM0NTY3ODkxMSIsImNyZWF0ZWRfYXQiOiIyMDIwLTExLTIwIDEyOjM4OjQ4IiwidXBkYXRlZF9hdCI6IjIwMjAtMTEtMjAgMTI6Mzg6NDgifV0sImlhdCI6MTYwODUwNTIxNywiZXhwIjoxNjExMDk3MjE3fQ.VKTYkgQtJ9F--XwbQAYF6_l179bWVn5zIIK8AIyvqEI';
+    const { token } = useContext(LoginContext);
 
     const [loading, setLoading] = useState(false);
 

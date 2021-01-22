@@ -1,0 +1,117 @@
+.divPagContato {
+  display: flex;
+  justify-content: center;
+  height: 90vh;
+  background-image: url("../../Assets/camisa.jpg");
+}
+.fundoCinza {
+  background-color: rgba(63, 63, 63, 0.378);
+  width: 100%;
+  height: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 7%;
+}
+
+.divFundoBrancoContato {
+  background-color: white;
+  padding: 10px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 65vh;
+}
+
+.tituloContato {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.escritaTituloC {
+  font-size: 300%;
+  color: #201f24;
+}
+
+.divisor {
+  border: 1px solid #201f24;
+  width: 80%;
+  margin-bottom: 2%;
+}
+
+.divRedesSociais {
+  display: flex;
+  width: 90%;
+  height: 25%;
+  margin-top: 2%;
+  justify-content: space-evenly;
+}
+
+.linksContato {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.linksContato:hover{
+  text-decoration: none!important;
+}
+
+.iconsContato {
+  width: 20%;
+  min-width: 35px;
+  height: 100%;
+  color: #201f24;
+}
+
+.escritaContato {
+  color: #201f24;
+  font-size: 2.2vmax;
+}
+
+.aEmail {
+  width: 90%;
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12vh;
+}
+
+.aEmail:hover{
+  text-decoration: none !important;
+}
+
+.aLocal {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4vh;
+}
+
+.aLocal{
+  text-decoration: none !important;
+}
+
+.envelopeContato {
+  min-width: 55px;
+  height: 120%;
+  color: #201f24;
+}
+
+.escritaEmail {
+  color: #201f24;
+  font-size: 2.2vmax;
+}
+.escritaLocalização {
+  color: #201f24;
+  font-size: 2.2vmax;
+}

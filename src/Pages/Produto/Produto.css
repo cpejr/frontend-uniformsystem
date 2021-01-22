@@ -1,52 +1,9 @@
-.div_carousel{
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0) !important;
-    overflow: hidden;
-}
-.div_carousel span *{
-    color:black !important;
-    background-color:black !important;
-}
 
-
- .carousel{
-    display: flex;
-    justify-content:space-between;
-    background-color: #fff !important;
-} 
-
-.carousel span{
-    background-color: black;
-    color:black;
-}
-
-.carousel-control-next-icon{
-    color:black !important;
-    background-color:black !important; 
-}
-
-
-.div_img_carousel{
-    display: flex;
-    justify-content:space-between;
-
-    width: 100%;
-    height: 100%;
-}
- .carousel_image{
-    max-width: 30%;
-    max-height: 100%;
-    padding-left:5px;
-}
-.carousel_image:hover{
-    border: 1px solid #ccc;
-}
 
 
 .all_page {
     width: 100%;
-    height: 80vh;
+    min-height: 80vh;
 
     display: flex;
     justify-content: center;
@@ -398,4 +355,32 @@
 
 #stylized_button:hover{
     background-color: #369c8f;
+}
+
+@media(max-width: 800px){
+    .all_page .page_content{
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .all_page .page_content .shirt_informations .two_columns {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 78%;
+    }
+
+    .all_page
+    .page_content
+    .shirt_informations
+    .two_columns
+    .priceAndImages
+    .images {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+    }
 }

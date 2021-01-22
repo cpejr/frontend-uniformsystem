@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 
 import { withRouter } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { FaChevronLeft } from 'react-icons/fa';
 
 import api from "../../../../services/api";
+import { LoginContext } from "../../../../contexts/LoginContext";
 
 import "./CadastroFunc.css";
 
@@ -56,7 +57,7 @@ function validateInput(type, value) {
 
 function CadastroFunc({history}) {
 
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiMzYwZTg0LWNjM2MtMzhmMi1jZmI1LTc3MzhiNjZmZDJhIiwibmFtZSI6IkRpb2dvIEFkbWluIDEiLCJmaXJlYmFzZV91aWQiOiJFS2xOY05NdjBiVXZKQTVaR2xXZDEzZXZIMjYyIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJkaW9nb2FkbTIwQGVtYWlsLmNvbSIsImNwZiI6IjEyMzQ1Njc4OTIwIiwiY3JlYXRlZF9hdCI6IjIwMjAtMTItMjIgMjM6MTM6MDEiLCJ1cGRhdGVkX2F0IjoiMjAyMC0xMi0yMiAyMzoxMzowMSJ9XSwiaWF0IjoxNjA4Njc5MjA1LCJleHAiOjE2MTEyNzEyMDV9.jJk7yPBwjDCdJPb-JIzj9ealrhMVGMNGwL1vRjyiEq8';
+  const { token } = useContext(LoginContext);
 
   const [typeEmployeeState, setTypeEmployeeState] = useState("");
 
@@ -171,7 +172,7 @@ function CadastroFunc({history}) {
           password: inputPassword.current.value,
         };
 
-        const response = await api.post("http://localhost:3333/user",
+        const response = await api.post("/user",
           newUserObj
           ,
           {

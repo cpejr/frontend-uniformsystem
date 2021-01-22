@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { ClickAwayListener } from "@material-ui/core";
 import api from "../../../services/api";
+import { LoginContext } from "../../../contexts/LoginContext";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -34,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function DropDownLoginContent(props) {
+    const { signIn } = useContext(LoginContext);
+    const history = useHistory();
     const [User, setUser] = useState("");
     const [Password, setPassword] = useState("");
     const [Email, setEmail] = useState(""); //e-mail esqueci minha senha
@@ -68,14 +72,26 @@ export default function DropDownLoginContent(props) {
         if (User.length > 0 && Password.length > 6) {
             try {
                 setLoading(true);
-                const response = await api.post("login", {
-                    email: User,
-                    password: Password,
+                const response = await api.post("/login", {
+                    "email": User,
+                    "password": Password,
                 });
+                if (response.data && response.data.accessToken) {
+                    const token = response.data.accessToken;
+                    const user = response.data.user;
+                    signIn(token, user);
+                    //Aqui manda para a rota logo apos o login
+                    if(user[0].user_type === process.env.REACT_APP_ADM_ROLE){
+                        history.push("/adm/home");
+                    }else if(user[0].user_type === process.env.REACT_APP_EMPLOYEE_ROLE){
+                        history.push("/adm/pedidos");
+                    }else{
+                        history.push("/");
+                    }
+                } else {
+                    alert(`Email ou senha incorretos!`);
+                }
 
-                localStorage.setItem("accessToken", response.data.accessToken);
-
-                const user = response.data.user[0];
                 setError(false);
 
             } catch (error) {
@@ -91,9 +107,10 @@ export default function DropDownLoginContent(props) {
 
     async function handleForgot(e) {
         try {
-            const response = await api.post("sendpassword", {
+            const response = await api.post("/sendpassword", {
                 email: Email,
             });
+            console.log('aqui', response);
         } catch (error) {
             console.warn(error);
             alert("E-mail não reconhecido. Verifique se escreveu corretamete ou faça o cadastro! :) ");
@@ -136,8 +153,12 @@ export default function DropDownLoginContent(props) {
                     <button className="b_login" onClick={(e) => handleLogin(e)} >
                         {loading ? <CircularProgress color='black' size={25} /> : "ACESSAR"}
                     </button>
-
-                    <button className="b_register">CADASTRAR</button>
+                    
+                    <Link style={{textDecoration: 'none', color: '#000'}} to="/cadastro">
+                        <button>
+                            CADASTRAR
+                        </button>
+                    </Link>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

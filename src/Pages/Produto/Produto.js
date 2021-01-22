@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import api from "../../services/api";
 import { useParams } from "react-router-dom";
 import {
     FaCheck,
     FaShoppingCart,
-    FaAngleRight,
-    FaAngleLeft,
 } from "react-icons/fa";
 
 import "./Produto.css";
@@ -14,9 +12,9 @@ import "./Radio.css";
 import Image from "../../Assets/camisa.jpg";
 import Camisa from "../../Assets/Foto_camisa.png";
 
-import { Carousel } from "react-bootstrap";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
+
 
 const secundary_images = [
     {
@@ -60,9 +58,14 @@ function Produto() {
     const [Cep, setCep] = useState(null);
     const [Quantity, setQuantity] = useState(null);
 
+
     const [loadingCep, setLoadingCep] = useState(false);
     const [loadingLogo, setLoadingLogo] = useState(false);
     const [loadingAddToCart, setLoadingAddToCart] = useState(false);
+
+
+    const inputQuantity = useRef(null);
+    const inputSize = useRef(null);
 
 
     //Pegando o id do produto pelo link
@@ -73,35 +76,17 @@ function Produto() {
     //depois eu pego a img link.
 
     useEffect(() => {
+        async function getProduto(product_id) {
+            const response = await api.get(`/productmodels/${product_id}`);
+            return response.data;
+        }
+
         getProduto(product_id).then((response) => {
             setProduto(response);
         });
     }, []);
 
-    /* 
-    product_id: "10", name: "Camisa bonita", description: "Camisa de malha bem macia e estilosa", product_type: "university", models: Array(1)}
-        description: "Camisa de malha bem macia e estilosa"
-        models: Array(1)
-        0:
-            gender: "M"
-            img_link: "www.google.com.br"
-            is_main: 1
-            model_description: "Uma camisa branca"
-            price: 12
-            product_model_id: 17
-            __proto__: Object
-            length: 1
-        __proto__: Array(0)
-        name: "Camisa bonita"
-        product_id: "10"
-        product_type: "university"
-    */
 
-    async function getProduto(product_id) {
-        const response = await api.get(`/productmodels/${product_id}`);
-
-        return response.data;
-    }
 
     //essa funcao tem um CSS só pra ela, pois gastou uns esquemas diferenciados pra fazer
     function Radio(gender) {
@@ -130,6 +115,7 @@ function Produto() {
                                 type='radio'
                                 name='radio_size_item'
                                 value={value}
+                                ref={inputSize}
                             ></input>
                             <span className='radio_checkmark'>
                                 {selectedValue === value ? Content() : null}
@@ -152,51 +138,7 @@ function Produto() {
         );
     }
 
-    function LittleCarrousel() {
-        return (
-            <div className='div_carousel'>
-                <Carousel
-                    controls={true}
-                    /* indicators={true} */ interval={99999}
-                    className='carrousel_product'
-                >
-                    {secundary_images.map((img, index) => {
-                        /* Possíveis soluções pro carrousel:
-                        -Matriz de imagens, em vez de vetor
-                            Cada Matriz [i][3] tem na posição i 3 imagens, que servem de 
-                            para entrar no carrousel. Conforme o i passa, se tem novas imagens. No fim, 
-                            se faz uma tratativa para nao pegarmos matrizes vazias */
-                        return (
-                            <Carousel.Item>
-                                <div className='div_img_carousel'>
-                                    <img
-                                        src={img.src}
-                                        alt={img.alt}
-                                        className='carousel_image'
-                                        onClick={() => setIndexImage(index)}
-                                    />
-
-                                    <img
-                                        src={img.src}
-                                        alt={img.alt}
-                                        className='carousel_image'
-                                        onClick={() => setIndexImage(index)}
-                                    />
-
-                                    <img
-                                        src={img.src}
-                                        alt={img.alt}
-                                        className='carousel_image'
-                                        onClick={() => setIndexImage(index)}
-                                    />
-                                </div>
-                            </Carousel.Item>
-                        );
-                    })}
-                </Carousel>
-            </div>
-        );
-    }
+    
     
     function AddToCart(){
         // window.alert('Voce AddToCart !!');
@@ -206,6 +148,9 @@ function Produto() {
         setTimeout(() => {
             setLoadingAddToCart(false);
         }, 3000);
+
+        window.alert('Voce AddToCart !!')
+
     }
 
     function CalculateCEP(){
@@ -234,30 +179,6 @@ function Produto() {
                 <div className='shirt_images'>
                     <div className='div_main_image'>
                         {MainImage(indexImage)}
-                    </div>
-                    <div className='container_secundary_images'>
-                        <div className='left_arrow'>
-                            <FaAngleLeft size='30px' />
-                        </div>
-                        <div className='div_secundary_images'>
-                            {secundary_images.map((image, indexImage) => {
-                                return (
-                                    <img
-                                        onClick={() =>
-                                            setIndexImage(indexImage)
-                                        }
-                                        key={indexImage}
-                                        src={image.src}
-                                        alt={image.alt}
-                                        className='secundary_images'
-                                    />
-                                );
-                            })}
-                        </div>
-                        <div className='right_arrow'>
-                            <FaAngleRight size='30px' />
-                            {/* {LittleCarrousel()} */}
-                        </div>
                     </div>
                 </div>
 
@@ -324,6 +245,7 @@ function Produto() {
                                 <h6 className='small_title'>Quantidade:</h6>
                                 <input
                                     type='number'
+                                    ref={inputQuantity}
                                     onChange={(e) =>
                                         setQuantity(e.target.value)
                                     }

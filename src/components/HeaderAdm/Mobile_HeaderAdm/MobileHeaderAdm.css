@@ -82,6 +82,7 @@ h1, h2, button, span, p{
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .cell_header .header_content .rightSide .logoutPart span{

@@ -49,9 +49,12 @@ const ProdutoEscolhido = {
 const obj_sizes = ["PP", "P", "M", "G", "GG"];
 
 function Produto() {
-    const [indexImage, setIndexImage] = useState(0);
     const [selectedValue, setSelectedValue] = useState(0);
     const [Produto, setProduto] = useState({});
+
+    const [models, setModels] = useState([]);
+    const [modelChoosen, setModelChoosen] = useState({});
+    const [isSelect, setIsSelect] = useState(0);
 
     const [Cep, setCep] = useState(null);
     const [Quantity, setQuantity] = useState(null);
@@ -63,15 +66,29 @@ function Produto() {
     const { product_id } = useParams();
 
 
-    useEffect(() => {
-        async function getProduto(product_id) {
+    useEffect(async () => {
+
+        async function getProductModelsFromProduct(product_id) {
             const response = await api.get(`/productmodels/${product_id}`);
             return response.data;
         }
 
-        getProduto(product_id).then((response) => {
-            setProduto(response);
-        });
+        const response = await getProductModelsFromProduct(product_id);
+        console.log('aqui', response)
+
+        setProduto(response);
+
+        // Armazena o modela
+        setModels(response.models)
+
+        const choosen = response.models.find(item => item.is_main === 1);
+
+        // Acha modelo principal
+        setModelChoosen(choosen);
+
+        // Acha modelo principal
+        setIsSelect(choosen.product_model_id);
+
     }, []);
 
 
@@ -127,6 +144,11 @@ function Produto() {
         window.alert('Voce AddALogo !!')
     }
 
+    const handleSelectModel = (product_model_id) => {
+        const selectedModel = models.find(item => item.product_model_id === product_model_id);
+        setModelChoosen(selectedModel);
+    }
+
     return (
         <div className='productPage'>
 
@@ -137,16 +159,29 @@ function Produto() {
             <div className='rightSide'>
                 <h1 className='productsName'>{Produto.name}</h1>
                 <div className="titleArea">
-                    <strong>Descrição:</strong>
-                    <span>Uma descrição</span>
+                    <strong>Descrição do produto:</strong>
+                    <span>{Produto.description}</span>
                 </div>
                 <div className='productsInfo'>
                     <div className="leftSideInside">
                         <div className="priceWIthPhotos">
-                            <strong>R$ 50,00</strong>
+                            <strong>{modelChoosen? `R$ ${modelChoosen.price?.toFixed(2)}` : 'none'}</strong>
                             <div className="productsPhotos">
-                                <img src={Image} alt="imagem" />
-                                <img src={Image} alt="imagem" />
+                                {   
+                                    models.length > 0 ?
+                                        models.map(item => {
+                                            <img   
+                                                src={item.img_link} 
+                                                alt={item.model_description}
+                                                className={isSelect === item.product_model_id ? 'productSelect': null}
+                                                onClick={() => handleSelectModel(item.product_model_id)} 
+                                            />
+                                        })
+                                    :
+                                    <span>Sem modelo</span>
+                                }
+                                {/* <img src={Image} alt="imagem" />
+                                <img src={Image} alt="imagem" /> */}
                             </div>
                         </div>
 

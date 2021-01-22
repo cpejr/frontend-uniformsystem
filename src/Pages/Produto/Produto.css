@@ -1,6 +1,9 @@
 
-.productPage{
+.productSelect{
+    border: 1px solid #76CCCC;
+}
 
+.productPage{
     min-height: 90vh;
     width: 90%;
 
@@ -255,6 +258,7 @@
 
     .productPage .rightSide{
         width: 100%;
+        padding: 0px;
     }
 }
 

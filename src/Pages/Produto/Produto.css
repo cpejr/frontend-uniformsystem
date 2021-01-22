@@ -122,6 +122,10 @@
     align-items: center;
 }
 
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .MuiTextField-root{
+    margin: 3px 0px;
+}
+
 .productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .calculateCEPButton{
     font-size: 12px;
     border-radius: 10px;
@@ -132,8 +136,7 @@
     width: 70%;
     margin-right: 10px;
     border-radius: 10px;
-    border: 0.3px solid #979494;
-    padding: 0px 4px;
+    padding: 3px 4px;
 }
 
 .productPage .rightSide .productsInfo .leftSideInside .shipSpace .forgotPassword{

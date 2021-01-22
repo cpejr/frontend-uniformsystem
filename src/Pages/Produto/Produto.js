@@ -6,7 +6,7 @@ import {
     FaShoppingCart,
 } from "react-icons/fa";
 
-import { Button } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core'
 
 import "./Produto.css";
 import "./Radio.css";
@@ -56,11 +56,15 @@ function Produto() {
     const [modelChoosen, setModelChoosen] = useState({});
     const [isSelect, setIsSelect] = useState(0);
 
+    const [errorCEP, setErrorCEP] = useState(false);
+    const [errorCEPMessage, setErrorCEPMessage] = useState('');
+
     const [Cep, setCep] = useState(null);
     const [Quantity, setQuantity] = useState(null);
 
     const inputQuantity = useRef(null);
     const inputSize = useRef(null);
+    const inputCEP = useRef(null);
 
     //Pegando o id do produto pelo link
     const { product_id } = useParams();
@@ -137,7 +141,19 @@ function Produto() {
     }
 
     function CalculateCEP(){
-        window.alert('Voce CalculateCEP !!')
+        const cepReceived = inputCEP.current.value;
+
+        if(cepReceived === '' || cepReceived.length < 8 || isNaN(Number(cepReceived))){
+            setErrorCEP(true);
+            setErrorCEPMessage('Digite um CEP válido.');
+        }else{
+            setErrorCEP(false);
+            setErrorCEPMessage('');
+
+            alert('Ola', cepReceived);
+
+        }
+
     }
 
     function AddALogo(){
@@ -188,8 +204,15 @@ function Produto() {
                         <div className="shipSpace">
                             <span>Calcule o CEP:</span>
                             <div className="calculateCEPArea">
-                                <input type="text"/>
-                                <Button className="calculateCEPButton">Calcular</Button>
+                                <TextField
+                                    variant="outlined" 
+                                    type="text" 
+                                    inputProps={{maxLength: 8}}
+                                    inputRef={inputCEP}
+                                    error={errorCEP} 
+                                    helperText={errorCEPMessage}
+                                />
+                                <Button className="calculateCEPButton" onClick={CalculateCEP}>Calcular</Button>
                             </div>
                             <span className="forgotPassword">Não sei meu CEP</span>
                         </div>

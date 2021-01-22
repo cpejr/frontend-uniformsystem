@@ -173,19 +173,21 @@ function Produto() {
             setErrorToken(false);
 
             const newProductInCart = {
-                product_model_id: modelChoosen.product_model_id,
+                product_model_id: `${modelChoosen.product_model_id}`,
                 size: selectedValue.split('_')[1],
-                amount: modelChoosen.price,
-                logo_link: '',
+                amount: Number(inputQuantity.current.value),
+                logo_link: '...',
             }
 
-            const response = await api.get(`/addtocart`,
+            console.log('aqui', newProductInCart)
+
+            const response = await api.put('/addtocart',
                 newProductInCart,
                 {
                     headers:{ Authorization: `Bearer ${token}` },
                 }
             );
-            console.log(response.data);
+            console.log('resposta', response.data);
 
         }
 

@@ -62,9 +62,6 @@ function Produto() {
     //Pegando o id do produto pelo link
     const { product_id } = useParams();
 
-    //depois de pego o id do produto pelo link
-    //depois com o id produto os models (getproductmodel)
-    //depois eu pego a img link.
 
     useEffect(() => {
         async function getProduto(product_id) {
@@ -89,7 +86,7 @@ function Produto() {
         }
 
         return (
-            <div className={"radio"} style={{ display: "flex" }}>
+            <div className="radio" style={{ display: "flex" }}>
                 {obj_sizes.map((size, index) => {
                     let value;
                     value = gender + "_" + size;
@@ -105,8 +102,8 @@ function Produto() {
                                 type='radio'
                                 name='radio_size_item'
                                 value={value}
-                                ref={inputSize}
-                            ></input>
+                                ref={inputSize} 
+                            />
                             <span className='radio_checkmark'>
                                 {selectedValue === value ? Content() : null}
                             </span>
@@ -157,7 +154,7 @@ function Produto() {
                             <span>Calcule o CEP:</span>
                             <div className="calculateCEPArea">
                                 <input type="text"/>
-                                <button>Calcular</button>
+                                <Button className="calculateCEPButton">Calcular</Button>
                             </div>
                             <span className="forgotPassword">Não sei meu CEP</span>
                         </div>
@@ -178,7 +175,7 @@ function Produto() {
 
                         <div className="quantity">
                             <strong>Quantidade</strong>
-                            <input type="number" />
+                            <input type="text" />
                         </div>
 
                         <div className="loadLogo">
@@ -193,17 +190,17 @@ function Produto() {
 
                             <Button>Carregue a sua logo!</Button>
                         </div>
+                        <Button className="addToCart">
+                            <FaShoppingCart
+                                className='icon'
+                                size='35px'
+                            />
+                            ADICIONAR AO CARRINHO
+                        </Button>
                     </div>
 
                 </div>
 
-                <Button className="addToCart">
-                    <FaShoppingCart
-                        className='icon'
-                        size='35px'
-                    />
-                    ADICIONAR AO CARRINHO
-                </Button>
             </div>
 
         </div>

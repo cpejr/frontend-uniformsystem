@@ -242,3 +242,38 @@
     background-color: rgb(37, 118, 143);
 
 }
+
+@media(max-width: 840px){
+    .productPage{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .productPage .leftSide{
+        width: 50%;
+    }
+
+    .productPage .rightSide{
+        width: 100%;
+    }
+}
+
+@media(max-width: 640px){
+
+    .productPage .rightSide .productsInfo{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .productPage .rightSide .productsInfo .leftSideInside{
+        width: 100%;
+    }
+
+    .productPage .rightSide .productsInfo .leftSideInside .shipSpace{
+        margin: 12px 0px 12px 0px;
+    }
+
+    .productPage .rightSide .productsInfo .sizeAndQuantity{
+        width: 100%;
+    }
+}

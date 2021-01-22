@@ -16,6 +16,7 @@ function EspecificOrderAdm(props) {
   var total;
   var id;
   const [Orders, setOrders] = useState([]);
+  const [Code, setCode] = useState([]);
 
   //const { token } = useContext(LoginContext);
 
@@ -35,6 +36,29 @@ function EspecificOrderAdm(props) {
   }, []);
 
   console.log(date);
+
+  async function ModificarStatus() {
+    if(status === "pending"){
+      try {
+        const statusUpdated = await api.put(`order/${orderId}`, {status: "preparing"});
+        status = "preparing";
+        alert("Apertou o botão"); 
+      } catch (error) {
+        console.warn(error);
+        alert(error);
+      }
+    }else{
+      if(Code != "") {
+        try {
+          const response = await api.post(`deliveratmail/${orderId}`, {tracking_code: Code});
+          status = "delivered";
+        } catch (error) {
+          console.warn(error);
+          alert(error);
+        }
+      }
+    }
+  }
 
   return (
     <div className="order-container">
@@ -80,7 +104,7 @@ function EspecificOrderAdm(props) {
             </div>
             {status === "pending" && (
               <div>
-                <button className="button-status" style={{ width: "28vw" }}>
+                <button className="button-status" style={{ width: "28vw" }} onClick={ModificarStatus}>
                   Mudar status para "Em produção"
                 </button>
               </div>
@@ -90,8 +114,9 @@ function EspecificOrderAdm(props) {
                 <input
                   placeholder="código de rastramento"
                   style={{ marginRight: "10px" }}
+                  onChange={(e) => setCode(e.target.value)}
                 ></input>
-                <button className="button-status">Entregar pedido</button>
+                <button className="button-status" onClick={ModificarStatus}>Entregar pedido</button>
               </div>
             )}
             {status === "delivered" && (

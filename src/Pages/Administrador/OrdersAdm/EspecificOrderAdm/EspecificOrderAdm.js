@@ -7,6 +7,10 @@ import camisa from "../../../../Assets/camisa.jpg";
 import { LoginContext } from "../../../../contexts/LoginContext";
 
 function EspecificOrderAdm(props) {
+  var date = props.location.state.date;
+  var today = new Date();
+
+  const orderId = props.location.state.orderId;
   let status = "pending";
   var price = [];
   var total;
@@ -19,12 +23,9 @@ function EspecificOrderAdm(props) {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiOGJmODMtOGUwZi02YjA3LTg3Yy0wNDRmM2EwMTNkM2MiLCJuYW1lIjoiQnJ5YW4iLCJmaXJlYmFzZV91aWQiOiJyZTRwc2pGNlR0aEhReXFpdjhyb2xYV2U0dWgxIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJicnlhbkBjcGUuY29tIiwiY3BmIjoiMDAwMDAwMDAwMDAiLCJjcmVhdGVkX2F0IjoiMjAyMS0wMS0xMSAxMjoxODo0NyIsInVwZGF0ZWRfYXQiOiIyMDIxLTAxLTExIDEyOjE4OjQ3In1dLCJpYXQiOjE2MTAzNjc1NTAsImV4cCI6MTYxMjk1OTU1MH0.czTnB8wKs6T0JIBF9T9dPz4YZmY3EXG8oW6ZOE1v6f8";
 
   const obterPedidos = async () => {
-    const resultado = await api.get(
-      `productsfromorder/fb1db8-87af-54da-2f24-401a3084152`,
-      {
-        headers: { authorization: `bearer ${token}` },
-      }
-    );
+    const resultado = await api.get(`productsfromorder/${orderId}`, {
+      headers: { authorization: `bearer ${token}` },
+    });
     console.log(resultado);
     setOrders(resultado.data);
   };
@@ -33,7 +34,7 @@ function EspecificOrderAdm(props) {
     obterPedidos();
   }, []);
 
-  console.log(props.date);
+  console.log(date);
 
   return (
     <div className="order-container">
@@ -52,7 +53,6 @@ function EspecificOrderAdm(props) {
             <div className="especific-info">
               {Orders.map((pedido) => {
                 id = pedido.order_id;
-                const date = props.date;
 
                 const reducer = (accumulator, currentValue) => {
                   return accumulator + currentValue;
@@ -60,6 +60,7 @@ function EspecificOrderAdm(props) {
 
                 price.push(pedido.product_price);
                 total = price.reduce(reducer);
+                total = total.toFixed(2);
                 return "";
               })}
             </div>
@@ -70,7 +71,7 @@ function EspecificOrderAdm(props) {
               <br />
               <span className="date">
                 <strong>Data do pedido:</strong>
-                {}
+                {today.toLocaleString("pt-BR", date)}
               </span>
               <br />
               <span className="price">

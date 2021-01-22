@@ -44,12 +44,6 @@ function OrdersAdm() {
 
   console.log(Orders.models);
 
-  function especifico(id, date) {
-    <div className="redirect">
-      <EspecificOrderAdm key={id} id={id} date={date} />;
-    </div>;
-  }
-
   function FilteredData() {
     return PEDIDOS.map((pedido, index) => {
       {
@@ -121,16 +115,21 @@ function OrdersAdm() {
                   {Orders.map((pedido) => {
                     const id = pedido.order_id;
                     date = pedido.created_at;
-
+                    console.log(date);
                     const colum = (
                       <div className="adm_orders_id">
                         <tr>
                           {id}
                           <Link
-                            to="/adm/pedidoespecifico"
+                            to={{
+                              pathname: "/adm/pedidoespecifico",
+                              state: {
+                                date: date,
+                                orderId: id,
+                              },
+                            }}
                             style={{ color: "black" }}
                           >
-                            {especifico(id, date)}
                             <FaAngleRight className="icon_table" />
                           </Link>
                         </tr>

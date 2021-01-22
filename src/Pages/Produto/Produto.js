@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
-import api from "../../services/api";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
     FaCheck,
     FaShoppingCart,
 } from "react-icons/fa";
 
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField } from '@material-ui/core';
+
+import api from "../../services/api";
+import { LoginContext } from "../../contexts/LoginContext";
 
 import "./Produto.css";
 import "./Radio.css";
@@ -14,41 +16,36 @@ import "./Radio.css";
 import Image from "../../Assets/camisa.jpg";
 import Camisa from "../../Assets/Foto_camisa.png";
 
-const secundary_images = [
-    {
-        src: Image,
-        alt: "alt_img2",
-    },
-    {
-        src: Camisa,
-        alt: "alt_img3",
-    },
-    {
-        src: Image,
-        alt: "alt_img4",
-    },
-];
+function validateFields(value, type){
+    let isValid;
+    switch (type) {
+        case 'quantity':
+            if(value === '' || Number(value) <= 0 || isNaN(Number(value))){
+                isValid = false;
+            }else{
+                isValid = true;
+            }
+            break;
+        case 'size':
+            if(value === 0){
+                isValid = false;
+            }else{
+                isValid = true;
+            }
+            break;
+        default:
+            break;
+    }
 
-const ProdutoEscolhido = {
-    name: "Nome do Produto Escolhido",
-    description:
-        "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.",
-    price: "50",
-    images: [
-        {
-            src: Image,
-            alt: "alt_img",
-        },
-        {
-            src: Image,
-            alt: "alt_img1",
-        },
-    ],
-};
+    return isValid;
+}
 
 const obj_sizes = ["PP", "P", "M", "G", "GG"];
 
 function Produto() {
+
+    const { token } = useContext(LoginContext);
+
     const [selectedValue, setSelectedValue] = useState(0);
     const [Produto, setProduto] = useState({});
 
@@ -58,6 +55,10 @@ function Produto() {
 
     const [errorCEP, setErrorCEP] = useState(false);
     const [errorCEPMessage, setErrorCEPMessage] = useState('');
+
+    const [errorSize, setErrorSize] = useState(false);
+
+    const [errorToken, setErrorToken] = useState(false);
 
     const [errorQuantity, setErrorQuantity] = useState(false);
     const [errorQuantityMessage, setErrorQuantityMessage] = useState('');
@@ -138,18 +139,53 @@ function Produto() {
     }
 
 
-    const AddToCart = () => {
+    const AddToCart = async () => {
 
-        const quantityReceived = inputQuantity.current.value;
+        const resultQuantityField = validateFields(inputQuantity.current.value, 'quantity');
+        const resultSizeField = validateFields(selectedValue, 'size');
 
-        if(quantityReceived === '' || Number(quantityReceived) <= 0 || isNaN(Number(quantityReceived))){
-            setErrorQuantity(true);
-            setErrorQuantityMessage('Quantidade inválida.');
+        if(!resultQuantityField || !resultSizeField || !token || token === 'notYet'){
+
+            if(!resultQuantityField){
+                setErrorQuantity(true);
+                setErrorQuantityMessage('Quantidade inválida.');
+            }else{
+                setErrorQuantity(false);
+                setErrorQuantityMessage('');
+            }
+
+            if(!resultSizeField){
+                setErrorSize(true);
+            }else{
+                setErrorSize(false);
+            }
+
+            if(!token || token === 'notYet'){
+                setErrorToken(true);
+            }else{
+                setErrorToken(false);
+            }
+            
         }else{
             setErrorQuantity(false);
             setErrorQuantityMessage('');
+            setErrorSize(false);
+            setErrorToken(false);
 
-            alert('Ola', quantityReceived);
+            const newProductInCart = {
+                product_model_id: modelChoosen.product_model_id,
+                size: selectedValue.split('_')[1],
+                amount: modelChoosen.price,
+                logo_link: '',
+            }
+
+            const response = await api.get(`/addtocart`,
+                newProductInCart,
+                {
+                    headers:{ Authorization: `Bearer ${token}` },
+                }
+            );
+            console.log(response.data);
 
         }
 
@@ -276,6 +312,9 @@ function Produto() {
                             />
                             ADICIONAR AO CARRINHO
                         </Button>
+
+                        {errorSize && <span style={{color: '#dc3545', fontSize: '0.9rem'}}>Escolha um tamanho</span>}
+                        {errorToken && <span style={{color: '#dc3545', fontSize: '0.9rem'}}>Necessário logar!</span>}
                     </div>
 
                 </div>

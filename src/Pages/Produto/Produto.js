@@ -63,7 +63,7 @@ function Produto() {
     const [errorQuantity, setErrorQuantity] = useState(false);
     const [errorQuantityMessage, setErrorQuantityMessage] = useState('');
 
-    const [Quantity, setQuantity] = useState(null);
+    const [calculatedShipping, setCalculatedShipping] = useState(null);
 
     const inputQuantity = useRef(null);
     const inputSize = useRef(null);
@@ -193,19 +193,29 @@ function Produto() {
 
     }
 
-    function CalculateCEP(){
+    async function CalculateCEP(){
         const cepReceived = inputCEP.current.value;
 
-        if(cepReceived === '' || cepReceived.length < 8 || isNaN(Number(cepReceived))){
-            setErrorCEP(true);
-            setErrorCEPMessage('Digite um CEP válido.');
-        }else{
-            setErrorCEP(false);
-            setErrorCEPMessage('');
+        try{
+            if(cepReceived === '' || cepReceived.length < 8 || isNaN(Number(cepReceived))){
+                setErrorCEP(true);
+                setErrorCEPMessage('Digite um CEP válido.');
+            }else{
+                setErrorCEP(false);
+                setErrorCEPMessage('');
+    
+                const response = await api.get(`/shipping/${cepReceived}`);
+    
+                console.log('frete', response.data.shipping.Valor);
+                setCalculatedShipping(response.data.shipping.Valor)
+    
+            }
 
-            alert('Ola', cepReceived);
-
+        }catch(err){
+            setCalculatedShipping(-1);
+            console.warn(err);
         }
+
 
     }
 
@@ -258,7 +268,7 @@ function Produto() {
                         </div>
 
                         <div className="shipSpace">
-                            <span>Calcule o CEP:</span>
+                            <span>Calcule o CEP:    {calculatedShipping && `R$ ${calculatedShipping}`}</span>
                             <div className="calculateCEPArea">
                                 <TextField
                                     variant="outlined" 
@@ -270,7 +280,8 @@ function Produto() {
                                 />
                                 <Button className="calculateCEPButton" onClick={CalculateCEP}>Calcular</Button>
                             </div>
-                            <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/default.cfm">
+                            
+                            <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/default.cfm" target="_blank">
                                 <span className="forgotPassword">Não sei meu CEP</span>
                             </a>
                         </div>

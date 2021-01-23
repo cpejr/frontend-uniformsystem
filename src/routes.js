@@ -18,6 +18,7 @@ import EspecificEmployee from "./Pages/Administrador/EmployeeAdm/EspecificEmploy
 import Loja from "./Pages/Loja";
 import Produto from "./Pages/Produto";
 import Perfil from "./Pages/Perfil";
+import EditarPerfil from "./Pages/EditarPerfil";
 import Login from "./Pages/Login";
 import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
@@ -128,13 +129,17 @@ function MenuRoutes() {
         <Route path="/product/:product_id" export component={Produto} />
         {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                 logado, você será redirecionado para a página Login. */}
-        <Route path="/perfil" export component={Perfil} />
+
+        <Route path="/perfil" export exact component={Perfil} />
+        <Route path="/editarPerfil" export exact component={EditarPerfil} />
+        
         <Route path="/cart" export component={Carrinho} />
         <Route path="/login" export component={Login} />
         <Route path="/contact" export component={Contato} />
         <Route path="/signUp" export component={SignUp} />
         <Route path="/cadastro" export component={Cadastro} />
         <Route path="/orders" export component={Pedidos} />
+
         {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
         <Route path='*' exact component={Error} />
       </Switch>

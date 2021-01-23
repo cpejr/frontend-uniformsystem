@@ -267,7 +267,7 @@ function CadastroFunc({history}) {
 
       <div className={classes.divButtons}>
         <Button className={classes.saveButton} onClick={() => handleSubmit()} >
-          {loading ? <CircularProgress /> : "CADASTRAR"}
+          {loading ? <CircularProgress color='secondary' /> : "CADASTRAR"}
         </Button>
       </div>
 

@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AiOutlineLeft } from 'react-icons/ai';
 
 import './EspecificOrderAdm.css';
 import camisa from '../../../../Assets/camisa.jpg';
 
+
+import CircularProgress from "@material-ui/core/CircularProgress"
+import { functionsIn } from 'lodash';
+
 function EspecificOrderAdm() {
-    let status = "pending";
+    const [loadingStatus, setLoadingStatus] = useState(false);
+
+    function ChangeStatus() {
+        setLoadingStatus(true);
+
+        setTimeout(() => {
+            setLoadingStatus(false);
+        }, 3000)
+    }
 
     return (
         <div className="order-container">
@@ -46,6 +58,10 @@ function EspecificOrderAdm() {
                             </div>
                         }
                     </div>
+
+                    <button className="button-status" onClick={ () => ChangeStatus() }>
+                        {loadingStatus ? <CircularProgress size={ 35 } color="secondary" className="circularProgress" /> : "Mudar status para ''Em produção''"}
+                    </button>
 
                 </div>
 

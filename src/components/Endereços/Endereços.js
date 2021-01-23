@@ -1,17 +1,22 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import "./Endereços.css";
 
 
 function Endereços({endereço}){
-    return (<div className="endereços">
-      <div className="endereçosLocal">{endereço.local}</div>
-      <div className="endereçosBairro">{endereço.bairro}</div>
-      <div className="endereçosCidade">{endereço.cidade}</div>
-      <div className="endereçosCep">{endereço.cep}</div>
-      <div className="endereçosEstado">{endereço.estado}</div>
-      <div className="endereçosPais">{endereço.pais}</div>
-      <div className="endereçosEdit"><a href="url">{endereço.editEnd}</a></div>
-    </div>);
+    return (
+      <div className="endereços">
+        <div className="enderecoInfo">{endereço.local}</div>
+        <div className="enderecoInfo">{endereço.bairro}</div>
+        <div className="enderecoInfo">{endereço.cidade}</div>
+        <div className="enderecoInfo">{endereço.cep}</div>
+        <div className="enderecoInfo">{endereço.estado}</div>
+        <div className="enderecoInfo">{endereço.pais}</div>
+        <Link to="/editardados" className="enderecosEdit">
+            Editar endereço
+        </Link>
+      </div>
+    );
 }
 
 export default Endereços;

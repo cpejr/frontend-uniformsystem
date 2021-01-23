@@ -24,18 +24,22 @@
 }
 
 .profileContainer .titleProfile {
-  font-size: 34px;
+  font-size: 28px;
   font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
   color: black;
   margin-bottom: 1px;
-  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.profileContainer .personalDataContainer .titleLine {
-  border-top: 3px solid #4dcdbc;
-  border-radius: 20px;
-  width: 50%;
-  margin-left: 10%;
+.profileContainer .titleLine {
+  height: 2px;
+  width: 80%;
+  background-color: #0EC4AB;
+  border-radius: 5px;
+  margin-top: 8px;
+  align-self: center;
 }
 
 .profileContainer .personalDataContainer .containerDados {
@@ -74,10 +78,9 @@
 }
 
 .profileContainer .ordersContainer .titleLine2 {
-  border-top: 3px solid #4dcdbc;
-  border-radius: 20px;
-  width: 30%;
-  margin-left: 10%;
+  height: 3px;
+  width: 80%;
+  margin-top: 8px;
 }
 
 @media (max-width: 800px) {

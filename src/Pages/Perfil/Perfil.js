@@ -96,26 +96,40 @@ function Perfil() {
   return (
     <div className="profileContainer">
       <div className="personalDataContainer">
-        <h1 className="titleProfile">DADOS PESSOAIS</h1>
-        <hr className="titleLine"></hr>
+        <h1 className="titleProfile">
+          DADOS PESSOAIS
+          <span className="titleLine"/>
+        </h1>
         <div className="containerDados">
             <DadosPessoais dado={currentUser} />
         </div>
 
         <div className="containerEndereço">
-          {userAddress.map((endereco, index) => (
-            <Endereços key={index} endereço={endereco} />
-          ))}
+          {
+            userAddress.lenght > 0 ?
+              userAddress.map((endereco, index) => (
+                <Endereços key={index} endereço={endereco} />
+              ))
+            : 
+              null
+          }
         </div>
       </div>
 
       <div className="ordersContainer">
-        <h1 className="titleProfile">MEUS PEDIDOS</h1>
-        <hr className="titleLine2"></hr>
+        <h1 className="titleProfile">
+          MEUS PEDIDOS
+          <span className="titleLine"/>
+        </h1>
         <div className="containerPedidos">
-          {userOrders.map((pedido, index) => (
-            <CardPedido key={index} pedido={pedido} />
-          ))}
+          { 
+            userOrders.length > 0 ?
+              userOrders.map((pedido, index) => (
+                <CardPedido key={index} pedido={pedido} />
+              ))
+            :
+            <span>Sem pedidos</span>
+          }
         </div>
       </div>
     </div>

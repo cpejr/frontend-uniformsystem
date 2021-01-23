@@ -1,7 +1,19 @@
-.dadosEdit{
-    margin-left: 10%;
-    color: #4DCDBC;
-    margin-top: 3%;
 
-
+.dadosPessoais{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
+
+.dadosPessoais .botaoEditarDados{
+    text-decoration: underline;
+    
+    margin-left: 10%;
+    color: #0EC4AB;
+    margin-top: 3%;
+}
+.dadosPessoais .botaoEditarDados:hover{
+    color: #0f6d60;
+}
+

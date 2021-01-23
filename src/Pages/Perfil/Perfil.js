@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import CardPedido from "../../components/CardPedido";
 import DadosPessoais from "../../components/DadosPessoais/DadosPessoais";
 import Endereços from "../../components/Endereços";
+
+import api from '../../services/api';
+import { LoginContext } from '../../contexts/LoginContext';
+
 import "./Perfil.css";
 
 const pedidos = [
@@ -48,29 +52,69 @@ const endereços = [
 ];
 
 function Perfil() {
+
+  const { user, token } = useContext(LoginContext);
+  const currentUser = user[0];
+  const [userAddress, setUserAddress] = useState([]);
+  const [userOrders, setUserOrders] = useState([]);
+
+  useEffect(() => {
+    try{
+
+      async function getAddress(){
+        const response = await api.get('/address',
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+        );
+        if(response.data){
+          setUserAddress(response.data);
+        }
+      }
+
+      async function getOrders(){
+        const response = await api.get(`/userorder/${currentUser.user_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+        );
+
+        if(response.data){
+          setUserOrders(response.data);
+        }
+      }
+
+      getAddress();
+      getOrders();
+
+    }catch(err){
+      console.warn(err);
+    }
+
+  }, [])
+
   return (
     <div className="profileContainer">
       <div className="personalDataContainer">
-        <h1 className="title">DADOS PESSOAIS</h1>
+        <h1 className="titleProfile">DADOS PESSOAIS</h1>
         <hr className="titleLine"></hr>
         <div className="containerDados">
-          {dados.map((dado) => (
-            <DadosPessoais key={dado.id} dado={dado} />
-          ))}
+            <DadosPessoais dado={currentUser} />
         </div>
 
         <div className="containerEndereço">
-          {endereços.map((endereço) => (
-            <Endereços key={endereço.id} endereço={endereço} />
+          {userAddress.map((endereco, index) => (
+            <Endereços key={index} endereço={endereco} />
           ))}
         </div>
       </div>
+
       <div className="ordersContainer">
-        <h1 className="title">MEUS PEDIDOS</h1>
+        <h1 className="titleProfile">MEUS PEDIDOS</h1>
         <hr className="titleLine2"></hr>
         <div className="containerPedidos">
-          {pedidos.map((pedido) => (
-            <CardPedido key={pedido.id} pedido={pedido} />
+          {userOrders.map((pedido, index) => (
+            <CardPedido key={index} pedido={pedido} />
           ))}
         </div>
       </div>

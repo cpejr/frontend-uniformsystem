@@ -1,14 +1,44 @@
-.containerPedidos {
-  width: 100%;
-  padding: 28px;
-  display: grid;
-  grid-column-gap: 8px;
-  grid-row-gap: 15px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+.profileContainer {
+  width: 90%;
+  min-height: 80vh;
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  /* flex-wrap: wrap; */
+  margin: 3% auto 10% auto;
 }
-.containerDados {
+
+.profileContainer .personalDataContainer{
+  width: 35%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.profileContainer .ordersContainer {
+  height: 100%;
+  width: 65%;
+  margin-left: 10%;
+}
+
+.profileContainer .titleProfile {
+  font-size: 34px;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  color: black;
+  margin-bottom: 1px;
+  align-self: flex-start;
+}
+
+.profileContainer .personalDataContainer .titleLine {
+  border-top: 3px solid #4dcdbc;
+  border-radius: 20px;
+  width: 50%;
+  margin-left: 10%;
+}
+
+.profileContainer .personalDataContainer .containerDados {
   width: 100%;
   padding: 15px;
   display: grid;
@@ -20,7 +50,7 @@
   line-height: 30px;
 }
 
-.containerEndereço {
+.profileContainer .personalDataContainer .containerEndereço {
   width: 100%;
   padding: 15px;
   display: grid;
@@ -32,33 +62,18 @@
   line-height: 30px;
 }
 
-.title {
-  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-  margin-left: 7%;
-  color: black;
-  margin-bottom: 1px;
+
+.profileContainer .ordersContainer .containerPedidos {
+  width: 100%;
+  padding: 20px;
+  display: grid;
+  grid-column-gap: 8px;
+  grid-row-gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  justify-content: center;
 }
 
-.profileContainer {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: 5%;
-  margin-bottom: 10%;
-  margin-top: 3%;
-}
-
-.ordersContainer {
-  margin-left: 10%;
-}
-
-.titleLine {
-  border-top: 3px solid #4dcdbc;
-  border-radius: 20px;
-  width: 50%;
-  margin-left: 10%;
-}
-
-.titleLine2 {
+.profileContainer .ordersContainer .titleLine2 {
   border-top: 3px solid #4dcdbc;
   border-radius: 20px;
   width: 30%;

@@ -4,13 +4,9 @@ import { Button, TextField, CircularProgress } from '@material-ui/core';
 import { LoginContext } from "../../contexts/LoginContext";
 import api from "../../services/api";
 import './Login.css';
-import { useState } from 'react';
-
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 function Login(){
-
 
   const { signIn } = useContext(LoginContext);
   const history = useHistory();

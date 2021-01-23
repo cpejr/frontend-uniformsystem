@@ -216,14 +216,16 @@ function Produto() {
 
     const handleSelectModel = (product_model_id) => {
         const selectedModel = models.find(item => item.product_model_id === product_model_id);
+        console.log('escolhido', selectedModel);
         setModelChoosen(selectedModel);
+        setIsSelect(selectedModel.product_model_id);
     }
 
     return (
         <div className='productPage'>
 
             <div className='leftSide'>
-                <img src={Image} alt="imagem" />
+                <img src={`${process.env.REACT_APP_BUCKET_AWS}${modelChoosen.img_link}`} alt={`${modelChoosen.model_description}`} />
             </div>
 
             <div className='rightSide'>
@@ -240,12 +242,14 @@ function Produto() {
                                 {   
                                     models.length > 0 ?
                                         models.map(item => {
-                                            <img   
-                                                src={item.img_link} 
-                                                alt={item.model_description}
-                                                className={isSelect === item.product_model_id ? 'productSelect': null}
-                                                onClick={() => handleSelectModel(item.product_model_id)} 
-                                            />
+                                            return (
+                                                <img   
+                                                    src={`${process.env.REACT_APP_BUCKET_AWS}${item.img_link}`} 
+                                                    alt={item.model_description}
+                                                    className={isSelect === item.product_model_id ? 'productSelect': null}
+                                                    onClick={() => handleSelectModel(item.product_model_id)} 
+                                                />
+                                            );
                                         })
                                     :
                                     <span>Sem modelo</span>
@@ -266,7 +270,9 @@ function Produto() {
                                 />
                                 <Button className="calculateCEPButton" onClick={CalculateCEP}>Calcular</Button>
                             </div>
-                            <span className="forgotPassword">Não sei meu CEP</span>
+                            <a href="http://www.buscacep.correios.com.br/sistemas/buscacep/default.cfm">
+                                <span className="forgotPassword">Não sei meu CEP</span>
+                            </a>
                         </div>
 
                     </div>

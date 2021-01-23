@@ -13,9 +13,6 @@ import { LoginContext } from "../../contexts/LoginContext";
 import "./Produto.css";
 import "./Radio.css";
 
-import Image from "../../Assets/camisa.jpg";
-import Camisa from "../../Assets/Foto_camisa.png";
-
 function validateFields(value, type){
     let isValid;
     switch (type) {
@@ -285,15 +282,16 @@ function Produto() {
                                     <span>Sem modelo</span>
                                 }
                             </div>
-                            
-                            {
-                                logoImage &&
-                                    <img 
-                                        className="logoImgClass" 
-                                        src={logoImage.file} 
-                                        alt={logoImage.imgAlt} 
-                                    />
-                            }
+                            <div className="logoSpaceDiv">
+                                {
+                                    logoImage &&
+                                        <img 
+                                            className="logoImgClass" 
+                                            src={logoImage.file} 
+                                            alt={logoImage.imgAlt} 
+                                        />
+                                }
+                            </div>
                         </div>
 
                         <div className="shipSpace">

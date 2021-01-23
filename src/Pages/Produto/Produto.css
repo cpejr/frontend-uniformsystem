@@ -106,7 +106,8 @@
 }
 
 .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos img{
-    width: 80%;
+    max-width: 80%;
+    max-height: 150px;
     cursor: pointer;
 }
 
@@ -114,11 +115,19 @@
     border: 1px solid #000;
 }
 
-.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoImgClass{
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoSpaceDiv{
+    max-height: 120px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 45px;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoSpaceDiv .logoImgClass{
     /* width: auto; */
     max-width: 70%;
-    height: 15%;
-    margin: 30px auto 16px auto;    
+    max-height: 150px;
 }
 
 .productPage .rightSide .productsInfo .leftSideInside .shipSpace{

@@ -57,7 +57,6 @@ function Produto() {
     const [errorCEPMessage, setErrorCEPMessage] = useState('');
 
     const [errorSize, setErrorSize] = useState(false);
-    const [errorLogo, setErrorLogo] = useState(false);
 
     const [errorToken, setErrorToken] = useState(false);
 
@@ -85,7 +84,6 @@ function Produto() {
         }
 
         const response = await getProductModelsFromProduct(product_id);
-        console.log('aqui', response)
 
         setProduto(response);
 
@@ -176,26 +174,25 @@ function Produto() {
             setErrorSize(false);
             setErrorToken(false);
 
-            let objImage = new FormData();
-            objImage.append("file", logoImage.imgSrc);
+            let objProdcutInCart = new FormData();
+            objProdcutInCart.append("product_model_id", `${modelChoosen.product_model_id}`);
+            objProdcutInCart.append("size", selectedValue.split('_')[1]);
+            objProdcutInCart.append("amount", Number(inputQuantity.current.value));
+            objProdcutInCart.append("file", logoImage.imgSrc);
+            objProdcutInCart.append("isLogoUpload", true);
+            
+            try{
+                const response = await api.put('/addtocart',
+                    objProdcutInCart,
+                    {
+                        headers:{ Authorization: `Bearer ${token}` },
+                    }
+                );
+                console.log('resposta', response.data);
 
-            const newProductInCart = {
-                product_model_id: `${modelChoosen.product_model_id}`,
-                size: selectedValue.split('_')[1],
-                amount: Number(inputQuantity.current.value),
-                logo_link: objImage,
-                isLogoUpload: true,
+            }catch(err){
+                console.warn(err);
             }
-
-            console.log('aqui', newProductInCart)
-
-            const response = await api.put('/addtocart',
-                newProductInCart,
-                {
-                    headers:{ Authorization: `Bearer ${token}` },
-                }
-            );
-            console.log('resposta', response.data);
 
         }
 
@@ -288,6 +285,7 @@ function Produto() {
                                     <span>Sem modelo</span>
                                 }
                             </div>
+                            
                             {
                                 logoImage &&
                                     <img 

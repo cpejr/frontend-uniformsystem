@@ -30,7 +30,7 @@
   margin-bottom: 1px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .profileContainer .titleLine {
@@ -84,13 +84,15 @@
 }
 
 @media (max-width: 800px) {
-  .ordersContainer {
-    margin-left: -30px;
+
+  .profileContainer{
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 0px;
+  }
+  
+  .profileContainer .personalDataContainer{
+    width: 100%;
   }
 
-  .containerPedidos {
-    width: 100%;
-    padding: 28px;
-    display: grid;
-  }
 }

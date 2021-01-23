@@ -6,9 +6,9 @@ import "./DadosPessoais.css";
 function DadosPessoais({dado}){
     return (
       <div className="dadosPessoais">
-        <span className="dadosName">{dado.name}</span>
-        <span className="dadosCpf">{dado.cpf}</span>
-        <span className="dadosEmail">{dado.email}</span>
+        <span className="dadosName">Nome: {dado.name}</span>
+        <span className="dadosCpf">CPF/CNPF: {dado.cpf}</span>
+        <span className="dadosEmail">E-mail: {dado.email}</span>
          <Link to="/editardados" className="botaoEditarDados">
             Editar meu cadastro
          </Link> 

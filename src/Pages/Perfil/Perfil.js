@@ -60,7 +60,6 @@ function Perfil() {
 
   useEffect(() => {
     try{
-
       async function getAddress(){
         const response = await api.get('/address',
         {
@@ -78,19 +77,16 @@ function Perfil() {
           headers: { Authorization: `Bearer ${token}` },
         },
         );
-
         if(response.data){
           setUserOrders(response.data);
         }
       }
-
       getAddress();
       getOrders();
 
     }catch(err){
       console.warn(err);
     }
-
   }, [])
 
   return (

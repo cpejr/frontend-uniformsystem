@@ -1,386 +1,333 @@
 
+.productSelect{
+    border: 4px solid #76CCCC;
+}
 
+.productPage .MuiFormHelperText-contained{
+    margin: 2px 0px 0px 0px;
+}
 
-.all_page {
-    width: 100%;
-    min-height: 80vh;
+.productPage{
+    min-height: 90vh;
+    width: 90%;
 
     display: flex;
     justify-content: center;
 
-    box-sizing: border-box;
+    padding: 30px 0px;
+    margin: 0 auto;
 }
 
-.all_page .page_content{
-    width: 97%;
-
+.productPage .leftSide{
+    width: 40%;
+    
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 80px;
 }
 
-.all_page .page_content .small_title {
-    font-weight: bold;
+.productPage .leftSide img{
+    width: 100%;
+    margin-bottom: 50px;
 }
 
-/* Daqui pra baixo temos somente a parte da imagem. */
-
-.all_page .page_content .shirt_images {
-    width: 35%;
-    /* background-color: red; */
-    height: 80vh;
-
+.productPage .rightSide{
+    
+    width: 60%;
+    padding-left: 10px;
+    
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    margin: 0;
-    padding: 5px 0 0 0;
 }
 
-.all_page .page_content .shirt_images .div_main_image {
-    height: 70%;
-   /*  margin: 0px 0 50px 0; */
+.productPage .rightSide h1{
+    
+    font-size: 40px;
+    font-weight: 600;
+    color: #000;
 }
 
-.all_page .page_content .shirt_images .div_main_image .main_image {
-    /* max-width: 100%;
-    max-height: 90%; */
-    /* width: 100%; */
-    height: 100%;
-}
-
-.all_page .page_content .shirt_images .container_secundary_images {
-    display: flex;
-    align-items: center;
-    overflow-x: auto;
-    width: 80%;
-    height: 20% !important;
-    margin: 0;
-}
-
- .all_page
-    .page_content
-    .shirt_images
-    .container_secundary_images
-    .div_secundary_images {
+.productPage .rightSide .titleArea{
     width: 100%;
-    height: 100%;
-}
-
-.all_page
-    .page_content
-    .shirt_images
-    .container_secundary_images
-    .div_secundary_images
-    .secundary_images {
-    width: 33%;
-    height: 100%;
-    padding-left: 1px;
-}
- 
- .all_page
-    .page_content
-    .shirt_images
-    .container_secundary_images
-    .div_secundary_images
-    .secundary_images:hover {
-    border: solid 1px black;
-}
- 
-
-/* Daqui pra baixo teremos a parte das informações das camisas */
-.all_page .page_content .shirt_informations {
-    width: 65%;
-    height: 100%;
-    /* background-color: blue; */
-}
-
-.all_page .page_content .shirt_informations .title_and_description {
-    height: 20%;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.all_page
-    .page_content
-    .shirt_informations
-    .title_and_description
-    .title_shirt {
-    font-weight: bold;
+.productPage .rightSide .titleArea strong{
+    font-size: 15px;
+    font-weight: 600;
 }
 
-.all_page
-    .page_content
-    .shirt_informations
-    .title_and_description
-    .div_descript {
-    margin: -3px 0 0 0;
-}
-.all_page
-    .page_content
-    .shirt_informations
-    .title_and_description
-    .div_descript
-    .descript_text {
-    margin: -5px 0 0 0;
+.productPage .rightSide .titleArea span{
+    font-size: 18px;
 }
 
-.all_page .page_content .shirt_informations .two_columns {
-    display: flex;
-    justify-content: space-between;
-    height: 78%;
-}
-
-.all_page .page_content .shirt_informations .two_columns .priceAndImages {
-    width: 39%;
-    /* background-color: yellow !important; */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: space-between;
-}
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .div_aux {
-    height: 70%;
-}
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .div_aux
-    .price{
-        font-weight:bold;
-    }
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .images {
-    overflow-y: auto;
-    flex-wrap: wrap;
-    width: 100%;
+.productPage .rightSide .productsInfo {
     height: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .images
-    .image {
-    margin:0 5px;
-    border-radius: 10px;
-    border: 1px solid black;
-    max-width: 50%;
-    max-height: 48%;
-}
-
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .frete {
-    display: flex;
-    flex-direction: column;
-}
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .frete
-    input {
-    border-radius: 10px;
-    border: 1px solid black;
-}
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .frete
-    a {
-    text-decoration: underline;
-    color: #666;
-}
-
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .images
-    .image:hover {
-    border: solid 1px black;
-}
-
-.all_page .page_content .shirt_informations .two_columns .order_container {
-    width: 60%;
-    height: 98%;
-    /* background-color: green !important; */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    padding-left:30px;
-
-}
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .quantity {
-    display: flex;
-    align-items: center;
-}
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .quantity
-    input {
-    width: 50px;
-    border-radius: 3px;
-    border: 1px solid black;
-    margin: 5px;
-}
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .quantity
-    h6 {
-    margin-top: auto;
-}
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .interprise_logo {
-    display: flex;
-    flex-direction: column;
-    /* align-items:center; */
-    /* justify-content:center; */
-}
-
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .interprise_logo
-    button {
-    margin: auto;
-}
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .div_cart_button {
     width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: row;
 }
 
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .div_cart_button
-    .cart_button {
+.productPage .rightSide .productsInfo .leftSideInside{
+    width: 50%;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-
-    word-wrap: normal;
-    width: 200px;
 }
 
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .div_cart_button
-    .cart_button
-    * {
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos{
+    height: 100%;
+    width: 100%;
     display: flex;
-    align-items: center;
-    text-align: center;
-    margin: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 28px;
+    
 }
 
-.all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .order_container
-    .cart_button
-    .icon {
-    height: 40px;
+
+
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos{
+    height: 60%;
+    width: 90%;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(auto-fill, 150px);
+    gap: 10px;
+    margin: 10px auto 0 auto;
 }
 
-#stylized_button {
-    border: 0;
-    border-radius: 25px;
-    /* width: fit-content; */
-    background-color: #4dcdbc;
-    padding: 1px 30px;
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos img{
+    max-width: 80%;
+    max-height: 150px;
     cursor: pointer;
 }
 
-#stylized_button:hover{
-    background-color: #369c8f;
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos img:hover{
+    border: 1px solid #000;
 }
 
-@media(max-width: 800px){
-    .all_page .page_content{
-        height: auto;
-        display: flex;
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoSpaceDiv{
+    max-height: 120px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 45px;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoSpaceDiv .logoImgClass{
+    /* width: auto; */
+    max-width: 70%;
+    max-height: 150px;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace{
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea{
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .MuiTextField-root{
+    margin: 3px 0px;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .MuiTextField-root .MuiOutlinedInput-root{
+    width: 80%;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .calculateCEPButton{
+    font-size: 12px;
+    border-radius: 10px;
+    background-color:  #d1c9c9;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea input{
+    width: 70%;
+    margin-right: 10px;
+    border-radius: 10px;
+    padding: 3px 4px;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .forgotPassword{
+    font-size: 15px;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #979494;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .shipSpace .forgotPassword:hover{
+    color: #000;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity{
+    width: 50%;
+    display: flex;
+    
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    margin-left: 10px;
+    
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity strong{
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 10px 0px;
+    margin-top: -20px;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes .genderCheckboxes{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes .genderCheckboxes + .genderCheckboxes{
+    margin-top: 8px;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity .quantity{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 24px;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity .quantity strong{
+    font-size: 15px;
+    margin-right: 8px;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity .quantity input{
+    width: 60px;
+    
+    margin: 20px 0;
+}
+
+.productPage .rightSide .productsInfo .sizeAndQuantity .quantity .MuiOutlinedInput-root{
+    height: 35px;
+}
+
+.productPage .rightSide .productsInfo .loadLogo{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 24px;
+}
+
+.productPage .rightSide .productsInfo .loadLogo .titleUploadLogo{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.productPage .rightSide .productsInfo .loadLogo .titleUploadLogo strong{
+    font-size: 15px;
+}
+
+.productPage .rightSide .productsInfo .loadLogo .titleUploadLogo span{
+    font-size: 14px;
+}
+
+.productPage .rightSide .productsInfo .loadLogo button{
+    font-size: 12px;
+    background-color: rgb(116, 202, 228);
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.productPage .rightSide .productsInfo .loadLogo button:hover{
+    background-color: rgb(64, 158, 187);
+}
+
+.productPage .rightSide .addToCart{
+    font-weight: 600;
+    
+    width: 100%;
+    background-color: rgb(26, 178, 224);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 20px;
+    
+    margin-top: 55px;
+}
+.productPage .rightSide .addToCart:hover{
+    background-color: rgb(37, 118, 143);
+
+}
+
+@media(max-width: 840px){
+    .productPage{
         flex-direction: column;
         align-items: center;
     }
 
-    .all_page .page_content .shirt_informations .two_columns {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 78%;
+    .productPage .leftSide{
+        width: 50%;
     }
 
-    .all_page
-    .page_content
-    .shirt_informations
-    .two_columns
-    .priceAndImages
-    .images {
+    /* .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos{
+        height: auto;
+    } */
+
+    .productPage .rightSide{
         width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: row;
+        padding: 0px;
+    }
+}
+
+@media(max-width: 640px){
+
+    .productPage .rightSide .productsInfo{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .productPage .rightSide .productsInfo .leftSideInside{
+        width: 100%;
+    }
+
+    .productPage .rightSide .productsInfo .leftSideInside .shipSpace{
+        margin: 12px 0px 12px 0px;
+    }
+
+    .productPage .rightSide .productsInfo .sizeAndQuantity{
+        width: 100%;
+    }
+
+    .productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes{
+        margin-top: 0px;
+    }
+
+    .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoImgClass{
+        max-height: 150px;
     }
 }

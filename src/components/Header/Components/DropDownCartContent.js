@@ -67,12 +67,12 @@ export default function DropDownCartContent(props) {
                         <div className="description">
                           <div className="pt1">
                             <p className="size">Tamanho: {produto.size}</p>
-                            <p>R$ {produto.price}</p>
+                            <p>R$ {Number(produto.price).toFixed(2)}</p>
                           </div>
                           <div className="pt2">
                             <p className="color">Cor: Branca</p>
                             <p className="total_price">
-                              {produto.amount}xR$ {Number(produto.price).toFixed(2)}
+                              {produto.amount} x R$ {Number(produto.price).toFixed(2)}
                             </p>
                           </div>
                         </div>

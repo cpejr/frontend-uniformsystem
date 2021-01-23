@@ -7,7 +7,7 @@ h1, h2, button, span, strong, label {
     max-width: 70%;
 }
 
-label{
+.fullContent .mainContent label{
     margin: 0 !important;
     font-size: 15px; 
 }

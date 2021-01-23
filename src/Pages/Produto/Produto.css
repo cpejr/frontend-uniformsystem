@@ -83,15 +83,15 @@
 
 .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos{
     height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    font-size: 28px;
     
 }
 
-.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos{
-    font-size: 28px;
-}
+
 
 .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos{
     height: 60%;
@@ -99,6 +99,7 @@
     overflow: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(auto-fill, 150px);
     gap: 10px;
     margin: 10px auto 0 auto;
 }
@@ -110,6 +111,12 @@
 
 .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos img:hover{
     border: 1px solid #000;
+}
+
+.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoImgClass{
+    width: 70%;
+    height: 15%;
+    margin: 30px auto 16px auto;    
 }
 
 .productPage .rightSide .productsInfo .leftSideInside .shipSpace{
@@ -164,6 +171,8 @@
     
     flex-direction: column;
     align-items: flex-start;
+    justify-content: space-evenly;
+    margin-left: 10px;
     
 }
 
@@ -178,6 +187,7 @@
     flex-direction: column;
     justify-content: space-evenly;
     padding: 10px 0px;
+    margin-top: -20px;
 }
 
 .productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes .genderCheckboxes{
@@ -194,6 +204,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    margin-top: 24px;
 }
 
 .productPage .rightSide .productsInfo .sizeAndQuantity .quantity strong{
@@ -216,6 +227,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 24px;
 }
 
 .productPage .rightSide .productsInfo .loadLogo .titleUploadLogo{
@@ -254,7 +266,7 @@
     justify-content: space-evenly;
     border-radius: 20px;
     
-    margin-top: 30px;
+    margin-top: 55px;
 }
 .productPage .rightSide .addToCart:hover{
     background-color: rgb(37, 118, 143);

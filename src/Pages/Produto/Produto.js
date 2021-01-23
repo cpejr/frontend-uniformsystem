@@ -57,6 +57,7 @@ function Produto() {
     const [errorCEPMessage, setErrorCEPMessage] = useState('');
 
     const [errorSize, setErrorSize] = useState(false);
+    const [errorLogo, setErrorLogo] = useState(false);
 
     const [errorToken, setErrorToken] = useState(false);
 
@@ -65,9 +66,12 @@ function Produto() {
 
     const [calculatedShipping, setCalculatedShipping] = useState(null);
 
+    const [logoImage, setLogoImage] = useState(null);
+
     const inputQuantity = useRef(null);
     const inputSize = useRef(null);
     const inputCEP = useRef(null);
+    const inputLogo = useRef(null);
 
     //Pegando o id do produto pelo link
     const { product_id } = useParams();
@@ -172,11 +176,15 @@ function Produto() {
             setErrorSize(false);
             setErrorToken(false);
 
+            let objImage = new FormData();
+            objImage.append("file", logoImage.imgSrc);
+
             const newProductInCart = {
                 product_model_id: `${modelChoosen.product_model_id}`,
                 size: selectedValue.split('_')[1],
                 amount: Number(inputQuantity.current.value),
-                logo_link: '...',
+                logo_link: objImage,
+                isLogoUpload: true,
             }
 
             console.log('aqui', newProductInCart)
@@ -206,21 +214,36 @@ function Produto() {
     
                 const response = await api.get(`/shipping/${cepReceived}`);
     
-                console.log('frete', response.data.shipping.Valor);
                 setCalculatedShipping(response.data.shipping.Valor)
-    
             }
 
         }catch(err){
             setCalculatedShipping(-1);
             console.warn(err);
         }
-
-
     }
 
-    function AddALogo(){
-        window.alert('Voce AddALogo !!')
+    function AddLogo() {
+        inputLogo.current.click();
+    }
+
+    function handleAddLogoImage(){
+
+        let fileData = new FileReader();
+        fileData.readAsDataURL(inputLogo.current.files[0]);
+
+        fileData.onload = function () {
+            const fileLoaded = fileData.result;
+
+            setLogoImage(
+                {
+                file: fileLoaded,
+                imgSrc: inputLogo.current.files[0],
+                imgAlt: "Logo",
+                },
+            );
+
+        };
 
     }
 
@@ -265,6 +288,14 @@ function Produto() {
                                     <span>Sem modelo</span>
                                 }
                             </div>
+                            {
+                                logoImage &&
+                                    <img 
+                                        className="logoImgClass" 
+                                        src={logoImage.file} 
+                                        alt={logoImage.imgAlt} 
+                                    />
+                            }
                         </div>
 
                         <div className="shipSpace">
@@ -322,7 +353,17 @@ function Produto() {
                                 </span>
                             </div>
 
-                            <Button>Carregue a sua logo!</Button>
+                            <Button 
+                                onClick={() => AddLogo()}
+                            >
+                                <input
+                                    type="file"
+                                    hidden
+                                    ref={inputLogo}
+                                    onChange={(e) => handleAddLogoImage()}
+                                />
+                                Carregue a sua logo!
+                            </Button>
                         </div>
                         <Button className="addToCart" onClick={() => AddToCart()}>
                             <FaShoppingCart

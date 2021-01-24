@@ -36,7 +36,7 @@ function EspecificOrderAdm(props) {
     const resultado = await api.get(`productsfromorder/${orderId}`, {
       headers: { authorization: `bearer ${token}` },
     });
-    console.log(resultado);
+
     setOrders(resultado.data);
   };
 
@@ -44,7 +44,7 @@ function EspecificOrderAdm(props) {
     const resultado = await api.get(`productmodels`, {
       headers: { authorization: `bearer ${token}` },
     });
-    console.log(resultado);
+
     setModels(resultado.data.models);
   };
 
@@ -58,7 +58,6 @@ function EspecificOrderAdm(props) {
     modelos.description.push(produto.model_description);
     return "";
   });
-  console.log("Opa", modelos.id, modelos.description);
 
   function descrição(product, id, legenda) {
     if (product === id) {
@@ -68,8 +67,6 @@ function EspecificOrderAdm(props) {
       return "";
     }
   }
-
-  console.log(modelos);
 
   return (
     <div className="order-container">
@@ -148,7 +145,7 @@ function EspecificOrderAdm(props) {
           <tbody>
             {Orders.map((pedido) => {
               var description;
-              console.log("Eu", modelos.id.length);
+
               for (var i = 0; i < modelos.id.length; i++) {
                 var product = pedido.product_model_id;
 

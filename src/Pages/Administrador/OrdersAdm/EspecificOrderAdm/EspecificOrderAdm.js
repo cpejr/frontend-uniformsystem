@@ -5,20 +5,30 @@ import "./EspecificOrderAdm.css";
 import camisa from "../../../../Assets/camisa.jpg";
 
 import { LoginContext } from "../../../../contexts/LoginContext";
+import { Description } from "@material-ui/icons";
+import { result } from "lodash";
 
 function EspecificOrderAdm(props) {
-  var date = props.location.state.date;
-  var today = new Date();
+  const date = props.location.state.date;
+  var created = new Date();
 
   const orderId = props.location.state.orderId;
   let status = "pending";
   var price = [];
   var total;
   var id;
+
+  var modelos = {
+    id: [],
+    description: [],
+  };
+
   const [Orders, setOrders] = useState([]);
+  const [Models, setModels] = useState([]);
 
   //const { token } = useContext(LoginContext);
 
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiOGJmODMtOGUwZi02YjA3LTg3Yy0wNDRmM2EwMTNkM2MiLCJuYW1lIjoiQnJ5YW4iLCJmaXJlYmFzZV91aWQiOiJyZTRwc2pGNlR0aEhReXFpdjhyb2xYV2U0dWgxIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJicnlhbkBjcGUuY29tIiwiY3BmIjoiMDAwMDAwMDAwMDAiLCJjcmVhdGVkX2F0IjoiMjAyMS0wMS0xMSAxMjoxODo0NyIsInVwZGF0ZWRfYXQiOiIyMDIxLTAxLTExIDEyOjE4OjQ3In1dLCJpYXQiOjE2MTAzNjc1NTAsImV4cCI6MTYxMjk1OTU1MH0.czTnB8wKs6T0JIBF9T9dPz4YZmY3EXG8oW6ZOE1v6f8";
 
@@ -30,11 +40,36 @@ function EspecificOrderAdm(props) {
     setOrders(resultado.data);
   };
 
+  const obterModelos = async () => {
+    const resultado = await api.get(`productmodels`, {
+      headers: { authorization: `bearer ${token}` },
+    });
+    console.log(resultado);
+    setModels(resultado.data.models);
+  };
+
   useEffect(() => {
     obterPedidos();
+    obterModelos();
   }, []);
 
-  console.log(date);
+  Models.map((produto) => {
+    modelos.id.push(produto.product_model_id);
+    modelos.description.push(produto.model_description);
+    return "";
+  });
+  console.log("Opa", modelos.id, modelos.description);
+
+  function descrição(product, id, legenda) {
+    if (product === id) {
+      var result = legenda;
+      return result;
+    } else {
+      return "";
+    }
+  }
+
+  console.log(modelos);
 
   return (
     <div className="order-container">
@@ -71,7 +106,7 @@ function EspecificOrderAdm(props) {
               <br />
               <span className="date">
                 <strong>Data do pedido:</strong>
-                {today.toLocaleString("pt-BR", date)}
+                {created.toLocaleString("pt-BR", date)}
               </span>
               <br />
               <span className="price">
@@ -112,14 +147,29 @@ function EspecificOrderAdm(props) {
           </thead>
           <tbody>
             {Orders.map((pedido) => {
+              var description;
+              console.log("Eu", modelos.id.length);
+              for (var i = 0; i < modelos.id.length; i++) {
+                var product = pedido.product_model_id;
+
+                if (modelos.id[i] === product) {
+                  description = modelos.description[i];
+                }
+              }
               const colum = (
                 <tr className="oder-tr-content">
                   <td className="amount">{pedido.amount}</td>
                   <td className="products">
                     <img src={camisa} className="image-product" />
-                    <span className="product-name">Camisa Personalisada 1</span>
+
+                    <span className="product-name">{description}</span>
                   </td>
-                  <td className="logo">Baixar imagem</td>
+                  <td className="logo">
+                    {" "}
+                    <a href={`${bucketAWS}${pedido.logo_link}`} download>
+                      Baixar Imagem
+                    </a>{" "}
+                  </td>
                 </tr>
               );
               return colum;

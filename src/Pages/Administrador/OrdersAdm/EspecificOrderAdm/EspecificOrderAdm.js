@@ -21,7 +21,7 @@ function EspecificOrderAdm(props) {
   //const { token } = useContext(LoginContext);
 
   const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbXSwiaWF0IjoxNjExNTA5NTc0LCJleHAiOjE2MTQxMDE1NzR9.W5uElG04g7BKzxnYhIMmM-wFdO5NxvmBhHc6Iw0OnSo";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbXSwiaWF0IjoxNjExNTE2NTM4LCJleHAiOjE2MTQxMDg1Mzh9.I8pPQCSitJA_50H--HYsuwe9hVWdVwASF_kP_FSN5l4";
 
   const obterPedidos = async () => {
     const resultado = await api.get(`productsfromorder/${orderId}`, {
@@ -42,7 +42,9 @@ function EspecificOrderAdm(props) {
       try {
         await api.put(`order/${orderId}`, {
           headers: { authorization: `bearer ${token}` },
-        }, {is_paid: 1, status: "preparing", shipping: 25});
+          is_paid: 1,
+          status: "preparing", 
+          shipping: 25.5});
         setStatus("preparing");
       } catch (error) {
         console.warn(error);
@@ -51,8 +53,10 @@ function EspecificOrderAdm(props) {
     }else{
       if(Code != "") {
         try {
-          const response = await api.post(`deliveratmail/${orderId}`, {tracking_code: Code});
-          setStatus("preparing");
+          const response = await api.post(`deliveratmail/${orderId}`, {
+            headers: { authorization: `bearer ${token}` },
+            tracking_code: Code});
+          setStatus("delivered");
         } catch (error) {
           console.warn(error);
           alert(error);

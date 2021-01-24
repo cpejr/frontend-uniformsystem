@@ -11,17 +11,17 @@ function EspecificOrderAdm(props) {
   var today = new Date();
 
   const orderId = props.location.state.orderId;
-  let status = "pending";
   var price = [];
   var total;
   var id;
   const [Orders, setOrders] = useState([]);
   const [Code, setCode] = useState([]);
+  const [status, setStatus] = useState("pending");
 
   //const { token } = useContext(LoginContext);
 
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiOGJmODMtOGUwZi02YjA3LTg3Yy0wNDRmM2EwMTNkM2MiLCJuYW1lIjoiQnJ5YW4iLCJmaXJlYmFzZV91aWQiOiJyZTRwc2pGNlR0aEhReXFpdjhyb2xYV2U0dWgxIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJicnlhbkBjcGUuY29tIiwiY3BmIjoiMDAwMDAwMDAwMDAiLCJjcmVhdGVkX2F0IjoiMjAyMS0wMS0xMSAxMjoxODo0NyIsInVwZGF0ZWRfYXQiOiIyMDIxLTAxLTExIDEyOjE4OjQ3In1dLCJpYXQiOjE2MTAzNjc1NTAsImV4cCI6MTYxMjk1OTU1MH0.czTnB8wKs6T0JIBF9T9dPz4YZmY3EXG8oW6ZOE1v6f8";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbXSwiaWF0IjoxNjExNTA5NTc0LCJleHAiOjE2MTQxMDE1NzR9.W5uElG04g7BKzxnYhIMmM-wFdO5NxvmBhHc6Iw0OnSo";
 
   const obterPedidos = async () => {
     const resultado = await api.get(`productsfromorder/${orderId}`, {
@@ -40,9 +40,10 @@ function EspecificOrderAdm(props) {
   async function ModificarStatus() {
     if(status === "pending"){
       try {
-        const statusUpdated = await api.put(`order/${orderId}`, {status: "preparing"});
-        status = "preparing";
-        alert("Apertou o botão"); 
+        await api.put(`order/${orderId}`, {
+          headers: { authorization: `bearer ${token}` },
+        }, {is_paid: 1, status: "preparing", shipping: 25});
+        setStatus("preparing");
       } catch (error) {
         console.warn(error);
         alert(error);
@@ -51,11 +52,13 @@ function EspecificOrderAdm(props) {
       if(Code != "") {
         try {
           const response = await api.post(`deliveratmail/${orderId}`, {tracking_code: Code});
-          status = "delivered";
+          setStatus("preparing");
         } catch (error) {
           console.warn(error);
           alert(error);
         }
+      }else{
+        alert("código de rastreamento não inserido");
       }
     }
   }

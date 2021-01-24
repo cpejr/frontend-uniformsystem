@@ -4,9 +4,13 @@ import { Button, TextField, CircularProgress } from '@material-ui/core';
 import { LoginContext } from "../../contexts/LoginContext";
 import api from "../../services/api";
 import './Login.css';
+import { useState } from 'react';
+
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 function Login(){
+
 
   const { signIn } = useContext(LoginContext);
   const history = useHistory();
@@ -134,6 +138,7 @@ function Login(){
               onChange={(e) => handleEmail(e)}
             />
             <h5>Senha</h5>
+
             <TextField
               variant="outlined"
               type="password" 
@@ -154,6 +159,7 @@ function Login(){
               }
             </Button>
             <Link to="/register">Esqueci minha senha</Link>
+
           </form>
         </section>
         </div>

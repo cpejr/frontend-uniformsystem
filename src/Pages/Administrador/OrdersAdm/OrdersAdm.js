@@ -25,10 +25,15 @@ function OrdersAdm() {
   const [OnlyPending, setOnlyPending] = useState(false);
   //const { token } = useContext(LoginContext);
   const [InputID, setInputID] = useState(0);
+<<<<<<< HEAD
   var date;
   const history = useHistory();
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiOGJmODMtOGUwZi02YjA3LTg3Yy0wNDRmM2EwMTNkM2MiLCJuYW1lIjoiQnJ5YW4iLCJmaXJlYmFzZV91aWQiOiJyZTRwc2pGNlR0aEhReXFpdjhyb2xYV2U0dWgxIiwidXNlcl90eXBlIjoiYWRtIiwiZW1haWwiOiJicnlhbkBjcGUuY29tIiwiY3BmIjoiMDAwMDAwMDAwMDAiLCJjcmVhdGVkX2F0IjoiMjAyMS0wMS0xMSAxMjoxODo0NyIsInVwZGF0ZWRfYXQiOiIyMDIxLTAxLTExIDEyOjE4OjQ3In1dLCJpYXQiOjE2MTAzNjc1NTAsImV4cCI6MTYxMjk1OTU1MH0.czTnB8wKs6T0JIBF9T9dPz4YZmY3EXG8oW6ZOE1v6f8";
+=======
+
+  const { token } = useContext(LoginContext);
+>>>>>>> master
 
   const obterPedidos = async () => {
     const resultado = await api.get(`order`, {
@@ -76,6 +81,10 @@ function OrdersAdm() {
     });
   }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
   return (
     <div className="orders_page">
       <div className="orders_data">

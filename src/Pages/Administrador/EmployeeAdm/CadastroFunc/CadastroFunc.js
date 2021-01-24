@@ -172,7 +172,7 @@ function CadastroFunc({history}) {
           password: inputPassword.current.value,
         };
 
-        const response = await api.post("http://localhost:3333/user",
+        const response = await api.post("/user",
           newUserObj
           ,
           {
@@ -267,7 +267,7 @@ function CadastroFunc({history}) {
 
       <div className={classes.divButtons}>
         <Button className={classes.saveButton} onClick={() => handleSubmit()} >
-          {loading ? <CircularProgress /> : "CADASTRAR"}
+          {loading ? <CircularProgress color='secondary' /> : "CADASTRAR"}
         </Button>
       </div>
 

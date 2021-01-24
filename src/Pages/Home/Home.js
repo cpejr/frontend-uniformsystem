@@ -138,7 +138,7 @@ function Home() {
         setWhatsappInfo(whatsAppNumber.data);
       } catch (error) {
         console.warn(error);
-        history.push('Error');
+        // history.push('Error');
       }
     }
 

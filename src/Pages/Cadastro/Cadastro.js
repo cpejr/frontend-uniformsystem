@@ -364,13 +364,11 @@ function Cadastro({ history }) {
         helperText={errorNameMessage}
         className={classes.largeInput}
         variant="outlined"
-        defaultValue="blablaaa"
       />
 
       <h1 className={classes.subTitle}>ENDEREÇO</h1>
       <div className="address01">
         <h1 className={classes.caption}>Rua</h1>
-        {addressInfo && (
           <TextField
             required
             label="Rua"
@@ -378,11 +376,9 @@ function Cadastro({ history }) {
             error={errorRua}
             helperText={errorRuaMessage}
             variant="outlined"
-            defaultValue={addressInfo.street}
             onChange={(event) => setRua(event.target.value)}
             className={classes.mediumInput}
           />
-        )}
         <h1 className={classes.caption}>N°</h1>
 
         <TextField
@@ -396,7 +392,6 @@ function Cadastro({ history }) {
         />
         <h1 className={classes.caption}>Complemento</h1>
 
-        {addressInfo && (
           <TextField
             required
             label="Complemento"
@@ -405,13 +400,10 @@ function Cadastro({ history }) {
             helperText={errorComplementoMessage}
             className={classes.mediumInput}
             variant="outlined"
-            defaultValue={addressInfo.complement}
             onChange={(event) => setComplemento(event.target.value)}
           />
-        )}
         <h1 className={classes.caption}>Bairro</h1>
 
-        {addressInfo && (
           <TextField
             required
             label="Bairro"
@@ -420,15 +412,12 @@ function Cadastro({ history }) {
             helperText={errorBairroMessage}
             className={classes.mediumInput}
             variant="outlined"
-            defaultValue={addressInfo.neighborhood}
             onChange={(event) => setBairro(event.target.value)}
           />
-        )}
       </div>
 
       <div className="address01">
         <h1 className={classes.caption}>CEP</h1>
-        {addressInfo && (
           <TextField
             required
             label="CEP"
@@ -437,12 +426,9 @@ function Cadastro({ history }) {
             helperText={errorCEPMessage}
             variant="outlined"
             className={classes.mediumInput}
-            defaultValue={addressInfo.zip_code}
             onChange={(event) => setCEP(event.target.value)}
           />
-        )}
         <h1 className={classes.caption}>Cidade</h1>
-        {addressInfo && (
           <TextField
             required
             label="Cidade"
@@ -451,20 +437,17 @@ function Cadastro({ history }) {
             helperText={errorCidadeMessage}
             className={classes.mediumInput}
             variant="outlined"
-            defaultValue={addressInfo.city}
             onChange={(event) => setCidade(event.target.value)}
           />
-        )}
         <h1 className={classes.caption}>Estado</h1>
-        {addressInfo && (
           <TextField
             required
             select
             label="Estado"
+            inputRef={estadoInput}
             error={errorEstado}
             helperText={errorEstadoMessage}
             className={classes.smallInput}
-            //defaultValue={addressInfo.state}
             onChange={(event) => setEstado(event.target.value)}
             variant="outlined"
           >
@@ -472,12 +455,10 @@ function Cadastro({ history }) {
               <MenuItem value={estado}>{estado}</MenuItem>
             ))}
           </TextField>
-        )}
       </div>
 
       <div className="address01">
         <h1 className={classes.caption}>Ponto de referência</h1>
-        {addressInfo && (
           <TextField
             required
             label="Ponto de Referência"
@@ -488,10 +469,9 @@ function Cadastro({ history }) {
             //InputLabelProps={{shrink: true}}
             //value="jj"
             variant="outlined"
-            defaultValue={addressInfo.complement}
             onChange={(event) => setPontoRef(event.target.value)}
           />
-        )}
+        
       </div>
 
       <h1 className={classes.subTitle}>TELEFONE DE CONTATO</h1>

@@ -30,7 +30,7 @@ function EspecificOrderAdm() {
                         <span className="title">DETALHES DO PEDIDO</span>
                         <div className="status">
                             <span>STATUS: </span>
-                            {/*<div>{status}</div> */}
+                            {/* <div>{status}</div>  */}
                         </div>
                     </div>
 

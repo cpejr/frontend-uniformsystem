@@ -10,6 +10,8 @@ import { LoginContext } from "../../../../contexts/LoginContext";
 function EspecificOrderAdm(props) {
   var date = props.location.state.date;
   var today = new Date();
+  var Status = props.location.state.status;
+  var deliver = props.location.state.deliver;
 
   const orderId = props.location.state.orderId;
   var price = [];
@@ -56,18 +58,6 @@ function EspecificOrderAdm(props) {
       }
     }else{
       if(Code != "") {
-        try {
-          const response = await api.put(`order/${orderId}`, {
-            is_paid: 1,
-            status: "delivered", 
-            shipping: 25.5},
-            {
-              headers: { authorization: `Bearer ${token}` },
-            });
-        } catch (error) {
-          console.warn(error);
-          alert(error);
-        }
         try{
           const response = await api.post(`deliveratmail/${orderId}`, {
             tracking_code: Code},
@@ -146,7 +136,7 @@ function EspecificOrderAdm(props) {
             )}
             {status === "delivered" && (
               <div>
-                <span className="deliveryman">Entregador: 007</span>
+                <span className="deliveryman">Entregador: {`${deliver}`}</span>
               </div>
             )}
           </div>

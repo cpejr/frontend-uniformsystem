@@ -3,6 +3,7 @@ import { AiOutlineLeft } from "react-icons/ai";
 import api from "../../../../services/api";
 import "./EspecificOrderAdm.css";
 import camisa from "../../../../Assets/camisa.jpg";
+import { useHistory } from 'react-router-dom';
 
 import { LoginContext } from "../../../../contexts/LoginContext";
 
@@ -17,6 +18,7 @@ function EspecificOrderAdm(props) {
   const [Orders, setOrders] = useState([]);
   const [Code, setCode] = useState([]);
   const [status, setStatus] = useState("pending");
+  const history = useHistory();
 
   //const { token } = useContext(LoginContext);
 
@@ -40,11 +42,13 @@ function EspecificOrderAdm(props) {
   async function ModificarStatus() {
     if(status === "pending"){
       try {
-        await api.put(`order/${orderId}`, {
-          headers: { authorization: `bearer ${token}` },
-          is_paid: 1,
-          status: "preparing", 
-          shipping: 25.5});
+        const response = await api.put(`order/${orderId}`, {
+        is_paid: 1,
+        status: "preparing", 
+        shipping: 25.5},
+        {
+          headers: { authorization: `Bearer ${token}` },
+        });
         setStatus("preparing");
       } catch (error) {
         console.warn(error);
@@ -53,9 +57,23 @@ function EspecificOrderAdm(props) {
     }else{
       if(Code != "") {
         try {
+          const response = await api.put(`order/${orderId}`, {
+            is_paid: 1,
+            status: "delivered", 
+            shipping: 25.5},
+            {
+              headers: { authorization: `Bearer ${token}` },
+            });
+        } catch (error) {
+          console.warn(error);
+          alert(error);
+        }
+        try{
           const response = await api.post(`deliveratmail/${orderId}`, {
-            headers: { authorization: `bearer ${token}` },
-            tracking_code: Code});
+            tracking_code: Code},
+            {
+              headers: { authorization: `Bearer ${token}` }   
+            ,});
           setStatus("delivered");
         } catch (error) {
           console.warn(error);
@@ -71,7 +89,7 @@ function EspecificOrderAdm(props) {
     <div className="order-container">
       <div className="especific-container">
         <div className="informations">
-          <AiOutlineLeft color="black" size={30} />
+          <AiOutlineLeft color="black" size={30} onClick={history.goBack} />
           <div className="title-status">
             <span className="title">DETALHES DO PEDIDO</span>
             <div className="status">

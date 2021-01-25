@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import "./CardPedido.css";
 import { MdInfoOutline } from 'react-icons/md';
 import { RiTruckFill } from 'react-icons/ri';
 import { Button } from 'react-bootstrap';
+
+import api from '../../services/api';
 
 function formatOrderStatus(status){
   let statusInPortuguese;
@@ -26,7 +28,9 @@ function formatOrderStatus(status){
 }
 
 
-function CardPedido({pedido}){
+function CardPedido({pedido, token}){
+
+    const [productsFromOrder, setProductsFromOrder] = useState([]);
 
     const orderDate = new Date(pedido.created_at);
     const dayOrder = orderDate.getDate();
@@ -34,6 +38,37 @@ function CardPedido({pedido}){
     const yearOrder = orderDate.getFullYear();
 
     const statusFormatted = formatOrderStatus(pedido.status);
+
+    useEffect(() => {
+
+      async function getProductsFromOrder(){
+        const response = await api.get(`/productsfromorder/${pedido.order_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+        );
+
+        console.log('products from order', response);
+        if(response.data){
+          setProductsFromOrder(response.data);
+        }
+      }
+
+      getProductsFromOrder();
+
+    }, []);
+
+    const totalPriceOrder = useMemo(() => {
+      let totalAux = 0;
+      productsFromOrder.forEach( item => {
+        totalAux += ((item.product_price * item.amount) - item.discount)
+        return totalAux;
+      });
+
+      console.log('aqui', totalAux)
+
+      return totalAux;
+    }, [productsFromOrder]);
 
     return (
       <div className="pedido">
@@ -48,7 +83,7 @@ function CardPedido({pedido}){
           <RiTruckFill style={{fontSize:'22px', marginRight: '7px'}}/>
           <span>Destino: {pedido.city}/{pedido.state} - {pedido.zip_code}</span>
         </div>  
-        <div className="pedidoTotal">Total: {pedido.total}</div>  
+        <div className="pedidoTotal">Total: R$ {totalPriceOrder.toFixed(2)}</div>  
         <Button className="pedidoBotao2">
           Acompanhar pedido
         </Button>

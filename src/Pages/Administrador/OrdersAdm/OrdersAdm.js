@@ -30,13 +30,12 @@ function OrdersAdm() {
 
   const { token } = useContext(LoginContext);
   const tokenVerified = token.includes(",") ? token.split(",")[0] : token;
-  console.log("OPAA", token);
 
   const obterPedidos = async () => {
     const resultado = await api.get(`order`, {
       headers: { authorization: `bearer ${tokenVerified}` },
     });
-    console.log(resultado);
+
     setOrders(resultado.data);
   };
 
@@ -44,14 +43,12 @@ function OrdersAdm() {
     obterPedidos();
   }, []);
 
-  console.log(Orders.models);
-
   function FilteredData() {
     return PEDIDOS.map((pedido, index) => {
       {
         /*Usar .filter*/
       }
-      console.log(pedido.ID);
+
       if (pedido.ID === InputID) {
         return (
           <tr key={index} className="singleOrder">
@@ -93,7 +90,6 @@ function OrdersAdm() {
                 className="input_id"
                 onChange={(e) => {
                   setInputID(e.target.value);
-                  console.log(InputID);
                 }}
               />
               <AiOutlineSearch className="icon_search" size="40px" />
@@ -117,7 +113,7 @@ function OrdersAdm() {
                   {Orders.map((pedido) => {
                     const id = pedido.order_id;
                     date = pedido.created_at;
-                    console.log(date);
+
                     const colum = (
                       <div className="adm_orders_id">
                         <tr>

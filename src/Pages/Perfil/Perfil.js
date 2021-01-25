@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import CardPedido from "../../components/CardPedido";
 import DadosPessoais from "../../components/DadosPessoais/DadosPessoais";
-import Endereços from "../../components/Endereços";
+import Enderecos from "../../components/Enderecos";
 import PopUpChangeAddress from "../../components/PopUpChangeAddress";
 
 import api from '../../services/api';
@@ -124,7 +124,7 @@ function Perfil() {
         <div className="containerEndereço">
           {
             userAddress !== {} ?
-                <Endereços endereço={userAddress} handleOpenModal={handleOpenModal}/>
+                <Enderecos endereço={userAddress} handleOpenModal={handleOpenModal}/>
             : 
               null
           }

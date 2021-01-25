@@ -95,4 +95,8 @@
     width: 100%;
   }
 
+  .profileContainer .ordersContainer{
+    margin-left: 0px;
+  }
+
 }

@@ -10,6 +10,7 @@ import { functionsIn } from 'lodash';
 
 function EspecificOrderAdm() {
     const [loadingStatus, setLoadingStatus] = useState(false);
+    const [status, setStatus] = useState(false);
 
     function ChangeStatus() {
         setLoadingStatus(true);
@@ -18,6 +19,7 @@ function EspecificOrderAdm() {
             setLoadingStatus(false);
         }, 3000)
     }
+
 
     return (
         <div className="order-container">

@@ -38,17 +38,17 @@ function CardPedido({pedido}){
     return (
       <div className="pedido">
         <div className="pedidoNumber">ID: {pedido.order_id}</div>
-        <div className="pedidoData">{dayOrder}/{monthOrder}/{yearOrder}</div>  
+        <div className="pedidoData">Data do pedido: {dayOrder}/{monthOrder}/{yearOrder}</div>  
         <hr></hr>
         <div className="pedidoStatus">
-          <MdInfoOutline />
-          <span>{statusFormatted}</span>
+          <MdInfoOutline style={{fontSize:'22px', marginRight: '5px'}}/>
+          <span>Status: {statusFormatted}</span>
         </div>  
         <div className="pedidoDestino">
-          <RiTruckFill/>
-          <span>{pedido.city}/{pedido.state} - {pedido.zip_code}</span>
+          <RiTruckFill style={{fontSize:'22px', marginRight: '5px'}}/>
+          <span>Destino: {pedido.city}/{pedido.state} - {pedido.zip_code}</span>
         </div>  
-        <div className="pedidoTotal">{pedido.total}</div>  
+        <div className="pedidoTotal">Total: {pedido.total}</div>  
         <Button className="pedidoBotao2">
           Acompanhar pedido
         </Button>

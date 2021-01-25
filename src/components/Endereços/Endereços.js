@@ -3,16 +3,18 @@ import { Link } from 'react-router-dom';
 import "./Endereços.css";
 
 
-function Endereços({endereço}){
+function Endereços({endereço, handleOpenModal}){
+
     return (
       <div className="endereços">
-        <div className="enderecoInfo">Logradouro: {endereço.local}</div>
-        <div className="enderecoInfo">Bairro: {endereço.bairro}</div>
-        <div className="enderecoInfo">Cidade: {endereço.cidade}</div>
-        <div className="enderecoInfo">CEP: {endereço.cep}</div>
-        <div className="enderecoInfo">Estado: {endereço.estado}</div>
-        <div className="enderecoInfo">País: {endereço.pais}</div>
-        <Link to="/editardados" className="enderecosEdit">
+        <div className="enderecoInfo">Logradouro: {endereço.street}</div>
+        <div className="enderecoInfo">Complemento: {endereço.complement}</div>
+        <div className="enderecoInfo">Bairro: {endereço.neighborhood}</div>
+        <div className="enderecoInfo">Cidade: {endereço.city}</div>
+        <div className="enderecoInfo">CEP: {endereço.zip_code}</div>
+        <div className="enderecoInfo">Estado: {endereço.state}</div>
+        <div className="enderecoInfo">País: {endereço.country}</div>
+        <Link className="enderecosEdit" onClick={() => handleOpenModal()}>
             Editar endereço
         </Link>
       </div>

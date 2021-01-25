@@ -41,11 +41,11 @@ function CardPedido({pedido}){
         <div className="pedidoData">Data do pedido: {dayOrder}/{monthOrder}/{yearOrder}</div>  
         <hr></hr>
         <div className="pedidoStatus">
-          <MdInfoOutline style={{fontSize:'22px', marginRight: '5px'}}/>
+          <MdInfoOutline style={{fontSize:'22px', marginRight: '7px'}}/>
           <span>Status: {statusFormatted}</span>
         </div>  
         <div className="pedidoDestino">
-          <RiTruckFill style={{fontSize:'22px', marginRight: '5px'}}/>
+          <RiTruckFill style={{fontSize:'22px', marginRight: '7px'}}/>
           <span>Destino: {pedido.city}/{pedido.state} - {pedido.zip_code}</span>
         </div>  
         <div className="pedidoTotal">Total: {pedido.total}</div>  

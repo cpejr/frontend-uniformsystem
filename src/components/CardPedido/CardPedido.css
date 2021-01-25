@@ -9,26 +9,26 @@
   line-height: 28px;
 }
 
-.pedidoNumber {
+.pedido .pedidoData {
+  margin: 8px 0px;
+}
+
+.pedido .pedidoNumber {
   font-weight: 550;
   font-size: large;
 }
 
-.data {
-  font-size: smaller;
+.pedido .pedidoStatus {
+  margin: 12px 0px;
 }
 
-.total {
-  font-size: medium;
-}
-
-hr {
+.pedido hr {
   border-top: 2px solid gray;
   margin-block-start: 0.3em;
   margin-block-end: 0.5em;
 }
  
-.pedidoBotao2 {
+.pedido .pedidoBotao2 {
   margin-top: 8%;
   margin-left: 15%;
   margin-right: 15%;
@@ -45,5 +45,9 @@ hr {
     width: fit-content;
     margin: auto;
     align-items: center;
+  }
+
+  .pedido + .pedido{
+    margin-top: 16px;
   }
 }

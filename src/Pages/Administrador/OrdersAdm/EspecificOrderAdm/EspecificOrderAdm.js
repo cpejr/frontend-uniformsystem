@@ -10,6 +10,7 @@ import { functionsIn } from 'lodash';
 
 function EspecificOrderAdm() {
     const [loadingStatus, setLoadingStatus] = useState(false);
+    const [status, setStatus] = useState(false);
 
     function ChangeStatus() {
         setLoadingStatus(true);
@@ -18,6 +19,7 @@ function EspecificOrderAdm() {
             setLoadingStatus(false);
         }, 3000)
     }
+
 
     return (
         <div className="order-container">
@@ -28,7 +30,7 @@ function EspecificOrderAdm() {
                         <span className="title">DETALHES DO PEDIDO</span>
                         <div className="status">
                             <span>STATUS: </span>
-                            <div>{status}</div> 
+                            {/*<div>{status}</div> */}
                         </div>
                     </div>
 
@@ -38,25 +40,25 @@ function EspecificOrderAdm() {
                             <span className="date">Data do pedido: 01/01/2021</span>
                             <span className="price">Valor do pedido: R$1000,00</span>
                         </div>
-                        {
-                            (status === "pending") &&
-                            <div>
-                                <button className="button-status">Mudar status para "Em produção"</button>
-                            </div>
-                        }
-                        {
-                            (status === "preparing") &&
-                            <div>
-                                <input placeholder="código de rastramento" style={{marginRight: "10px"}}></input>
-                                <button className="button-status">Entregar pedido</button>
-                            </div>
-                        }
-                        {
-                            (status === "delivered") &&
-                            <div>
-                                <span className="deliveryman">Entregador: 007</span>
-                            </div>
-                        }
+                        {/*{*/}
+                        {/*    (status === "pending") &&*/}
+                        {/*    <div>*/}
+                        {/*        <button className="button-status">Mudar status para "Em produção"</button>*/}
+                        {/*    </div>*/}
+                        {/*}*/}
+                        {/*{*/}
+                        {/*    (status === "preparing") &&*/}
+                        {/*    <div>*/}
+                        {/*        <input placeholder="código de rastramento" style={{marginRight: "10px"}}></input>*/}
+                        {/*        <button className="button-status">Entregar pedido</button>*/}
+                        {/*    </div>*/}
+                        {/*}*/}
+                        {/*{*/}
+                        {/*    (status === "delivered") &&*/}
+                        {/*    <div>*/}
+                        {/*        <span className="deliveryman">Entregador: 007</span>*/}
+                        {/*    </div>*/}
+                        {/*}*/}
                     </div>
 
                     <button className="button-status" onClick={ () => ChangeStatus() }>

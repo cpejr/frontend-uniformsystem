@@ -39,7 +39,7 @@ function CardPedido({pedido}){
       <div className="pedido">
         <div className="pedidoNumber">ID: {pedido.order_id}</div>
         <div className="pedidoData">Data do pedido: {dayOrder}/{monthOrder}/{yearOrder}</div>  
-        <hr></hr>
+        <hr className="horizontalLine"></hr>
         <div className="pedidoStatus">
           <MdInfoOutline style={{fontSize:'22px', marginRight: '7px'}}/>
           <span>Status: {statusFormatted}</span>

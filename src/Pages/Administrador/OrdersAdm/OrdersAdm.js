@@ -29,10 +29,12 @@ function OrdersAdm() {
   const history = useHistory();
 
   const { token } = useContext(LoginContext);
+  const tokenVerified = token.includes(",") ? token.split(",")[0] : token;
+  console.log("OPAA", token);
 
   const obterPedidos = async () => {
     const resultado = await api.get(`order`, {
-      headers: { authorization: `bearer ${token}` },
+      headers: { authorization: `bearer ${tokenVerified}` },
     });
     console.log(resultado);
     setOrders(resultado.data);

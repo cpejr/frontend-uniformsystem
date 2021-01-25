@@ -164,7 +164,11 @@ function AdmRoutes() {
         <Switch>
           <Route path="/adm/home" component={HomeEditable} />
           <Route path="/adm/pedidos" component={OrdersAdm} />
-          <Route path="/adm/pedido/:id" export component={EspecificOrderAdm} />
+          <Route
+            path="/adm/pedidoespecifico"
+            export
+            component={EspecificOrderAdm}
+          />
           <Route path="/adm/produtos" component={ProductsAdm} />
           <Route path="/adm/funcionarios" export component={EmployeeAdm} />
           <Route

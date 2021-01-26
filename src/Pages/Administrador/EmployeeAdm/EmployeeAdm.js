@@ -62,8 +62,9 @@ function EmployeeAdm() {
   async function deleteEmployee(){
     try {
       await api.delete(`/delAdmOrEmployee/${dialogItem.item.user_id}`, {
-        headers: { authorization: token },
+        headers: { Authorization: `Bearer ${token}` },
       });
+      
       handleClose();
       getEmployees();
     } catch (error) {
@@ -80,7 +81,7 @@ function EmployeeAdm() {
   return (
     <div>
       <div>
-        <Link className="buttonEmployee" to="/adm/funcionarios/cadastro">
+        <Link  className="buttonEmployee" to="/adm/cadastrofuncionarios">
           <Button type="button">
             CADASTRAR FUNCIONÁRIO
           </Button>
@@ -106,7 +107,8 @@ function EmployeeAdm() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {employees.map((employee) => (
+            {employees.length > 0 ? 
+            employees.map((employee) => (
               <TableRow key={employee.user_id}>
                 <TableCell component="td" scope="row">
                   {employee.name}
@@ -119,13 +121,16 @@ function EmployeeAdm() {
                     <BsFillTrashFill />
                   </IconButton>
                   <IconButton>
-                    <Link to="/adm/funcionarios/funcionarioEspecifico">
+                    <Link to={`/adm/funcionario/${employee.user_id}`}>
                       <BsInfoCircle />
                     </Link>
                   </IconButton>
                 </TableCell>
               </TableRow>
-            ))}
+            ))
+          :
+              <span>Nenhum funcionário cadastrado</span>
+          }
           </TableBody>
         </Table>
       </TableContainer>

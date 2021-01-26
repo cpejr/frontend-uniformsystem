@@ -154,7 +154,7 @@ export default function DropDownLoginContent(props) {
                         {loading ? <CircularProgress color='black' size={25} /> : "ACESSAR"}
                     </button>
                     
-                    <Link style={{textDecoration: 'none', color: '#000'}} to="/signup">
+                    <Link style={{textDecoration: 'none', color: '#000'}} to="/cadastro">
                         <button>
                             CADASTRAR
                         </button>

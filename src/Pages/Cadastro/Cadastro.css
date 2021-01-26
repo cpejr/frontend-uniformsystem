@@ -12,7 +12,7 @@ label {
   max-width: 70%;
 }
 
-label {
+.fullContent label {
   margin: 0 !important;
   font-size: 15px;
 }

@@ -40,7 +40,6 @@ function OrdersAdm() {
         const resultado = await api.get(`/order?${query}`, {
           headers: { authorization: `bearer ${token}` },
         });
-        console.log(resultado);
         setOrders(resultado.data);
       } catch (error) {
         console.warn(error);
@@ -50,7 +49,6 @@ function OrdersAdm() {
       const resultado = await api.get(`order`, {
         headers: { authorization: `bearer ${token}` },
       });
-      console.log(resultado);
       setOrders(resultado.data);
     }
   };
@@ -59,14 +57,12 @@ function OrdersAdm() {
     obterPedidos();
   }, []);
 
-  console.log(Orders.models);
 
   function FilteredData() {
     return PEDIDOS.map((pedido, index) => {
       {
         /*Usar .filter*/
       }
-      console.log(pedido.ID);
       if (pedido.ID === InputID) {
         return (
           <tr key={index} className="singleOrder">
@@ -101,18 +97,6 @@ function OrdersAdm() {
             <div className="filterTitleProducts">
               <FaFilter /> FILTRAR:
             </div>
-            <div className="input_div">
-              <input
-                type="text"
-                placeholder="Digite um id"
-                className="input_id"
-                onChange={(e) => {
-                  setInputID(e.target.value);
-                  console.log(InputID);
-                }}
-              />
-              <AiOutlineSearch className="icon_search" size="40px" />
-            </div>
           </div>
           <div className="div_pendente">
             <div className="text_pendente">Pendente</div>
@@ -136,7 +120,6 @@ function OrdersAdm() {
                     date = pedido.created_at;
                     const Status = pedido.status;
                     const deliver = pedido.delivered_by;
-                    console.log(date);
                     const colum = (
                       <div className="adm_orders_id">
                         <tr>

@@ -12,6 +12,7 @@ function EspecificOrderAdm(props) {
   const orderId = props.location.state.orderId;
   let status = "pending";
   var price = [];
+  var discount = [];
   var total;
   var id;
 
@@ -71,14 +72,26 @@ function EspecificOrderAdm(props) {
             <div className="especific-info">
               {Orders.map((pedido) => {
                 id = pedido.order_id;
+                discount.push(pedido.discount);
+
+                const reducerDiscount = (accumulator, currentValue) => {
+                  return accumulator + currentValue;
+                };
+
+                price.push(pedido.product_price * pedido.amount);
 
                 const reducer = (accumulator, currentValue) => {
                   return accumulator + currentValue;
                 };
 
-                price.push(pedido.product_price);
-                total = price.reduce(reducer);
+                total =
+                  price.reduce(reducer) - discount.reduce(reducerDiscount);
+
                 total = total.toFixed(2);
+                if (id === 0) {
+                  id = "Sem dados";
+                  total = "Sem dados";
+                }
                 return "";
               })}
             </div>

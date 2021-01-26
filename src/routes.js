@@ -172,7 +172,7 @@ function AdmRoutes() {
               component={OrdersAdm} 
             />
             <Route
-              path="/adm/pedido/:id"
+              path="/adm/pedidoespecifico"
               export
               component={EspecificOrderAdm}
             />

@@ -116,7 +116,7 @@ function OrdersAdm() {
           </div>
           <div className="div_pendente">
             <div className="text_pendente">Pendente</div>
-            <div onClick={obterPedidos}>
+            <div className="evento_pendente" onClick={obterPedidos}>
               <Toggle className="toggle_order" Status={setOnlyPending} />
             </div>
           </div>

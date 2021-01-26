@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -35,9 +35,13 @@ import HeaderAdm from "./components/HeaderAdm";
 import FooterAdm from "./components/FooterAdm";
 import SidebarAdm from "./components/SidebarAdm";
 
-import { isAuthenticated, isADM, isADMOrEmployee, isClientOrADMOrEmployee } from "./services/auth";
+import {
+  isAuthenticated,
+  isADM,
+  isADMOrEmployee,
+  isClientOrADMOrEmployee,
+} from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
-
 
 // Controle de rotas para Cliente
 const PrivateClientRoute = ({ component: Component, ...rest }) => {
@@ -57,7 +61,7 @@ const PrivateClientRoute = ({ component: Component, ...rest }) => {
       }
     />
   );
-}
+};
 
 // Controle de rotas para ADM
 const PrivateADMRoute = ({ component: Component, ...rest }) => {
@@ -77,7 +81,7 @@ const PrivateADMRoute = ({ component: Component, ...rest }) => {
       }
     />
   );
-}
+};
 
 // Controle de rotas para Employee ou ADM
 const PrivateADMOrEmployeeRoute = ({ component: Component, ...rest }) => {
@@ -97,7 +101,7 @@ const PrivateADMOrEmployeeRoute = ({ component: Component, ...rest }) => {
       }
     />
   );
-}
+};
 
 export default function Routes() {
   return (
@@ -141,7 +145,7 @@ function MenuRoutes() {
         <Route path="/orders" export component={Pedidos} />
 
         {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
-        <Route path='*' exact component={Error} />
+        <Route path="*" exact component={Error} />
       </Switch>
       <Footer />
     </div>
@@ -149,7 +153,6 @@ function MenuRoutes() {
 }
 
 function AdmRoutes() {
-
   const { user } = useContext(LoginContext);
 
   // if (user === "notYet") return <Loading/>;
@@ -169,7 +172,7 @@ function AdmRoutes() {
               component={OrdersAdm} 
             />
             <Route
-              path="/adm/pedido/:id"
+              path="/adm/pedidoespecifico"
               export
               component={EspecificOrderAdm}
             />
@@ -214,17 +217,17 @@ function AdmRoutes() {
   );
 }
 
-function Loading(props){
+function Loading(props) {
   const { user } = useContext(LoginContext);
-    console.log("UseEffect Loading: ", user);
-    if (user.type === "adm") return <Redirect to="/adm/home"/>;
-    if ((user === null) || (user === 'notYet')) return <Redirect to="/login" />;
-    else 
-      return (
-        <div className="loading">
-          <div className="loading-logo">
-            <ClipLoader size={100} color={"#123abc"} loading={true} />
-          </div>
+  console.log("UseEffect Loading: ", user);
+  if (user.type === "adm") return <Redirect to="/adm/home" />;
+  if (user === null || user === "notYet") return <Redirect to="/login" />;
+  else
+    return (
+      <div className="loading">
+        <div className="loading-logo">
+          <ClipLoader size={100} color={"#123abc"} loading={true} />
         </div>
-  );
+      </div>
+    );
 }

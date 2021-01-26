@@ -1,69 +1,157 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from "react";
 import { AiOutlineLeft } from 'react-icons/ai';
-
+import api from "../../../../services/api";
 import './EspecificOrderAdm.css';
 import camisa from '../../../../Assets/camisa.jpg';
-
-
+import { useHistory } from 'react-router-dom';
+import { LoginContext } from "../../../../contexts/LoginContext";
 import CircularProgress from "@material-ui/core/CircularProgress"
 import { functionsIn } from 'lodash';
 
-function EspecificOrderAdm() {
+function EspecificOrderAdm(props) {
     const [loadingStatus, setLoadingStatus] = useState(false);
-    const [status, setStatus] = useState(false);
+    //const [status, setStatus] = useState(false);
+    var date = props.location.state.date;
+    var today = new Date();
+    var Status = props.location.state.status;
+    var deliver = props.location.state.deliver;
+  
+    const orderId = props.location.state.orderId;
+    var price = [];
+    var total;
+    var id;
+    const [Orders, setOrders] = useState([]);
+    const [Code, setCode] = useState([]);
+    const [status, setStatus] = useState("pending");
+    const history = useHistory();
 
-    function ChangeStatus() {
+    /*function ChangeStatus() {
         setLoadingStatus(true);
 
         setTimeout(() => {
             setLoadingStatus(false);
         }, 3000)
-    }
+    }*/
 
+    const { token } = useContext(LoginContext);
+
+    const obterPedidos = async () => {
+      const resultado = await api.get(`productsfromorder/${orderId}`, {
+        headers: { authorization: `bearer ${token}` },
+      });
+      console.log(resultado);
+      setOrders(resultado.data);
+    };
+  
+    useEffect(() => {
+      obterPedidos();
+    }, []);
+  
+    console.log(date);
+  
+    async function ModificarStatus() {
+      if(status === "pending"){
+        try {
+          const response = await api.put(`order/${orderId}`, {
+          is_paid: 1,
+          status: "preparing", 
+          shipping: 25.5},
+          {
+            headers: { authorization: `Bearer ${token}` },
+          });
+          setStatus("preparing");
+        } catch (error) {
+          console.warn(error);
+          alert(error);
+        }
+      }else{
+        if(Code != "") {
+          try{
+            const response = await api.post(`deliveratmail/${orderId}`, {
+              tracking_code: Code},
+              {
+                headers: { authorization: `Bearer ${token}` }   
+              ,});
+            setStatus("delivered");
+          } catch (error) {
+            console.warn(error);
+            alert(error);
+          }
+        }else{
+          alert("código de rastreamento não inserido");
+        }
+      }
+    }
 
     return (
         <div className="order-container">
             <div className="especific-container">
                 <div className="informations">
-                    <AiOutlineLeft color='black' size={30} />
+                    <AiOutlineLeft color='black' size={30} onClick={history.goBack} />
                     <div className="title-status">
                         <span className="title">DETALHES DO PEDIDO</span>
                         <div className="status">
                             <span>STATUS: </span>
-                            {/*<div>{status}</div> */}
+                            <div>{status}</div>
                         </div>
                     </div>
 
                     <div className="id-button">
                         <div className="especific-info">
-                            <span className="id">ID: 002</span>
-                            <span className="date">Data do pedido: 01/01/2021</span>
-                            <span className="price">Valor do pedido: R$1000,00</span>
+                          {Orders.map((pedido) => {
+                            id = pedido.order_id;
+
+                            const reducer = (accumulator, currentValue) => {
+                              return accumulator + currentValue;
+                            };
+
+                            price.push(pedido.product_price);
+                            total = price.reduce(reducer);
+                            total = total.toFixed(2);
+                            return "";
+                          })}
                         </div>
-                        {/*{*/}
-                        {/*    (status === "pending") &&*/}
-                        {/*    <div>*/}
-                        {/*        <button className="button-status">Mudar status para "Em produção"</button>*/}
-                        {/*    </div>*/}
-                        {/*}*/}
-                        {/*{*/}
-                        {/*    (status === "preparing") &&*/}
-                        {/*    <div>*/}
-                        {/*        <input placeholder="código de rastramento" style={{marginRight: "10px"}}></input>*/}
-                        {/*        <button className="button-status">Entregar pedido</button>*/}
-                        {/*    </div>*/}
-                        {/*}*/}
-                        {/*{*/}
-                        {/*    (status === "delivered") &&*/}
-                        {/*    <div>*/}
-                        {/*        <span className="deliveryman">Entregador: 007</span>*/}
-                        {/*    </div>*/}
-                        {/*}*/}
+                        <div className="adm_orders">
+                          <span className="id">
+                            <strong>ID:</strong> {id}
+                          </span>
+                          <br />
+                          <span className="date">
+                            <strong>Data do pedido:</strong>
+                            {today.toLocaleString("pt-BR", date)}
+                          </span>
+                          <br />
+                          <span className="price">
+                            <strong>Valor do pedido:</strong> R${total}
+                          </span>
+                        </div>
+                        {status === "pending" && (
+                          <div>
+                            <button className="button-status" style={{ width: "28vw" }} onClick={ModificarStatus}>
+                              Mudar status para "Em produção"
+                            </button>
+                          </div>
+                        )}
+                        {status === "preparing" && (
+                          <div>
+                            <input
+                              placeholder="código de rastramento"
+                              style={{ marginRight: "10px" }}
+                              onChange={(e) => setCode(e.target.value)}
+                            ></input>
+                            <button className="button-status" onClick={ModificarStatus}>Entregar pedido</button>
+                          </div>
+                        )}
+                        {status === "delivered" && (
+                          <div>
+                            <span className="deliveryman">Entregador: {`${deliver}`}</span>
+                          </div>
+                        )}
                     </div>
 
-                    <button className="button-status" onClick={ () => ChangeStatus() }>
+                    {/*<button className="button-status" onClick={ () => ChangeStatus() }>
                         {loadingStatus ? <CircularProgress size={ 35 } color="secondary" className="circularProgress" /> : "Mudar status para ''Em produção''"}
-                    </button>
+                    </button>*/}
 
                 </div>
 
@@ -76,38 +164,19 @@ function EspecificOrderAdm() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="oder-tr-content">
-                            <td className="amount">10</td>
+                      {Orders.map((pedido) => {
+                        const colum = (
+                          <tr className="oder-tr-content">
+                            <td className="amount">{pedido.amount}</td>
                             <td className="products">
-                                <img src={camisa} className="image-product" />
-                                <span className="product-name">Camisa Personalisada 1</span>
+                              <img src={camisa} className="image-product" />
+                              <span className="product-name">Camisa Personalisada 1</span>
                             </td>
                             <td className="logo">Baixar imagem</td>
-                        </tr>
-                        <tr className="oder-tr-content">
-                            <td className="amount">10</td>
-                            <td className="products">
-                                <img src={camisa} className="image-product" />
-                                <span className="product-name">Camisa Personalisada 1</span>
-                            </td>
-                            <td className="logo">Baixar imagem</td>
-                        </tr>
-                        <tr className="oder-tr-content">
-                            <td className="amount">10</td>
-                            <td className="products">
-                                <img src={camisa} className="image-product" />
-                                <span className="product-name">Camisa Personalisada 1</span>
-                            </td>
-                            <td className="logo">Baixar imagem</td>
-                        </tr>
-                        <tr className="oder-tr-content">
-                            <td className="amount">10</td>
-                            <td className="products">
-                                <img src={camisa} className="image-product" />
-                                <span className="product-name">Camisa Personalisada 1</span>
-                            </td>
-                            <td className="logo">Baixar imagem</td>
-                        </tr>
+                          </tr>
+                        );
+                        return colum;
+                      })}
                     </tbody>
                 </table>
             </div>
@@ -116,3 +185,4 @@ function EspecificOrderAdm() {
 }
 
 export default EspecificOrderAdm;
+

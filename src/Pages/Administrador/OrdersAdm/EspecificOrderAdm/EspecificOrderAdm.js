@@ -194,52 +194,6 @@ function EspecificOrderAdm(props) {
               </div>
             )}
           </div>
-
-          {/*<button className="button-status" onClick={ () => ChangeStatus() }>
-                        {loadingStatus ? <CircularProgress size={ 35 } color="secondary" className="circularProgress" /> : "Mudar status para ''Em produção''"}
-                    </button>*/}
-        </div>
-        <div className="adm_orders">
-          <span className="id">
-            <strong>ID:</strong> {id}
-          </span>
-          <br />
-          <span className="date">
-            <strong>Data do pedido:</strong>
-            {created.toLocaleString("pt-BR", date)}
-          </span>
-          <br />
-          <span className="price">
-            <strong>Valor do pedido:</strong> R${total}
-          </span>
-          {status === "pending" && (
-            <div>
-              <button
-                className="button-status"
-                style={{ width: "28vw" }}
-                onClick={ModificarStatus}
-              >
-                Mudar status para "Em produção"
-              </button>
-            </div>
-          )}
-          {status === "preparing" && (
-            <div>
-              <input
-                placeholder="código de rastramento"
-                style={{ marginRight: "10px" }}
-                onChange={(e) => setCode(e.target.value)}
-              ></input>
-              <button className="button-status" onClick={ModificarStatus}>
-                Entregar pedido
-              </button>
-            </div>
-          )}
-          {status === "delivered" && (
-            <div>
-              <span className="deliveryman">Entregador: {`${deliver}`}</span>
-            </div>
-          )}
         </div>
 
         <table className="order-table">

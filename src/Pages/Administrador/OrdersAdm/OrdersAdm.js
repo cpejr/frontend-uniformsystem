@@ -7,11 +7,8 @@ import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
 
 import Toggle from "../../../components/Toggle";
-import EspecificOrderAdm from "../OrdersAdm/EspecificOrderAdm/EspecificOrderAdm";
 
 import { FaAngleRight, FaFilter } from "react-icons/fa";
-import { AiOutlineSearch } from "react-icons/ai";
-import { BorderRight } from "@material-ui/icons";
 
 const PEDIDOS = [
   { status: "Entregue", ID: 2050 },
@@ -30,13 +27,12 @@ function OrdersAdm() {
 
   const { token } = useContext(LoginContext);
 
-
   const obterPedidos = async () => {
-     if(OnlyPending === false){
+    if (OnlyPending === false) {
       let query = [];
-      let param = 'status=pending';
+      let param = "status=pending";
       query.push(param);
-       try {
+      try {
         const resultado = await api.get(`/order?${query}`, {
           headers: { authorization: `bearer ${token}` },
         });
@@ -45,7 +41,7 @@ function OrdersAdm() {
         console.warn(error);
         alert(error);
       }
-    }else{
+    } else {
       const resultado = await api.get(`order`, {
         headers: { authorization: `bearer ${token}` },
       });
@@ -56,7 +52,6 @@ function OrdersAdm() {
   useEffect(() => {
     obterPedidos();
   }, []);
-
 
   function FilteredData() {
     return PEDIDOS.map((pedido, index) => {

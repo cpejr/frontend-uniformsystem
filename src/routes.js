@@ -14,7 +14,6 @@ import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
 import CadastroFunc from "./Pages/Administrador/EmployeeAdm/CadastroFunc";
 import EspecificEmployee from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
 
-
 import Loja from "./Pages/Loja";
 import Produto from "./Pages/Produto";
 import Perfil from "./Pages/Perfil";
@@ -136,7 +135,7 @@ function MenuRoutes() {
 
         <Route path="/perfil" export exact component={Perfil} />
         <Route path="/editarPerfil" export exact component={EditarPerfil} />
-        
+
         <Route path="/cart" export component={Carrinho} />
         <Route path="/login" export component={Login} />
         <Route path="/contact" export component={Contato} />
@@ -158,62 +157,45 @@ function AdmRoutes() {
   // if (user === "notYet") return <Loading/>;
   // if (user === null || user.user_type === "adm") return <Redirect to="/adm/home" />;
   // else
-    return (
-      <div>
-        <HeaderAdm />
-        <SidebarAdm>
-          <Switch>
-            <Route 
-              path="/adm/home" 
-              component={HomeEditable} 
-            />
-            <Route 
-              path="/adm/pedidos"  
-              component={OrdersAdm} 
-            />
-            <Route
-              path="/adm/pedidoespecifico"
-              export
-              component={EspecificOrderAdm}
-            />
-            <Route 
-              path="/adm/produtos"  
-              component={ProductsAdm} 
-            />
-            <Route
-              path="/adm/funcionarios"
-              export
-              component={EmployeeAdm}
-            />
-            <Route
-              path="/adm/cadastrofuncionarios"
-              export
-              component={CadastroFunc}
-            />
-            <Route
-              path="/adm/produtos/cadastro"
-              export
-              component={RegisterProduct}
-            />
-            <Route
-              path="/adm/produtos/:product_id"
-              export
-              component={EditProduct}
-            />
-            <Route
-              path="/adm/funcionario/:id"
-              export
-              component={EspecificEmployee}
-            />
-            <Route 
-              path='*' 
-              exact={true} 
-              component={Error} 
-            />
-          </Switch>
-        </SidebarAdm>
-        <FooterAdm />
-      </div>
+  return (
+    <div>
+      <HeaderAdm />
+      <SidebarAdm>
+        <Switch>
+          <Route path="/adm/home" component={HomeEditable} />
+          <Route path="/adm/pedidos" component={OrdersAdm} />
+          <Route
+            path="/adm/pedidoespecifico"
+            export
+            component={EspecificOrderAdm}
+          />
+          <Route path="/adm/produtos" component={ProductsAdm} />
+          <Route path="/adm/funcionarios" export component={EmployeeAdm} />
+          <Route
+            path="/adm/cadastrofuncionarios"
+            export
+            component={CadastroFunc}
+          />
+          <Route
+            path="/adm/produtos/cadastro"
+            export
+            component={RegisterProduct}
+          />
+          <Route
+            path="/adm/produtos/:product_id"
+            export
+            component={EditProduct}
+          />
+          <Route
+            path="/adm/funcionario/:id"
+            export
+            component={EspecificEmployee}
+          />
+          <Route path="*" exact={true} component={Error} />
+        </Switch>
+      </SidebarAdm>
+      <FooterAdm />
+    </div>
   );
 }
 

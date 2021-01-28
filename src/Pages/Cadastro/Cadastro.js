@@ -25,7 +25,7 @@ function validateInput(type, value) {
   }
 
   if (type === "CPF") {
-    if (isNaN(Number(value)) || value.length < 10 || value === "") {
+    if (isNaN(Number(value)) || value.length !== 11 || value === "") {
       isValid = false;
     } else {
       isValid = true;
@@ -99,6 +99,8 @@ function validateInput(type, value) {
   return isValid;
 }
 
+
+
 function Cadastro({ history }) {
   // const { token } = useContext(LoginContext);
   const classes = useStyles();
@@ -169,9 +171,19 @@ function Cadastro({ history }) {
     setOpenSnackBar(false);
   };
 
+  useEffect(() => {
+    console.log(userInfo)
+  }, [userInfo]);
+
+  // useEffect(() => {
+  //   console.log(addressInfo);
+  // }, [addressInfo])
+
   const handleInputChange = (e, type) => {
     let newUserInfo;
     let newAddressInfo;
+    let flag1 = false;
+    let flag2 = false;
 
     if(type === 'name'){
       newUserInfo = {
@@ -198,11 +210,12 @@ function Cadastro({ history }) {
       }
     }
 
-    if(type === 'street'){
+    if(type === 'rua'){
       newAddressInfo = {
-        street: e.target.value
+        rua: e.target.value
       }
       setAddressInfo({ ...addressInfo, ...newAddressInfo })
+      flag1 = true;
     }
 
     if(type === 'number'){
@@ -210,6 +223,7 @@ function Cadastro({ history }) {
         number: e.target.value
       }
       setAddressInfo({ ...addressInfo, ...newAddressInfo })
+      flag2 = true;
     }
 
     if(type === 'city'){
@@ -243,10 +257,24 @@ function Cadastro({ history }) {
 
     if(type === 'state'){
       newAddressInfo = {
-        state: estadoInput.current.value
+        state: e.target.value
       }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+      console.log(newAddressInfo.state);
+      setAddressInfo({ ...addressInfo, state: e.target.value });
     }
+
+    
+   if(flag1 && flag2) { 
+    const str1 = addressInfo.rua;
+    const str2 = addressInfo.number;
+
+    const halfStreet = str1.concat(" ");
+    const street = halfStreet.concat(str2);
+
+    setAddressInfo({ ...addressInfo, street: street })
+    delete addressInfo['number'];
+    delete addressInfo['rua'];
+  }
 
     const Address = {
       address: { ...addressInfo }
@@ -615,7 +643,7 @@ function Cadastro({ history }) {
             error={errorRua}
             helperText={errorRuaMessage}
             variant="outlined"
-            onChange={(event) => handleInputChange(event, 'street')} // deixar 'rua' em portugues mesmo!
+            onChange={(event) => handleInputChange(event, 'rua')} 
             className={classes.mediumInput}
           />
         <h1 className={classes.caption}>N°</h1>
@@ -639,7 +667,7 @@ function Cadastro({ history }) {
           helperText={errorNumMessage}
           className={classes.smallInput}
           variant="outlined"
-          // onChange={(event) => handleInputChange(event, 'number')}
+          onChange={(event) => handleInputChange(event, 'number')}
         />
         <h1 className={classes.caption}>Complemento</h1>
 

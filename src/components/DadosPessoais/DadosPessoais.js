@@ -7,7 +7,7 @@ function DadosPessoais({dado}){
       <div className="dadosName">{dado.name}</div>
       <div className="dadosCpf">{dado.cpf}</div>
       <div className="dadosEmail">{dado.email}</div>
-      <div className="dadosEdit"><a href="url">{dado.edit}</a></div>
+      <div className="dadosEdit"><a href="/editarPerfil">{dado.edit}</a></div>
       
     </div>);
 }

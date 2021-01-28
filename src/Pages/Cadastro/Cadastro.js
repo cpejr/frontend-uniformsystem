@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Cadastro.css";
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
@@ -29,8 +31,18 @@ function Cadastro() {
   const [cepStored, setCep] = useState("");
   const [complementoStored, setComplemento] = useState("");
 
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
+
   return (
     <div className="fullPage">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1 className="titleCad">CADASTRO</h1>
       <div className="inputsTogetherCad">
         <div className="inputsPrimeira">

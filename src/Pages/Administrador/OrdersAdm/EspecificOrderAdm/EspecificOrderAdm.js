@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { AiOutlineLeft } from 'react-icons/ai';
 import api from "../../../../services/api";
 import './EspecificOrderAdm.css';
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../../meta/reactHelmet';
 import camisa from '../../../../Assets/camisa.jpg';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from "../../../../contexts/LoginContext";
@@ -24,6 +26,15 @@ function EspecificOrderAdm(props) {
     const [Code, setCode] = useState([]);
     const [status, setStatus] = useState("pending");
     const history = useHistory();
+
+    const meta = {
+      titlePage: "Home - UniformSystem",
+      titleSearch: "",
+      description: "",
+      keyWords: "",
+      imageUrl: "",
+      imageAlt: "",
+    }
 
     /*function ChangeStatus() {
         setLoadingStatus(true);
@@ -85,6 +96,7 @@ function EspecificOrderAdm(props) {
 
     return (
         <div className="order-container">
+          <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
             <div className="especific-container">
                 <div className="informations">
                     <AiOutlineLeft color='black' size={30} onClick={history.goBack} />

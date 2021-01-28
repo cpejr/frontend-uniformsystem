@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
 import { useHistory, Link } from "react-router-dom";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../meta/reactHelmet';
 import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
 
@@ -29,6 +30,15 @@ function OrdersAdm() {
   const history = useHistory();
 
   const { token } = useContext(LoginContext);
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
 
   const obterPedidos = async () => {
@@ -91,6 +101,7 @@ function OrdersAdm() {
 
   return (
     <div className="orders_page">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="orders_data">
         <div className="top_page">
           <div className="search_order">

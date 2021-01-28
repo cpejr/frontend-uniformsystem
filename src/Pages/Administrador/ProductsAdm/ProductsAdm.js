@@ -5,6 +5,8 @@ import ProductCardAdm from '../../../components/ProductCardAdm';
 import { FaFilter, FaSearch } from 'react-icons/fa';
 import _ from 'lodash';
 import './ProductsAdm.css';
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../meta/reactHelmet';
 
 const FILTER_OPTIONS = [
   'FEMININO',
@@ -22,6 +24,15 @@ function ProductsAdm() {
   const page = useRef(1);
   const pageLoading = useRef(false);
   const inputSearchAdm = useRef(null);
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   async function getProducts() {
     try {
@@ -166,6 +177,7 @@ function ProductsAdm() {
 
   return (
     <div className="products-adm">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="search-products-name">
         <input
           id='search-name'

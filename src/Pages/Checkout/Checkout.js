@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import api from '../../services/api';
 
 import Accordion from '@material-ui/core/Accordion';
@@ -73,6 +74,15 @@ function Checkout() {
   const serviceCode = '04014';
 
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   useEffect(
     () => {
@@ -270,6 +280,7 @@ function Checkout() {
 
   return (
     <div className="fullContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1>Lista de Produtos</h1>
       <div className="mainContent">
         <div className="leftSide">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Helmet} from 'react-helmet';
-import '../../meta/reactHelmet';
+import MetaData from '../../meta/reactHelmet';
 import { Carousel } from 'react-bootstrap';
 
 import camisa from '../../Assets/camisa.jpg';

@@ -3,7 +3,8 @@ import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
 import { useHistory } from 'react-router-dom';
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import { FaFilter, FaSearch, FaTruckLoading } from 'react-icons/fa';
 import _ from 'lodash';
 
@@ -29,6 +30,15 @@ function Loja() {
   const [filter, setFilter] = useState({ product_type: [], gender: [] });
   const page = useRef(1);
   const pageLoading = useRef(false);
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   const inputSearch = useRef(null);
   const history = useHistory();
@@ -230,6 +240,7 @@ function Loja() {
 
   return (
     <div className="shop">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="search">
         <input
           id="search"

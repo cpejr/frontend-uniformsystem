@@ -1,6 +1,7 @@
 import React from "react";
 import TabelaFuncionarios from "../../../../components/TabelaFuncionario/TabelaFuncionario";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../../meta/reactHelmet';
 import { withRouter } from 'react-router-dom';
 
 import "./EspecificEmployee.css";
@@ -33,8 +34,19 @@ const orderHistory = [
 ];
 
 function EspecificEmployee({history}) {
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
+
   return (
     <div>
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <ArrowBackIosIcon className="setaVoltar" onClick={() => history.goBack()}></ArrowBackIosIcon>
       <div className="boxTitle">
         <h1 className="titleFuncExp">FUNCIONÁRIO ESPECÍFICO</h1>

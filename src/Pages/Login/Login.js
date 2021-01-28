@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from 'react-router-dom';
 import { Button, TextField, CircularProgress } from '@material-ui/core';
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import { LoginContext } from "../../contexts/LoginContext";
 import api from "../../services/api";
 import './Login.css';
@@ -22,6 +24,15 @@ function Login(){
   const [errorPasswordMessage, setErrorPasswordMessage] = useState('');
 
   const [loading, setLoading] = useState(false);
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -121,6 +132,7 @@ function Login(){
   
   return (
     <div className="login">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="box">
         <section className="form">
           <form>

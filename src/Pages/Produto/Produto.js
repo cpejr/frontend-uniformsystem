@@ -6,6 +6,8 @@ import {
 } from "react-icons/fa";
 
 import { Button, TextField } from '@material-ui/core';
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 
 import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
@@ -71,6 +73,15 @@ function Produto() {
 
     //Pegando o id do produto pelo link
     const { product_id } = useParams();
+
+    const meta = {
+        titlePage: "Home - UniformSystem",
+        titleSearch: "",
+        description: "",
+        keyWords: "",
+        imageUrl: "",
+        imageAlt: "",
+      }
 
 
     useEffect(async () => {
@@ -250,7 +261,7 @@ function Produto() {
 
     return (
         <div className='productPage'>
-
+            <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
             <div className='leftSide'>
                 <img src={`${process.env.REACT_APP_BUCKET_AWS}${modelChoosen.img_link}`} alt={`${modelChoosen.model_description}`} />
             </div>

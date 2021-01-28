@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../meta/reactHelmet';
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
@@ -102,6 +103,15 @@ function HomeEditable() {
   const [imagemCarousel03, setImagemCarousel03] = useState(false);
   const [imagemCarousel04, setImagemCarousel04] = useState(false);
   const [imagemCarousel05, setImagemCarousel05] = useState(false);
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   const arrayImages = [
     imagemCarousel01,
@@ -574,6 +584,7 @@ function HomeEditable() {
 
   return (
     <div className="HomeEditableContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="carouselPart">
         <div className="titleArea">
           <h1>

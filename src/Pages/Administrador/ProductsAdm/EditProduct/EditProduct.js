@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { withRouter, useParams } from 'react-router-dom';
 import api from '../../../../services/api';
 import { LoginContext } from '../../../../contexts/LoginContext';
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../../meta/reactHelmet';
 import { Button, CircularProgress, makeStyles, Snackbar, TextField } from '@material-ui/core';
 
 import MuiAlert from '@material-ui/lab/Alert';
@@ -62,6 +63,15 @@ function EditProduct({history}) {
   const inputDescription = useRef(null);
 
   const classes = useStyles();
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   useEffect( () => {
 
@@ -281,7 +291,7 @@ function EditProduct({history}) {
 
   return (
     <div className="editProductFullContent">
-      
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <FaChevronLeft className="iconToReturn" onClick={() => history.goBack()} />
 
       <div className="mainContent">

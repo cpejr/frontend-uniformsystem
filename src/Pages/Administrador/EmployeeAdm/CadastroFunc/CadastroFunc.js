@@ -1,5 +1,6 @@
 import React, { useRef, useState, useContext } from "react";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../../meta/reactHelmet';
 import { withRouter } from 'react-router-dom';
 
 import { Button, CircularProgress, makeStyles, MenuItem, Snackbar, TextField } from '@material-ui/core';
@@ -85,6 +86,15 @@ function CadastroFunc({history}) {
 
   const [loading, setLoading] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   const handleCloseSnackBar = (event, reason) => {
     if (reason === 'clickaway') {
@@ -201,6 +211,7 @@ function CadastroFunc({history}) {
 
   return (
     <div className="registerEmployeeFullContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <FaChevronLeft className={classes.icon} onClick={() => history.goBack()} />
       <h1 className={classes.mainTitle}>
           CADASTRAR NOVO FUNCIONÁRIO

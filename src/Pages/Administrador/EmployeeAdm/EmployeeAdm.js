@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../meta/reactHelmet';
 import { Link } from 'react-router-dom';
 
 import {
@@ -38,6 +39,15 @@ function EmployeeAdm() {
   const { token } = useContext(LoginContext);
   const [employees, setEmployees] = useState([]);
   const [dialogItem, setDialogItem] = useState({open: false, item: null});
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   function handleClose(){
     setDialogItem({open: false, item: null});
@@ -80,6 +90,7 @@ function EmployeeAdm() {
 
   return (
     <div>
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div>
         <Link  className="buttonEmployee" to="/adm/cadastrofuncionarios">
           <Button type="button">

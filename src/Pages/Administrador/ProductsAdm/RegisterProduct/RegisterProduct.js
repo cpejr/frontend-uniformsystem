@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import api from '../../../../services/api';
 import { LoginContext } from '../../../../contexts/LoginContext';
-
 import { Button, CircularProgress, makeStyles, Snackbar, TextField } from '@material-ui/core';
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../../../meta/reactHelmet';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import ProductModelCardAdm from '../../../../components/ProductModelCardAdm';
@@ -37,6 +37,15 @@ function validateInputWithTypeText(valueFromInput){
 }
 
 function RegisterProduct({history}) {
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   const { token } = useContext(LoginContext);
 
@@ -275,6 +284,7 @@ function RegisterProduct({history}) {
 
   return (
     <div className="registerProductFullContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       
       <FaChevronLeft className="iconToReturn" onClick={() => history.goBack()} />
 

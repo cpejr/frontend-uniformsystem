@@ -4,6 +4,8 @@ import api from '../../services/api';
 import { LoginContext } from '../../contexts/LoginContext';
 import './Carrinho.css';
 import CartProduct from './Components/CartProduct';
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import ShippingCalc from './Components/ShippingCalc';
 
 function Carrinho() {
@@ -15,6 +17,15 @@ function Carrinho() {
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
   const [shipping, setShipping] = useState();
+
+  const meta = {
+    titlePage: "Home - UniformSystem",
+    titleSearch: "",
+    description: "",
+    keyWords: "",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   async function handleChangeAmount(number, product_key) {
     try {
@@ -82,6 +93,7 @@ function Carrinho() {
 
   return (
     <div className="cardContainer">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1 className="cartTitle">Carrinho</h1>
       <table className="cartTable">
         <thead>

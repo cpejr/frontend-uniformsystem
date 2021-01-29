@@ -8,11 +8,8 @@ import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
 
 import Toggle from "../../../components/Toggle";
-import EspecificOrderAdm from "../OrdersAdm/EspecificOrderAdm/EspecificOrderAdm";
 
 import { FaAngleRight, FaFilter } from "react-icons/fa";
-import { AiOutlineSearch } from "react-icons/ai";
-import { BorderRight } from "@material-ui/icons";
 
 const PEDIDOS = [
   { status: "Entregue", ID: 2050 },

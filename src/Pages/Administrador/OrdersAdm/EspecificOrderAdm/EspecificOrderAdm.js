@@ -2,27 +2,32 @@ import React, { useEffect, useState, useContext } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import api from "../../../../services/api";
 import "./EspecificOrderAdm.css";
+import camisa from "../../../../Assets/camisa.jpg";
 import { Helmet } from "react-helmet";
 import MetaData from "../../../../meta/reactHelmet";
-import camisa from "../../../../Assets/camisa.jpg";
 import { useHistory } from "react-router-dom";
 import { LoginContext } from "../../../../contexts/LoginContext";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { functionsIn } from "lodash";
 
 function EspecificOrderAdm(props) {
-  const [loadingStatus, setLoadingStatus] = useState(false);
   //const [status, setStatus] = useState(false);
-  var date = props.location.state.date;
-  var today = new Date();
   var Status = props.location.state.status;
   var deliver = props.location.state.deliver;
 
+  const date = props.location.state.date;
+  var created = new Date();
+
   const orderId = props.location.state.orderId;
   var price = [];
+  var discount = [];
   var total;
   var id;
+
+  var modelos = {
+    id: [],
+    description: [],
+  };
   const [Orders, setOrders] = useState([]);
+  const [Models, setModels] = useState([]);
   const [Code, setCode] = useState([]);
   const [status, setStatus] = useState("pending");
   const history = useHistory();
@@ -46,6 +51,7 @@ function EspecificOrderAdm(props) {
     }*/
 
   const { token } = useContext(LoginContext);
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const obterPedidos = async () => {
     const resultado = await api.get(`productsfromorder/${orderId}`, {
@@ -55,11 +61,24 @@ function EspecificOrderAdm(props) {
     setOrders(resultado.data);
   };
 
+  const obterModelos = async () => {
+    const resultado = await api.get(`productmodels`, {
+      headers: { authorization: `bearer ${token}` },
+    });
+
+    setModels(resultado.data.models);
+  };
+
   useEffect(() => {
     obterPedidos();
+    obterModelos();
   }, []);
 
-  console.log(date);
+  Models.map((produto) => {
+    modelos.id.push(produto.product_model_id);
+    modelos.description.push(produto.model_description);
+    return "";
+  });
 
   async function ModificarStatus() {
     if (status === "pending") {
@@ -133,9 +152,22 @@ function EspecificOrderAdm(props) {
                   return accumulator + currentValue;
                 };
 
-                price.push(pedido.product_price);
-                total = price.reduce(reducer);
+                discount.push(pedido.discount);
+
+                const reducerDiscount = (accumulator, currentValue) => {
+                  return accumulator + currentValue;
+                };
+
+                price.push(pedido.product_price * pedido.amount);
+
+                total =
+                  price.reduce(reducer) - discount.reduce(reducerDiscount);
+
                 total = total.toFixed(2);
+                if (id === 0) {
+                  id = "Sem dados";
+                  total = "Sem dados";
+                }
                 return "";
               })}
             </div>
@@ -146,7 +178,7 @@ function EspecificOrderAdm(props) {
               <br />
               <span className="date">
                 <strong>Data do pedido:</strong>
-                {today.toLocaleString("pt-BR", date)}
+                {created.toLocaleString("pt-BR", date)}
               </span>
               <br />
               <span className="price">
@@ -182,10 +214,6 @@ function EspecificOrderAdm(props) {
               </div>
             )}
           </div>
-
-          {/*<button className="button-status" onClick={ () => ChangeStatus() }>
-                        {loadingStatus ? <CircularProgress size={ 35 } color="secondary" className="circularProgress" /> : "Mudar status para ''Em produção''"}
-                    </button>*/}
         </div>
 
         <table className="order-table">
@@ -198,14 +226,29 @@ function EspecificOrderAdm(props) {
           </thead>
           <tbody>
             {Orders.map((pedido) => {
+              var description;
+
+              for (var i = 0; i < modelos.id.length; i++) {
+                var product = pedido.product_model_id;
+
+                if (modelos.id[i] === product) {
+                  description = modelos.description[i];
+                }
+              }
               const colum = (
                 <tr className="oder-tr-content">
                   <td className="amount">{pedido.amount}</td>
                   <td className="products">
                     <img src={camisa} className="image-product" />
-                    <span className="product-name">Camisa Personalisada 1</span>
+
+                    <span className="product-name">{description}</span>
                   </td>
-                  <td className="logo">Baixar imagem</td>
+                  <td className="logo">
+                    {" "}
+                    <a href={`${bucketAWS}${pedido.logo_link}`} download>
+                      Baixar Imagem
+                    </a>{" "}
+                  </td>
                 </tr>
               );
               return colum;

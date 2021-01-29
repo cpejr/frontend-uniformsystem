@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { AiOutlineLeft } from "react-icons/ai";
+import { FaChevronLeft } from 'react-icons/fa';
 import api from "../../../../services/api";
 import "./EspecificOrderAdm.css";
 import camisa from "../../../../Assets/camisa.jpg";
@@ -114,7 +114,7 @@ function EspecificOrderAdm(props) {
     <div className="order-container">
       <div className="especific-container">
         <div className="informations">
-          <AiOutlineLeft color="black" size={30} onClick={history.goBack} />
+          <FaChevronLeft className="arrowBackIcon" onClick={() => history.goBack()} />
           <div className="title-status">
             <span className="title">DETALHES DO PEDIDO</span>
             <div className="status">

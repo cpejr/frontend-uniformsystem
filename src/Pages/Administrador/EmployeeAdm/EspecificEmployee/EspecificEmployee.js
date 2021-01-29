@@ -4,7 +4,7 @@ import TabelaFuncionarios from "../../../../components/TabelaFuncionario/TabelaF
 import { withRouter } from 'react-router-dom';
 
 import "./EspecificEmployee.css";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import { FaChevronLeft } from 'react-icons/fa';
 
 const funcionario = 
   {
@@ -34,8 +34,8 @@ const orderHistory = [
 
 function EspecificEmployee({history}) {
   return (
-    <div>
-      <ArrowBackIosIcon className="setaVoltar" onClick={() => history.goBack()}></ArrowBackIosIcon>
+    <div className="especific-employee">
+      <FaChevronLeft className="setaVoltar" onClick={() => history.goBack()} />
       <div className="boxTitle">
         <h1 className="titleFuncExp">FUNCIONÁRIO ESPECÍFICO</h1>
         <hr className="titleLineExp"></hr>

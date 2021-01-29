@@ -138,10 +138,10 @@ function EditarPerfil({ history }) {
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes E-commerce | Editar Perfil",
+    titleSearch: "Editar Perfil",
+    description: "Mude seus dados pessoais do seu perfil de usuário",
+    keyWords: "Editar perfil",
     imageUrl: "",
     imageAlt: "",
   }

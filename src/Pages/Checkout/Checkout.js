@@ -76,10 +76,10 @@ function Checkout() {
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes E-commerce | Checkout",
+    titleSearch: "Checkout",
+    description: "Checkout de pagamento",
+    keyWords: "Checkout",
     imageUrl: "",
     imageAlt: "",
   }

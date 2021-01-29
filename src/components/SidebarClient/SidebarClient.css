@@ -1,7 +1,6 @@
 .fullContentSidebar {
   height: 100%;
   width: 400px;
-  display: none;
   border-right: 2px solid #707070;
 }
 
@@ -40,13 +39,13 @@
 }
 
 /* Aumentar o tamanho da altura */
-.sidebar .PrivateHiddenCss-xsDown-8,
-.sidebar .PrivateHiddenCss-xsDown-8 .MuiDrawer-root,
-.sidebar
+.sidebarClient .PrivateHiddenCss-xsDown-8,
+.sidebarClient .PrivateHiddenCss-xsDown-8 .MuiDrawer-root,
+.sidebarClient
   .PrivateHiddenCss-xsDown-8
   .MuiDrawer-root
   div
-  .sidebar
+  .sidebarClient
   .PrivateHiddenCss-xsDown-8
   .MuiDrawer-root
   div
@@ -54,39 +53,42 @@
   height: 100%;
 }
 
-.sidebar {
+.sidebarClient {
   min-height: 90vh;
   display: flex;
 }
-/* Tira barra azul da sidebar */
-.sidebar .MuiAppBar-root {
+/* Tira barra azul da sidebarClient */
+.sidebarClient .MuiAppBar-root {
   height: 100%;
   width: 85px;
   display: none !important;
   margin-top: 174px;
 }
 
-.sidebar .MuiPaper-root {
+.sidebarClient .MuiPaper-root {
   position: relative;
 }
 
-.sidebar .MuiList-root a {
+.sidebarClient .MuiList-root a {
   color: #201f24;
   text-decoration: none;
 }
 
+.sidebarListaClient{
+  width: 220px;
+}
 @media (max-width: 600px) {
-  .sidebar .MuiList-root a {
+  .sidebarClient .MuiList-root a {
     color: #201f24;
     text-decoration: none;
   }
 
-  .sidebar .MuiPaper-root {
+  .sidebarClient .MuiPaper-root {
     display: none;
   }
 
-  /* Tira barra azul da sidebar */
-  .sidebar .MuiAppBar-root {
+  /* Tira barra azul da sidebarClient */
+  .sidebarClient .MuiAppBar-root {
     height: 100%;
     width: 85px;
     margin-top: 174px;
@@ -98,18 +100,18 @@
 }
 
 @media (max-width: 600px) {
-  .sidebar .MuiToolbar-root {
+  .sidebarClient .MuiToolbar-root {
     position: fixed;
     background-color: #201f24;
     top: 0;
   }
 
-  .sidebar .MuiAppBar-root {
+  .sidebarClient .MuiAppBar-root {
     height: 100%;
     width: 85px;
     display: block !important;
   }
-  .sidebar .MuiAppBar-positionFixed {
+  .sidebarClient .MuiAppBar-positionFixed {
     height: auto;
     position: fixed;
     width: 85px;

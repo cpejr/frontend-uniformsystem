@@ -11,7 +11,7 @@ import Hidden from "@material-ui/core/Hidden";
 import HomeIcon from '@material-ui/icons/Home';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
-import FaShoppingCart from 'react-icons/fa';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
@@ -22,7 +22,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-const drawerWidth = 220;
+const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     width: "100%",
     padding: 0,
-    paddingTop: theme.spacing(3),
+    // paddingTop: theme.spacing(3),
   },
 }));
 
@@ -81,9 +81,9 @@ export default function ComputerSidebar(props) {
       path: "/contact",
     },
     {
-        itemName: "Carrinho",
-        itemIcon: <FaShoppingCart />,
-        path:
+      itemName: "Carrinho",
+      itemIcon: <ShoppingCartIcon />,
+      path: "/cart"
     },
   ];
 
@@ -91,13 +91,13 @@ export default function ComputerSidebar(props) {
     <div>
       <div className={classes.toolbar} />
       <Divider />
-      <List>
+      <List className="sidebarListaClient">
           {
               objListOptionsClient.map((item, index) => (
                 <Link to={`${item.path}`}>
                   <ListItem button key={index}>
                     <ListItemIcon>{item.itemIcon}</ListItemIcon>
-                    <ListItemText primary={item.itemName} />
+                    <ListItemText primary={item.itemName.toUpperCase()} />
                   </ListItem>
                 </Link>
               ))
@@ -110,7 +110,7 @@ export default function ComputerSidebar(props) {
 
 
   return (
-    <div className="sidebar">
+    <div className="sidebarClient">
       {/* <CssBaseline /> */}
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>

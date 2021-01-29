@@ -20,10 +20,10 @@ function Contato() {
   const [WhatsappInfo, setWhatsappInfo] = useState("");
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes E-commerce | Contato",
+    titleSearch: "Contato Profit Uniformes",
+    description: "Entre em contato conosco!",
+    keyWords: "Contato",
     imageUrl: "",
     imageAlt: "",
   }

@@ -32,10 +32,10 @@ function Cadastro() {
   const [complementoStored, setComplemento] = useState("");
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes E-commerce | Cadastro",
+    titleSearch: "Cadastro Profit Uniformes",
+    description: "Cadastre-se no mais novo site de uniformização profissional",
+    keyWords: "Cadastro",
     imageUrl: "",
     imageAlt: "",
   }

@@ -19,10 +19,10 @@ function Carrinho() {
   const [shipping, setShipping] = useState();
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes E-commerce | Carrinho",
+    titleSearch: "Carrinho",
+    description: "Seu carrinho de compras em Profit",
+    keyWords: "Carrinho",
     imageUrl: "",
     imageAlt: "",
   }

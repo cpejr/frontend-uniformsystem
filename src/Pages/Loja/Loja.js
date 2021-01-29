@@ -32,10 +32,10 @@ function Loja() {
   const pageLoading = useRef(false);
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes Ecommerce | Loja",
+    titleSearch: "Profit Uniformes | Loja",
+    description: "Uniformes e bonés personalizados para sua empresa, universidade, time e muito mais. Venha conhecer nossos modelos e suas possibilidades de personalização!",
+    keyWords: "Uniformes | Loja | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
   }

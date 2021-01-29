@@ -38,10 +38,10 @@ function Home() {
   //         }, [])
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes Ecommerce | Home",
+    titleSearch: "Profit Uniformes | Home",
+    description: "Loja on-line de uniformização profissional. Venha conhecer nossos produtos!",
+    keyWords: "Uniformes | Home | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
   }

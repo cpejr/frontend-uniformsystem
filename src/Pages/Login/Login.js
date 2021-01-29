@@ -26,10 +26,10 @@ function Login(){
   const [loading, setLoading] = useState(false);
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes Ecommerce | Login",
+    titleSearch: "Profit Uniformes | Login",
+    description: "faça login com sua conta profit e conheça nossos uniformes personalizados e funcionalidades.",
+    keyWords: "Uniformes | Login | Entrar | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
   }

@@ -75,10 +75,10 @@ function Produto() {
     const { product_id } = useParams();
 
     const meta = {
-        titlePage: "Home - UniformSystem",
-        titleSearch: "",
-        description: "",
-        keyWords: "",
+        titlePage: "Uniformes Ecommerce | Produto",
+        titleSearch: "Profit Uniformes | Produto",
+        description: "Produtos personalizados prontos para a compra.",
+        keyWords: "Uniformes | Produto | Ecommerce | Profit",
         imageUrl: "",
         imageAlt: "",
       }

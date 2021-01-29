@@ -6,10 +6,10 @@ import MetaData from '../../meta/reactHelmet';
 function Sign_Up() {
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes Ecommerce | Cadastro",
+    titleSearch: "Profit Uniformes | Cadastro",
+    description: "Cadastre-se no nosso ecommerce e tenha a melhor experiência possível com sua conta profit e nossos uniformes personalizados!",
+    keyWords: "Uniformes | Cadastro | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
   }

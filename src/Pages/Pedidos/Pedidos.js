@@ -24,10 +24,10 @@ export default function Pedidos() {
     const [InputID, setInputID] = useState(0);
 
     const meta = {
-        titlePage: "Home - UniformSystem",
-        titleSearch: "",
-        description: "",
-        keyWords: "",
+        titlePage: "Uniformes Ecommerce | Pedidos",
+        titleSearch: "Profit Uniformes | Pedidos",
+        description: "Confira as informações do seu pedido e o status de entrega.",
+        keyWords: "Uniformes | Pedidos | Entrega | Ecommerce | Profit",
         imageUrl: "",
         imageAlt: "",
       }

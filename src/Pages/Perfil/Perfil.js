@@ -19,10 +19,10 @@ function Perfil() {
   const [openModal, setOpenModal] = useState(false);
 
   const meta = {
-    titlePage: "Home - UniformSystem",
-    titleSearch: "",
-    description: "",
-    keyWords: "",
+    titlePage: "Uniformes Ecommerce | Perfil",
+    titleSearch: "Profit Uniformes | Perfil",
+    description: "Verifique seus dados pessoais e informações de envio juntamente com seus pedidos no perfil profit!",
+    keyWords: "Uniformes | Perfil | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
   }

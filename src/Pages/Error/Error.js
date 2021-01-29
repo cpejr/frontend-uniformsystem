@@ -7,7 +7,7 @@ import MetaData from '../../meta/reactHelmet';
 function Error() {
 
   const meta = {
-    titlePage: "Home - UniformSystem",
+    titlePage: "Erro",
     titleSearch: "",
     description: "",
     keyWords: "",

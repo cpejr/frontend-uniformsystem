@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import api from "../../../services/api";
-import { LoginContext } from '../../../contexts/LoginContext';
+import { LoginContext } from "../../../contexts/LoginContext";
+import { useHistory, Link } from "react-router-dom";
 
 import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
@@ -8,8 +9,6 @@ import OrderTable from "../../../components/OrderTable/OrderTable";
 import Toggle from "../../../components/Toggle";
 
 import { FaAngleRight, FaFilter } from "react-icons/fa";
-import { AiOutlineSearch } from "react-icons/ai";
-import { BorderRight } from "@material-ui/icons";
 
 const PEDIDOS = [
   { status: "Entregue", ID: 2050 },
@@ -20,32 +19,45 @@ const PEDIDOS = [
 
 function OrdersAdm() {
   const [Orders, setOrders] = useState([]);
-  const [OnlyPending, setOnlyPending] = useState(false);
-
+  const [OnlyPending, setOnlyPending] = useState();
+  //const { token } = useContext(LoginContext);
   const [InputID, setInputID] = useState(0);
+  var date;
+  const history = useHistory();
 
   const { token } = useContext(LoginContext);
 
   const obterPedidos = async () => {
-    const resultado = await api.get(`order`, {
-      headers: { authorization: `bearer ${token}` },
-    });
-    console.log(resultado);
-    setOrders(resultado.data);
+    if (OnlyPending === false) {
+      let query = [];
+      let param = "status=pending";
+      query.push(param);
+      try {
+        const resultado = await api.get(`/order?${query}`, {
+          headers: { authorization: `bearer ${token}` },
+        });
+        setOrders(resultado.data);
+      } catch (error) {
+        console.warn(error);
+        alert(error);
+      }
+    } else {
+      const resultado = await api.get(`order`, {
+        headers: { authorization: `bearer ${token}` },
+      });
+      setOrders(resultado.data);
+    }
   };
 
   useEffect(() => {
     obterPedidos();
   }, []);
 
-  console.log(Orders.models);
-
   function FilteredData() {
     return PEDIDOS.map((pedido, index) => {
       {
         /*Usar .filter*/
       }
-      console.log(pedido.ID);
       if (pedido.ID === InputID) {
         return (
           <tr key={index} className="singleOrder">
@@ -72,7 +84,6 @@ function OrdersAdm() {
     });
   }
 
-
   return (
     <div className="orders_page">
       <div className="orders_data">
@@ -81,22 +92,12 @@ function OrdersAdm() {
             <div className="filterTitleProducts">
               <FaFilter /> FILTRAR:
             </div>
-            <div className="input_div">
-              <input
-                type="text"
-                placeholder="Digite um id"
-                className="input_id"
-                onChange={(e) => {
-                  setInputID(e.target.value);
-                  console.log(InputID);
-                }}
-              />
-              <AiOutlineSearch className="icon_search" size="40px" />
-            </div>
           </div>
           <div className="div_pendente">
             <div className="text_pendente">Pendente</div>
-            <Toggle className="toggle_order" Status={setOnlyPending}></Toggle>
+            <div className="evento_pendente" onClick={obterPedidos}>
+              <Toggle className="toggle_order" Status={setOnlyPending} />
+            </div>
           </div>
         </div>
 
@@ -111,11 +112,27 @@ function OrdersAdm() {
                 <tr>
                   {Orders.map((pedido) => {
                     const id = pedido.order_id;
+                    date = pedido.created_at;
+                    const Status = pedido.status;
+                    const deliver = pedido.delivered_by;
                     const colum = (
                       <div className="adm_orders_id">
                         <tr>
                           {id}
-                          <FaAngleRight className="icon_table" />
+                          <Link
+                            to={{
+                              pathname: "/adm/pedidoespecifico",
+                              state: {
+                                date: date,
+                                orderId: id,
+                                Status: Status,
+                                deliver: deliver,
+                              },
+                            }}
+                            style={{ color: "black" }}
+                          >
+                            <FaAngleRight className="icon_table" />
+                          </Link>
                         </tr>
                       </div>
                     );
@@ -141,7 +158,7 @@ function OrdersAdm() {
 
           {/* Os <th> sao o cabeçalho da tabela. O tr é uma linha da tabela. */}
 
-          <tr></tr>
+          <tr />
         </div>
       </div>
     </div>

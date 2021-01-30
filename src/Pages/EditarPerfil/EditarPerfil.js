@@ -119,6 +119,7 @@ function EditarPerfil({ history }) {
   const [pontoRef, setPontoRef] = useState("");
   const [telefone, setTelefone] = useState(0);
 
+  const [userInfo, setUserInfo] = useState();
   const [addressInfo, setAddressInfo] = useState();
 
   const nomeInput = useRef(null);
@@ -136,17 +137,28 @@ function EditarPerfil({ history }) {
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
   useEffect(() => {
-    getUserData();
+    getUserAddress();
+    //getUserInfo();
   }, []);
 
-  async function getUserData() {
+  async function getUserAddress() {
     const response = await api.get("/address", {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { 
+        Authorization: `Bearer ${token}`
+     },
     });
-    console.log(response.data);
-
+    console.log(response);
     setAddressInfo({ ...response.data.adresses[0] });
-    //console.log(addressInfo.street);
+  }
+
+  async function getUserInfo() {
+    const response = await api.get("/user", {
+      headers: { 
+        Authorization: `Bearer ${token}`
+     },
+    });
+    console.log(response);
+    setUserInfo({ ...response.data });
   }
 
   const handleCloseSnackBar = (event, reason) => {
@@ -300,7 +312,7 @@ function EditarPerfil({ history }) {
         setLoading(true);
 
         const response = await api.get(
-          "/address/2b2b31e-31e-d86-faf-5c478e7ef07",
+          "/address",
           {
             headers: { authorization: `Bearer ${token}` },
           }

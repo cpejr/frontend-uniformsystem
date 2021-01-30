@@ -99,8 +99,6 @@ function validateInput(type, value) {
   return isValid;
 }
 
-
-
 function Cadastro({ history }) {
   // const { token } = useContext(LoginContext);
   const classes = useStyles();
@@ -144,8 +142,8 @@ function Cadastro({ history }) {
   const [errorTelefone, setErrorTelefone] = useState(false);
   const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
-  const [userInfo, setUserInfo] = useState();
-  const [addressInfo, setAddressInfo] = useState();
+  const [userInfo, setUserInfo] = useState({});
+  const [addressInfo, setAddressInfo] = useState({});
 
   const nomeInput = useRef(null);
   const CPFInput = useRef(null);
@@ -171,9 +169,9 @@ function Cadastro({ history }) {
     setOpenSnackBar(false);
   };
 
-  useEffect(() => {
-    console.log(userInfo)
-  }, [userInfo]);
+  // useEffect(() => {
+  //   console.log(userInfo)
+  // }, [userInfo]);
 
   // useEffect(() => {
   //   console.log(addressInfo);
@@ -182,8 +180,6 @@ function Cadastro({ history }) {
   const handleInputChange = (e, type) => {
     let newUserInfo;
     let newAddressInfo;
-    let flag1 = false;
-    let flag2 = false;
 
     if(type === 'name'){
       newUserInfo = {
@@ -215,7 +211,6 @@ function Cadastro({ history }) {
         rua: e.target.value
       }
       setAddressInfo({ ...addressInfo, ...newAddressInfo })
-      flag1 = true;
     }
 
     if(type === 'number'){
@@ -223,7 +218,6 @@ function Cadastro({ history }) {
         number: e.target.value
       }
       setAddressInfo({ ...addressInfo, ...newAddressInfo })
-      flag2 = true;
     }
 
     if(type === 'city'){
@@ -262,19 +256,6 @@ function Cadastro({ history }) {
       console.log(newAddressInfo.state);
       setAddressInfo({ ...addressInfo, state: e.target.value });
     }
-
-    
-   if(flag1 && flag2) { 
-    const str1 = addressInfo.rua;
-    const str2 = addressInfo.number;
-
-    const halfStreet = str1.concat(" ");
-    const street = halfStreet.concat(str2);
-
-    setAddressInfo({ ...addressInfo, street: street })
-    delete addressInfo['number'];
-    delete addressInfo['rua'];
-  }
 
     const Address = {
       address: { ...addressInfo }
@@ -458,6 +439,28 @@ function Cadastro({ history }) {
       setErrorPontoRefMessage("");
       setErrorTelefone(false);
       setErrorTelefoneMessage("");
+
+      const str1 = addressInfo.rua;
+      const str2 = addressInfo.number;
+
+      const halfStreet = str1.concat(" ");
+      const street = halfStreet.concat(str2);
+
+      console.log('street = ', street);
+
+      setAddressInfo({ ...addressInfo, street: street });
+
+      delete addressInfo['number'];
+      delete addressInfo['rua'];
+
+      delete userInfo.address['number'];
+      delete userInfo.address['rua'];
+
+      const Address = {
+        address: { ...addressInfo }
+      }
+  
+      setUserInfo({ ...userInfo, ...Address });
 
       console.log(userInfo);
 

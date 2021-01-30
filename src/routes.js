@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -13,7 +13,6 @@ import EditProduct from "./Pages/Administrador/ProductsAdm/EditProduct";
 import EmployeeAdm from "./Pages/Administrador/EmployeeAdm";
 import CadastroFunc from "./Pages/Administrador/EmployeeAdm/CadastroFunc";
 import EspecificEmployee from "./Pages/Administrador/EmployeeAdm/EspecificEmployee";
-
 
 import Loja from "./Pages/Loja";
 import Produto from "./Pages/Produto";
@@ -35,9 +34,13 @@ import HeaderAdm from "./components/HeaderAdm";
 import FooterAdm from "./components/FooterAdm";
 import SidebarAdm from "./components/SidebarAdm";
 
-import { isAuthenticated, isADM, isADMOrEmployee, isClientOrADMOrEmployee } from "./services/auth";
+import {
+  isAuthenticated,
+  isADM,
+  isADMOrEmployee,
+  isClientOrADMOrEmployee,
+} from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
-
 
 // Controle de rotas para Cliente
 const PrivateClientRoute = ({ component: Component, ...rest }) => {
@@ -57,7 +60,7 @@ const PrivateClientRoute = ({ component: Component, ...rest }) => {
       }
     />
   );
-}
+};
 
 // Controle de rotas para ADM
 const PrivateADMRoute = ({ component: Component, ...rest }) => {
@@ -77,7 +80,7 @@ const PrivateADMRoute = ({ component: Component, ...rest }) => {
       }
     />
   );
-}
+};
 
 // Controle de rotas para Employee ou ADM
 const PrivateADMOrEmployeeRoute = ({ component: Component, ...rest }) => {
@@ -97,7 +100,7 @@ const PrivateADMOrEmployeeRoute = ({ component: Component, ...rest }) => {
       }
     />
   );
-}
+};
 
 export default function Routes() {
   return (
@@ -132,7 +135,7 @@ function MenuRoutes() {
 
         <Route path="/perfil" export exact component={Perfil} />
         <Route path="/editarPerfil" export exact component={EditarPerfil} />
-        
+
         <Route path="/cart" export component={Carrinho} />
         <Route path="/login" export component={Login} />
         <Route path="/contact" export component={Contato} />
@@ -141,7 +144,7 @@ function MenuRoutes() {
         <Route path="/orders" export component={Pedidos} />
 
         {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
-        <Route path='*' exact component={Error} />
+        <Route path="*" exact component={Error} />
       </Switch>
       <Footer />
     </div>
@@ -149,82 +152,64 @@ function MenuRoutes() {
 }
 
 function AdmRoutes() {
-
   const { user } = useContext(LoginContext);
 
   // if (user === "notYet") return <Loading/>;
   // if (user === null || user.user_type === "adm") return <Redirect to="/adm/home" />;
   // else
-    return (
-      <div>
-        <HeaderAdm />
-        <SidebarAdm>
-          <Switch>
-            <Route 
-              path="/adm/home" 
-              component={HomeEditable} 
-            />
-            <Route 
-              path="/adm/pedidos"  
-              component={OrdersAdm} 
-            />
-            <Route
-              path="/adm/pedido/:id"
-              export
-              component={EspecificOrderAdm}
-            />
-            <Route 
-              path="/adm/produtos"  
-              component={ProductsAdm} 
-            />
-            <Route
-              path="/adm/funcionarios"
-              export
-              component={EmployeeAdm}
-            />
-            <Route
-              path="/adm/cadastrofuncionarios"
-              export
-              component={CadastroFunc}
-            />
-            <Route
-              path="/adm/produtos/cadastro"
-              export
-              component={RegisterProduct}
-            />
-            <Route
-              path="/adm/produtos/:product_id"
-              export
-              component={EditProduct}
-            />
-            <Route
-              path="/adm/funcionario/:id"
-              export
-              component={EspecificEmployee}
-            />
-            <Route 
-              path='*' 
-              exact={true} 
-              component={Error} 
-            />
-          </Switch>
-        </SidebarAdm>
-        <FooterAdm />
-      </div>
+  return (
+    <div>
+      <HeaderAdm />
+      <SidebarAdm>
+        <Switch>
+          <Route path="/adm/home" component={HomeEditable} />
+          <Route path="/adm/pedidos" component={OrdersAdm} />
+          <Route
+            path="/adm/pedidoespecifico"
+            export
+            component={EspecificOrderAdm}
+          />
+          <Route path="/adm/produtos" component={ProductsAdm} />
+          <Route path="/adm/funcionarios" export component={EmployeeAdm} />
+          <Route
+            path="/adm/cadastrofuncionarios"
+            export
+            component={CadastroFunc}
+          />
+          <Route
+            path="/adm/produtos/cadastro"
+            export
+            component={RegisterProduct}
+          />
+          <Route
+            path="/adm/produtos/:product_id"
+            export
+            component={EditProduct}
+          />
+          <Route
+            path="/adm/funcionario/:id"
+            export
+            component={EspecificEmployee}
+          />
+          <Route path="*" exact={true} component={Error} />
+        </Switch>
+      </SidebarAdm>
+      <FooterAdm />
+    </div>
   );
 }
 
-function Loading(props){
+function Loading(props) {
   const { user } = useContext(LoginContext);
-    console.log("UseEffect Loading: ", user);
-    if (user.type === "adm") return <Redirect to="/adm/home"/>;
-    if ((user === null) || (user === 'notYet')) return <Redirect to="/login" />;
-    else 
-      return (
-        <div className="loading">
-          <div className="loading-logo">
-            <ClipLoader size={100} color={"#123abc"} loading={true} />
-          </div>
+  console.log("UseEffect Loading: ", user);
+  if (user.type === "adm") return <Redirect to="/adm/home" />;
+  if (user === null || user === "notYet") return <Redirect to="/login" />;
+  else
+    return (
+      <div className="loading">
+        <div className="loading-logo">
+          <ClipLoader size={100} color={"#123abc"} loading={true} />
         </div>
-  );
+      </div>
+    );
 }

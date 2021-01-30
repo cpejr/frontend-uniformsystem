@@ -132,6 +132,12 @@ th {
   width: 100%;
 }
 
+.evento_pendente{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 @media (max-width: 808px) {
   .search_order {
     flex-direction: row;

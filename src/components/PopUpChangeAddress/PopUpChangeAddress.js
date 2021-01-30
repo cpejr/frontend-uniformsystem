@@ -3,8 +3,8 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import { CircularProgress, Dialog, DialogTitle, TextField, Button, 
     makeStyles, MenuItem, Typography  } from '@material-ui/core';
 
-import api from "../../../services/api";
-import { LoginContext } from "../../../contexts/LoginContext";
+import api from "../../services/api";
+import { LoginContext } from "../../contexts/LoginContext";
 
 import SaveIcon from '@material-ui/icons/Save';
 

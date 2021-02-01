@@ -21,7 +21,6 @@ import EditarPerfil from "./Pages/EditarPerfil";
 import Login from "./Pages/Login";
 import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
-// import SignUp from "./Pages/Sign_Up";
 import Checkout from "./Pages/Checkout";
 import Cadastro from "./Pages/Cadastro";
 import Pedidos from "./Pages/Pedidos";
@@ -162,7 +161,6 @@ function MenuRoutes() {
           <Route path="/cart" export component={Carrinho} />
           <Route path="/login" export component={Login} />
           <Route path="/contact" export component={Contato} />
-          <Route path="/signUp" export component={SignUp} />
           <Route path="/cadastro" export component={Cadastro} />
           <Route path="/orders" export component={Pedidos} />
   
@@ -193,7 +191,6 @@ function MenuRoutes() {
           <Route path="/cart" export component={Carrinho} />
           <Route path="/login" export component={Login} />
           <Route path="/contact" export component={Contato} />
-          <Route path="/signUp" export component={SignUp} />
           <Route path="/cadastro" export component={Cadastro} />
           <Route path="/orders" export component={Pedidos} />
   

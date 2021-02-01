@@ -327,7 +327,7 @@ function Produto() {
               </div>
 
               <a
-                href="http://www.buscacep.correios.com.br/sistemas/buscacep/default.cfm"
+                href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
                 target="_blank"
               >
                 <span className="forgotPassword">Não sei meu CEP</span>

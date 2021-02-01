@@ -3,7 +3,8 @@ import CardPedido from "../../components/CardPedido";
 import DadosPessoais from "../../components/DadosPessoais/DadosPessoais";
 import Enderecos from "../../components/Enderecos";
 import PopUpChangeAddress from "../../components/PopUpChangeAddress";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import api from '../../services/api';
 import { LoginContext } from '../../contexts/LoginContext';
 
@@ -17,6 +18,15 @@ function Perfil() {
   const [userAddress, setUserAddress] = useState({});
   const [userOrders, setUserOrders] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+
+  const meta = {
+    titlePage: "Uniformes Ecommerce | Perfil",
+    titleSearch: "Profit Uniformes | Perfil",
+    description: "Verifique seus dados pessoais e informações de envio juntamente com seus pedidos no perfil profit!",
+    keyWords: "Uniformes | Perfil | Ecommerce | Profit",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   useEffect(() => {
     try{
@@ -94,6 +104,7 @@ function Perfil() {
 
   return (
     <div className="profileContainer">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="personalDataContainer">
         <h1 className="titleProfile">
           DADOS PESSOAIS

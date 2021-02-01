@@ -15,7 +15,7 @@ const LoginContextProvider = (props) => {
       try {
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`,
+            authorization: `Bearer ${token}`,
           },
         };
         const response = await api.get("/verify", config);

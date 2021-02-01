@@ -76,6 +76,7 @@ function validateInput(type, value) {
 
 function EditarPerfil({ history }) {
   const { token } = useContext(LoginContext);
+  const { user } = useContext(LoginContext);
   const classes = useStyles();
 
   const [errorName, setErrorName] = useState(false);
@@ -135,30 +136,21 @@ function EditarPerfil({ history }) {
 
   const [loading, setLoading] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
+  let flag = false;
 
   useEffect(() => {
     getUserAddress();
-    //getUserInfo();
   }, []);
 
   async function getUserAddress() {
     const response = await api.get("/address", {
-      headers: { 
+      headers: {
         Authorization: `Bearer ${token}`
-     },
+      },
     });
-    console.log(response);
     setAddressInfo({ ...response.data.adresses[0] });
-  }
 
-  async function getUserInfo() {
-    const response = await api.get("/user", {
-      headers: { 
-        Authorization: `Bearer ${token}`
-     },
-    });
-    console.log(response);
-    setUserInfo({ ...response.data });
+    console.log(addressInfo);
   }
 
   const handleCloseSnackBar = (event, reason) => {
@@ -368,7 +360,8 @@ function EditarPerfil({ history }) {
       </h1>
 
       <h1 className={classes.subTitle}>NOME COMPLETO</h1>
-      <TextField
+      { user[0].name && (
+        <TextField
         required
         inputRef={nomeInput}
         error={errorName}
@@ -376,8 +369,8 @@ function EditarPerfil({ history }) {
         helperText={errorNameMessage}
         className={classes.largeInput}
         variant="outlined"
-        defaultValue="blablaaa"
-      />
+        defaultValue={user[0].name}
+      />)}
 
       <h1 className={classes.subTitle}>ENDEREÇO</h1>
       <div className="address01">
@@ -397,15 +390,17 @@ function EditarPerfil({ history }) {
         )}
         <h1 className={classes.caption}>N°</h1>
 
-        <TextField
-          required
-          label="Número"
-          inputRef={numInput}
-          error={errorNum}
-          helperText={errorNumMessage}
-          className={classes.smallInput}
-          variant="outlined"
-        />
+        {addressInfo &&
+          <TextField
+            required
+            label="Número"
+            inputRef={numInput}
+            error={errorNum}
+            helperText={errorNumMessage}
+            className={classes.smallInput}
+            defaultValue={addressInfo.number}
+            variant="outlined"
+          />}
         <h1 className={classes.caption}>Complemento</h1>
 
         {addressInfo && (
@@ -476,7 +471,7 @@ function EditarPerfil({ history }) {
             error={errorEstado}
             helperText={errorEstadoMessage}
             className={classes.smallInput}
-            //defaultValue={addressInfo.state}
+            defaultValue={addressInfo.state}
             onChange={(event) => setEstado(event.target.value)}
             variant="outlined"
           >
@@ -522,8 +517,8 @@ function EditarPerfil({ history }) {
           {loading ? (
             <CircularProgress color="secondary" />
           ) : (
-            "SALVAR ALTERAÇÕES"
-          )}
+              "SALVAR ALTERAÇÕES"
+            )}
         </Button>
       </div>
 

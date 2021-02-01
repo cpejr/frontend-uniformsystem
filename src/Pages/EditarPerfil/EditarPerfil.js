@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef, useContext } from "react";
 
+=======
+import React, { useState, useEffect, useRef } from "react";
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
+>>>>>>> origin/master
 import { withRouter } from "react-router-dom";
 
 import {
@@ -109,7 +115,10 @@ function EditarPerfil({ history }) {
   const [errorTelefone, setErrorTelefone] = useState(false);
   const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
+<<<<<<< HEAD
   const [userInfo, setUserInfo] = useState({ name: user[0].name });
+=======
+>>>>>>> origin/master
   const [addressInfo, setAddressInfo] = useState();
   const [addressId, setAddressId] = useState();
 
@@ -120,16 +129,30 @@ function EditarPerfil({ history }) {
   const bairroInput = useRef(null);
   const CEPInput = useRef(null);
   const cidadeInput = useRef(null);
-  const estadoInput = useRef(null);
+  const estadoInput = useRef("");
   const pontoRefInput = useRef(null);
   const telefoneInput = useRef(null);
 
   const [loading, setLoading] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
+  const meta = {
+    titlePage: "Uniformes E-commerce | Editar Perfil",
+    titleSearch: "Editar Perfil",
+    description: "Mude seus dados pessoais do seu perfil de usuário",
+    keyWords: "Editar perfil",
+    imageUrl: "",
+    imageAlt: "",
+  }
+
   useEffect(() => {
+<<<<<<< HEAD
     getUserAddress();
   }, []);
+=======
+    getUserData();
+  }, []); // executa assim que carregar a página
+>>>>>>> origin/master
 
   // useEffect(() => {
   //   console.log(addressInfo);
@@ -138,9 +161,13 @@ function EditarPerfil({ history }) {
 
   async function getUserAddress() {
     const response = await api.get("/address", {
+<<<<<<< HEAD
       headers: {
         Authorization: `Bearer ${token}`
       },
+=======
+      headers: { authorization: `Bearer ${token}` },
+>>>>>>> origin/master
     });
     setAddressInfo({ ...response.data.adresses[0] });
     setUserInfo({ user: user[0].name });
@@ -170,7 +197,7 @@ function EditarPerfil({ history }) {
       "cidade",
       cidadeInput.current.value
     );
-    const resultValidateEstado = true; //= validateInput('estado', estadoInput.current.value);
+    const resultValidateEstado = validateInput('estado', estadoInput.current.value);
     const resultValidatePontoRef = validateInput(
       "pontoRef",
       pontoRefInput.current.value
@@ -309,12 +336,28 @@ function EditarPerfil({ history }) {
       try {
         setLoading(true);
 
+<<<<<<< HEAD
         const response = await api.put(
           `address/${parseInt(addressInfo.address_id, 10)}`,
           newData, 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
+=======
+        const addressId = addressInfo.address_id
+        delete addressInfo['address_id'];
+        delete addressInfo['user_id'];
+
+        const updated_fields = {
+            "updatedFields": { ...addressInfo }
+        }
+
+        const response = await api.put(`/address/${addressId}`,
+            updated_fields,
+            {
+                headers: { authorization: `bearer ${token}` },
+            }
+>>>>>>> origin/master
         );
         console.log(response);
 
@@ -341,6 +384,7 @@ function EditarPerfil({ history }) {
   };
 
   const handleInputChange = (e, type) => {
+<<<<<<< HEAD
     let newUserInfo;
     let newAddressInfo;
   
@@ -403,6 +447,55 @@ function EditarPerfil({ history }) {
     }
   }
 
+=======
+    let newInfo;
+    let newUserInfo;
+    if(type === 'name'){
+        newUserInfo = {
+            name: e.target.value
+        }
+    }
+
+    if(type === 'street'){
+        newInfo = {
+            street: e.target.value
+        }
+    }
+
+    if(type === 'complement'){
+        newInfo = {
+            complement: e.target.value
+        }
+    }
+
+    if(type === 'neighborhood'){
+        newInfo = {
+            neighborhood: e.target.value
+        }
+    }
+
+    if(type === 'zip_code'){
+        newInfo = {
+            zip_code: e.target.value
+        }
+    }
+
+    if(type === 'city'){
+        newInfo = {
+            city: e.target.value
+        }
+    }
+
+    if(type === 'state'){
+      newInfo = {
+          state: e.target.value
+      }
+  }
+
+    setAddressInfo({...addressInfo, ...newInfo});
+}
+
+>>>>>>> origin/master
   const estados = [
     "AC",
     "AL",
@@ -435,6 +528,7 @@ function EditarPerfil({ history }) {
 
   return (
     <div className="registerEmployeeFullContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1 className={classes.mainTitle}>
         EDITAR DADOS PESSOAIS
         <span className={classes.spanInsideTitle} />
@@ -450,12 +544,18 @@ function EditarPerfil({ history }) {
         helperText={errorNameMessage}
         className={classes.largeInput}
         variant="outlined"
+<<<<<<< HEAD
         defaultValue={user[0].name}
         onChange={(e) => handleInputChange(e, 'name')}
       />)}
+=======
+        defaultValue="blablaaa"
+        onChange={(e) => handleInputChange(e, 'name')}
+      />
+>>>>>>> origin/master
 
       <h1 className={classes.subTitle}>ENDEREÇO</h1>
-      <div className="address01">
+      <div className="horizontalInput">
         <h1 className={classes.caption}>Rua</h1>
         {addressInfo && (
           <TextField
@@ -467,6 +567,10 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.street}
+<<<<<<< HEAD
+=======
+            className={classes.mediumInput}
+>>>>>>> origin/master
             onChange={(e) => handleInputChange(e, 'street')}
           />
         )}
@@ -516,7 +620,7 @@ function EditarPerfil({ history }) {
         )}
       </div>
 
-      <div className="address01">
+      <div className="horizontalInput">
         <h1 className={classes.caption}>CEP</h1>
         {addressInfo && (
           <TextField
@@ -529,6 +633,10 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             defaultValue={addressInfo.zip_code}
             onChange={(e) => handleInputChange(e, 'zip_code')}
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
           />
         )}
         <h1 className={classes.caption}>Cidade</h1>
@@ -554,7 +662,10 @@ function EditarPerfil({ history }) {
             error={errorEstado}
             helperText={errorEstadoMessage}
             className={classes.smallInput}
+<<<<<<< HEAD
             defaultValue={addressInfo.state}
+=======
+>>>>>>> origin/master
             onChange={(e) => handleInputChange(e, 'state')}
             variant="outlined"
           >
@@ -565,7 +676,7 @@ function EditarPerfil({ history }) {
         )}
       </div>
 
-      <div className="address01">
+      <div className="horizontalInput">
         <h1 className={classes.caption}>Ponto de referência</h1>
         {addressInfo && (
           <TextField
@@ -577,7 +688,10 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.complement}
+<<<<<<< HEAD
             // onChange={(e) => handleInputChange(e, 'complement')}
+=======
+>>>>>>> origin/master
           />
         )}
       </div>

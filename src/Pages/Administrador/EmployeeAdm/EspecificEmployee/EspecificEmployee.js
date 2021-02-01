@@ -1,18 +1,17 @@
 import React from "react";
 import TabelaFuncionarios from "../../../../components/TabelaFuncionario/TabelaFuncionario";
-
-import { withRouter } from 'react-router-dom';
+import { Helmet } from "react-helmet";
+import MetaData from "../../../../meta/reactHelmet";
+import { withRouter } from "react-router-dom";
 
 import "./EspecificEmployee.css";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import { FaChevronLeft } from 'react-icons/fa';
 
-const funcionario = 
-  {
-    id: 1,
-    nome: "MARIA SOUZA",
-    cpf: "123456789-35",
-  };
-
+const funcionario = {
+  id: 1,
+  nome: "MARIA SOUZA",
+  cpf: "123456789-35",
+};
 
 const orderHistory = [
   {
@@ -32,16 +31,38 @@ const orderHistory = [
   },
 ];
 
-function EspecificEmployee({history}) {
+function EspecificEmployee({ history }) {
+  const meta = {
+    titlePage: "Administrador | Funcionário Específico",
+    titleSearch: "Funcionário Específico Profit",
+    description:
+      "Encontre os funcionários desejados com seus respectivos dados.",
+    keyWords: "Dados, Funcionário, Específico, Profit",
+    imageUrl: "",
+    imageAlt: "",
+  };
+
   return (
+
     <div>
-      <ArrowBackIosIcon className="setaVoltar" onClick={() => history.goBack()}></ArrowBackIosIcon>
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
+      <FaChevronLeft className="setaVoltar" onClick={() => history.goBack()} />
       <div className="boxTitle">
         <h1 className="titleFuncExp">FUNCIONÁRIO ESPECÍFICO</h1>
         <hr className="titleLineExp"></hr>
       </div>
       <div className="tabela">
-          <TabelaFuncionarios funcionario={funcionario} orderHistory={orderHistory} />
+        <TabelaFuncionarios
+          funcionario={funcionario}
+          orderHistory={orderHistory}
+        />
       </div>
     </div>
   );

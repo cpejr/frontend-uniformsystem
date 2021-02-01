@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
 import { useHistory, Link } from "react-router-dom";
-
+import { Helmet } from "react-helmet";
+import MetaData from "../../../meta/reactHelmet";
 import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
 
@@ -26,6 +27,16 @@ function OrdersAdm() {
   const history = useHistory();
 
   const { token } = useContext(LoginContext);
+
+  const meta = {
+    titlePage: "Administrador | Ordem",
+    titleSearch: "Ordem Pedidos Profit",
+    description:
+      "Selecione seus produtos e faça já sua ordem de pedido, sua encomenda será prontamente solicitada.",
+    keyWords: "Encomenda, Ordem, Pedido, Profit",
+    imageUrl: "",
+    imageAlt: "",
+  };
 
   const obterPedidos = async () => {
     if (OnlyPending === false) {
@@ -86,6 +97,14 @@ function OrdersAdm() {
 
   return (
     <div className="orders_page">
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="orders_data">
         <div className="top_page">
           <div className="search_order">

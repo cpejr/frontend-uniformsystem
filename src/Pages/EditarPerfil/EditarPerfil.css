@@ -43,7 +43,7 @@
     justify-content: center;
   }
 
-  .address01 {
+  .horizontalInput {
     display: flex;
     flex-direction: row;
 
@@ -80,7 +80,7 @@
   }
 
 @media(max-width: 800px){
-  .address01 {
+  .horizontalInput {
     flex-direction: column;
   }
 }

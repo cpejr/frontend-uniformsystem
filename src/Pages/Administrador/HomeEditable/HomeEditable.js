@@ -201,7 +201,7 @@ function HomeEditable() {
         setInstagramInfo(instagramLink.data);
         setWhatsappInfo(whatsAppNumber.data);
       } catch (error) {
-        history.push("/errorPage");
+        // history.push("/errorPage");
         console.warn(error);
       }
     }

@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
     return (
         <LoginContextProvider>
-            <Routes />;
+            <Routes />
         </LoginContextProvider>
     );
 }

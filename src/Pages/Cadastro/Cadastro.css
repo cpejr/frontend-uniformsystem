@@ -52,6 +52,10 @@
   align-items: center;
 }
 
+.horizontalInput + .horizontalInput{
+  margin-top: 12px;
+}
+
 .MuiTextField-root {
     border: 2px solid;
 }

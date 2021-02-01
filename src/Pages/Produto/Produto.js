@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { FaCheck, FaShoppingCart } from "react-icons/fa";
 
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField } from '@material-ui/core';
+import MetaData from '../../meta/reactHelmet';
 
 import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
@@ -48,6 +49,15 @@ function Produto() {
 
   const [errorCEP, setErrorCEP] = useState(false);
   const [errorCEPMessage, setErrorCEPMessage] = useState("");
+    const meta = {
+        titlePage: "Uniformes Ecommerce | Produto",
+        titleSearch: "Profit Uniformes | Produto",
+        description: "Produtos personalizados prontos para a compra.",
+        keyWords: "Uniformes | Produto | Ecommerce | Profit",
+        imageUrl: "",
+        imageAlt: "",
+      }
+
 
   const [errorSize, setErrorSize] = useState(false);
 
@@ -101,6 +111,7 @@ function Produto() {
     }
 
     return (
+
       <div className="radio" style={{ display: "flex" }}>
         {obj_sizes.map((size, index) => {
           let value;
@@ -244,6 +255,7 @@ function Produto() {
 
   return (
     <div className="productPage">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="leftSide">
         <img
           src={`${process.env.REACT_APP_BUCKET_AWS}${modelChoosen.img_link}`}
@@ -292,6 +304,7 @@ function Produto() {
                   />
                 )}
               </div>
+
             </div>
 
             <div className="shipSpace">

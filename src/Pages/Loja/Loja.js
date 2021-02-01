@@ -3,7 +3,8 @@ import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
 import { useHistory } from 'react-router-dom';
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import { FaFilter, FaSearch, FaTruckLoading } from 'react-icons/fa';
 import _ from 'lodash';
 
@@ -29,6 +30,15 @@ function Loja() {
   const [filter, setFilter] = useState({ product_type: [], gender: [] });
   const page = useRef(1);
   const pageLoading = useRef(false);
+
+  const meta = {
+    titlePage: "Uniformes Ecommerce | Loja",
+    titleSearch: "Profit Uniformes | Loja",
+    description: "Uniformes e bonés personalizados para sua empresa, universidade, time e muito mais. Venha conhecer nossos modelos e suas possibilidades de personalização!",
+    keyWords: "Uniformes | Loja | Ecommerce | Profit",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   const inputSearch = useRef(null);
   const history = useHistory();
@@ -230,6 +240,7 @@ function Loja() {
 
   return (
     <div className="shop">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="search">
         <input
           id="search"

@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
-import api from "../../services/api";
-import { LoginContext } from "../../contexts/LoginContext";
-import "./Carrinho.css";
-import CartProduct from "./Components/CartProduct";
-import ShippingCalc from "./Components/ShippingCalc";
+import React, { useEffect, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import api from '../../services/api';
+import { LoginContext } from '../../contexts/LoginContext';
+import CartProduct from './Components/CartProduct';
+import MetaData from '../../meta/reactHelmet';
+import ShippingCalc from './Components/ShippingCalc';
+import './Carrinho.css';
 
 function Carrinho() {
   const history = useHistory();
@@ -14,6 +15,15 @@ function Carrinho() {
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
   const [shipping, setShipping] = useState();
+
+  const meta = {
+    titlePage: "Uniformes E-commerce | Carrinho",
+    titleSearch: "Carrinho",
+    description: "Seu carrinho de compras em Profit",
+    keyWords: "Carrinho",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   async function handleChangeAmount(number, product_key) {
     try {
@@ -78,6 +88,7 @@ function Carrinho() {
 
   return (
     <div className="cardContainer">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1 className="cartTitle">Carrinho</h1>
       <div className="cartTable">
         <table className="table">

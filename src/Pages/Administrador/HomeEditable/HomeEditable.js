@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-
+import { Helmet } from "react-helmet";
+import MetaData from "../../../meta/reactHelmet";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
@@ -9,8 +10,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import Button from "@material-ui/core/Button";
 
@@ -20,29 +21,34 @@ import { LoginContext } from "../../../contexts/LoginContext";
 import "./HomeEditable.css";
 import { useHistory } from "react-router-dom";
 
-function SelectedImages({ srcImg, altImg, whoWeAre = false, setSelectedImage, SelectedImage }) {
+function SelectedImages({
+  srcImg,
+  altImg,
+  whoWeAre = false,
+  setSelectedImage,
+  SelectedImage,
+}) {
   const handleClick = () => {
     setSelectedImage(!SelectedImage);
   };
-  
-  if(!whoWeAre){
+
+  if (!whoWeAre) {
     return (
       <div
-        className={SelectedImage ? "boxOutsideImage selected" : "boxOutsideImage"}
+        className={
+          SelectedImage ? "boxOutsideImage selected" : "boxOutsideImage"
+        }
         onClick={handleClick}
       >
         <img src={srcImg} alt={altImg} />
       </div>
     );
-  }else{
-      return (
-        <div
-          className={"boxOutsideImage"}
-        >
-          <img src={srcImg} alt={altImg} />
-        </div>
-      );
-
+  } else {
+    return (
+      <div className={"boxOutsideImage"}>
+        <img src={srcImg} alt={altImg} />
+      </div>
+    );
   }
 }
 
@@ -75,10 +81,8 @@ function InputsOrIconWithInput({
 }
 
 function HomeEditable() {
-
   const { token } = useContext(LoginContext);
   const history = useHistory();
-  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiYTM0MWQzMi1iMTMtNGY0Mi1jYTNlLTIwNTc4NGMxYzU2IiwibmFtZSI6Ikd1c3Rhdm8gQWRtaW4gMSIsImZpcmViYXNlX3VpZCI6IkNwNWNDUUlwVHpacHJJUXd0WFBUWXF4SVpXeDEiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6Imd1c3Rhdm9AZW1haWwuY29tIiwiY3BmIjoiMTIzNDU2Nzg5NjYiLCJjcmVhdGVkX2F0IjoiMjAyMC0xMi0xNSAyMDozMDo0OCIsInVwZGF0ZWRfYXQiOiIyMDIwLTEyLTE1IDIwOjMwOjQ4In1dLCJpYXQiOjE2MDgwNjQzOTEsImV4cCI6MTYxMDY1NjM5MX0.VPOhngRZnI42o344HpJM3CCCE4STSYbHHTC-nICDGzM";
 
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
@@ -103,6 +107,16 @@ function HomeEditable() {
   const [imagemCarousel04, setImagemCarousel04] = useState(false);
   const [imagemCarousel05, setImagemCarousel05] = useState(false);
 
+  const meta = {
+    titlePage: "Administrador | Home",
+    titleSearch: "Home Profit",
+    description:
+      "Venha conhecer mais da nossa loja. Nessa página você encontra nossos dados de contato e uma breve história nossa.",
+    keyWords: "Redes Sociais, Quem somos, História, Profit",
+    imageUrl: "",
+    imageAlt: "",
+  };
+
   const arrayImages = [
     imagemCarousel01,
     imagemCarousel02,
@@ -110,6 +124,7 @@ function HomeEditable() {
     imagemCarousel04,
     imagemCarousel05,
   ];
+
   const arrayStateImages = [
     setImagemCarousel01,
     setImagemCarousel02,
@@ -151,47 +166,47 @@ function HomeEditable() {
   // UseEffect para inicializar as informações da Home
   useEffect(() => {
     async function getHomeInfo() {
-
       try {
         const response = await api.get("/home/info", {
           headers: { authorization: `bearer ${token}` },
         });
+        
+        if(response.data){
+          const textWhoWeAre = response.data.filter((item) =>
+            item.key === "textWhoWeAre" ? item.data : null
+          )[0];
+          const textProducts = response.data.filter((item) =>
+            item.key === "textProducts" ? item.data : null
+          )[0];
+          const cellphone = response.data.filter((item) =>
+            item.key === "cellphone" ? item.data : null
+          )[0];
+          const address = response.data.filter((item) =>
+            item.key === "address" ? item.data : null
+          )[0];
+          const facebookLink = response.data.filter((item) =>
+            item.key === "facebookLink" ? item.data : null
+          )[0];
+          const instagramLink = response.data.filter((item) =>
+            item.key === "instagramLink" ? item.data : null
+          )[0];
+          const whatsAppNumber = response.data.filter((item) =>
+            item.key === "whatsAppNumber" ? item.data : null
+          )[0];
+          setTextoQuemSomos(textWhoWeAre.data);
+          setTextoProdutos(textProducts.data);
+          setTelephoneInfo(cellphone.data);
+          setEnderecoInfo(address.data);
+          setFacebookInfo(facebookLink.data);
+          setInstagramInfo(instagramLink.data);
+          setWhatsappInfo(whatsAppNumber.data);
+        }
   
-        const textWhoWeAre = response.data.filter((item) =>
-          item.key === "textWhoWeAre" ? item.data : null
-        )[0];
-        const textProducts = response.data.filter((item) =>
-          item.key === "textProducts" ? item.data : null
-        )[0];
-        const cellphone = response.data.filter((item) =>
-          item.key === "cellphone" ? item.data : null
-        )[0];
-        const address = response.data.filter((item) =>
-          item.key === "address" ? item.data : null
-        )[0];
-        const facebookLink = response.data.filter((item) =>
-          item.key === "facebookLink" ? item.data : null
-        )[0];
-        const instagramLink = response.data.filter((item) =>
-          item.key === "instagramLink" ? item.data : null
-        )[0];
-        const whatsAppNumber = response.data.filter((item) =>
-          item.key === "whatsAppNumber" ? item.data : null
-        )[0];
-  
-        setTextoQuemSomos(textWhoWeAre.data);
-        setTextoProdutos(textProducts.data);
-        setTelephoneInfo(cellphone.data);
-        setEnderecoInfo(address.data);
-        setFacebookInfo(facebookLink.data);
-        setInstagramInfo(instagramLink.data);
-        setWhatsappInfo(whatsAppNumber.data);
       } catch (error) {
-        history.push("/errorPage");
+        // history.push("/errorPage");
         console.warn(error);
       }
     }
-
 
     getHomeInfo();
   }, []);
@@ -274,17 +289,15 @@ function HomeEditable() {
 
     fileData.onload = function () {
       const fileLoaded = fileData.result;
-
       setImagesCarousel([
         ...imagesCarousel,
         {
           file: fileLoaded,
           imgSrc: inputCarousel.current.files[0],
-          imgAlt: "Imagem Carrossel 33",
+          imgAlt: "Profit Uniformes",
           imgPlace: "carousel",
         },
       ]);
-
     };
   }
 
@@ -295,7 +308,6 @@ function HomeEditable() {
     const indexToExclude = [];
 
     arrayImages.forEach((item, index) => {
-
       if (item) {
         indexToExclude.push(index);
 
@@ -305,8 +317,7 @@ function HomeEditable() {
         newExcludedCarouselImages.push(imagesCarousel[index]);
 
         setExcludedCarouselImages(newExcludedCarouselImages);
-      } 
-
+      }
     });
 
     const newImagesCarousel = [];
@@ -318,7 +329,7 @@ function HomeEditable() {
       else newImagesCarousel.push(element);
     }
 
-    setImagesCarousel(newImagesCarousel)
+    setImagesCarousel(newImagesCarousel);
   }
 
   // Manipulação para as imagens de Quem Somos
@@ -337,7 +348,7 @@ function HomeEditable() {
       setImagesWhoWeAre({
         file: fileLoaded,
         imgSrc: inputWhoWeAre.current.files[0],
-        imgAlt: "Imagem Quem somos 32",
+        imgAlt: "Profit Uniformes",
         imgPlace: "whoWeAre",
       });
     };
@@ -370,7 +381,7 @@ function HomeEditable() {
         {
           file: fileLoaded,
           imgSrc: inputProducts.current.files[0],
-          imgAlt: inputProducts.current.files[0].name,
+          imgAlt: 'Profit Uniformes',
           imgPlace: "products",
         },
       ]);
@@ -384,7 +395,6 @@ function HomeEditable() {
     const indexToExclude = [];
 
     arrayImagesProducts.forEach((item, index) => {
-
       if (item) {
         indexToExclude.push(index);
 
@@ -394,8 +404,7 @@ function HomeEditable() {
         newExcludedProductsImages.push(imagesProducts[index]);
 
         setExcludedProductsImages(newExcludedProductsImages);
-      } 
-
+      }
     });
 
     const newImagesProducts = [];
@@ -407,18 +416,29 @@ function HomeEditable() {
       else newImagesProducts.push(element);
     }
 
-    setImagesProducts(newImagesProducts)
+    setImagesProducts(newImagesProducts);
   }
 
   // useEffect para excluir elementos
-  useEffect(() => {
-  }, [imagesCarousel]);
+  useEffect(() => {}, [imagesCarousel]);
 
   // Função para salvar as informações depois de editar a Home
   async function handleSaveChanges() {
     setLoading(true);
     // Salva mudanças de Home Info
     try {
+      const objTeste = {
+        textWhoWeAre: textoQuemSomos,
+        textProducts: textoProdutos,
+        contactInfo: {
+          cellphone: telephoneInfo,
+          address: enderecoInfo,
+          facebookLink: facebookInfo,
+          instagramLink: instagramInfo,
+          whatsAppNumber: whatsappInfo,
+        },
+      }
+      console.log('home info', objTeste);
       await api.put(
         "/home/info",
         {
@@ -442,12 +462,10 @@ function HomeEditable() {
 
     // Salva mudanças de Home Images
     try {
-
       // Deleta imagens para colocar novas - Carrossel
       if(excludedCarouselImages[0]){
-
+        console.log('excludedCarouselImages', excludedCarouselImages);
         excludedCarouselImages.forEach(async (item) => {
-
           if (item.file.includes(bucketAWS)) {
             const nameWithType = item.file.split(".com/")[1];
             const name = nameWithType.split(".")[0];
@@ -461,6 +479,7 @@ function HomeEditable() {
 
       // Deleta imagens para colocar novas - Who We Are
       if(excludedWhoWeAreImages.file){
+        console.log('excludedWhoWeAreImages', excludedWhoWeAreImages);
         if (excludedWhoWeAreImages.file.includes(bucketAWS)) {
           const nameWithType = excludedWhoWeAreImages.file.split(".com/")[1];
           const name = nameWithType.split(".")[0];
@@ -473,6 +492,7 @@ function HomeEditable() {
 
       // Deleta imagens para colocar novas - Products
       if(excludedProductsImages[0]){
+        console.log('excludedProductsImages', excludedProductsImages);
         excludedProductsImages.forEach(async (item) => {
           if (item.file.includes(bucketAWS)) {
             const nameWithType = item.file.split(".com/")[1];
@@ -488,7 +508,7 @@ function HomeEditable() {
       // Inicializa
       // setImagesHome([])
       // Posta novas imagens
-      if (imagesCarousel[0].file) {
+      if (imagesCarousel[0] && imagesCarousel[0].file) {
 
         imagesCarousel.map(async (item) => {
           if (!item.file.includes(bucketAWS)) {
@@ -510,7 +530,6 @@ function HomeEditable() {
       }
 
       if (imagesWhoWeAre.file) {
-
         if (!imagesWhoWeAre.file.includes(bucketAWS)) {
           let objImage = new FormData();
           objImage.append("file", imagesWhoWeAre.imgSrc);
@@ -527,7 +546,7 @@ function HomeEditable() {
         }
       }
 
-      if (imagesProducts[0].file) {
+      if (imagesProducts[0] && imagesProducts[0].file) {
 
         imagesProducts.map(async (item) => {
           if (!item.file.includes(bucketAWS)) {
@@ -548,15 +567,14 @@ function HomeEditable() {
       }
 
       setTimeout(() => {
-        setLoading(false)
+        setLoading(false);
         setOpen(true);
-      }
-      , 3000);
+      }, 3000);
 
       // Refresh da página
       window.location.reload();
-
     } catch (err) {
+      setLoading(false)
       console.warn(err.message);
       return err.message;
     }
@@ -565,15 +583,32 @@ function HomeEditable() {
   const [open, setOpen] = useState(false);
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
 
+  const handleTextWhoWeAre = (value) => {
+    console.log('text who we are', value)
+    setTextoQuemSomos(value);
+  }
+
+  const handleProducts = (value) => {
+    setTextoProdutos(value);
+  }
+
   return (
     <div className="HomeEditableContent">
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="carouselPart">
         <div className="titleArea">
           <h1>
@@ -648,7 +683,7 @@ function HomeEditable() {
           <div className="textWhoWeAre">
             <textarea
               defaultValue={textoQuemSomos}
-              onChange={(e) => setTextoQuemSomos(e.target.value)}
+              onChange={(e) => handleTextWhoWeAre(e.target.value)}
             />
           </div>
         </div>
@@ -718,7 +753,7 @@ function HomeEditable() {
           <div className="textProducts">
             <textarea
               defaultValue={textoProdutos}
-              onChange={(e) => setTextoProdutos(e.target.value)}
+              onChange={(e) => handleProducts(e.target.value)}
             />
           </div>
         </div>
@@ -847,7 +882,12 @@ function HomeEditable() {
         {loading ? <CircularProgress color="secondary" /> : "SALVAR ALTERAÇÕES"}
       </Button>
       <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-        <MuiAlert onClose={handleClose} elevation={6} variant="filled" severity="success">
+        <MuiAlert
+          onClose={handleClose}
+          elevation={6}
+          variant="filled"
+          severity="success"
+        >
           Alterações realizadas com sucesso!
         </MuiAlert>
       </Snackbar>

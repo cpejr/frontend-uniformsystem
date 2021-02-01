@@ -132,7 +132,7 @@ function Carrinho() {
           width: "35vw",
           paddingLeft: "67vw",
           paddingBottom: "15vh",
-          paddingTop: "70vh",
+          paddingTop: "50vh",
         }}
       >
         {products.length > 0 && (

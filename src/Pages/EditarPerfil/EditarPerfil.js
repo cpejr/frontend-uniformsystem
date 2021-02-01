@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useRef, useContext } from "react";
-
-=======
-import React, { useState, useEffect, useRef } from "react";
 import {Helmet} from 'react-helmet';
 import MetaData from '../../meta/reactHelmet';
->>>>>>> origin/master
 import { withRouter } from "react-router-dom";
 
 import {
@@ -50,7 +45,7 @@ function validateInput(type, value) {
   }
 
   if (type === "CEP") {
-    if (isNaN(Number(value)) || value.length < 8 || value === "") {
+    if (value.length < 8 || value === "") {
       isValid = false;
     } else {
       isValid = true;
@@ -70,7 +65,7 @@ function validateInput(type, value) {
   }
 
   if (type === "telefone") {
-    if (isNaN(Number(value)) || value.length < 8 || value === "") {
+    if (value.length < 8 || value === "") {
       isValid = false;
     } else {
       isValid = true;
@@ -115,10 +110,7 @@ function EditarPerfil({ history }) {
   const [errorTelefone, setErrorTelefone] = useState(false);
   const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
-<<<<<<< HEAD
   const [userInfo, setUserInfo] = useState({ name: user[0].name });
-=======
->>>>>>> origin/master
   const [addressInfo, setAddressInfo] = useState();
   const [addressId, setAddressId] = useState();
 
@@ -146,31 +138,19 @@ function EditarPerfil({ history }) {
   }
 
   useEffect(() => {
-<<<<<<< HEAD
     getUserAddress();
   }, []);
-=======
-    getUserData();
-  }, []); // executa assim que carregar a página
->>>>>>> origin/master
-
-  // useEffect(() => {
-  //   console.log(addressInfo);
-  //   console.log(userInfo);
-  // }, [addressInfo, userInfo])
 
   async function getUserAddress() {
     const response = await api.get("/address", {
-<<<<<<< HEAD
       headers: {
         Authorization: `Bearer ${token}`
       },
-=======
-      headers: { authorization: `Bearer ${token}` },
->>>>>>> origin/master
     });
+    console.log(response);
+
     setAddressInfo({ ...response.data.adresses[0] });
-    setUserInfo({ user: user[0].name });
+    setUserInfo({ name: user[0].name });
   }
 
   const handleCloseSnackBar = (event, reason) => {
@@ -320,12 +300,24 @@ function EditarPerfil({ history }) {
       setErrorTelefone(false);
       setErrorTelefoneMessage("");
 
+      const str1 = addressInfo.rua;
+      const str2 = addressInfo.number;
+
+      const halfStreet = str1.concat(',');
+      const street = halfStreet.concat(str2);
+
+     // setAddressInfo({ ...addressInfo, street: street });
+
+      delete addressInfo['number'];
+      delete addressInfo['rua'];
+
       const newData = {
-        updatedFields: { ...addressInfo }
+        updatedFields: { ...addressInfo, street: street }
       }
+
       delete newData.updatedFields['address_id'];
-      delete newData.updatedFields['number'];
       delete newData.updatedFields['user_id'];
+
       console.log(newData);
 
       const newUser = {
@@ -336,31 +328,16 @@ function EditarPerfil({ history }) {
       try {
         setLoading(true);
 
-<<<<<<< HEAD
         const response = await api.put(
           `address/${parseInt(addressInfo.address_id, 10)}`,
           newData, 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
-=======
-        const addressId = addressInfo.address_id
-        delete addressInfo['address_id'];
-        delete addressInfo['user_id'];
-
-        const updated_fields = {
-            "updatedFields": { ...addressInfo }
-        }
-
-        const response = await api.put(`/address/${addressId}`,
-            updated_fields,
-            {
-                headers: { authorization: `bearer ${token}` },
-            }
->>>>>>> origin/master
         );
         console.log(response);
 
+        console.log(newUser);
         const responseUser = await api.put(
           `user/${user[0].user_id}`,
           newUser,
@@ -384,7 +361,6 @@ function EditarPerfil({ history }) {
   };
 
   const handleInputChange = (e, type) => {
-<<<<<<< HEAD
     let newUserInfo;
     let newAddressInfo;
   
@@ -395,9 +371,9 @@ function EditarPerfil({ history }) {
       setUserInfo({ ...newUserInfo });
     }
   
-    if(type === 'street'){
+    if(type === 'rua'){
       newAddressInfo = {
-        street: e.target.value
+        rua: e.target.value
       }
       setAddressInfo({ ...addressInfo, ...newAddressInfo })
     }
@@ -447,55 +423,6 @@ function EditarPerfil({ history }) {
     }
   }
 
-=======
-    let newInfo;
-    let newUserInfo;
-    if(type === 'name'){
-        newUserInfo = {
-            name: e.target.value
-        }
-    }
-
-    if(type === 'street'){
-        newInfo = {
-            street: e.target.value
-        }
-    }
-
-    if(type === 'complement'){
-        newInfo = {
-            complement: e.target.value
-        }
-    }
-
-    if(type === 'neighborhood'){
-        newInfo = {
-            neighborhood: e.target.value
-        }
-    }
-
-    if(type === 'zip_code'){
-        newInfo = {
-            zip_code: e.target.value
-        }
-    }
-
-    if(type === 'city'){
-        newInfo = {
-            city: e.target.value
-        }
-    }
-
-    if(type === 'state'){
-      newInfo = {
-          state: e.target.value
-      }
-  }
-
-    setAddressInfo({...addressInfo, ...newInfo});
-}
-
->>>>>>> origin/master
   const estados = [
     "AC",
     "AL",
@@ -544,15 +471,9 @@ function EditarPerfil({ history }) {
         helperText={errorNameMessage}
         className={classes.largeInput}
         variant="outlined"
-<<<<<<< HEAD
         defaultValue={user[0].name}
         onChange={(e) => handleInputChange(e, 'name')}
       />)}
-=======
-        defaultValue="blablaaa"
-        onChange={(e) => handleInputChange(e, 'name')}
-      />
->>>>>>> origin/master
 
       <h1 className={classes.subTitle}>ENDEREÇO</h1>
       <div className="horizontalInput">
@@ -566,12 +487,8 @@ function EditarPerfil({ history }) {
             helperText={errorRuaMessage}
             className={classes.mediumInput}
             variant="outlined"
-            defaultValue={addressInfo.street}
-<<<<<<< HEAD
-=======
-            className={classes.mediumInput}
->>>>>>> origin/master
-            onChange={(e) => handleInputChange(e, 'street')}
+            defaultValue={(addressInfo.street).split(',')[0]}
+            onChange={(e) => handleInputChange(e, 'rua')}
           />
         )}
         <h1 className={classes.caption}>N°</h1>
@@ -584,7 +501,7 @@ function EditarPerfil({ history }) {
             error={errorNum}
             helperText={errorNumMessage}
             className={classes.smallInput}
-            defaultValue={addressInfo.number}
+            defaultValue={(addressInfo.street).split(',')[1]}
             variant="outlined"
             onChange={(e) => handleInputChange(e, 'number')}
           />}
@@ -633,10 +550,6 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             defaultValue={addressInfo.zip_code}
             onChange={(e) => handleInputChange(e, 'zip_code')}
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
           />
         )}
         <h1 className={classes.caption}>Cidade</h1>
@@ -662,10 +575,7 @@ function EditarPerfil({ history }) {
             error={errorEstado}
             helperText={errorEstadoMessage}
             className={classes.smallInput}
-<<<<<<< HEAD
             defaultValue={addressInfo.state}
-=======
->>>>>>> origin/master
             onChange={(e) => handleInputChange(e, 'state')}
             variant="outlined"
           >
@@ -688,10 +598,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.complement}
-<<<<<<< HEAD
             // onChange={(e) => handleInputChange(e, 'complement')}
-=======
->>>>>>> origin/master
           />
         )}
       </div>

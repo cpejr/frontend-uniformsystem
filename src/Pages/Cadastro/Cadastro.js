@@ -91,7 +91,7 @@ function validateInput(type, value) {
   }
 
   if (type === "telefone") {
-    if ( value.length < 8 || value === "" ) {
+    if (value.length < 8 || value === "" ) {
       isValid = false;
     } else {
       isValid = true;
@@ -445,7 +445,7 @@ function Cadastro({ history }) {
       const str1 = addressInfo.rua;
       const str2 = addressInfo.number;
 
-      const halfStreet = str1.concat(" ");
+      const halfStreet = str1.concat(',');
       const street = halfStreet.concat(str2);
 
       console.log('street = ', street);

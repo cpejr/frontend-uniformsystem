@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import api from "../../services/api";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import "./Pedidos.css";
 
 import SidebarAdm from "../../components/SidebarAdm";
@@ -21,6 +22,15 @@ export default function Pedidos() {
     const [OnlyPending, setOnlyPending] = useState(false);
 
     const [InputID, setInputID] = useState(0);
+
+    const meta = {
+        titlePage: "Uniformes Ecommerce | Pedidos",
+        titleSearch: "Profit Uniformes | Pedidos",
+        description: "Confira as informações do seu pedido e o status de entrega.",
+        keyWords: "Uniformes | Pedidos | Entrega | Ecommerce | Profit",
+        imageUrl: "",
+        imageAlt: "",
+      }
 
 /*     useEffect(() => {
         getOrders().then((newOrders) => {
@@ -150,6 +160,7 @@ export default function Pedidos() {
     }
     return (
         <div className='orders_page'>
+            <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
             <div className='sideBar'>
                 <SidebarAdm />
             </div>

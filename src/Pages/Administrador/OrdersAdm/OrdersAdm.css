@@ -127,9 +127,31 @@ th {
   width: 120%;
 }
 
+.adm_orders_id tr {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+}
+
+.adm_orders_id tr a svg{
+  font-size: 30px;
+  color: #666;
+  cursor: pointer;
+}
+
+.adm_orders_id tr a svg:hover{
+  color: #007bff;
+}
+
 .adm_orders_status {
   border-bottom: 1px solid #323131;
   width: 100%;
+}
+
+.evento_pendente{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 @media (max-width: 808px) {

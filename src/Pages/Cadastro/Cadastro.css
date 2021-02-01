@@ -1,70 +1,37 @@
-h1,
-h2,
-button,
-span,
-strong,
-label {
-  font-family: "Century Gothic";
-}
 
-.divInputLabelError input {
-  outline: none;
-  max-width: 70%;
-}
-
-.fullContent label {
-  margin: 0 !important;
-  font-size: 15px;
-}
-
-.fullContent {
-  width: 90%;
-  height: 100%;
-
-  padding: 20px 0;
-
-  margin: 20px auto;
-}
-
-.fullContent h1 {
-  width: 90%;
-  font-size: 48px;
-  line-height: 49px;
-  align-self: flex-start;
-  margin-bottom: 20px;
-}
-
-.mainContent {
+.registerEmployeeFullContent {
   width: 100%;
+  padding: 30px;
+};
 
+.registerEmployeeFullContent .titleCad2 {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
+  margin-top: 30px !important; 
 }
 
-.leftSide {
-  width: 60%;
+.titleLineExp2 {
+  border-top: 3px solid #4dcdbc;
+  border-radius: 20px;
+  width: 52%;
+  margin-left: 0.5%;
+  margin-top: -1%;
+  margin-bottom: 5%;
+}
+
+.divInputLabelError2{
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: center;
 }
 
-.leftSide .aboutProduct {
-  width: 90%;
-  margin-bottom: 32px;
-
-  padding: 60px 10px;
+.buttonCad2 {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
+  margin-top: 3%;
+  margin-left: 25%;
 
-  align-self: flex-start;
-
-  border: 1px solid rgb(167, 162, 162);
-}
-
-.fullContent .purchaseFinished {
   background-color: #0ec4ab;
   padding: 8px 70px;
   outline: none;
@@ -74,7 +41,37 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
+.horizontalInput {
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+
+  align-items: center;
+}
+
+.horizontalInput + .horizontalInput{
+  margin-top: 12px;
+}
+
+.MuiTextField-root {
+    border: 2px solid;
+}
+
+.purchaseFinished{
+
+  background-color: #0EC4AB;
+  padding: 8px 70px;
+  outline: none;
+  border: 1px solid rgb(167, 162, 162);
+  border-radius: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   font-size: 35px;
   font-weight: normal;
   margin-top: 24px;
@@ -82,109 +79,8 @@ label {
   transition: background-color 0.6s ease;
 }
 
-.fullContent .purchaseFinished:hover {
-  background-color: #9ccac4;
-}
-
-.MuiAccordion-root {
-  width: 90%;
-  background-color: #8ed7cd !important;
-  border: 0.7px solid #ccc;
-}
-
-@media (max-width: 800px) {
-  .mainContent {
-    width: 100%;
-
-    display: flex;
+@media(max-width: 800px){
+  .horizontalInput {
     flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-  }
-
-  .mainContent .leftSide,
-  .rightSide {
-    width: 90%;
-    margin: 0 auto;
-  }
-
-  .mainContent .leftSide .aboutProduct {
-    width: 100%;
-  }
-
-  .fullContent .purchaseFinished {
-    padding: 8px 10px;
-    width: 60%;
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-  }
-}
-
-.inputsTogetherCad {
-  padding: 5px;
-  border: 3px solid black;
-  margin-top: 40px;
-  line-height: 30px;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  margin: auto;
-  margin-bottom: 60px !important;
-}
-.inputsTogetherCad * {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 500px;
-}
-
-.titleCad {
-  display: flex;
-  justify-content: center;
-  margin-top: 5%;
-}
-
-.buttonCad {
-  display: flex;
-  justify-content: center;
-}
-
-.inputsEndereço {
-  margin-bottom: 5%;
-}
-
-.buttonCad {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  margin-bottom: 12px;
-
-  background-color: #0ec4ab;
-  padding: 8px 70px;
-  outline: none;
-  border: 1px solid rgb(167, 162, 162);
-  border-radius: 43px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.divInputLabelError {
-  width: 750px;
-}
-
-@media (max-width: 800px) {
-  .inputsTogetherCad {
-    display: flex;
-    justify-content: space-evenly;
-    width: 300px;
-  }
-  .divInputLabelError {
-    width: 400px;
-  }
-  .buttonCad{
-    width: 280px;
   }
 }

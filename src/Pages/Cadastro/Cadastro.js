@@ -17,6 +17,8 @@ import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
 
 import "./Cadastro.css";
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 
 function validateInput(type, value) {
   let isValid;
@@ -520,8 +522,19 @@ function Cadastro({ history }) {
     "TO",
   ];
 
+  const meta = {
+    titlePage: "Uniformes Ecommerce | Cadastro",
+    titleSearch: "Profit Uniformes | Cadastro",
+    description: "Cadastre-se no nosso ecommerce e tenha a melhor experiência possível com sua conta profit e nossos uniformes personalizados!",
+    keyWords: "Uniformes | Cadastro | Ecommerce | Profit",
+    imageUrl: "",
+    imageAlt: "",
+  }
+
   return (
+
     <div className="registerEmployeeFullContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1 className={classes.mainTitle}>
         CADASTRO
         <span className={classes.spanInsideTitle} />
@@ -532,6 +545,7 @@ function Cadastro({ history }) {
         <h1 className={classes.caption}>Nome</h1>
           <TextField
             required
+
             label="Nome"
             InputLabelProps={{
               classes: {

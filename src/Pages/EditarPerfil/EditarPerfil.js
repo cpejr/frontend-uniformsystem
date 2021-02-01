@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import { withRouter } from "react-router-dom";
 
 import {
@@ -124,6 +125,15 @@ function EditarPerfil({ history }) {
 
   const [loading, setLoading] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  const meta = {
+    titlePage: "Uniformes E-commerce | Editar Perfil",
+    titleSearch: "Editar Perfil",
+    description: "Mude seus dados pessoais do seu perfil de usuário",
+    keyWords: "Editar perfil",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   useEffect(() => {
     getUserData();
@@ -396,6 +406,7 @@ function EditarPerfil({ history }) {
 
   return (
     <div className="registerEmployeeFullContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1 className={classes.mainTitle}>
         EDITAR DADOS PESSOAIS
         <span className={classes.spanInsideTitle} />

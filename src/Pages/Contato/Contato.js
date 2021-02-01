@@ -6,6 +6,8 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import api from "../../services/api";
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import { HiOutlineMail } from "react-icons/hi";
 import "./Contato.css";
 
@@ -16,6 +18,16 @@ function Contato() {
   const [EnderecoInfo, setEnderecoInfo] = useState("");
   const [InstagramInfo, setInstagramInfo] = useState("");
   const [WhatsappInfo, setWhatsappInfo] = useState("");
+
+  const meta = {
+    titlePage: "Uniformes E-commerce | Contato",
+    titleSearch: "Contato Profit Uniformes",
+    description: "Entre em contato conosco!",
+    keyWords: "Contato",
+    imageUrl: "",
+    imageAlt: "",
+  }
+
   useEffect(() => {
     async function getContactInfo() {
       try {
@@ -50,6 +62,7 @@ function Contato() {
   }, []);
   return (
     <div className="divPagContato">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="fundoCinza">
         <div className="divFundoBrancoContato">
           <div className="tituloContato">

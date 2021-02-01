@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,700;1,300&display=swap%27');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,700;1,300&display=swap%27");
 
-
-#root{
+#root {
   overflow: hidden;
 }
 
-body{
+body {
   margin: 0;
-  font-family: Roboto Condensed, sans-serif !important; 
+  font-family: Roboto Condensed, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-body input, body button{
+body input,
+body button {
   outline: none !important;
 }
 

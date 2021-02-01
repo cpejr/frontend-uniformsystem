@@ -1,0 +1,119 @@
+.fullContentSidebar {
+  height: 100%;
+  width: 400px;
+  border-right: 2px solid #707070;
+}
+
+.fullContentSidebar ul {
+  max-height: 400px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.fullContentSidebar ul li {
+  width: 100%;
+
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.fullContentSidebar ul li div:focus {
+  background-color: #707070;
+}
+
+.MuiDrawer-root .MuiSvgIcon-root {
+  font-size: 35px !important;
+}
+
+.fullContentSidebar ul li span {
+  font-size: 25px;
+}
+
+/* Aumentar o tamanho da altura */
+.sidebarClient .PrivateHiddenCss-xsDown-8,
+.sidebarClient .PrivateHiddenCss-xsDown-8 .MuiDrawer-root,
+.sidebarClient
+  .PrivateHiddenCss-xsDown-8
+  .MuiDrawer-root
+  div
+  .sidebarClient
+  .PrivateHiddenCss-xsDown-8
+  .MuiDrawer-root
+  div
+  ul {
+  height: 100%;
+}
+
+.sidebarClient {
+  min-height: 90vh;
+  display: flex;
+}
+/* Tira barra azul da sidebarClient */
+.sidebarClient .MuiAppBar-root {
+  height: 100%;
+  width: 85px;
+  display: none !important;
+  margin-top: 174px;
+}
+
+.sidebarClient .MuiPaper-root {
+  position: relative;
+}
+
+.sidebarClient .MuiList-root a {
+  color: #201f24;
+  text-decoration: none;
+}
+
+.sidebarListaClient{
+  width: 220px;
+}
+@media (max-width: 849px) {
+  .sidebarClient .MuiList-root a {
+    color: #201f24;
+    text-decoration: none;
+  }
+
+  .sidebarClient .MuiPaper-root {
+    display: none;
+  }
+
+  /* Tira barra azul da sidebarClient */
+  .sidebarClient .MuiAppBar-root {
+    height: 100%;
+    width: 85px;
+    margin-top: 174px;
+  }
+
+  .fullContentSidebar {
+    display: block;
+  }
+}
+
+@media (max-width: 849px) {
+  .sidebarClient .MuiToolbar-root {
+    position: fixed;
+    background-color: #201f24;
+    top: 0;
+  }
+
+  .sidebarClient .MuiAppBar-root {
+    height: 100%;
+    width: 85px;
+    display: block !important;
+  }
+  .sidebarClient .MuiAppBar-positionFixed {
+    height: auto;
+    position: fixed;
+    width: 85px;
+  }
+}

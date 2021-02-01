@@ -2,9 +2,9 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
   min-width: 100%;
-  overflow: auto;
-  padding: 0 20px;
+  padding: 30px 20px;
   padding-right: 8vw;
 }
 
@@ -25,6 +25,11 @@ td {
   margin: 0 auto;
   padding: 15px;
   margin-right: 15px;
+}
+
+.cartTable .table {
+  height: 100%;
+  width: 100%;
 }
 
 .productInfo {
@@ -86,13 +91,14 @@ td {
 
 .cartTitle {
   margin-left: 10%;
+  align-self: flex-start;
   text-decoration: underline;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
 .checkoutButton {
-  margin-top: 5vh;
+  /* margin-top: 5vh; */
   height: 50px;
   width: 300px;
   align-self: flex-end;
@@ -103,10 +109,11 @@ td {
   font-weight: 400;
   transition: 0.5s;
 }
-.buttonSize {
-  display: flex;
-  padding-left: 35vw;
+.cardContainer .buttonSize {
   width: 35vw;
+  display: flex;
+  align-self: flex-end;
+  margin-right: 40px;
 }
 
 .checkoutButton:hover {

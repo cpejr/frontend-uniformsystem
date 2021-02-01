@@ -109,19 +109,9 @@ function EditarPerfil({ history }) {
   const [errorTelefone, setErrorTelefone] = useState(false);
   const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
-  const [name, setName] = useState("");
-  const [rua, setRua] = useState("");
-  const [num, setNum] = useState(0);
-  const [complemento, setComplemento] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [CEP, setCEP] = useState(0);
-  const [cidade, setCidade] = useState("");
-  const [estado, setEstado] = useState("");
-  const [pontoRef, setPontoRef] = useState("");
-  const [telefone, setTelefone] = useState(0);
-
-  const [userInfo, setUserInfo] = useState();
+  const [userInfo, setUserInfo] = useState({ name: user[0].name });
   const [addressInfo, setAddressInfo] = useState();
+  const [addressId, setAddressId] = useState();
 
   const nomeInput = useRef(null);
   const ruaInput = useRef(null);
@@ -136,11 +126,15 @@ function EditarPerfil({ history }) {
 
   const [loading, setLoading] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
-  let flag = false;
 
   useEffect(() => {
     getUserAddress();
   }, []);
+
+  // useEffect(() => {
+  //   console.log(addressInfo);
+  //   console.log(userInfo);
+  // }, [addressInfo, userInfo])
 
   async function getUserAddress() {
     const response = await api.get("/address", {
@@ -149,8 +143,7 @@ function EditarPerfil({ history }) {
       },
     });
     setAddressInfo({ ...response.data.adresses[0] });
-
-    console.log(addressInfo);
+    setUserInfo({ user: user[0].name });
   }
 
   const handleCloseSnackBar = (event, reason) => {
@@ -300,27 +293,115 @@ function EditarPerfil({ history }) {
       setErrorTelefone(false);
       setErrorTelefoneMessage("");
 
+      const newData = {
+        updatedFields: { ...addressInfo }
+      }
+      delete newData.updatedFields['address_id'];
+      delete newData.updatedFields['number'];
+      delete newData.updatedFields['user_id'];
+      console.log(newData);
+
+      const newUser = {
+        updatedFields: { ...userInfo }
+      }
+      console.log(newUser);
+
       try {
         setLoading(true);
 
-        const response = await api.get(
-          "/address",
+        const response = await api.put(
+          `address/${parseInt(addressInfo.address_id, 10)}`,
+          newData, 
           {
-            headers: { authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-
         console.log(response);
+
+        const responseUser = await api.put(
+          `user/${user[0].user_id}`,
+          newUser,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        console.log(responseUser);
 
         setTimeout(() => {
           setLoading(false);
           setOpenSnackBar(true);
         }, 2000);
+
+        history.push('/');
       } catch (err) {
         console.log(err.message);
+        setLoading(false);
       }
     }
   };
+
+  const handleInputChange = (e, type) => {
+    let newUserInfo;
+    let newAddressInfo;
+  
+    if(type === 'name'){
+      newUserInfo = {
+        name: e.target.value,
+      }
+      setUserInfo({ ...newUserInfo });
+    }
+  
+    if(type === 'street'){
+      newAddressInfo = {
+        street: e.target.value
+      }
+      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+    }
+  
+    if(type === 'number'){
+      newAddressInfo = {
+        number: e.target.value
+      }
+      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+    }
+  
+    if(type === 'city'){
+      newAddressInfo = {
+        city: e.target.value,
+        country: "Brasil"
+      }
+      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+    }
+  
+    if(type === 'neighborhood'){
+      newAddressInfo = {
+        neighborhood: e.target.value
+      }
+      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+    }
+  
+    if(type === 'zip_code'){
+      newAddressInfo = {
+        zip_code: e.target.value
+      }
+      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+    }
+  
+    if(type === 'complement'){
+      newAddressInfo = {
+        complement: e.target.value
+      }
+      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+    }
+  
+    if(type === 'state'){
+      newAddressInfo = {
+        state: e.target.value
+      }
+      console.log(newAddressInfo.state);
+      setAddressInfo({ ...addressInfo, state: e.target.value });
+    }
+  }
 
   const estados = [
     "AC",
@@ -370,6 +451,7 @@ function EditarPerfil({ history }) {
         className={classes.largeInput}
         variant="outlined"
         defaultValue={user[0].name}
+        onChange={(e) => handleInputChange(e, 'name')}
       />)}
 
       <h1 className={classes.subTitle}>ENDEREÇO</h1>
@@ -382,10 +464,10 @@ function EditarPerfil({ history }) {
             inputRef={ruaInput}
             error={errorRua}
             helperText={errorRuaMessage}
+            className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.street}
-            onChange={(event) => setRua(event.target.value)}
-            className={classes.mediumInput}
+            onChange={(e) => handleInputChange(e, 'street')}
           />
         )}
         <h1 className={classes.caption}>N°</h1>
@@ -400,6 +482,7 @@ function EditarPerfil({ history }) {
             className={classes.smallInput}
             defaultValue={addressInfo.number}
             variant="outlined"
+            onChange={(e) => handleInputChange(e, 'number')}
           />}
         <h1 className={classes.caption}>Complemento</h1>
 
@@ -413,7 +496,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.complement}
-            onChange={(event) => setComplemento(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'complement')}
           />
         )}
         <h1 className={classes.caption}>Bairro</h1>
@@ -428,7 +511,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.neighborhood}
-            onChange={(event) => setBairro(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'neighborhood')}
           />
         )}
       </div>
@@ -445,7 +528,7 @@ function EditarPerfil({ history }) {
             variant="outlined"
             className={classes.mediumInput}
             defaultValue={addressInfo.zip_code}
-            onChange={(event) => setCEP(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'zip_code')}
           />
         )}
         <h1 className={classes.caption}>Cidade</h1>
@@ -459,7 +542,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.city}
-            onChange={(event) => setCidade(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'city')}
           />
         )}
         <h1 className={classes.caption}>Estado</h1>
@@ -472,7 +555,7 @@ function EditarPerfil({ history }) {
             helperText={errorEstadoMessage}
             className={classes.smallInput}
             defaultValue={addressInfo.state}
-            onChange={(event) => setEstado(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'state')}
             variant="outlined"
           >
             {estados.map((estado) => (
@@ -492,11 +575,9 @@ function EditarPerfil({ history }) {
             error={errorPontoRef}
             helperText={errorPontoRefMessage}
             className={classes.mediumInput}
-            //InputLabelProps={{shrink: true}}
-            //value="jj"
             variant="outlined"
             defaultValue={addressInfo.complement}
-            onChange={(event) => setPontoRef(event.target.value)}
+            // onChange={(e) => handleInputChange(e, 'complement')}
           />
         )}
       </div>
@@ -533,7 +614,7 @@ function EditarPerfil({ history }) {
           variant="filled"
           severity="success"
         >
-          Funcionário cadastrado com sucesso!
+          Dados alterados com sucesso!
         </MuiAlert>
       </Snackbar>
     </div>

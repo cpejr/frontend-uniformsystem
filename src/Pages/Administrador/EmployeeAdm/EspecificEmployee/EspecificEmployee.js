@@ -44,7 +44,7 @@ function EspecificEmployee({ history }) {
 
   return (
 
-    <div>
+    <div className="especific-employee">
       <MetaData
         titlePage={meta.titlePage}
         titleSearch={meta.titleSearch}
@@ -53,7 +53,10 @@ function EspecificEmployee({ history }) {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      <FaChevronLeft className="setaVoltar" onClick={() => history.goBack()} />
+      <FaChevronLeft
+        className="setaVoltar"
+        onClick={() => history.goBack()}
+      />
       <div className="boxTitle">
         <h1 className="titleFuncExp">FUNCIONÁRIO ESPECÍFICO</h1>
         <hr className="titleLineExp"></hr>

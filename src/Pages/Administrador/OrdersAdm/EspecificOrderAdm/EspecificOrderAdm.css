@@ -23,6 +23,19 @@
   flex-direction: column;
 }
 
+.informations .setaVoltar{
+  position: absolute;
+  font-size: 35px;
+  top: 10px;
+  left: 5px;
+  color: #666;
+  cursor: pointer;
+}
+
+.informations .setaVoltar:hover{
+    color: #007bff;
+}
+
 .informations .arrowBackIcon{
   position: absolute;
   font-size: 35px;

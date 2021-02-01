@@ -79,19 +79,7 @@ function Carrinho() {
   return (
     <div className="cardContainer">
       <h1 className="cartTitle">Carrinho</h1>
-      <div
-        classname="buttonSize"
-        style={{ width: "35vw", paddingLeft: "68vw", paddingBottom: "1vh" }}
-      >
-        {products.length > 0 && (
-          <button
-            className="checkoutButton"
-            onClick={() => history.push("checkout")}
-          >
-            Finalizar Compra
-          </button>
-        )}
-      </div>
+
       <table className="cartTable">
         <thead>
           <tr>
@@ -138,6 +126,24 @@ function Carrinho() {
           </tr>
         </tbody>
       </table>
+      <div
+        classname="buttonSize"
+        style={{
+          width: "35vw",
+          paddingLeft: "67vw",
+          paddingBottom: "15vh",
+          paddingTop: "70vh",
+        }}
+      >
+        {products.length > 0 && (
+          <button
+            className="checkoutButton"
+            onClick={() => history.push("checkout")}
+          >
+            Finalizar Compra
+          </button>
+        )}
+      </div>
     </div>
   );
 }

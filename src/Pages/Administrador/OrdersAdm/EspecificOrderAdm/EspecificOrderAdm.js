@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
+import { FaChevronLeft } from "react-icons/fa";
 import api from "../../../../services/api";
 import "./EspecificOrderAdm.css";
 import camisa from "../../../../Assets/camisa.jpg";
+import { Helmet } from "react-helmet";
+import MetaData from "../../../../meta/reactHelmet";
 import { useHistory } from "react-router-dom";
 import { LoginContext } from "../../../../contexts/LoginContext";
 
@@ -29,6 +32,16 @@ function EspecificOrderAdm(props) {
   const [Code, setCode] = useState([]);
   const [status, setStatus] = useState("pending");
   const history = useHistory();
+
+  const meta = {
+    titlePage: "Administrador | Ordem Específica",
+    titleSearch: "Ordem Específica Profit",
+    description:
+      "Tendo solicitado seu pedido especifique o que é necessário para sua confecção e entrega. É possível também acompanhar o andamento do seu pedido.",
+    keyWords: "Específico, Pedido, Detalhes, Profit",
+    imageUrl: "",
+    imageAlt: "",
+  };
 
   /*function ChangeStatus() {
         setLoadingStatus(true);
@@ -112,9 +125,21 @@ function EspecificOrderAdm(props) {
 
   return (
     <div className="order-container">
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="especific-container">
         <div className="informations">
-          <AiOutlineLeft color="black" size={30} onClick={history.goBack} />
+          {/* <AiOutlineLeft color="black" size={30} onClick={history.goBack} /> */}
+          <FaChevronLeft
+            className="setaVoltar"
+            onClick={() => history.goBack()}
+          />
           <div className="title-status">
             <span className="title">DETALHES DO PEDIDO</span>
             <div className="status">

@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
-import api from '../../services/api';
-import { LoginContext } from '../../contexts/LoginContext';
-import './Carrinho.css';
-import CartProduct from './Components/CartProduct';
-import ShippingCalc from './Components/ShippingCalc';
+import React, { useEffect, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import api from "../../services/api";
+import { LoginContext } from "../../contexts/LoginContext";
+import "./Carrinho.css";
+import CartProduct from "./Components/CartProduct";
+import ShippingCalc from "./Components/ShippingCalc";
 
 function Carrinho() {
   const history = useHistory();
 
   const { token } = useContext(LoginContext);
-
 
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
@@ -27,14 +26,14 @@ function Carrinho() {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
       products[product_key].amount = newAmount;
       setProducts([...products]);
     } catch (error) {
       console.warn(error);
       alert(error);
-      history.push('Error');
+      history.push("Error");
     }
   }
 
@@ -49,40 +48,50 @@ function Carrinho() {
     } catch (error) {
       console.warn(error);
       alert(error);
-      history.push('Error');
+      history.push("Error");
     }
   }
 
   async function getProducts() {
-    const response = await api.get('/cart', {
+    const response = await api.get("/cart", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setProducts([...response.data]);
   }
 
-  useEffect(
-    () => {
-      let aux = 0;
-      products.forEach(product => {
-        aux += product.price * product.amount;
-      });
-      setSubTotal(aux);
-    },
-    [products],
-  );
+  useEffect(() => {
+    let aux = 0;
+    products.forEach((product) => {
+      aux += product.price * product.amount;
+    });
+    setSubTotal(aux);
+  }, [products]);
 
   useEffect(() => {
     try {
       getProducts();
     } catch (error) {
       console.warn(error);
-      alert('Erro ao Buscar carrinho');
+      alert("Erro ao Buscar carrinho");
     }
   }, []);
 
   return (
     <div className="cardContainer">
       <h1 className="cartTitle">Carrinho</h1>
+      <div
+        classname="buttonSize"
+        style={{ width: "35vw", paddingLeft: "68vw", paddingBottom: "1vh" }}
+      >
+        {products.length > 0 && (
+          <button
+            className="checkoutButton"
+            onClick={() => history.push("checkout")}
+          >
+            Finalizar Compra
+          </button>
+        )}
+      </div>
       <table className="cartTable">
         <thead>
           <tr>
@@ -105,10 +114,10 @@ function Carrinho() {
           ))}
           <tr>
             <td colSpan="3" className="subTotal">
-              Subtotal:{' '}
+              Subtotal:{" "}
             </td>
             <td colSpan="2" className="subTotal">
-              R${subTotal.toFixed(2).replace('.', ',')}
+              R${subTotal.toFixed(2).replace(".", ",")}
             </td>
           </tr>
           <tr>
@@ -116,27 +125,19 @@ function Carrinho() {
               <ShippingCalc setShipping={setShipping} />
             </td>
             <td colSpan="3">
-              {shipping && `R$${shipping.toFixed(2).replace('.', ',')}`}
+              {shipping && `R$${shipping.toFixed(2).replace(".", ",")}`}
             </td>
           </tr>
           <tr>
             <td colSpan="5" className="total">
               R$
               {shipping
-                ? (subTotal + shipping).toFixed(2).replace('.', ',')
-                : subTotal.toFixed(2).replace('.', ',')}
+                ? (subTotal + shipping).toFixed(2).replace(".", ",")
+                : subTotal.toFixed(2).replace(".", ",")}
             </td>
           </tr>
         </tbody>
       </table>
-      {products.length > 0 && (
-        <button
-          className="checkoutButton"
-          onClick={() => history.push('checkout')}
-        >
-          Finalizar Compra
-        </button>
-      )}
     </div>
   );
 }

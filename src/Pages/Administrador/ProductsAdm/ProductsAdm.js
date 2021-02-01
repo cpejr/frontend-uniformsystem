@@ -189,9 +189,8 @@ function ProductsAdm() {
       </div>
       <div className="products-container">
         <div className="sidebar-container">
-          <Link className="button-content" to="/adm/produtos/cadastro">
-            {" "}
-            CADASTRAR NOVO PRODUTO
+          <Link className="buttonNewProduct" to="/adm/produtos/cadastro">
+            CADASTRAR PRODUTO
           </Link>
 
           <div className="filter-container">

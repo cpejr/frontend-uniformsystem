@@ -13,6 +13,7 @@ import "./Perfil.css";
 function Perfil() {
 
   const { user, token } = useContext(LoginContext);
+  console.log('usuario', user)
   const currentUser = user[0];
   const [userAddress, setUserAddress] = useState({});
   const [userOrders, setUserOrders] = useState([]);
@@ -35,7 +36,9 @@ function Perfil() {
           headers: { Authorization: `Bearer ${token}` },
         },
         );
-        if(response.data.adresses){
+
+        console.log('aqi', response)
+        if(response.data.adresses.length > 0){
           setUserAddress(response.data.adresses[0]);
         }
         console.log('resposta', response.data.adresses[0])
@@ -48,6 +51,7 @@ function Perfil() {
           headers: { Authorization: `Bearer ${token}` },
         },
         );
+        console.log('orders', response)
         if(response.data){
           setUserOrders(response.data);
         }

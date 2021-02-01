@@ -5,7 +5,7 @@ import MetaData from "../../../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
 
 import "./EspecificEmployee.css";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import { FaChevronLeft } from 'react-icons/fa';
 
 const funcionario = {
   id: 1,
@@ -43,6 +43,7 @@ function EspecificEmployee({ history }) {
   };
 
   return (
+
     <div>
       <MetaData
         titlePage={meta.titlePage}
@@ -52,10 +53,7 @@ function EspecificEmployee({ history }) {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      <ArrowBackIosIcon
-        className="setaVoltar"
-        onClick={() => history.goBack()}
-      ></ArrowBackIosIcon>
+      <FaChevronLeft className="setaVoltar" onClick={() => history.goBack()} />
       <div className="boxTitle">
         <h1 className="titleFuncExp">FUNCIONÁRIO ESPECÍFICO</h1>
         <hr className="titleLineExp"></hr>

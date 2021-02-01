@@ -77,7 +77,7 @@
 .sidebarListaClient{
   width: 220px;
 }
-@media (max-width: 600px) {
+@media (max-width: 849px) {
   .sidebarClient .MuiList-root a {
     color: #201f24;
     text-decoration: none;
@@ -99,7 +99,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 849px) {
   .sidebarClient .MuiToolbar-root {
     position: fixed;
     background-color: #201f24;

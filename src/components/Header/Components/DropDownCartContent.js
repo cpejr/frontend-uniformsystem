@@ -67,6 +67,9 @@ export default function DropDownCartContent(props) {
                         <div className="description">
                           <div className="pt1">
                             <p className="size">Tamanho: {produto.size}</p>
+                          </div>
+                          <div className="pt1">
+                            <p className="gender">Gênero: {produto.gender === 'F'? 'Feminino': 'Masculino'}</p>
                             <p>R$ {Number(produto.price).toFixed(2)}</p>
                           </div>
                           <div className="pt2">

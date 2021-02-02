@@ -183,12 +183,22 @@ function Produto() {
         "product_model_id",
         `${modelChoosen.product_model_id}`
       );
+
+      const formattedGender = selectedValue.split("_")[0] === 'Fem' ? 'F' : 'M';
+
+      objProdcutInCart.append("gender", formattedGender);
       objProdcutInCart.append("size", selectedValue.split("_")[1]);
       objProdcutInCart.append("amount", Number(inputQuantity.current.value));
-      objProdcutInCart.append("file", logoImage.imgSrc);
-      objProdcutInCart.append("isLogoUpload", true);
+      objProdcutInCart.append("logo_link", logoImage? logoImage.imgSrc : null);
+      objProdcutInCart.append("isLogoUpload", logoImage ? true: false);
+      
+      // console.log("gender", formattedGender);
+      console.log("size", selectedValue.split("_")[1]);
+      console.log("amount", Number(inputQuantity.current.value));
+      console.log("logo_link", logoImage? logoImage.imgSrc : null);
+      console.log("isLogoUpload", logoImage ? true: false);
 
-      console.log("EAE", objProdcutInCart);
+      console.log("objNoProductInCart", objProdcutInCart.entries());
       try {
         const response = await api.put("/addtocart", objProdcutInCart, {
           headers: { Authorization: `Bearer ${token}` },

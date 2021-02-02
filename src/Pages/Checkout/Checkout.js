@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {Helmet} from 'react-helmet';
 import MetaData from '../../meta/reactHelmet';
 import api from '../../services/api';
 
@@ -303,6 +302,7 @@ function Checkout() {
                       <span>Nome do produto: {product.name}</span>
                       <span>Quantidade total: {product.amount} uni.</span>
                       <span>Tamanho: {product.size}</span>
+                      <span>Gênero: {product.gender === 'F'? 'Feminino' : 'Masculino'}</span>
                       <span>Preço único: R$ {product.price}</span>
                       <span>Total: R$ {product.amount * product.price}</span>
                     </div>

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Helmet } from "react-helmet";
 import MetaData from "../../../meta/reactHelmet";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
@@ -10,13 +9,14 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+// import Snackbar from "@material-ui/core/Snackbar";
+// import MuiAlert from "@material-ui/lab/Alert";
 
 import Button from "@material-ui/core/Button";
 
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
+import SnackbarMessage from "../../../components/SnackbarMessage";
 
 import "./HomeEditable.css";
 import { useHistory } from "react-router-dom";
@@ -99,6 +99,10 @@ function HomeEditable() {
 
   // Estado para armazenar Imagens de Produtos
   const [imagesProducts, setImagesProducts] = useState([]);
+
+
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
 
   // Estados para armazenar imagens selecionadas do Carrossel
   const [imagemCarousel01, setImagemCarousel01] = useState(false);
@@ -568,12 +572,16 @@ function HomeEditable() {
 
       setTimeout(() => {
         setLoading(false);
+        setMessageSnackbar("Alterações realizadas com sucesso!");
+        setTypeSnackbar("success");
         setOpen(true);
-      }, 3000);
+      }, 1500);
 
       // Refresh da página
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
+      setMessageSnackbar("Falha ao atualizar os dados");
+      setTypeSnackbar("error");
       setLoading(false)
       console.warn(err.message);
       return err.message;
@@ -881,7 +889,7 @@ function HomeEditable() {
       <Button className="saveChangesButton" onClick={handleSaveChanges}>
         {loading ? <CircularProgress color="secondary" /> : "SALVAR ALTERAÇÕES"}
       </Button>
-      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+      {/* <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <MuiAlert
           onClose={handleClose}
           elevation={6}
@@ -890,7 +898,8 @@ function HomeEditable() {
         >
           Alterações realizadas com sucesso!
         </MuiAlert>
-      </Snackbar>
+      </Snackbar> */}
+      <SnackbarMessage open={open} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

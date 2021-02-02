@@ -13,6 +13,7 @@ th {
   height: 40px;
   border: 0;
   border: 0.1px solid#7FA5A0 !important;
+  padding: 0 !important;
 }
 
 .orders {
@@ -124,7 +125,7 @@ th {
 .adm_orders_id {
   padding-bottom: 1vh;
   border-bottom: 1px solid #323131;
-  width: 120%;
+  width: 100%;
 }
 
 .adm_orders_id tr {
@@ -133,13 +134,13 @@ th {
   margin-left: 10px;
 }
 
-.adm_orders_id tr a svg{
+.adm_orders_id tr a svg {
   font-size: 30px;
   color: #666;
   cursor: pointer;
 }
 
-.adm_orders_id tr a svg:hover{
+.adm_orders_id tr a svg:hover {
   color: #007bff;
 }
 
@@ -148,7 +149,7 @@ th {
   width: 100%;
 }
 
-.evento_pendente{
+.evento_pendente {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -196,7 +197,7 @@ th {
 }
 
 @media (max-width: 1090px) {
-  .orders_data{
+  .orders_data {
     padding: 5vh;
   }
 

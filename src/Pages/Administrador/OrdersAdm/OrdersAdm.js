@@ -125,40 +125,19 @@ function OrdersAdm() {
             <tr>
               <th>ID</th>
               <th>Status</th>
+              <th>Especificações</th>
             </tr>
             <tr>
               <td>
-                <tr>
-                  {Orders.map((pedido) => {
-                    const id = pedido.order_id;
-                    date = pedido.created_at;
-                    const Status = pedido.status;
-                    const deliver = pedido.delivered_by;
-                    const colum = (
-                      <div className="adm_orders_id">
-                        <tr>
-                          {id}
-                          <Link
-                            to={{
-                              pathname: "/adm/pedidoespecifico",
-                              state: {
-                                date: date,
-                                orderId: id,
-                                Status: Status,
-                                deliver: deliver,
-                              },
-                            }}
-                            style={{ color: "black" }}
-                          >
-                            <FaAngleRight className="icon_table" />
-                          </Link>
-                        </tr>
-                      </div>
-                    );
+                {Orders.map((pedido) => {
+                  const id = pedido.order_id;
+                  date = pedido.created_at;
+                  const Status = pedido.status;
+                  const deliver = pedido.delivered_by;
+                  const colum = <div className="adm_orders_id">{id}</div>;
 
-                    return colum;
-                  })}
-                </tr>
+                  return colum;
+                })}
               </td>
 
               <td>
@@ -166,9 +145,37 @@ function OrdersAdm() {
                   const status = pedido.status;
                   const colum = (
                     <div className="adm_orders_status">
-                      <tr>{<OrderTable status={status} />}</tr>
+                      {<OrderTable status={status} />}
                     </div>
                   );
+                  return colum;
+                })}
+              </td>
+              <td>
+                {Orders.map((pedido) => {
+                  const id = pedido.order_id;
+                  date = pedido.created_at;
+                  const Status = pedido.status;
+                  const deliver = pedido.delivered_by;
+                  const colum = (
+                    <div className="adm_orders_id">
+                      <Link
+                        to={{
+                          pathname: "/adm/pedidoespecifico",
+                          state: {
+                            date: date,
+                            orderId: id,
+                            Status: Status,
+                            deliver: deliver,
+                          },
+                        }}
+                        style={{ color: "black" }}
+                      >
+                        Detalhes...
+                      </Link>
+                    </div>
+                  );
+
                   return colum;
                 })}
               </td>
@@ -176,8 +183,6 @@ function OrdersAdm() {
           </table>
 
           {/* Os <th> sao o cabeçalho da tabela. O tr é uma linha da tabela. */}
-
-          <tr />
         </div>
       </div>
     </div>

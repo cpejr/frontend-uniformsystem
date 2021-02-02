@@ -12,6 +12,7 @@ import { LoginContext } from '../../../contexts/LoginContext';
 export default function DropDownCartContent(props) {
   let Subtotal = 0;
 
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
   const { token } = useContext(LoginContext);
   const history = useHistory();
 
@@ -57,8 +58,8 @@ export default function DropDownCartContent(props) {
                     <div className="singleProduct">
                       <div className="photo">
                         <img
-                          src={produto.img_link}
-                          alt="FotoCamisa"
+                          src={bucketAWS + produto.img_link}
+                          alt={produto.name}
                           className="FotoCamisa"
                         />
                       </div>

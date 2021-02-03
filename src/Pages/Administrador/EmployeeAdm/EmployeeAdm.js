@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
 import { Helmet } from "react-helmet";
+import { FaSearch } from 'react-icons/fa';
 import MetaData from "../../../meta/reactHelmet";
 import { Link } from "react-router-dom";
 
@@ -38,6 +39,7 @@ function EmployeeAdm() {
   const { token } = useContext(LoginContext);
   const [employees, setEmployees] = useState([]);
   const [dialogItem, setDialogItem] = useState({ open: false, item: null });
+  const inputSearch = useRef(null);
 
   const meta = {
     titlePage: "Administrador | Funcionário",
@@ -88,6 +90,14 @@ function EmployeeAdm() {
     getEmployees();
   }, []);
 
+  function FilterEmployee() {
+    const employee_name = inputSearch.current.value;
+    employees.map((employee) => (
+      employee.name.includes(employee_name)
+    ));
+    alert('vc está procurando');
+  }
+
   return (
     <div>
       <MetaData
@@ -98,10 +108,22 @@ function EmployeeAdm() {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
+      <div className="topEmployee">
+      <div className="searchEmployee">
+        <input
+          id="searchEmployee"
+          type="text"
+          ref={inputSearch}
+          placeholder="Buscar Funcionário"
+        />
+
+        <FaSearch onClick={FilterEmployee} className="searchButtonEmployee" />
+      </div>
       <div>
         <Link className="buttonEmployee" to="/adm/cadastrofuncionarios">
           <Button type="button">CADASTRAR FUNCIONÁRIO</Button>
         </Link>
+      </div>
       </div>
       <TableContainer component={Paper}>
         <Table

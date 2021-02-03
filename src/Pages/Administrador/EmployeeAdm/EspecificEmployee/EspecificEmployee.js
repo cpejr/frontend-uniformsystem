@@ -1,17 +1,14 @@
-import React from "react";
+import React, {useEffect, useContext, useState} from "react";
+import api from "../../../../services/api";
 import TabelaFuncionarios from "../../../../components/TabelaFuncionario/TabelaFuncionario";
+import { LoginContext } from "../../../../contexts/LoginContext";
 import { Helmet } from "react-helmet";
 import MetaData from "../../../../meta/reactHelmet";
-import { withRouter } from "react-router-dom";
+import { withRouter, useParams } from "react-router-dom";
 
 import "./EspecificEmployee.css";
 import { FaChevronLeft } from 'react-icons/fa';
 
-const funcionario = {
-  id: 1,
-  nome: "MARIA SOUZA",
-  cpf: "123456789-35",
-};
 
 const orderHistory = [
   {
@@ -31,7 +28,8 @@ const orderHistory = [
   },
 ];
 
-function EspecificEmployee({ history }) {
+function EspecificEmployee( {history} ) {
+  const [Employees, setEmployees] = useState([]);
   const meta = {
     titlePage: "Administrador | Funcionário Específico",
     titleSearch: "Funcionário Específico Profit",
@@ -40,6 +38,35 @@ function EspecificEmployee({ history }) {
     keyWords: "Dados, Funcionário, Específico, Profit",
     imageUrl: "",
     imageAlt: "",
+  };
+  var user_id;
+
+  const {id} = useParams();
+
+  const { token } = useContext(LoginContext);
+
+  async function getEspecificEmployee() {
+    console.log(id);
+    try {
+      const resultado = await api.get(`/employees/${id}`, {
+        headers: { authorization: `bearer ${token}` },
+      });
+      console.log(resultado.data);
+      setEmployees(resultado.data);
+    } catch (error) {
+      console.warn(error);
+      alert(error);
+    }
+  };
+
+  useEffect(() => {
+    getEspecificEmployee();
+  }, []); // executa assim que carregar a página
+
+  const funcionario = {
+    id: Employees.user_id,
+    nome: Employees.name,
+    cpf: Employees.cpf,
   };
 
   return (

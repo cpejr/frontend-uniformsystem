@@ -92,9 +92,8 @@ function EmployeeAdm() {
 
   function FilterEmployee() {
     const employee_name = inputSearch.current.value;
-    employees.map((employee) => (
-      employee.name.includes(employee_name)
-    ));
+    const resultado = employees.filter(emplo => emplo.name.toLowerCase() === employee_name)
+    console.log(resultado);
     alert('vc está procurando');
   }
 

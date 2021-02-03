@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import Logo from "../../Assets/Logo_1.png";
 
+
+
 function ComputerFooter() {
     return (
         <div className="all_footer">
@@ -32,7 +34,7 @@ function ComputerFooter() {
                 <a href="https://www.google.com.br" className="customize">
                     (31) 99999-9999
                 </a>
-                <a href="https://www.google.com.br" className="contact">
+                <a href="/contact" className="contact">
                     CONTATO
                 </a>
                 <div className="icons">
@@ -42,9 +44,11 @@ function ComputerFooter() {
                     <a href="https://www.instagram.com" className="instagram">
                         <FaInstagram />
                     </a>
-                    <a href="https://www.whatsapp.com" className="whatsapp">
+                    
+                    <a href="#" className="whatsapp">
                         <FaWhatsapp />
                     </a>
+                    
                 </div>
             </div>
         </div>
@@ -75,7 +79,7 @@ function MobileFooter() {
                     </a>
                {/*  </div>
                 <div className="secondLine"> */}
-                    <a href="https://www.google.com.br" className="contact">
+                    <a href="/contact" className="contact">
                         CONTATO
                     </a>
                     <div className="icons">
@@ -88,9 +92,9 @@ function MobileFooter() {
                         >
                             <FaInstagram />
                         </a>
-                        <a href="https://www.whatsapp.com" className="whatsapp">
-                            <FaWhatsapp />
-                        </a>
+                        <a href="#" className="whatsapp">
+                        <FaWhatsapp />
+                    </a>
                     {/* </div> */}
                 </div>
             </div>

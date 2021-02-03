@@ -40,6 +40,8 @@ function EspecificEmployee( {history} ) {
     imageAlt: "",
   };
   var user_id;
+  var name_employee;
+  var cpf;
 
   const {id} = useParams();
 
@@ -52,7 +54,7 @@ function EspecificEmployee( {history} ) {
         headers: { authorization: `bearer ${token}` },
       });
       console.log(resultado.data);
-      setEmployees(resultado.data);
+      setEmployees([...resultado.data.user]);
     } catch (error) {
       console.warn(error);
       alert(error);
@@ -62,12 +64,6 @@ function EspecificEmployee( {history} ) {
   useEffect(() => {
     getEspecificEmployee();
   }, []); // executa assim que carregar a página
-
-  const funcionario = {
-    id: Employees.user_id,
-    nome: Employees.name,
-    cpf: Employees.cpf,
-  };
 
   return (
 
@@ -89,8 +85,19 @@ function EspecificEmployee( {history} ) {
         <hr className="titleLineExp"></hr>
       </div>
       <div className="tabela">
+        {Employees.map((employee) => {
+          name_employee = employee.name
+          user_id = employee.id
+          cpf = employee.cpf
+        })}
         <TabelaFuncionarios
-          funcionario={funcionario}
+          funcionario={ 
+            {
+            id: user_id,
+            nome: name_employee,
+            cpf: cpf,
+            }
+          }
           orderHistory={orderHistory}
         />
       </div>

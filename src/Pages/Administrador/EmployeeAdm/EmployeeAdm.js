@@ -62,6 +62,7 @@ function EmployeeAdm() {
       const response = await api.get("/employees", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(response);
       setEmployees([...response.data.employees]);
     } catch (error) {
       console.warn(error);

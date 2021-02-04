@@ -84,7 +84,7 @@ function EspecificOrderAdm(props) {
   async function ModificarStatus() {
     if (status === "pending") {
       try {
-        const response = await api.put(
+        /*const response = await api.put(
           `order/${orderId}`,
           {
             is_paid: 1,
@@ -94,7 +94,7 @@ function EspecificOrderAdm(props) {
           {
             headers: { authorization: `Bearer ${token}` },
           }
-        );
+        );*/
         setStatus("preparing");
       } catch (error) {
         console.warn(error);

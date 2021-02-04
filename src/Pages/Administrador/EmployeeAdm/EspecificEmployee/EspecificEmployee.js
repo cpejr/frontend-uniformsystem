@@ -30,6 +30,7 @@ const orderHistory = [
 
 function EspecificEmployee( {history} ) {
   const [Employees, setEmployees] = useState([]);
+  const [Orders, setOrders] = useState([]);
   const meta = {
     titlePage: "Administrador | Funcionário Específico",
     titleSearch: "Funcionário Específico Profit",
@@ -42,6 +43,10 @@ function EspecificEmployee( {history} ) {
   var user_id;
   var name_employee;
   var cpf;
+  var order_id;
+  var idpedido;
+  var data;
+  var id_order;
 
   const {id} = useParams();
 
@@ -61,8 +66,23 @@ function EspecificEmployee( {history} ) {
     }
   };
 
+  async function getOrders() {
+    console.log(id);
+    try {
+      const resultado2 = await api.get(`/shipping/deliveredby/${id}`, {
+        headers: { authorization: `bearer ${token}` },
+      });
+      console.log(resultado2);
+      setOrders([...resultado2.data]);
+    } catch (error) {
+      console.warn(error);
+      alert(error);
+    }
+  };
+
   useEffect(() => {
     getEspecificEmployee();
+    getOrders();
   }, []); // executa assim que carregar a página
 
   return (
@@ -90,6 +110,11 @@ function EspecificEmployee( {history} ) {
           user_id = employee.id
           cpf = employee.cpf
         })}
+        {Orders.map((order) => {
+          id_order = 3
+          idpedido = order.order_id
+          data = order.updated_at
+        })}
         <TabelaFuncionarios
           funcionario={ 
             {
@@ -98,7 +123,23 @@ function EspecificEmployee( {history} ) {
             cpf: cpf,
             }
           }
-          orderHistory={orderHistory}
+          orderHistory={[
+            {
+              id: id_order,
+              idpedido: idpedido,
+              data: data,
+            },
+            {
+              id: 2,
+              idpedido: "",
+              data: "",
+            },
+            {
+              id: 1,
+              idpedido: "",
+              data: "",
+            },
+          ]}
         />
       </div>
     </div>

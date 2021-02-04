@@ -1,5 +1,5 @@
 .tabela {
-  margin-left: 12%;
+  margin-left: 5%;
   font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 }
 
@@ -8,8 +8,14 @@
   text-align: center;
 }
 
+.employee {
+  padding-bottom: 12vh;
+  width: 60vh;
+}
+
 .idfunc {
   text-align: center;
+  padding: 2vh;
 }
 
 .datafunc {

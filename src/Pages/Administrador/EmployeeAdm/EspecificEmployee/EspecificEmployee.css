@@ -31,3 +31,8 @@
   margin-top: -1%;
   margin-bottom: 5%;
 }
+
+.tabela {
+  align-items: baseline;
+  align-content: center;
+}

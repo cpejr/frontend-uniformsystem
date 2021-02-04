@@ -169,7 +169,7 @@ function AdmRoutes() {
             export
             component={EspecificOrderAdm}
           />
-          <Route path="/adm/produtos" component={ProductsAdm} />
+          <Route path="/adm/produtos" exact component={ProductsAdm} />
           <Route path="/adm/funcionarios" export component={EmployeeAdm} />
           <Route
             path="/adm/cadastrofuncionarios"

@@ -35,7 +35,7 @@ function Loja() {
   async function getProducts() {
     //fazendo a requisição pro back
     try {
-      let query = [];
+      let query = ["available=true"];
       if (filter.product_type.length > 0) {
         let products_type = filter.product_type.join(',');
         let param = 'product_type=' + products_type;
@@ -63,8 +63,8 @@ function Loja() {
         query.push(param);
       }
 
-      const response = await api.get(`/productmodels?${query.join('&')}`);
-      return response.data.models;
+      const response = await api.get(`/product?${query.join('&')}`);
+      return response.data.products;
     } catch (error) {
       console.warn(error);
       alert('Erro no servidor.');
@@ -287,7 +287,7 @@ function Loja() {
 
         <div className="productContainer">
           {products.map(product => (
-            <ProductCard key={product.product_model_id} product={product} />
+            <ProductCard key={product.product_id} product={product} />
           ))}
         </div>
       </div>

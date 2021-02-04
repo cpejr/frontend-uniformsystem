@@ -1,66 +1,76 @@
-import React from 'react';
-import './ProductModelCardAdm.css';
+import React, { useState } from "react";
+import "./ProductModelCardAdm.css";
 
-import { FaEdit, FaStar, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaStar, FaTrashAlt } from "react-icons/fa";
 
-function ProductModelCardAdm({productModelID, handleSelectToEdit,
-    productModelArray, setProductModelArray, fullProduct}) {
+import Switch from "react-switch";
+import api from "../../services/api";
 
-    const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
+function ProductModelCardAdm({
+  handleSelectToEdit,
+  productModelArray,
+  setProductModelArray,
+  fullProduct,
+}) {
+  const [available, setAvailable] = useState(fullProduct.available);
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
-    const {fileToShow, imgLink, modelDescription, price, gender} = fullProduct;
+  const {
+    fileToShow,
+    imgLink,
+    modelDescription,
+    price,
+    gender,
+    product_model_id,
+  } = fullProduct;
 
-    const handleIsMain = () => {
+  const handleEditModel = () => {
+    handleSelectToEdit(product_model_id);
+    // handleClose();
+  };
 
-        const objWithNewIsMain = {
-            ...productModelArray[productModelID],
-            isMain: !productModelArray[productModelID].isMain
-        }
+  const handleDeleteModel = (product_model_id) => {
+    const copyProductModelArray = [...productModelArray];
+    copyProductModelArray.splice(product_model_id, 1);
+    setProductModelArray(copyProductModelArray);
+  };
 
-        const copyProductModelArray = [...productModelArray]
-        copyProductModelArray.splice(productModelID, 1, objWithNewIsMain);
-
-        setProductModelArray(copyProductModelArray)
+  const handleSwitchChange = async () => {
+    try {
+      await api.put(`/model/${product_model_id}`, { available: !available });
+      setAvailable(!available);
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    const handleEditModel = () => {
-        handleSelectToEdit(productModelID);
-        // handleClose();
-    }
+  return (
+    <div className="productModelCardAdmFullContent">
+      <Switch onChange={handleSwitchChange} checked={available} />
+      <FaTrashAlt
+        className="iconGarbage"
+        onClick={() => handleDeleteModel(product_model_id)}
+      />
+      {fileToShow ? (
+        <img src={fileToShow} alt={modelDescription} />
+      ) : imgLink.includes(bucketAWS) ? (
+        <img src={imgLink} alt={modelDescription} />
+      ) : (
+        "Sem imagem"
+      )}
+      <span className="modelName">{modelDescription}</span>
 
-    const handleDeleteModel = (productModelID) => {
-        const copyProductModelArray = [...productModelArray];
-        copyProductModelArray.splice(productModelID, 1);
-        setProductModelArray(copyProductModelArray);
-    }
+      <div className="priceAndGender">
+        <span>{`R$ ${price}`}</span>
+        <span>{gender === "M" ? "Masculino" : "Feminino"}</span>
+      </div>
 
-    return (
-        <div className="productModelCardAdmFullContent">
-            <FaTrashAlt className="iconGarbage" onClick={() => handleDeleteModel(productModelID)}/>
-            { fileToShow ? <img src={fileToShow} alt={modelDescription} />: 
-                imgLink.includes(bucketAWS) ? <img src={imgLink} alt={modelDescription} /> :
-                'Sem imagem' }
-            <span className="modelName">{modelDescription}</span>
-
-            <div className="priceAndGender">
-                <span>{`R$ ${price}`}</span>
-                <span>{gender === 'M'? 'Masculino': 'Feminino'}</span>
-            </div>
-
-            <div className="iconWithText" onClick={() => handleEditModel()}>
-                <FaEdit className="iconProductModelCard" />
-                <span>EDITAR MODELO</span>
-            </div>
-            <div className={productModelArray[productModelID].isMain ? 
-                    "iconWithText selected"
-                    : "iconWithText"}
-                    onClick={() => handleIsMain()}
-            >
-                <FaStar className="iconProductModelCard" />
-                <span >ADICIONAR COMO MODELO PRINCIPAL</span>
-            </div>
-        </div>
-    );
+      <div className="iconWithText" onClick={() => handleEditModel()}>
+        <FaEdit className="iconProductModelCard" />
+        <span>EDITAR MODELO</span>
+      </div>
+    </div>
+  );
 }
 
 export default ProductModelCardAdm;

@@ -38,6 +38,7 @@ function EmployeeAdm() {
   const classes = useStyles();
   const { token } = useContext(LoginContext);
   const [employees, setEmployees] = useState([]);
+  const funcionario = [];
   const [dialogItem, setDialogItem] = useState({ open: false, item: null });
   const inputSearch = useRef(null);
 
@@ -92,9 +93,14 @@ function EmployeeAdm() {
 
   function FilterEmployee() {
     const employee_name = inputSearch.current.value;
-    const resultado = employees.filter(emplo => emplo.name.toLowerCase() === employee_name)
-    console.log(resultado);
-    alert('vc está procurando');
+    employees.map((employee) => {
+    //const resultado = employees.filter(employee => employee.name.toLowerCase() === employee_name)
+    if(employee.name === employee_name){
+        funcionario.push(employee);
+        setEmployees(funcionario);
+    }
+    });
+    //alert('vc está procurando');
   }
 
   return (

@@ -131,6 +131,7 @@ function EmployeeAdm() {
       </div>
       </div>
       <TableContainer component={Paper}>
+        <div className="tableEmployee" style={{overflow: "auto", height: "1280px"}}>
         <Table
           className={classes.table}
           size="small"
@@ -180,6 +181,7 @@ function EmployeeAdm() {
             )}
           </TableBody>
         </Table>
+        </div>
       </TableContainer>
 
       <ExcludeDialog

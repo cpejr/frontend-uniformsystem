@@ -1,29 +1,86 @@
 .buttonEmployee {
-    width: 30%;
-    height: 50px;
-    background-color: #0EC4AB;
-    margin-top: 16px;
-    border-radius: 5vh;
-    min-width: 100px;
-    float: right;
-    margin-bottom: 40px;
+  width: 80%;
+  height: 50px;
+  background-color: #0ec4ab;
+  margin-top: 10px;
+  margin-left: 25vh;
+  border-radius: 5vh;
+  min-width: 100px;
+  float: right;
+  margin-bottom: 40px;
 }
 
-.buttonEmployee:hover{
-    text-decoration: none;
-    background-color: #0EC4ABAA;
+.topEmployee {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
-.buttonEmployee button{
-    width: 100%;
-    height: 100%;
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    background-color: transparent;
+.searchEmployee {
+  display: flex;
+  justify-content: center;
+  margin-top: 3vh;
 }
 
+#searchEmployee {
+  border-radius: 5vh;
+  border-color: #201f24;
+  height: 5vh;
+  width: 40vw;
+  color: rbga(0, 0, 0, 0.54);
+  padding-left: 5%;
+}
+
+#searchEmployee:focus {
+  border-color: #3696e4;
+}
+
+.searchButtonEmployee {
+  color: #201f24;
+  margin-left: 3vh;
+  margin-top: 1vh;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.searchButtonEmployee:hover {
+  color: #3696e4;
+}
+
+.buttonEmployee:hover {
+  text-decoration: none;
+  background-color: #0ec4abaa;
+}
+
+.buttonEmployee button {
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background-color: transparent;
+}
 
 .header-table {
-    background-color: #ccc;
+  background-color: #ccc;
+}
+
+@media (max-width: 800px) {
+  #searchEmployee {
+    width: 60vw;
+  }
+
+  .searchButtonEmployee {
+    margin-right: 5vh;
+  }
+
+  .topEmployee {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .buttonEmployee {
+    margin-right: 7vh;
+  }
 }

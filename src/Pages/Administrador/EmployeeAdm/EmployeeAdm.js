@@ -62,6 +62,7 @@ function EmployeeAdm() {
       const response = await api.get("/employees", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(response);
       setEmployees([...response.data.employees]);
     } catch (error) {
       console.warn(error);
@@ -124,7 +125,9 @@ function EmployeeAdm() {
           </TableHead>
           <TableBody>
             {employees.length > 0 ? (
-              employees.map((employee) => (
+              employees.map((employee) => {
+                const id = employee.user_id;
+                const colum = (
                 <TableRow key={employee.user_id}>
                   <TableCell component="td" scope="row">
                     {employee.name}
@@ -141,13 +144,15 @@ function EmployeeAdm() {
                       <BsFillTrashFill />
                     </IconButton>
                     <IconButton>
-                      <Link to={`/adm/funcionario/${employee.user_id}`}>
+                      <Link to={`/adm/funcionario/`+id}>
                         <BsInfoCircle />
                       </Link>
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))
+              );
+              return colum;
+            })
             ) : (
               <span>Nenhum funcionário cadastrado</span>
             )}

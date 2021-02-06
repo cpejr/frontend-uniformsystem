@@ -12,7 +12,7 @@ function TabelaFuncionarios({ funcionario, orderHistory }) {
       </thead>
       <tbody>
         <tr>
-          <td>
+          <td className="employee">
             NOME COMPLETO: {funcionario.nome}
             <br></br>
             CPF:{funcionario.cpf}

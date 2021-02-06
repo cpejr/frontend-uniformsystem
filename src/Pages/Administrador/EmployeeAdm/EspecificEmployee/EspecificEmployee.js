@@ -43,22 +43,22 @@ function EspecificEmployee( {history} ) {
   var user_id;
   var name_employee;
   var cpf;
-  var order_id;
+  var data_final;
   var idpedido;
   var data;
   var id_order;
+  var data_br;
+  var dia;
 
   const {id} = useParams();
 
   const { token } = useContext(LoginContext);
 
   async function getEspecificEmployee() {
-    console.log(id);
     try {
       const resultado = await api.get(`/employees/${id}`, {
         headers: { authorization: `bearer ${token}` },
       });
-      console.log(resultado.data);
       setEmployees([...resultado.data.user]);
     } catch (error) {
       console.warn(error);
@@ -67,12 +67,10 @@ function EspecificEmployee( {history} ) {
   };
 
   async function getOrders() {
-    console.log(id);
     try {
       const resultado2 = await api.get(`/shipping/deliveredby/${id}`, {
         headers: { authorization: `bearer ${token}` },
       });
-      console.log(resultado2);
       setOrders([...resultado2.data]);
     } catch (error) {
       console.warn(error);
@@ -114,6 +112,9 @@ function EspecificEmployee( {history} ) {
           id_order = 3
           idpedido = order.order_id
           data = order.updated_at
+          data_br = data.split("-");
+          dia = data_br[2].split(" ");
+          data_final = dia[0]+"/"+data_br[1]+"/"+data_br[0];
         })}
         <TabelaFuncionarios
           funcionario={ 
@@ -127,7 +128,7 @@ function EspecificEmployee( {history} ) {
             {
               id: id_order,
               idpedido: idpedido,
-              data: data,
+              data: data_final,
             },
             {
               id: 2,

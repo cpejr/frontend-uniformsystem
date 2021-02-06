@@ -42,3 +42,10 @@
     margin-right: 5vh;
   }
 }
+
+@media (max-width: 600px) {
+  .tabela {
+    overflow: auto;
+    width: 400px;
+  }
+}

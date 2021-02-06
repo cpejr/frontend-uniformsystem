@@ -45,6 +45,7 @@ h1, h2, span, button{
 
 .HomeEditableContent{
     width: 100%;
+    padding: 30px 0px;
 
     display: flex;
     flex-direction: column;

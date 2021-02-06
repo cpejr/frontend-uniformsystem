@@ -7,6 +7,7 @@ import MetaData from '../../meta/reactHelmet';
 
 import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
+import SnackbarMessage from "../../components/SnackbarMessage";
 
 import "./Produto.css";
 import "./Radio.css";
@@ -70,6 +71,10 @@ function Produto() {
 
   const [logoImage, setLogoImage] = useState(null);
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
+
   const inputQuantity = useRef(null);
   const inputSize = useRef(null);
   const inputCEP = useRef(null);
@@ -92,13 +97,21 @@ function Produto() {
     setModels(response.models);
 
     const choosen = response.models.find((item) => item.is_main === 1);
+    console.log('choosen', choosen)
 
     // Acha modelo principal
-    setModelChoosen(choosen);
+    setModelChoosen(!choosen? 1: choosen);
 
     // Acha modelo principal
-    setIsSelect(choosen.product_model_id);
+    setIsSelect(!choosen? 1: choosen.product_model_id);
   }, []);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   //essa funcao tem um CSS só pra ela, pois gastou uns esquemas diferenciados pra fazer
   function Radio(gender) {
@@ -183,18 +196,38 @@ function Produto() {
         "product_model_id",
         `${modelChoosen.product_model_id}`
       );
+
+      const formattedGender = selectedValue.split("_")[0] === 'Fem' ? 'F' : 'M';
+
+      objProdcutInCart.append("gender", formattedGender);
       objProdcutInCart.append("size", selectedValue.split("_")[1]);
       objProdcutInCart.append("amount", Number(inputQuantity.current.value));
-      objProdcutInCart.append("file", logoImage.imgSrc);
-      objProdcutInCart.append("isLogoUpload", true);
+      objProdcutInCart.append("logo_link", logoImage? logoImage.imgSrc : null);
+      objProdcutInCart.append("isLogoUpload", logoImage ? true: false);
+      
+      // console.log("gender", formattedGender);
+      console.log("size", selectedValue.split("_")[1]);
+      console.log("amount", Number(inputQuantity.current.value));
+      console.log("logo_link", logoImage? logoImage.imgSrc : null);
+      console.log("isLogoUpload", logoImage ? true: false);
 
-      console.log("EAE", objProdcutInCart);
+      console.log("objNoProductInCart", objProdcutInCart.entries());
       try {
         const response = await api.put("/addtocart", objProdcutInCart, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("resposta", response.data);
+
+        // Espera X milissegundos para ativar a função interna
+        setTimeout(() => {
+          setMessageSnackbar("Produto adicionado no carrinho!");
+          setTypeSnackbar("success");
+          setOpenSnackbar(true);
+        }, 500);
+        
       } catch (err) {
+        setMessageSnackbar("Falha ao adicionar o produto");
+        setTypeSnackbar("error");
         console.warn(err);
       }
     }
@@ -327,7 +360,7 @@ function Produto() {
               </div>
 
               <a
-                href="http://www.buscacep.correios.com.br/sistemas/buscacep/default.cfm"
+                href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
                 target="_blank"
               >
                 <span className="forgotPassword">Não sei meu CEP</span>
@@ -395,6 +428,7 @@ function Produto() {
           </div>
         </div>
       </div>
+      <SnackbarMessage open={openSnackbar} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
 
@@ -6,11 +6,12 @@ import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import Logo from "../../Assets/Logo_1.png";
 
 import api from "../../services/api";
+import { LoginContext } from "../../contexts/LoginContext";
 
 
 function ComputerFooter() {
-    const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiNzEzYjMyLWUxMzYtNmJkYi1iYjcwLWRkYWJmZTRmYmM2IiwibmFtZSI6IkZlbGlwZSIsImZpcmViYXNlX3VpZCI6ImNpU1ZUVjdISGlnU0NYdUJrUG9zNklJWm93dDEiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImZlbGlwZUB0ZXN0ZS5jb20iLCJjcGYiOiIxMTExMTExMTExMSIsImNyZWF0ZWRfYXQiOiIyMDIxLTAxLTE1IDAwOjQ4OjEyIiwidXBkYXRlZF9hdCI6IjIwMjEtMDEtMTUgMDA6NDg6MTIifV0sImlhdCI6MTYxMDY3MTc0OCwiZXhwIjoxNjEzMjYzNzQ4fQ.vmKMvkG0_bV6DUjbHUuOeH_UnbJcud5oJ6i-ecxX21Q";
+  
+  const { token } = useContext(LoginContext);
   const [FacebookInfo, setFacebookInfo] = useState("");
   const [EnderecoInfo, setEnderecoInfo] = useState("");
   const [InstagramInfo, setInstagramInfo] = useState("");
@@ -102,8 +103,7 @@ function ComputerFooter() {
 
 function MobileFooter() {
 
-    const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiNzEzYjMyLWUxMzYtNmJkYi1iYjcwLWRkYWJmZTRmYmM2IiwibmFtZSI6IkZlbGlwZSIsImZpcmViYXNlX3VpZCI6ImNpU1ZUVjdISGlnU0NYdUJrUG9zNklJWm93dDEiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImZlbGlwZUB0ZXN0ZS5jb20iLCJjcGYiOiIxMTExMTExMTExMSIsImNyZWF0ZWRfYXQiOiIyMDIxLTAxLTE1IDAwOjQ4OjEyIiwidXBkYXRlZF9hdCI6IjIwMjEtMDEtMTUgMDA6NDg6MTIifV0sImlhdCI6MTYxMDY3MTc0OCwiZXhwIjoxNjEzMjYzNzQ4fQ.vmKMvkG0_bV6DUjbHUuOeH_UnbJcud5oJ6i-ecxX21Q";
+  const { token } = useContext(LoginContext);
   const [FacebookInfo, setFacebookInfo] = useState("");
   const [EnderecoInfo, setEnderecoInfo] = useState("");
   const [InstagramInfo, setInstagramInfo] = useState("");

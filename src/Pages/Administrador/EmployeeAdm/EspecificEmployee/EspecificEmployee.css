@@ -1,5 +1,4 @@
-
-.especific-employee{
+.especific-employee {
   width: 100%;
   padding: 30px 0;
   position: relative;
@@ -35,4 +34,11 @@
 .tabela {
   align-items: baseline;
   align-content: center;
+}
+
+@media (max-width: 1000px) {
+  .especific-employee {
+    width: 60vw;
+    margin-right: 5vh;
+  }
 }

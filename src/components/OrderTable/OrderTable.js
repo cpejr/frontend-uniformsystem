@@ -6,11 +6,11 @@ function OrderTable(Props) {
       return (
         <div
           className="container"
-          style={{ paddingLeft: "0vw", paddingBottom: "0vh" }}
+          style={{ padding: "10px 15px" }}
         >
           <div
             id="orderStyle"
-            style={{ backgroundColor: "#60F86A", color: "black" }}
+            style={{ backgroundColor: "#60F86A", color: "black", padding: '5px 8px'  }}
           >
             Entregue
           </div>
@@ -21,11 +21,11 @@ function OrderTable(Props) {
       return (
         <div
           className="container"
-          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
+          style={{ padding: "10px 15px" }}
         >
           <div
             id="orderStyle"
-            style={{ backgroundColor: "#F94444", color: "white" }}
+            style={{ backgroundColor: "#F94444", color: "white", padding: '5px 8px'  }}
           >
             Pendente
           </div>
@@ -36,11 +36,11 @@ function OrderTable(Props) {
       return (
         <div
           className="container"
-          style={{ paddingLeft: "0", paddingBottom: "0" }}
+          style={{ padding: "10px 15px" }}
         >
           <div
             id="orderStyle"
-            style={{ backgroundColor: "#FFE45A", color: "black" }}
+            style={{ backgroundColor: "#FFE45A", color: "black", padding: '5px 8px' }}
           >
             Em Andamento
           </div>
@@ -51,11 +51,11 @@ function OrderTable(Props) {
       return (
         <div
           className="container"
-          style={{ paddingLeft: "0", paddingBottom: "0" }}
+          style={{ padding: "10px 15px" }}
         >
           <div
             id="orderStyle"
-            style={{ backgroundColor: "#15B5DE", color: "black" }}
+            style={{ backgroundColor: "#15B5DE", color: "black", padding: '5px 8px' }}
           >
             Aguardando Pagamento
           </div>

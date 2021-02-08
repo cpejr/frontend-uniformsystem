@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
-import { useHistory, Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
 import MetaData from "../../../meta/reactHelmet";
 import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
@@ -24,20 +23,11 @@ import {
   IconButton,
 } from "@material-ui/core";
 
-const PEDIDOS = [
-  { status: "Entregue", ID: 2050 },
-  { status: "Pendente", ID: 2051 },
-  { status: "Em Andamento", ID: 2052 },
-  { status: "Aguardando Pagamento", ID: 2053 },
-];
-
 function OrdersAdm() {
   const [Orders, setOrders] = useState([]);
   const [OnlyPending, setOnlyPending] = useState();
-  //const { token } = useContext(LoginContext);
   const [InputID, setInputID] = useState(0);
   var date;
-  const history = useHistory();
 
   const { token } = useContext(LoginContext);
 
@@ -143,7 +133,7 @@ function OrdersAdm() {
                               deliver: deliver,
                             },
                           }}
-                          style={{ color: "black" }}
+                          style={{ color: "black", marginLeft:'8px' }}
                         >
                           Detalhes...
                         </Link>

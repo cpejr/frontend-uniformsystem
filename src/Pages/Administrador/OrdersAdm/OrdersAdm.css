@@ -1,6 +1,7 @@
 /* Estlizações abaixo são para a tabela */
 #orderStyle {
   width: fit-content;
+  text-align: center;
   border-radius: 15px;
   height: fit-content;
   background-color: red;

@@ -6,7 +6,7 @@ function OrderTable(Props) {
       return (
         <div
           className="container"
-          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
+          style={{ paddingLeft: "0vw", paddingBottom: "0vh" }}
         >
           <div
             id="orderStyle"
@@ -36,7 +36,7 @@ function OrderTable(Props) {
       return (
         <div
           className="container"
-          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
+          style={{ paddingLeft: "0", paddingBottom: "0" }}
         >
           <div
             id="orderStyle"
@@ -51,7 +51,7 @@ function OrderTable(Props) {
       return (
         <div
           className="container"
-          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
+          style={{ paddingLeft: "0", paddingBottom: "0" }}
         >
           <div
             id="orderStyle"

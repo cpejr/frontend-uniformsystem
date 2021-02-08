@@ -11,6 +11,19 @@ import Toggle from "../../../components/Toggle";
 
 import { FaAngleRight, FaFilter } from "react-icons/fa";
 
+import {
+  Button,
+  makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+} from "@material-ui/core";
+
 const PEDIDOS = [
   { status: "Entregue", ID: 2050 },
   { status: "Pendente", ID: 2051 },
@@ -64,37 +77,6 @@ function OrdersAdm() {
     obterPedidos();
   }, []);
 
-  function FilteredData() {
-    return PEDIDOS.map((pedido, index) => {
-      {
-        /*Usar .filter*/
-      }
-      if (pedido.ID === InputID) {
-        return (
-          <tr key={index} className="singleOrder">
-            <td className="id_table">
-              <div className="id_camp">
-                <div
-                  className="pedido_text"
-                  style={{
-                    width: "fit-content",
-                  }}
-                >
-                  {pedido.ID}{" "}
-                </div>{" "}
-                <FaAngleRight className="icon_table" />
-              </div>
-            </td>
-
-            <td className="status_table">
-              <OrderTable Order={pedido.status} />{" "}
-            </td>
-          </tr>
-        );
-      }
-    });
-  }
-
   return (
     <div className="orders_page">
       <MetaData
@@ -121,66 +103,58 @@ function OrdersAdm() {
         </div>
 
         <div className="adm_div_table">
-          <table className="orders">
-            <tr>
-              <th>ID</th>
-              <th>Status</th>
-              <th>Especificações</th>
-            </tr>
-            <tr>
-              <td>
-                {Orders.map((pedido) => {
-                  const id = pedido.order_id;
-                  date = pedido.created_at;
-                  const Status = pedido.status;
-                  const deliver = pedido.delivered_by;
-                  const colum = <div className="adm_orders_id">{id}</div>;
-
-                  return colum;
-                })}
-              </td>
-
-              <td>
-                {Orders.map((pedido) => {
-                  const status = pedido.status;
-                  const colum = (
-                    <div className="adm_orders_status">
-                      {<OrderTable status={status} />}
-                    </div>
-                  );
-                  return colum;
-                })}
-              </td>
-              <td>
+          <TableContainer component={Paper}>
+            <Table className="orders" size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center" className="header-table">
+                    ID
+                  </TableCell>
+                  <TableCell align="center" className="header-table">
+                    STATUS
+                  </TableCell>
+                  <TableCell align="center" className="header-table">
+                    ESPECIFICAÇÕES
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {Orders.map((pedido) => {
                   const id = pedido.order_id;
                   date = pedido.created_at;
                   const Status = pedido.status;
                   const deliver = pedido.delivered_by;
                   const colum = (
-                    <div className="adm_orders_id">
-                      <Link
-                        to={{
-                          pathname: "/adm/pedidoespecifico",
-                          state: {
-                            date: date,
-                            orderId: id,
-                            Status: Status,
-                            deliver: deliver,
-                          },
-                        }}
-                        style={{ color: "black" }}
-                      >
-                        Detalhes...
-                      </Link>
-                    </div>
+                    <TableRow>
+                      <TableCell component="td" scope="row">
+                        {pedido.order_id}
+                      </TableCell>
+                      <TableCell component="td" scope="row">
+                        {<OrderTable status={pedido.status} />}
+                      </TableCell>
+                      <TableCell component="td" scope="row">
+                        <Link
+                          to={{
+                            pathname: "/adm/pedidoespecifico",
+                            state: {
+                              date: date,
+                              orderId: id,
+                              Status: Status,
+                              deliver: deliver,
+                            },
+                          }}
+                          style={{ color: "black" }}
+                        >
+                          Detalhes...
+                        </Link>
+                      </TableCell>
+                    </TableRow>
                   );
-
                   return colum;
                 })}
-              </td>
-            </tr>
-          </table>
+              </TableBody>
+            </Table>
+          </TableContainer>
 
           {/* Os <th> sao o cabeçalho da tabela. O tr é uma linha da tabela. */}
         </div>

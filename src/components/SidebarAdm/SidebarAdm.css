@@ -69,7 +69,7 @@
     text-decoration: none;
 }
 
-@media(max-width: 600px){
+@media(max-width: 100px){
 
     .sidebar .MuiList-root a{
         color: #201F24;

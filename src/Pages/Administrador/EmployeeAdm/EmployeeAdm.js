@@ -100,7 +100,7 @@ function EmployeeAdm() {
         imageAlt={meta.imageAlt}
       />
       <div>
-        <Link className="buttonEmployee" to="/adm/cadastrofuncionarios">
+        <Link className="buttonEmployee" to="/adm/funcionarios/cadastro">
           <Button type="button">CADASTRAR FUNCIONÁRIO</Button>
         </Link>
       </div>

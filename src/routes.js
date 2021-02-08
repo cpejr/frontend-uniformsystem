@@ -214,19 +214,24 @@ function AdmRoutes() {
       <HeaderAdm />
       <SidebarAdm>
         <Switch>
-          <PrivateADMRoute path="/adm/home" component={HomeEditable} />
-          <PrivateADMOrEmployeeRoute path="/adm/pedidos" component={OrdersAdm} />
+          <PrivateADMRoute
+            path="/adm/home"
+            component={HomeEditable}
+          />
+          <PrivateADMOrEmployeeRoute
+            path="/adm/pedidos"
+            exact
+            component={OrdersAdm}
+          />
           <PrivateADMOrEmployeeRoute
             path="/adm/pedidoespecifico"
             export
             component={EspecificOrderAdm}
           />
-          <PrivateADMRoute path="/adm/produtos" component={ProductsAdm} />
-          <PrivateADMRoute path="/adm/funcionarios" export component={EmployeeAdm} />
-          <PrivateADMRoute
-            path="/adm/cadastrofuncionarios"
-            export
-            component={CadastroFunc}
+          <PrivateADMRoute 
+            path="/adm/produtos" 
+            exact
+            component={ProductsAdm} 
           />
           <PrivateADMRoute
             path="/adm/produtos/cadastro"
@@ -237,6 +242,17 @@ function AdmRoutes() {
             path="/adm/produtos/:product_id"
             export
             component={EditProduct}
+          />
+          <PrivateADMRoute 
+            path="/adm/funcionarios" 
+            export
+            exact 
+            component={EmployeeAdm} 
+          />
+          <PrivateADMRoute
+            path="/adm/funcionarios/cadastro"
+            export
+            component={CadastroFunc}
           />
           <PrivateADMRoute
             path="/adm/funcionario/:id"

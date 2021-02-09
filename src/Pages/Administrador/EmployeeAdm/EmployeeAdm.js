@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
-import { Helmet } from "react-helmet";
+import { FaSearch } from 'react-icons/fa';
 import MetaData from "../../../meta/reactHelmet";
 import { Link } from "react-router-dom";
 
@@ -35,9 +35,11 @@ const useStyles = makeStyles({
 
 function EmployeeAdm() {
   const classes = useStyles();
-  const { token } = useContext(LoginContext);
+  const { token, user } = useContext(LoginContext);
   const [employees, setEmployees] = useState([]);
+  const [funcionarioFiltrado, setFuncionarioFiltrado] = useState([]);;
   const [dialogItem, setDialogItem] = useState({ open: false, item: null });
+  const inputSearch = useRef(null);
 
   const meta = {
     titlePage: "Administrador | Funcionário",
@@ -64,6 +66,7 @@ function EmployeeAdm() {
       });
       console.log(response);
       setEmployees([...response.data.employees]);
+      setFuncionarioFiltrado([...response.data.employees]);
     } catch (error) {
       console.warn(error);
       alert("Erro ao buscar funcionários");
@@ -89,6 +92,26 @@ function EmployeeAdm() {
     getEmployees();
   }, []);
 
+  function FilterEmployee() {
+    //Seta para vazio
+    setFuncionarioFiltrado([]);
+
+    const employee_name = inputSearch.current.value.toLowerCase();
+    employees.map((employee) => {
+      if(employee.name.toLowerCase().includes(employee_name)){
+        //Adiciona funcionario filtrado ao array
+        setFuncionarioFiltrado(funcionarioFiltrado => [...funcionarioFiltrado, employee])
+        // funcionario.push(employee);
+        // setEmployees(funcionario);
+      }
+    });
+    
+    // Se nao tiver nada no Input de busca, cooca todos
+    if(employee_name === ''){
+      setFuncionarioFiltrado([...employees]);
+    }
+  }
+
   return (
     <div>
       <MetaData
@@ -99,10 +122,22 @@ function EmployeeAdm() {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
+      <div className="topEmployee">
+      <div className="searchEmployee">
+        <input
+          id="searchEmployee"
+          type="text"
+          ref={inputSearch}
+          placeholder="Buscar Funcionário"
+        />
+
+        <FaSearch onClick={FilterEmployee} className="searchButtonEmployee" />
+      </div>
       <div>
         <Link className="buttonEmployee" to="/adm/funcionarios/cadastro">
           <Button type="button">CADASTRAR FUNCIONÁRIO</Button>
         </Link>
+      </div>
       </div>
       <TableContainer component={Paper}>
         <Table
@@ -124,8 +159,8 @@ function EmployeeAdm() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {employees.length > 0 ? (
-              employees.map((employee) => {
+            {funcionarioFiltrado.length > 0 ? (
+              funcionarioFiltrado.map((employee) => {
                 const id = employee.user_id;
                 const colum = (
                 <TableRow key={employee.user_id}>
@@ -140,9 +175,13 @@ function EmployeeAdm() {
                     scope="row"
                     className={classes.actions}
                   >
-                    <IconButton onClick={() => handleOpen(employee)}>
-                      <BsFillTrashFill />
-                    </IconButton>
+                    {
+                      id !== user[0].user_id ? 
+                        <IconButton onClick={() => handleOpen(employee)}>
+                          <BsFillTrashFill />
+                        </IconButton>:
+                      null
+                    }
                     <IconButton>
                       <Link to={`/adm/funcionario/`+id}>
                         <BsInfoCircle />

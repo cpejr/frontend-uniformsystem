@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import { Carousel } from 'react-bootstrap';
 
 import camisa from '../../Assets/camisa.jpg';
@@ -35,6 +36,15 @@ function Home() {
   //             login()
   //             console.log('TESTE', window.location.pathname)
   //         }, [])
+
+  const meta = {
+    titlePage: "Uniformes Ecommerce | Home",
+    titleSearch: "Profit Uniformes | Home",
+    description: "Loja on-line de uniformização profissional. Venha conhecer nossos produtos!",
+    keyWords: "Uniformes | Home | Ecommerce | Profit",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   const conteudoHome = {
     Carrossel: [
@@ -198,6 +208,7 @@ function Home() {
 
   return (
     <div className="fullContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="divCarousel">
         {imagesCarousel.length > 0 ? 
         

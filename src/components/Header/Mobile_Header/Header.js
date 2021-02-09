@@ -18,7 +18,6 @@ function MobileHeader() {
 
     const { user, logOut } = useContext(LoginContext);
     const currentUser = !user || user === 'notYet' ? null : user[0];
-    const name = currentUser.name.split(" ");
 
     const handleLogOut = () => {
         logOut();
@@ -56,7 +55,7 @@ function MobileHeader() {
                             >
                                 <FaUser className="user_icon" />
                                 <div className="aboutTheUser" style={{ width: "fit-content", cursor: "pointer"}}>
-                                    {name[0].toUpperCase()}
+                                    {currentUser.name.split(" ")[0].toUpperCase()}
                                 </div>
                             </Link>
                             :

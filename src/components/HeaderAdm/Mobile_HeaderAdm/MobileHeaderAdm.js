@@ -12,7 +12,6 @@ function MobileHeaderAdm() {
     const history = useHistory();
     const { user, logOut } = useContext(LoginContext);
     const currentUser = user[0];
-    const name = currentUser.name.split(" ");
 
     const handleLogOut = () => {
         logOut();
@@ -31,7 +30,7 @@ function MobileHeaderAdm() {
                     <Link className="aboutTheUser" style={{textDecoration: 'none', color: "#fff"}} to="/perfil">
                         <FaUserCircle />
                         <div className="divNameFunction" >
-                            <span>{name[0]}</span>
+                            <span>{currentUser.name.split(" ")[0]}</span>
                             <p>{currentUser.user_type === 'adm' ? "Administrador"
                             :
                                 "Funcionário"

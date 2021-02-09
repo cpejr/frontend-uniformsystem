@@ -72,7 +72,7 @@ export default function DropDownLoginContent(props) {
         if (User.length > 0 && Password.length > 6) {
             try {
                 setLoading(true);
-                const response = await api.post("/login", {
+                const response = await api.post("/session/login", {
                     "email": User,
                     "password": Password,
                 });

@@ -56,7 +56,7 @@ function EspecificEmployee( {history} ) {
 
   async function getEspecificEmployee() {
     try {
-      const resultado = await api.get(`/employees/${id}`, {
+      const resultado = await api.get(`/users/employees/${id}`, {
         headers: { authorization: `bearer ${token}` },
       });
       setEmployees([...resultado.data.user]);

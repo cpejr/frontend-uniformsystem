@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
-import { Helmet } from "react-helmet";
 import { FaSearch } from 'react-icons/fa';
 import MetaData from "../../../meta/reactHelmet";
 import { Link } from "react-router-dom";
@@ -36,9 +35,9 @@ const useStyles = makeStyles({
 
 function EmployeeAdm() {
   const classes = useStyles();
-  const { token } = useContext(LoginContext);
+  const { token, user } = useContext(LoginContext);
   const [employees, setEmployees] = useState([]);
-  const funcionario = [];
+  const [funcionarioFiltrado, setFuncionarioFiltrado] = useState([]);;
   const [dialogItem, setDialogItem] = useState({ open: false, item: null });
   const inputSearch = useRef(null);
 
@@ -67,6 +66,7 @@ function EmployeeAdm() {
       });
       console.log(response);
       setEmployees([...response.data.employees]);
+      setFuncionarioFiltrado([...response.data.employees]);
     } catch (error) {
       console.warn(error);
       alert("Erro ao buscar funcionários");
@@ -93,15 +93,23 @@ function EmployeeAdm() {
   }, []);
 
   function FilterEmployee() {
-    const employee_name = inputSearch.current.value;
+    //Seta para vazio
+    setFuncionarioFiltrado([]);
+
+    const employee_name = inputSearch.current.value.toLowerCase();
     employees.map((employee) => {
-    //const resultado = employees.filter(employee => employee.name.toLowerCase() === employee_name)
-    if(employee.name === employee_name){
-        funcionario.push(employee);
-        setEmployees(funcionario);
-    }
+      if(employee.name.toLowerCase().includes(employee_name)){
+        //Adiciona funcionario filtrado ao array
+        setFuncionarioFiltrado(funcionarioFiltrado => [...funcionarioFiltrado, employee])
+        // funcionario.push(employee);
+        // setEmployees(funcionario);
+      }
     });
-    //alert('vc está procurando');
+    
+    // Se nao tiver nada no Input de busca, cooca todos
+    if(employee_name === ''){
+      setFuncionarioFiltrado([...employees]);
+    }
   }
 
   return (
@@ -151,8 +159,8 @@ function EmployeeAdm() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {employees.length > 0 ? (
-              employees.map((employee) => {
+            {funcionarioFiltrado.length > 0 ? (
+              funcionarioFiltrado.map((employee) => {
                 const id = employee.user_id;
                 const colum = (
                 <TableRow key={employee.user_id}>
@@ -167,9 +175,13 @@ function EmployeeAdm() {
                     scope="row"
                     className={classes.actions}
                   >
-                    <IconButton onClick={() => handleOpen(employee)}>
-                      <BsFillTrashFill />
-                    </IconButton>
+                    {
+                      id !== user[0].user_id ? 
+                        <IconButton onClick={() => handleOpen(employee)}>
+                          <BsFillTrashFill />
+                        </IconButton>:
+                      null
+                    }
                     <IconButton>
                       <Link to={`/adm/funcionario/`+id}>
                         <BsInfoCircle />

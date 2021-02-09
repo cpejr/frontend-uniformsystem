@@ -22,7 +22,7 @@
 }
 
 .pedido .pedidoStatus {
-  margin: 12px 0px;
+  margin: 0px 0px;
 }
 
 .pedido .horizontalLine {
@@ -31,7 +31,7 @@
   margin-block-start: 0.3em;
   margin-block-end: 0.5em;
 }
- 
+
 .pedido .pedidoBotao2 {
   margin-top: 8%;
   margin-left: 15%;
@@ -52,7 +52,7 @@
     align-items: flex-start;
   }
 
-  .pedido + .pedido{
+  .pedido + .pedido {
     margin-top: 16px;
   }
 }

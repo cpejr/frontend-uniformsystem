@@ -221,7 +221,7 @@ function AdmRoutes() {
             export
             component={EspecificOrderAdm}
           />
-          <PrivateADMRoute path="/adm/produtos" component={ProductsAdm} />
+          <PrivateADMRoute path="/adm/produtos" exact component={ProductsAdm} />
           <PrivateADMRoute path="/adm/funcionarios" export component={EmployeeAdm} />
           <PrivateADMRoute
             path="/adm/cadastrofuncionarios"

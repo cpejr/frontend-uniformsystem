@@ -20,6 +20,7 @@ function Header() {
 
     const { user, logOut } = useContext(LoginContext);
     const currentUser = !user || user === 'notYet' ? null : user[0];
+    const name = currentUser.name.split(" ");
 
     const handleLogOut = () => {
         logOut();
@@ -55,7 +56,7 @@ function Header() {
                                 to="/perfil"
                             >
                                 <FaUser className="user_icon" />
-                                <div style={{ width: "fit-content", cursor: "pointer"}}>{currentUser.name.toUpperCase()}</div>
+                                <div style={{ width: "fit-content", cursor: "pointer"}}>{name[0].toUpperCase()}</div>
                             </Link>
                             :
                                 <>

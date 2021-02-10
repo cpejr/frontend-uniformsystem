@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect} from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import {BrowserRouter, Route, Switch, Redirect, Link} from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import Home from "./Pages/Home";
@@ -41,6 +41,9 @@ import {
   isClientOrADMOrEmployee,
 } from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
+import Fab from "@material-ui/core/Fab";
+import EditIcon from "@material-ui/icons/Edit";
+import HomeIcon from '@material-ui/icons/Home';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -133,6 +136,7 @@ function MenuRoutes() {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
+  const { user } = useContext(LoginContext);
   useEffect(() => {
     function handleResize() {
         setWindowDimensions(getWindowDimensions());
@@ -168,6 +172,13 @@ function MenuRoutes() {
           <Route path='*' exact component={Error} />
         </Switch>
         </SidebarClient>
+        {(user !== null && user[0].user_type === "adm") ?
+          <Link to="/adm/home" style={{position: 'fixed', right: 10, bottom: 10}}>
+            <Fab color="primary" aria-label="edit">
+              <EditIcon />
+            </Fab>
+          </Link>
+          : null}
         <Footer />
       </div>
     );
@@ -197,6 +208,13 @@ function MenuRoutes() {
           {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
           <Route path='*' exact component={Error} />
         </Switch>
+        {(user !== null && user[0].user_type === "adm") ?
+          <Link to="/adm/home" style={{position: 'fixed', right: '1vw', bottom: '11vh'}}>
+            <Fab color="primary" aria-label="edit">
+              <EditIcon />
+            </Fab>
+          </Link>
+          : null}
         <Footer />
       </div>
     );
@@ -262,6 +280,13 @@ function AdmRoutes() {
           <Route path="*" exact={true} component={Error} />
         </Switch>
       </SidebarAdm>
+      {(user !== null && user[0].user_type === "adm") ?
+        <Link to="/" style={{position: 'fixed', right: '1vw', bottom: '11vh'}}>
+          <Fab color="primary" aria-label="home">
+            <HomeIcon />
+          </Fab>
+        </Link>
+        : null}
       <FooterAdm />
     </div>
   );

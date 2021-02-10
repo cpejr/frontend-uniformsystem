@@ -43,6 +43,7 @@ import {
 import { LoginContext } from "./contexts/LoginContext";
 import Fab from "@material-ui/core/Fab";
 import EditIcon from "@material-ui/icons/Edit";
+import HomeIcon from '@material-ui/icons/Home';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -279,6 +280,13 @@ function AdmRoutes() {
           <Route path="*" exact={true} component={Error} />
         </Switch>
       </SidebarAdm>
+      {(user !== null && user[0].user_type === "adm") ?
+        <Link to="/" style={{position: 'fixed', right: '1vw', bottom: '11vh'}}>
+          <Fab color="primary" aria-label="home">
+            <HomeIcon />
+          </Fab>
+        </Link>
+        : null}
       <FooterAdm />
     </div>
   );

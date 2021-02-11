@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # Instala o Node
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2
+      with:
+       node-version: 12.x
+    # Passo 1: Instalar as dependências NPM/Yarn
+    - name: Install dependencies
+      run: npm install
+
+    # Passo 3: Copiar código para a Digital Ocean
+    - name: Copy files to Digital Ocean
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        key: ${{ secrets.SSH_KEY }}
+        source: ".,!node_modules"
+        target: "~/uniformSystem/frontend"
+  
+    # RUN SCRIPT FOR PRODUCTION
+    - name: Run production script
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        key: ${{ secrets.SSH_KEY }}
+        script: | 
+         cd ~/uniformSystem/frontend
+         npm install
+         npm run build
+         pm2 restart static-page-server-3000

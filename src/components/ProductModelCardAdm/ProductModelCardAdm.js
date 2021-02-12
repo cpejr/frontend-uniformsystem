@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ProductModelCardAdm.css";
 
-import { FaEdit, FaStar, FaTrashAlt } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 
 import Switch from "react-switch";
 import api from "../../services/api";
@@ -29,12 +29,6 @@ function ProductModelCardAdm({
     // handleClose();
   };
 
-  const handleDeleteModel = (product_model_id) => {
-    const copyProductModelArray = [...productModelArray];
-    copyProductModelArray.splice(product_model_id, 1);
-    setProductModelArray(copyProductModelArray);
-  };
-
   const handleSwitchChange = async () => {
     try {
       await api.put(`/model/${product_model_id}`, { available: !available });
@@ -46,11 +40,7 @@ function ProductModelCardAdm({
 
   return (
     <div className="productModelCardAdmFullContent">
-      <Switch onChange={handleSwitchChange} checked={available} />
-      <FaTrashAlt
-        className="iconGarbage"
-        onClick={() => handleDeleteModel(product_model_id)}
-      />
+      <Switch onChange={handleSwitchChange} checked={available} className="iconAvailable"/>
       {fileToShow ? (
         <img src={fileToShow} alt={modelDescription} />
       ) : imgLink.includes(bucketAWS) ? (
@@ -61,7 +51,7 @@ function ProductModelCardAdm({
       <span className="modelName">{modelDescription}</span>
 
       <div className="priceAndGender">
-        <span>{`R$ ${price}`}</span>
+        <span>{`R$ ${Number(price).toFixed(2).replace(".", ",")}`}</span>
         <span>{gender === "M" ? "Masculino" : "Feminino"}</span>
       </div>
 

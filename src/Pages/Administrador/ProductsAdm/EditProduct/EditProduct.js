@@ -208,25 +208,11 @@ function EditProduct({ history }) {
 
         // Deleto todos os product models de início
         if (oldProductModelsArray.length > 0) {
-          let params;
 
           oldProductModelsArray.map(async (item) => {
-            if (item.imgLink !== "Sem imagem") {
-              let nameWithType = item.imgLink.split(bucketAWS)[1];
-              params = {
-                name: nameWithType.split(".")[0],
-                type: nameWithType.split(".")[1],
-              };
-            } else {
-              params = {
-                name: "Sem imagem",
-                type: null,
-              };
-            }
 
             await api.delete(`/model/${item.product_model_id}`, {
-              headers: { authorization: `bearer ${token}` },
-              params,
+              headers: { authorization: `bearer ${token}` }
             });
           });
         }
@@ -241,9 +227,10 @@ function EditProduct({ history }) {
             );
             objImage.append("is_main", item.isMain);
             objImage.append("img_link", item.imgLink.name ? "." : item.imgLink);
-            objImage.append("price", item.price.replace(",", ".")); // substitui "," por ".", pois backend tem validação por "." em price
+            objImage.append("price", item.price); // substitui "," por ".", pois backend tem validação por "." em price
             objImage.append("model_description", item.modelDescription);
             objImage.append("gender", item.gender);
+            console.log("🚀 ~ file: EditProduct.js ~ line 249 ~ productModelsArray.map ~ objImage", objImage)
 
             await api.post(`/newmodel/${productInfo.product_id}`, objImage, {
               headers: { authorization: `bearer ${token}` },

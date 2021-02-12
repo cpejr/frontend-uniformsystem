@@ -7,17 +7,19 @@ import {Helmet} from 'react-helmet';
 import MetaData from '../../meta/reactHelmet';
 import api from '../../services/api';
 import { LoginContext } from '../../contexts/LoginContext';
+import { useHistory } from 'react-router-dom';
 
 import "./Perfil.css";
 
 function Perfil() {
 
-  const { user, token } = useContext(LoginContext);
+  const { user, logOut, token } = useContext(LoginContext);
   console.log('usuario', user)
   const currentUser = user[0];
   const [userAddress, setUserAddress] = useState({});
   const [userOrders, setUserOrders] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const history = useHistory();
 
   const meta = {
     titlePage: "Uniformes Ecommerce | Perfil",
@@ -28,10 +30,23 @@ function Perfil() {
     imageAlt: "",
   }
 
+  async function deleteUser() {
+    try {
+      await api.delete(`/delUserClient/${currentUser.user_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      history.push("/")
+      logOut()
+    } catch (error) {
+      console.warn(error);
+      alert("Erro ao excluir usuário");
+    }
+  }
+
   useEffect(() => {
     try{
       async function getAddress(){
-        const response = await api.get('/address',
+        const response = await api.get(`/address/${currentUser.user_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -121,6 +136,16 @@ function Perfil() {
             : 
               null
           }
+        </div>
+
+        <div>
+          <button
+            className="button-perfil"
+            style={{ width: "22vw", marginTop: "5vh" }}
+            onClick={deleteUser}
+          >
+            Apagar conta
+          </button>
         </div>
       </div>
 

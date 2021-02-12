@@ -92,12 +92,13 @@ function Produto() {
     const response = await getProductModelsFromProduct(product_id);
 
     setProduto(response);
+    const arrayOfModels = response.models;
 
     // Armazena o modela
-    setModels(response.models);
+    setModels(arrayOfModels);
 
-    const choosen = response.models.find((item) => item.is_main === 1);
-    console.log('choosen', choosen)
+
+    const choosen = arrayOfModels[Math.floor(Math.random() * arrayOfModels.length)];;
 
     // Acha modelo principal
     setModelChoosen(!choosen? 1: choosen);
@@ -206,15 +207,16 @@ function Produto() {
       objProdcutInCart.append("isLogoUpload", logoImage ? true: false);
       
       // console.log("gender", formattedGender);
+      console.log("product model id", modelChoosen.product_model_id);
+      console.log("gender", formattedGender);
       console.log("size", selectedValue.split("_")[1]);
       console.log("amount", Number(inputQuantity.current.value));
       console.log("logo_link", logoImage? logoImage.imgSrc : null);
       console.log("isLogoUpload", logoImage ? true: false);
 
-      console.log("objNoProductInCart", objProdcutInCart.entries());
       try {
         const response = await api.put("/addtocart", objProdcutInCart, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { authorization: `Bearer ${token}` },
         });
         console.log("resposta", response.data);
 

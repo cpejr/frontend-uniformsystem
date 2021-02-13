@@ -19,7 +19,7 @@ export default function DropDownCartContent(props) {
   const [productsInCart, setProductsInCart] = useState([]);
 
   async function getProducts() {
-    const response = await api.get('/cart', {
+    const response = await api.get('/productInCart/cart', {
       headers: { Authorization: `Bearer ${token}` },
     });
     setProductsInCart(response.data);
@@ -106,7 +106,7 @@ export default function DropDownCartContent(props) {
           className="stylized_button"
           onClick={() => {
             handleClickAway();
-            history.push("/cart");
+            history.push("/cart"); //pagina do carrinho
           }}
         >
           Ir para o carrinho

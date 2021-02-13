@@ -200,7 +200,7 @@ function Checkout() {
   // Lista dos produtos para finalizar pedido
   async function getProducts() {
     try {
-      const response = await api.get('/cart', {
+      const response = await api.get('/productInCart/cart', {
         headers: {
           authorization: `bearer ${token}`,
         },

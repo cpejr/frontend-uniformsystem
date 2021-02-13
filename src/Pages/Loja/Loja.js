@@ -3,7 +3,6 @@ import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
 import { useHistory } from 'react-router-dom';
-import {Helmet} from 'react-helmet';
 import MetaData from '../../meta/reactHelmet';
 import { FaFilter, FaSearch, FaTruckLoading } from 'react-icons/fa';
 import _ from 'lodash';
@@ -78,7 +77,7 @@ function Loja() {
     } catch (error) {
       console.warn(error);
       alert('Erro no servidor.');
-      history.push('Error');
+      // history.push('Error');
     }
   }
 
@@ -223,8 +222,11 @@ function Loja() {
           pageLoading.current = true;
           page.current++;
           getProducts().then(newProducts => {
-            setProducts([...products, ...newProducts]);
-            pageLoading.current = false;
+
+            if(newProducts){
+              setProducts([...products, ...newProducts]);
+              pageLoading.current = false;
+            }
           });
         }
       }
@@ -297,9 +299,12 @@ function Loja() {
         </div>
 
         <div className="productContainer">
-          {products.map(product => (
-            <ProductCard key={product.product_id} product={product} />
-          ))}
+          {products && products.lenght > 0 ? 
+            products.map(product => (
+              <ProductCard key={product.product_id} product={product} />
+            )):
+            <h1>Sem produtos cadastrados...</h1>
+          }
         </div>
       </div>
     </div>

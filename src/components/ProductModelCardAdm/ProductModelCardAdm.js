@@ -8,11 +8,10 @@ import api from "../../services/api";
 
 function ProductModelCardAdm({
   handleSelectToEdit,
-  productModelArray,
-  setProductModelArray,
   fullProduct,
+  whichMethodIs
 }) {
-  const [available, setAvailable] = useState(fullProduct.available);
+  const [isAvailable, setIsAvailable] = useState(fullProduct.available);
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const {
@@ -24,23 +23,32 @@ function ProductModelCardAdm({
     product_model_id,
   } = fullProduct;
 
+
+
   const handleEditModel = () => {
     handleSelectToEdit(product_model_id);
     // handleClose();
   };
 
-  const handleSwitchChange = async () => {
-    try {
-      await api.put(`/model/${product_model_id}`, { available: !available });
-      setAvailable(!available);
-    } catch (error) {
-      console.error(error);
+  const handleSwitchChange = async (type) => {
+    
+    if(type === 'edit'){
+      try {
+        await api.put(`/model/${product_model_id}`, { available: !isAvailable });
+        setIsAvailable(!isAvailable);
+        fullProduct.available = !isAvailable;
+      } catch (error) {
+        console.error(error);
+      }
+    }else{
+      setIsAvailable(!isAvailable);
+      fullProduct.available = !isAvailable;
     }
   };
 
   return (
     <div className="productModelCardAdmFullContent">
-      <Switch onChange={handleSwitchChange} checked={available} className="iconAvailable"/>
+      <Switch onChange={() => handleSwitchChange(whichMethodIs)} checked={isAvailable} className="iconAvailable"/>
       {fileToShow ? (
         <img src={fileToShow} alt={modelDescription} />
       ) : imgLink.includes(bucketAWS) ? (

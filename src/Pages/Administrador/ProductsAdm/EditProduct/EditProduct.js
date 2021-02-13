@@ -315,6 +315,7 @@ function EditProduct({ history }) {
                     productModelArray={productModelsArray}
                     setProductModelArray={setProductModelsArray}
                     fullProduct={item}
+                    whichMethodIs={'edit'}
                   />
                 ) : null
               )}

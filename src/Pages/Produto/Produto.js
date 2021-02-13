@@ -216,7 +216,7 @@ function Produto() {
           setMessageSnackbar("Produto adicionado no carrinho!");
           setTypeSnackbar("success");
           setOpenSnackbar(true);
-        }, 500);
+        }, 800);
         
       } catch (err) {
         setMessageSnackbar("Falha ao adicionar o produto");

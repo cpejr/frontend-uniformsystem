@@ -222,7 +222,6 @@ function Loja() {
           pageLoading.current = true;
           page.current++;
           getProducts().then(newProducts => {
-
             if(newProducts){
               setProducts([...products, ...newProducts]);
               pageLoading.current = false;
@@ -299,7 +298,7 @@ function Loja() {
         </div>
 
         <div className="productContainer">
-          {products && products.lenght > 0 ? 
+          {products ? 
             products.map(product => (
               <ProductCard key={product.product_id} product={product} />
             )):

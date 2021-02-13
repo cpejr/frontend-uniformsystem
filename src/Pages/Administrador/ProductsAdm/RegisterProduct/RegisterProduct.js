@@ -315,7 +315,7 @@ function RegisterProduct({ history }) {
           inputName.current.value = "";
           inputDescription.current.value = "";
           setProductModelsArray([]);
-        }, 3000);
+        }, 2000);
       } catch (err) {
         console.log(err.message);
       }

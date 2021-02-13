@@ -228,7 +228,7 @@ function Checkout() {
 
   // Pega endereço
   async function getAddress() {
-    const response = await api.get(`/address/${user_id}`, {
+    const response = await api.get(`/address`, {
       headers: { authorization: `bearer ${token}` },
     });
     setAddress({ ...response.data.adresses[0] });

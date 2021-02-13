@@ -52,6 +52,17 @@ function SelectedImages({
   }
 }
 
+const maskPhone = value => {
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d{5})(\d{4})(\d)/, "$1-$2");
+};
+
+const maskOnlyLetters = value => {
+  return value.replace(/[!@#¨$%^&*)(+=._-]+/g, "");
+};
+
 function InputsOrIconWithInput({
   label,
   placeholderInfo,
@@ -74,7 +85,63 @@ function InputsOrIconWithInput({
           outline: "none",
         }}
         placeholder={placeholderInfo}
+        onChange={(e) => setInfo(maskOnlyLetters(e.target.value))}
+      />
+    </div>
+  );
+}
+
+function InputsOrIconWithInputUrl({
+  label,
+  placeholderInfo,
+  icon,
+  hasIcon,
+  defaultValue,
+  setInfo,
+}) {
+  return (
+    <div className="labelWithInputHomeEditable">
+      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label}</label>}
+      <input
+        type="url"
+        name="inputFromLabel"
+        value={defaultValue}
+        style={{
+          border: "1px solid #aaa",
+          borderRadius: "15px",
+          padding: "5px 10px",
+          outline: "none",
+        }}
+        placeholder={placeholderInfo}
         onChange={(e) => setInfo(e.target.value)}
+      />
+    </div>
+  );
+}
+
+function InputsOrIconWithInputPhone({
+  label,
+  placeholderInfo,
+  icon,
+  hasIcon,
+  defaultValue,
+  setInfo,
+}) {
+  return (
+    <div className="labelWithInputHomeEditable">
+      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label}</label>}
+      <input
+        type="text"
+        name="inputFromLabel"
+        value={defaultValue}
+        style={{
+          border: "1px solid #aaa",
+          borderRadius: "15px",
+          padding: "5px 10px",
+          outline: "none",
+        }}
+        placeholder={placeholderInfo}
+        onChange={(e) => setInfo(maskPhone(e.target.value))}
       />
     </div>
   );
@@ -166,6 +233,7 @@ function HomeEditable() {
   const [facebookInfo, setFacebookInfo] = useState("");
   const [instagramInfo, setInstagramInfo] = useState("");
   const [whatsappInfo, setWhatsappInfo] = useState("");
+  const [phone, setPhone] = useState("");
 
   // UseEffect para inicializar as informações da Home
   useEffect(() => {
@@ -828,7 +896,7 @@ function HomeEditable() {
         </div>
 
         <div className="changeInfoArea">
-          <InputsOrIconWithInput
+          <InputsOrIconWithInputPhone
             label={"TELEFONE"}
             placeholderInfo={"(XX) XXXX-XXXX"}
             icon={<FacebookIcon />}
@@ -846,7 +914,7 @@ function HomeEditable() {
           />
           <div className="socialMediaInfo" style={{ marginTop: "24px" }}>
             <h2>REDES SOCIAIS</h2>
-            <InputsOrIconWithInput
+            <InputsOrIconWithInputUrl
               label={"FACEBOOK"}
               placeholderInfo={"testeholder"}
               icon={
@@ -858,7 +926,7 @@ function HomeEditable() {
               hasIcon={true}
               setInfo={setFacebookInfo}
             />
-            <InputsOrIconWithInput
+            <InputsOrIconWithInputUrl
               label={"INSTAGRAM"}
               placeholderInfo={"testeholder"}
               icon={
@@ -870,7 +938,7 @@ function HomeEditable() {
               hasIcon={true}
               setInfo={setInstagramInfo}
             />
-            <InputsOrIconWithInput
+            <InputsOrIconWithInputPhone
               label={"WHATSAPP"}
               placeholderInfo={"testeholder"}
               icon={

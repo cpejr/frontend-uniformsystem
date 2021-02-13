@@ -55,7 +55,7 @@ function MobileHeader() {
                             >
                                 <FaUser className="user_icon" />
                                 <div className="aboutTheUser" style={{ width: "fit-content", cursor: "pointer"}}>
-                                    {currentUser.name.toUpperCase()}
+                                    {currentUser.name.split(" ")[0].toUpperCase()}
                                 </div>
                             </Link>
                             :

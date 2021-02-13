@@ -1,11 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./Footer.css";
 import { Link } from "react-router-dom";
 
 import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import Logo from "../../Assets/Logo_1.png";
 
+import api from "../../services/api";
+import { LoginContext } from "../../contexts/LoginContext";
+
+
 function ComputerFooter() {
+  
+  const { token } = useContext(LoginContext);
+  const [FacebookInfo, setFacebookInfo] = useState("");
+  const [EnderecoInfo, setEnderecoInfo] = useState("");
+  const [InstagramInfo, setInstagramInfo] = useState("");
+  const [WhatsappInfo, setWhatsappInfo] = useState("");
+  const [TelephoneInfo, setTelephoneInfo] = useState("");
+
+  useEffect(() => {
+    async function getContactInfo() {
+      try {
+        const response = await api.get("/home/info", {
+          headers: { authorization: `bearer ${token}` },
+        });
+
+        if (response.data.length === 0) {
+          throw new Error("Home info is Empty");
+        }
+        const address = response.data.filter((item) =>
+          item.key === "address" ? item.data : null
+        )[0];
+        const facebookLink = response.data.filter((item) =>
+          item.key === "facebookLink" ? item.data : null
+        )[0];
+        const instagramLink = response.data.filter((item) =>
+          item.key === "instagramLink" ? item.data : null
+        )[0];
+        const whatsAppNumber = response.data.filter((item) =>
+          item.key === "whatsAppNumber" ? item.data : null
+        )[0];
+        const cellphone = response.data.filter((item) =>
+            item.key === "cellphone" ? item.data : null
+        )[0];
+        setEnderecoInfo(address.data);
+        setFacebookInfo(facebookLink.data);
+        setInstagramInfo(instagramLink.data);
+        setWhatsappInfo(whatsAppNumber.data);
+        setTelephoneInfo(cellphone.data)
+      } catch (error) {
+        console.warn(error);
+      }
+    }
+    getContactInfo();
+  }, []);
+
     return (
         <div className="all_footer">
             <div className="content_footer">
@@ -14,37 +63,38 @@ function ComputerFooter() {
                         <img src={Logo} alt="Logo" className="Logo" />
                     </Link>
                 </div>
-                <a href="https://www.google.com.br" className="customize">
+                <a href={`https://www.google.com/maps?q=${EnderecoInfo}`} target="_blank" rel="noreferrer" className="customize">
                     <p
                         className="address"
                         style={{
                             height: "80% !important",
                             textAlign: "center",
-                            fontSize: "14px",
+                            fontSize: "16px",
                             margin: "auto",
+                            maxWidth: "35vw",
                         }}
                     >
-                        Rua Alguma Coisa, 100, Liberdade
-                        <br />
-                        Belo Horizonte - MG
+                        {EnderecoInfo}
                     </p>
                 </a>
-                <a href="https://www.google.com.br" className="customize">
-                    (31) 99999-9999
-                </a>
-                <a href="https://www.google.com.br" className="contact">
+                <p className="mt-3">
+                    {TelephoneInfo === "" ? "Sem dados" : TelephoneInfo}
+                </p>
+                <a href="/contact" className="contact">
                     CONTATO
                 </a>
                 <div className="icons">
-                    <a href="https://www.facebook.com" className="facebook">
+                    <a href={FacebookInfo === "" ? "https://www.facebook.com/" : FacebookInfo} target="_blank" rel="noreferrer" className="facebook">
                         <FaFacebook />
                     </a>
-                    <a href="https://www.instagram.com" className="instagram">
+                    <a href={InstagramInfo === "" ? "https://www.instagram.com/" : `https://www.instagram.com/${InstagramInfo}`} target="_blank" rel="noreferrer" className="instagram">
                         <FaInstagram />
                     </a>
-                    <a href="https://www.whatsapp.com" className="whatsapp">
+                    
+                    <a href="#" className="whatsapp">
                         <FaWhatsapp />
                     </a>
+                    
                 </div>
             </div>
         </div>
@@ -52,6 +102,51 @@ function ComputerFooter() {
 }
 
 function MobileFooter() {
+
+  const { token } = useContext(LoginContext);
+  const [FacebookInfo, setFacebookInfo] = useState("");
+  const [EnderecoInfo, setEnderecoInfo] = useState("");
+  const [InstagramInfo, setInstagramInfo] = useState("");
+  const [WhatsappInfo, setWhatsappInfo] = useState("");
+  const [TelephoneInfo, setTelephoneInfo] = useState("");
+
+  useEffect(() => {
+    async function getContactInfo() {
+      try {
+        const response = await api.get("/home/info", {
+          headers: { authorization: `bearer ${token}` },
+        });
+
+        if (response.data.length === 0) {
+          throw new Error("Home info is Empty");
+        }
+        const address = response.data.filter((item) =>
+          item.key === "address" ? item.data : null
+        )[0];
+        const facebookLink = response.data.filter((item) =>
+          item.key === "facebookLink" ? item.data : null
+        )[0];
+        const instagramLink = response.data.filter((item) =>
+          item.key === "instagramLink" ? item.data : null
+        )[0];
+        const whatsAppNumber = response.data.filter((item) =>
+          item.key === "whatsAppNumber" ? item.data : null
+        )[0];
+        const cellphone = response.data.filter((item) =>
+            item.key === "cellphone" ? item.data : null
+        )[0];
+        setEnderecoInfo(address.data);
+        setFacebookInfo(facebookLink.data);
+        setInstagramInfo(instagramLink.data);
+        setWhatsappInfo(whatsAppNumber.data);
+        setTelephoneInfo(cellphone.data)
+      } catch (error) {
+        console.warn(error);
+      }
+    }
+    getContactInfo();
+  }, []);
+
     return (
         <div className="cell_footer">
             <div className="logo">
@@ -61,36 +156,31 @@ function MobileFooter() {
             </div>
             <div className="content_footer">
                 {/* <div className="firstLine"> */}
-                    <a href="https://www.google.com.br" className="customize">
+                    <a href={`https://www.google.com/maps?q=${EnderecoInfo}`} target="_blank" rel="noreferrer" className="customize">
                         <p
                             className="address"
                         >
-                            Rua Alguma Coisa, 100, Liberdade
-                            <br />
-                            Belo Horizonte - MG
+                            {EnderecoInfo}
                         </p>
                     </a>
-                    <a href="https://www.google.com.br" className="customize">
-                        (31) 99999-9999
-                    </a>
+                    <p>
+                        {TelephoneInfo === "" ? "Sem dados" : TelephoneInfo}
+                    </p>
                {/*  </div>
                 <div className="secondLine"> */}
-                    <a href="https://www.google.com.br" className="contact">
+                    <a href="/contact" className="contact">
                         CONTATO
                     </a>
                     <div className="icons">
-                        <a href="https://www.facebook.com" className="facebook">
+                        <a href={FacebookInfo === "" ? "https://www.facebook.com/" : FacebookInfo} target="_blank" rel="noreferrer" className="facebook">
                             <FaFacebook />
                         </a>
-                        <a
-                            href="https://www.instagram.com"
-                            className="instagram"
-                        >
+                        <a href={InstagramInfo === "" ? "https://www.instagram.com/" : `https://www.instagram.com/${InstagramInfo}`} target="_blank" rel="noreferrer" className="instagram">
                             <FaInstagram />
                         </a>
-                        <a href="https://www.whatsapp.com" className="whatsapp">
-                            <FaWhatsapp />
-                        </a>
+                        <a href="#" className="whatsapp">
+                        <FaWhatsapp />
+                    </a>
                     {/* </div> */}
                 </div>
             </div>

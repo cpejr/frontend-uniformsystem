@@ -171,15 +171,16 @@ function Cadastro({ history }) {
     setOpenSnackBar(false);
   };
 
-  // useEffect(() => {
-  //   console.log(userInfo)
-  // }, [userInfo]);
+  useEffect(() => {
+    console.log(userInfo)
+  }, [userInfo]);
 
   // useEffect(() => {
   //   console.log(addressInfo);
   // }, [addressInfo])
 
   const handleInputChange = (e, type) => {
+    // Setting User Info
     let newUserInfo;
     let newAddressInfo;
 
@@ -208,9 +209,16 @@ function Cadastro({ history }) {
       }
     }
 
+    if (type === "telefone") {
+      newUserInfo = {
+        telefone: e.target.value
+      } 
+    }
+
+    // Setting Address Info
     if(type === 'rua'){
       newAddressInfo = {
-        rua: e.target.value
+        street: e.target.value
       }
       setAddressInfo({ ...addressInfo, ...newAddressInfo })
     }
@@ -255,46 +263,30 @@ function Cadastro({ history }) {
       newAddressInfo = {
         state: e.target.value
       }
-      console.log(newAddressInfo.state);
       setAddressInfo({ ...addressInfo, state: e.target.value });
     }
 
     const Address = {
       address: { ...addressInfo }
     }
-
+    console.log(Address)
     setUserInfo({ ...userInfo, ...newUserInfo, ...Address });
   }
 
   const handleSubmit = async () => {
-    const resultValidateName = validateInput("name", nomeInput.current.value);
-    const resultValidateCPF = validateInput("CPF", CPFInput.current.value);
-    const resultValidateEmail = validateInput("email", emailInput.current.value);
-    const resultValidatePassword = validateInput("password", passwordInput.current.value);
-    const resultValidateRua = validateInput("rua", ruaInput.current.value);
-    const resultValidateNum = validateInput("numero", numInput.current.value);
-    const resultValidateComplemento = validateInput(
-      "complemento",
-      complementoInput.current.value
-    );
-    const resultValidateBairro = validateInput(
-      "bairro",
-      bairroInput.current.value
-    );
-    const resultValidateCEP = validateInput("CEP", CEPInput.current.value);
-    const resultValidateCidade = validateInput(
-      "cidade",
-      cidadeInput.current.value
-    );
-    const resultValidateEstado = validateInput('estado', estadoInput.current.value);
-    const resultValidatePontoRef = validateInput(
-      "pontoRef",
-      pontoRefInput.current.value
-    );
-    const resultValidateTelefone = validateInput(
-      "telefone",
-      telefoneInput.current.value
-    );
+    const resultValidateName = validateInput( "name" , nomeInput.current.value );
+    const resultValidateCPF = validateInput( "CPF" , CPFInput.current.value );
+    const resultValidateEmail = validateInput( "email" , emailInput.current.value );
+    const resultValidatePassword = validateInput( "password" , passwordInput.current.value );
+    const resultValidateRua = validateInput( "rua" , ruaInput.current.value );
+    const resultValidateNum = validateInput( "numero" , numInput.current.value );
+    const resultValidateComplemento = validateInput( "complemento" , complementoInput.current.value );
+    const resultValidateBairro = validateInput( "bairro" , bairroInput.current.value );
+    const resultValidateCEP = validateInput( "CEP" , CEPInput.current.value );
+    const resultValidateCidade = validateInput( "cidade" , cidadeInput.current.value );
+    const resultValidateEstado = validateInput( 'estado' , estadoInput.current.value );
+    const resultValidatePontoRef = validateInput( "pontoRef" , pontoRefInput.current.value );
+    const resultValidateTelefone = validateInput( "telefone" , telefoneInput.current.value );
 
     if (
       !resultValidateName ||
@@ -442,13 +434,14 @@ function Cadastro({ history }) {
       setErrorTelefone(false);
       setErrorTelefoneMessage("");
 
-      const str1 = addressInfo.rua;
+      const str1 = addressInfo.street;
       const str2 = addressInfo.number;
 
       const halfStreet = str1.concat(" ");
-      const street = halfStreet.concat(str2);
+      const street = halfStreet.concat( ', número:', str2 );
+      // const street = str1 + " " + str2;
 
-      console.log('street = ', street);
+      console.log(street);
 
       setAddressInfo({ ...addressInfo, street: street });
 
@@ -464,11 +457,10 @@ function Cadastro({ history }) {
   
       setUserInfo({ ...userInfo, ...Address });
 
-      console.log(userInfo);
+      console.log(userInfo.address);
 
       try {
         setLoading(true);
-
         const response = await api.post(
           "/user",
           userInfo,
@@ -570,6 +562,7 @@ function Cadastro({ history }) {
           <TextField
             required
             label="CPF"
+            type="number"
             InputLabelProps={{
               classes: {
                 root: classes.inputLabel,
@@ -580,6 +573,9 @@ function Cadastro({ history }) {
               classes: {
                 root: classes.inputBox
               }
+            }}
+            onInput = {(e) =>{
+              e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,11)
             }}
             inputRef={CPFInput}
             error={errorCPF}
@@ -668,6 +664,7 @@ function Cadastro({ history }) {
         <TextField
           required
           label="N°"
+          type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
@@ -739,6 +736,7 @@ function Cadastro({ history }) {
           <TextField
             required
             label="CEP"
+            type="number"
             InputLabelProps={{
               classes: {
                 root: classes.inputLabel,
@@ -749,6 +747,9 @@ function Cadastro({ history }) {
               classes: {
                 root: classes.inputBox
               }
+            }}
+            onInput = {(e) =>{
+              e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,8)
             }}
             inputRef={CEPInput}
             error={errorCEP}
@@ -834,17 +835,22 @@ function Cadastro({ history }) {
       <TextField
         required
         label="Telefone"
+        type="number"
         InputLabelProps={{
           classes: {
             root: classes.inputLabel,
             focused: classes.inputLabelFocused
           }
         }}
+        onInput = {(e) =>{
+          e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,12)
+        }}
         inputRef={telefoneInput}
         error={errorTelefone}
         helperText={errorTelefoneMessage}
         className={classes.mediumInput}
         variant="outlined"
+        onChange={(event) => handleInputChange(event, 'telefone')}
       />
 
       <div className={classes.divButtons}>

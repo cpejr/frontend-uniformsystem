@@ -107,6 +107,20 @@ const validateFields = (value) => {
     return isValid;
 } 
 
+const validateImages = (arrayOfImages, arrayOfExcludedImages, isWhoWeAreImage = false) => {
+    let isValid = true;
+    if(isWhoWeAreImage){
+      if(!arrayOfImages.file){
+        isValid = false;
+      }
+    }else{
+      if((arrayOfImages.length === 0 && arrayOfExcludedImages.length === 0) || arrayOfImages.length - arrayOfExcludedImages.length <= 0){
+        isValid = false;
+      }
+    }
+    return isValid;
+} 
+
 function HomeEditable() {
   const { token } = useContext(LoginContext);
   const history = useHistory();
@@ -130,6 +144,15 @@ function HomeEditable() {
     instagramLink: '',
     whatsAppLink: '',
   });
+
+  const [errorImageCarousel, setErrorImageCarousel] = useState(false);
+  const [errorImageCarouselMessage, setErrorImageCarouselMessage] = useState("");
+
+  const [errorImageWhoWeAre, setErrorImageWhoWeAre] = useState(false);
+  const [errorImageWhoWeAreMessage, setErrorImageWhoWeAreMessage] = useState("");
+
+  const [errorImageProducts, setErrorImageProducts] = useState(false);
+  const [errorImageProductsMessage, setErrorImageProductsMessage] = useState("");
 
   const [errorTextWhoWeAre, setErrorTextWhoWeAre] = useState(false);
   const [errorTextWhoWeAreMessage, setErrorTextWhoWeAreMessage] = useState("");
@@ -225,9 +248,7 @@ function HomeEditable() {
         const response = await api.get("/home/info", {
           headers: { authorization: `bearer ${token}` },
         });
-        console.log('response', response)
         if(response.data){
-          console.log('entoru')
           const textWhoWeAre = response.data.filter((item) =>
             item.key === "textWhoWeAre" ? item.data : null
           )[0];
@@ -255,7 +276,6 @@ function HomeEditable() {
           const whatsAppLink = response.data.filter((item) =>
             item.key === "whatsAppLink" ? item.data : null
           )[0];
-          console.log('aqu', textWhoWeAre.data)
 
           setHomeInfo({
             textWhoWeAre: textWhoWeAre.data,
@@ -474,6 +494,10 @@ function HomeEditable() {
   // Função para salvar as informações depois de editar a Home
   async function handleSaveChanges() {
 
+    const imageCarouselValidated = validateImages(imagesCarousel, excludedCarouselImages);
+    const imageWhoWeAreValidated = validateImages(imagesWhoWeAre, excludedWhoWeAreImages, true);
+    const imageProductsValidated = validateImages(imagesProducts, excludedProductsImages);
+    
     const textWhoWeAreValidated = validateFields(homeInfo.textWhoWeAre);
     const textProductsValidated = validateFields(homeInfo.textProducts);
     const telephoneInfoValidated = validateFields(homeInfo.telephoneInfo);
@@ -482,8 +506,34 @@ function HomeEditable() {
     const instagramLinkValidated = validateFields(homeInfo.instagramLink);
     const whatsAppLinkValidated = validateFields(homeInfo.whatsAppLink);
 
-    if(!textWhoWeAreValidated || !textProductsValidated || !telephoneInfoValidated || !enderecoInfoValidated
-    || !facebookLinkValidated || !instagramLinkValidated || !whatsAppLinkValidated){
+    if( !imageCarouselValidated || !imageWhoWeAreValidated || !imageProductsValidated
+      || !textWhoWeAreValidated || !textProductsValidated || !telephoneInfoValidated 
+      || !enderecoInfoValidated || !facebookLinkValidated || !instagramLinkValidated 
+      || !whatsAppLinkValidated){
+
+      if(!imageCarouselValidated){
+        setErrorImageCarousel(true);
+        setErrorImageCarouselMessage('Campo obrigatório.');
+      }else{
+        setErrorImageCarousel(false);
+        setErrorImageCarouselMessage('');
+      }
+
+      if(!imageWhoWeAreValidated){
+        setErrorImageWhoWeAre(true);
+        setErrorImageWhoWeAreMessage('Campo obrigatório.');
+      }else{
+        setErrorImageWhoWeAre(false);
+        setErrorImageWhoWeAreMessage('');
+      }
+
+      if(!imageProductsValidated){
+        setErrorImageProducts(true);
+        setErrorImageProductsMessage('Campo obrigatório.');
+      }else{
+        setErrorImageProducts(false);
+        setErrorImageProductsMessage('');
+      }
 
       if(!textWhoWeAreValidated){
         setErrorTextWhoWeAre(true);
@@ -559,7 +609,6 @@ function HomeEditable() {
             whatsAppLink: homeInfo.whatsAppLink,
           },
         }
-        console.log('home info', objTeste);
         const teste = await api.put(
           "/home/info",
           objTeste,
@@ -568,7 +617,6 @@ function HomeEditable() {
           }
         );
   
-        console.log('ajaja', teste)
       } catch (err) {
         console.warn(err.message);
       }
@@ -577,7 +625,6 @@ function HomeEditable() {
       try {
         // Deleta imagens para colocar novas - Carrossel
         if(excludedCarouselImages[0]){
-          console.log('excludedCarouselImages', excludedCarouselImages);
           excludedCarouselImages.forEach(async (item) => {
             if (item.file.includes(bucketAWS)) {
               const nameWithType = item.file.split(".com/")[1];
@@ -592,7 +639,6 @@ function HomeEditable() {
   
         // Deleta imagens para colocar novas - Who We Are
         if(excludedWhoWeAreImages.file){
-          console.log('excludedWhoWeAreImages', excludedWhoWeAreImages);
           if (excludedWhoWeAreImages.file.includes(bucketAWS)) {
             const nameWithType = excludedWhoWeAreImages.file.split(".com/")[1];
             const name = nameWithType.split(".")[0];
@@ -605,7 +651,6 @@ function HomeEditable() {
   
         // Deleta imagens para colocar novas - Products
         if(excludedProductsImages[0]){
-          console.log('excludedProductsImages', excludedProductsImages);
           excludedProductsImages.forEach(async (item) => {
             if (item.file.includes(bucketAWS)) {
               const nameWithType = item.file.split(".com/")[1];
@@ -622,7 +667,6 @@ function HomeEditable() {
         // setImagesHome([])
         // Posta novas imagens
         if (imagesCarousel[0] && imagesCarousel[0].file) {
-  
           imagesCarousel.map(async (item) => {
             if (!item.file.includes(bucketAWS)) {
               let objImage = new FormData();
@@ -756,7 +800,7 @@ function HomeEditable() {
 
         <div className="changeImagesPart">
           <h2>ALTERAR IMAGENS</h2>
-          <div className="boxChangeImages">
+          <div className="boxChangeImages" style={errorImageCarousel? {marginBottom: '0px', borderColor: '#f44336'}: { marginBottom: '24px'}}>
             {imagesCarousel.map((item, index) =>
               item ? (
                 <SelectedImages
@@ -769,6 +813,9 @@ function HomeEditable() {
               ) : null
             )}
           </div>
+          <span style={errorImageCarousel? {display:'block', color: '#f44336', fontSize: '14px', marginBottom: '24px'}: {display: 'none'}}>
+            {errorImageCarouselMessage}
+          </span>
           <div className="buttonsCarouselPart">
             <Button className="firstButton" onClick={handleAddImageCarousel}>
               <input
@@ -833,16 +880,21 @@ function HomeEditable() {
         <div className="changeImageArea">
           <h2>ALTERAR IMAGEM</h2>
           <div className="imageWhoWeAre">
-            <div className="boxChangeImageWhoWeAre">
-              {imagesWhoWeAre.file ? (
-                <SelectedImages
-                  srcImg={imagesWhoWeAre.file}
-                  altImg={imagesWhoWeAre.imgAlt}
-                  whoWeAre={true}
-                />
-              ) : (
-                <span>Sem imagem</span>
-              )}
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: '100%', width: '60%'}}>
+              <div className="boxChangeImageWhoWeAre" style={errorImageWhoWeAre? {marginBottom: '0px', borderColor: '#f44336'}: { marginBottom: '24px'}}>
+                {imagesWhoWeAre.file ? (
+                  <SelectedImages
+                    srcImg={imagesWhoWeAre.file}
+                    altImg={imagesWhoWeAre.imgAlt}
+                    whoWeAre={true}
+                  />
+                ) : (
+                  <span>Sem imagem</span>
+                )}
+              </div>
+              <span style={errorImageWhoWeAre? {display:'block', color: '#f44336', fontSize: '14px'}: {display: 'none'}}>
+                {errorImageWhoWeAreMessage}
+              </span>
             </div>
             <div className="buttonsWhoWeArePart">
               <Button className="firstButton" onClick={handleAddImageWhoWeAre}>
@@ -909,7 +961,7 @@ function HomeEditable() {
 
         <div className="changeImagesPart">
           <h2>ALTERAR PRODUTOS - UNIVERSITÁRIOS</h2>
-          <div className="boxChangeImages">
+          <div className="boxChangeImages" style={errorImageProducts? {marginBottom: '0px', borderColor: '#f44336'}: { marginBottom: '24px'}}>
             {imagesProducts.map((item, index) =>
               item ? (
                 <SelectedImages
@@ -922,6 +974,9 @@ function HomeEditable() {
               ) : null
             )}
           </div>
+          <span style={errorImageProducts? {display:'block', color: '#f44336', fontSize: '14px', marginBottom: '24px'}: {display: 'none', marginBottom: '24px'}}>
+            {errorImageProductsMessage}
+          </span>
           <div className="buttonsCarouselPart">
             <Button className="firstButton" onClick={handleAddImageProducts}>
               <input

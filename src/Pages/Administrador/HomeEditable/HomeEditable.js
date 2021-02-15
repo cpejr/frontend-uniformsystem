@@ -3,16 +3,9 @@ import MetaData from "../../../meta/reactHelmet";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
-
-import CircularProgress from "@material-ui/core/CircularProgress";
-
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import DeleteIcon from "@material-ui/icons/Delete";
-
-// import Snackbar from "@material-ui/core/Snackbar";
-// import MuiAlert from "@material-ui/lab/Alert";
-
-import Button from "@material-ui/core/Button";
+import { Button, CircularProgress, TextField} from "@material-ui/core";
 
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
@@ -63,6 +56,7 @@ const maskOnlyLetters = value => {
   return value.replace(/[!@#¨$%^&*)(+=._-]+/g, "");
 };
 
+
 function InputsOrIconWithInput({
   label,
   placeholderInfo,
@@ -70,82 +64,48 @@ function InputsOrIconWithInput({
   hasIcon,
   defaultValue,
   setInfo,
+  field,
+  errorBoolean,
+  errorMessage
 }) {
+
+  const handleChangeText = (value) => {
+    setInfo( oldValue => ({
+      textWhoWeAre: oldValue.textWhoWeAre,
+      textProducts: oldValue.textProducts,
+      telephoneInfo: field === "telephone" ? maskPhone(value) : oldValue.telephoneInfo,
+      enderecoInfo: field === "endereco" ? value : oldValue.enderecoInfo,
+      facebookUsername: field === "facebook" ? value : oldValue.facebookLink,
+      instagramUsername: field === "instagram" ? value : oldValue.instagramLink,
+      facebookLink: field === "facebook" ? value : oldValue.facebookLink,
+      instagramLink: field === "instagram" ? value : oldValue.instagramLink,
+      whatsAppLink: field === "whatsapp" ? value : oldValue.whatsAppLink,
+    }));
+  }
   return (
     <div className="labelWithInputHomeEditable">
-      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label}</label>}
-      <input
+      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label.toUpperCase()}</label>}
+      <TextField
+        variant="outlined"
         type="text"
-        name="inputFromLabel"
         value={defaultValue}
-        style={{
-          border: "1px solid #aaa",
-          borderRadius: "15px",
-          padding: "5px 10px",
-          outline: "none",
-        }}
+        label={label}
+        error={errorBoolean}
+        helperText={errorMessage}
         placeholder={placeholderInfo}
-        onChange={(e) => setInfo(maskOnlyLetters(e.target.value))}
+        onChange={(e) => handleChangeText(e.target.value)}
       />
     </div>
   );
 }
 
-function InputsOrIconWithInputUrl({
-  label,
-  placeholderInfo,
-  icon,
-  hasIcon,
-  defaultValue,
-  setInfo,
-}) {
-  return (
-    <div className="labelWithInputHomeEditable">
-      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label}</label>}
-      <input
-        type="url"
-        name="inputFromLabel"
-        value={defaultValue}
-        style={{
-          border: "1px solid #aaa",
-          borderRadius: "15px",
-          padding: "5px 10px",
-          outline: "none",
-        }}
-        placeholder={placeholderInfo}
-        onChange={(e) => setInfo(e.target.value)}
-      />
-    </div>
-  );
-}
-
-function InputsOrIconWithInputPhone({
-  label,
-  placeholderInfo,
-  icon,
-  hasIcon,
-  defaultValue,
-  setInfo,
-}) {
-  return (
-    <div className="labelWithInputHomeEditable">
-      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label}</label>}
-      <input
-        type="text"
-        name="inputFromLabel"
-        value={defaultValue}
-        style={{
-          border: "1px solid #aaa",
-          borderRadius: "15px",
-          padding: "5px 10px",
-          outline: "none",
-        }}
-        placeholder={placeholderInfo}
-        onChange={(e) => setInfo(maskPhone(e.target.value))}
-      />
-    </div>
-  );
-}
+const validateFields = (value) => {
+    let isValid = true;
+    if(value === ''){
+      isValid = false;
+    }
+    return isValid;
+} 
 
 function HomeEditable() {
   const { token } = useContext(LoginContext);
@@ -157,6 +117,40 @@ function HomeEditable() {
 
   // Estado para armazenar todas as imagens da Home
   const [imagesHome, setImagesHome] = useState([]);
+
+  // Estados para armazenar textos
+  const [homeInfo, setHomeInfo] = useState({
+    textWhoWeAre: '',
+    textProducts: '',
+    telephoneInfo: '',
+    enderecoInfo: '',
+    facebookUsername: '',
+    instagramUsername: '',
+    facebookLink: '',
+    instagramLink: '',
+    whatsAppLink: '',
+  });
+
+  const [errorTextWhoWeAre, setErrorTextWhoWeAre] = useState(false);
+  const [errorTextWhoWeAreMessage, setErrorTextWhoWeAreMessage] = useState("");
+
+  const [errorTextProducts, setErrorTextProducts] = useState(false);
+  const [errorTextProductsMessage, setErrorTextProductsMessage] = useState("");
+
+  const [errorTelephone, setErrorTelephone] = useState(false);
+  const [errorTelephoneMessage, setErrorTelephoneMessage] = useState("");
+
+  const [errorEndereco, setErrorEndereco] = useState(false);
+  const [errorEnderecoMessage, setErrorEnderecoMessage] = useState("");
+
+  const [errorFacebookLink, setErrorFacebookLink] = useState(false);
+  const [errorFacebookLinkMessage, setErrorFacebookLinkMessage] = useState("");
+
+  const [errorInstagramLink, setErrorInstagramLink] = useState(false);
+  const [errorInstagramLinkMessage, setErrorInstagramLinkMessage] = useState("");
+
+  const [errorWhatsAppLink, setErrorWhatsAppLink] = useState(false);
+  const [errorWhatsAppLinkMessage, setErrorWhatsAppLinkMessage] = useState("");
 
   // Estado para armazenar Imagens do Carrossel
   const [imagesCarousel, setImagesCarousel] = useState([]);
@@ -224,17 +218,6 @@ function HomeEditable() {
   const [excludedWhoWeAreImages, setExcludedWhoWeAreImages] = useState({});
   const [excludedProductsImages, setExcludedProductsImages] = useState([]);
 
-  // Estados para armazenar textos
-  const [textoQuemSomos, setTextoQuemSomos] = useState("");
-  const [textoProdutos, setTextoProdutos] = useState("");
-
-  const [telephoneInfo, setTelephoneInfo] = useState("");
-  const [enderecoInfo, setEnderecoInfo] = useState("");
-  const [facebookInfo, setFacebookInfo] = useState("");
-  const [instagramInfo, setInstagramInfo] = useState("");
-  const [whatsappInfo, setWhatsappInfo] = useState("");
-  const [phone, setPhone] = useState("");
-
   // UseEffect para inicializar as informações da Home
   useEffect(() => {
     async function getHomeInfo() {
@@ -242,8 +225,9 @@ function HomeEditable() {
         const response = await api.get("/home/info", {
           headers: { authorization: `bearer ${token}` },
         });
-        
+        console.log('response', response)
         if(response.data){
+          console.log('entoru')
           const textWhoWeAre = response.data.filter((item) =>
             item.key === "textWhoWeAre" ? item.data : null
           )[0];
@@ -256,30 +240,40 @@ function HomeEditable() {
           const address = response.data.filter((item) =>
             item.key === "address" ? item.data : null
           )[0];
+          const facebookUsername = response.data.filter((item) =>
+            item.key === "facebookUsername" ? item.data : null
+          )[0];
+          const instagramUsername = response.data.filter((item) =>
+            item.key === "instagramUsername" ? item.data : null
+          )[0];
           const facebookLink = response.data.filter((item) =>
             item.key === "facebookLink" ? item.data : null
           )[0];
           const instagramLink = response.data.filter((item) =>
             item.key === "instagramLink" ? item.data : null
           )[0];
-          const whatsAppNumber = response.data.filter((item) =>
-            item.key === "whatsAppNumber" ? item.data : null
+          const whatsAppLink = response.data.filter((item) =>
+            item.key === "whatsAppLink" ? item.data : null
           )[0];
-          setTextoQuemSomos(textWhoWeAre.data);
-          setTextoProdutos(textProducts.data);
-          setTelephoneInfo(cellphone.data);
-          setEnderecoInfo(address.data);
-          setFacebookInfo(facebookLink.data);
-          setInstagramInfo(instagramLink.data);
-          setWhatsappInfo(whatsAppNumber.data);
+          console.log('aqu', textWhoWeAre.data)
+
+          setHomeInfo({
+            textWhoWeAre: textWhoWeAre.data,
+            textProducts: textProducts.data,
+            telephoneInfo: cellphone.data,
+            enderecoInfo: address.data,
+            facebookUsername: facebookLink.data,
+            instagramUsername: instagramLink.data,
+            facebookLink: facebookLink.data,
+            instagramLink: instagramLink.data,
+            whatsAppLink: whatsAppLink.data,
+          });
         }
-  
       } catch (error) {
         // history.push("/errorPage");
         console.warn(error);
       }
     }
-
     getHomeInfo();
   }, []);
 
@@ -337,14 +331,11 @@ function HomeEditable() {
           imgPlace: item.imgPlace,
         }));
       }
-
       setImagesCarousel([...imagesCarousel]);
       setImagesWhoWeAre(imagesWhoWeAre);
       setImagesProducts([...imagesProducts]);
-
       setImagesHome([...imagesCarousel, imagesWhoWeAre, ...imagesProducts]);
     }
-
     getHomeImages();
   }, []);
 
@@ -378,29 +369,22 @@ function HomeEditable() {
 
   function handleDeleteImageCarousel() {
     const indexToExclude = [];
-
     arrayImages.forEach((item, index) => {
       if (item) {
         indexToExclude.push(index);
-
         arrayStateImages[index](false);
-
         const newExcludedCarouselImages = [...excludedCarouselImages];
         newExcludedCarouselImages.push(imagesCarousel[index]);
-
         setExcludedCarouselImages(newExcludedCarouselImages);
       }
     });
-
     const newImagesCarousel = [];
     let excludeIndex = 0;
-
     for (let index = 0; index < imagesCarousel.length; index++) {
       const element = imagesCarousel[index];
       if (indexToExclude[excludeIndex] === index) excludeIndex++;
       else newImagesCarousel.push(element);
     }
-
     setImagesCarousel(newImagesCarousel);
   }
 
@@ -414,7 +398,6 @@ function HomeEditable() {
   function handleAddImageWhoWeAreFileInput() {
     let fileData = new FileReader();
     fileData.readAsDataURL(inputWhoWeAre.current.files[0]);
-
     fileData.onload = function () {
       const fileLoaded = fileData.result;
       setImagesWhoWeAre({
@@ -465,29 +448,23 @@ function HomeEditable() {
 
   function handleDeleteImageProducts() {
     const indexToExclude = [];
-
     arrayImagesProducts.forEach((item, index) => {
       if (item) {
         indexToExclude.push(index);
-
         arrayStateImagesProducts[index](false);
-
         const newExcludedProductsImages = [...excludedProductsImages];
         newExcludedProductsImages.push(imagesProducts[index]);
-
         setExcludedProductsImages(newExcludedProductsImages);
       }
     });
 
     const newImagesProducts = [];
     let excludeIndex = 0;
-
     for (let index = 0; index < imagesProducts.length; index++) {
       const element = imagesProducts[index];
       if (indexToExclude[excludeIndex] === index) excludeIndex++;
       else newImagesProducts.push(element);
     }
-
     setImagesProducts(newImagesProducts);
   }
 
@@ -496,138 +473,183 @@ function HomeEditable() {
 
   // Função para salvar as informações depois de editar a Home
   async function handleSaveChanges() {
-    setLoading(true);
-    // Salva mudanças de Home Info
-    try {
-      const objTeste = {
-        textWhoWeAre: textoQuemSomos,
-        textProducts: textoProdutos,
-        contactInfo: {
-          cellphone: telephoneInfo,
-          address: enderecoInfo,
-          facebookLink: facebookInfo,
-          instagramLink: instagramInfo,
-          whatsAppNumber: whatsappInfo,
-        },
+
+    const textWhoWeAreValidated = validateFields(homeInfo.textWhoWeAre);
+    const textProductsValidated = validateFields(homeInfo.textProducts);
+    const telephoneInfoValidated = validateFields(homeInfo.telephoneInfo);
+    const enderecoInfoValidated = validateFields(homeInfo.enderecoInfo);
+    const facebookLinkValidated = validateFields(homeInfo.facebookLink);
+    const instagramLinkValidated = validateFields(homeInfo.instagramLink);
+    const whatsAppLinkValidated = validateFields(homeInfo.whatsAppLink);
+
+    if(!textWhoWeAreValidated || !textProductsValidated || !telephoneInfoValidated || !enderecoInfoValidated
+    || !facebookLinkValidated || !instagramLinkValidated || !whatsAppLinkValidated){
+
+      if(!textWhoWeAreValidated){
+        setErrorTextWhoWeAre(true);
+        setErrorTextWhoWeAreMessage('Campo obrigatório.');
+      }else{
+        setErrorTextWhoWeAre(false);
+        setErrorTextWhoWeAreMessage('');
       }
-      console.log('home info', objTeste);
-      await api.put(
-        "/home/info",
-        {
-          textWhoWeAre: textoQuemSomos,
-          textProducts: textoProdutos,
+
+      if(!textProductsValidated){
+        setErrorTextProducts(true);
+        setErrorTextProductsMessage('Campo obrigatório.');
+      }else{
+        setErrorTextProducts(false);
+        setErrorTextProductsMessage('');
+      }
+
+      if(!telephoneInfoValidated){
+        setErrorTelephone(true);
+        setErrorTelephoneMessage('Campo obrigatório.');
+      }else{
+        setErrorTelephone(false);
+        setErrorTelephoneMessage('');
+      }
+
+      if(!enderecoInfoValidated){
+        setErrorEndereco(true);
+        setErrorEnderecoMessage('Campo obrigatório.');
+      }else{
+        setErrorEndereco(false);
+        setErrorEnderecoMessage('');
+      }
+
+      if(!facebookLinkValidated){
+        setErrorFacebookLink(true);
+        setErrorFacebookLinkMessage('Campo obrigatório.');
+      }else{
+        setErrorFacebookLink(false);
+        setErrorFacebookLinkMessage('');
+      }
+
+      if(!instagramLinkValidated){
+        setErrorInstagramLink(true);
+        setErrorInstagramLinkMessage('Campo obrigatório.');
+      }else{
+        setErrorInstagramLink(false);
+        setErrorInstagramLinkMessage('');
+      }
+
+      if(!whatsAppLinkValidated){
+        setErrorWhatsAppLink(true);
+        setErrorWhatsAppLinkMessage('Campo obrigatório.');
+      }else{
+        setErrorWhatsAppLink(false);
+        setErrorWhatsAppLinkMessage('');
+      }
+
+    }else{
+      
+      setLoading(true);
+      // Salva mudanças de Home Info
+      try {
+        const objTeste = {
+          textWhoWeAre: homeInfo.textWhoWeAre,
+          textProducts: homeInfo.textProducts,
           contactInfo: {
-            cellphone: telephoneInfo,
-            address: enderecoInfo,
-            facebookLink: facebookInfo,
-            instagramLink: instagramInfo,
-            whatsAppNumber: whatsappInfo,
+            cellphone: homeInfo.telephoneInfo,
+            address: homeInfo.enderecoInfo,
+            facebookUsername: homeInfo.facebookLink,
+            instagramUsername: homeInfo.instagramLink,
+            facebookLink: homeInfo.facebookLink,
+            instagramLink: homeInfo.instagramLink,
+            whatsAppLink: homeInfo.whatsAppLink,
           },
-        },
-        {
-          headers: { authorization: `bearer ${token}` },
         }
-      );
-    } catch (err) {
-      console.warn(err.message);
-    }
-
-    // Salva mudanças de Home Images
-    try {
-      // Deleta imagens para colocar novas - Carrossel
-      if(excludedCarouselImages[0]){
-        console.log('excludedCarouselImages', excludedCarouselImages);
-        excludedCarouselImages.forEach(async (item) => {
-          if (item.file.includes(bucketAWS)) {
-            const nameWithType = item.file.split(".com/")[1];
-            const name = nameWithType.split(".")[0];
-            const type = nameWithType.split(".")[1];
-            await api.delete(`/home/images?name=${name}&type=${type}`, {
-              headers: { authorization: `bearer ${token}` },
-            });
-          }
-        });
-      }
-
-      // Deleta imagens para colocar novas - Who We Are
-      if(excludedWhoWeAreImages.file){
-        console.log('excludedWhoWeAreImages', excludedWhoWeAreImages);
-        if (excludedWhoWeAreImages.file.includes(bucketAWS)) {
-          const nameWithType = excludedWhoWeAreImages.file.split(".com/")[1];
-          const name = nameWithType.split(".")[0];
-          const type = nameWithType.split(".")[1];
-          await api.delete(`/home/images?name=${name}&type=${type}`, {
+        console.log('home info', objTeste);
+        const teste = await api.put(
+          "/home/info",
+          objTeste,
+          {
             headers: { authorization: `bearer ${token}` },
+          }
+        );
+  
+        console.log('ajaja', teste)
+      } catch (err) {
+        console.warn(err.message);
+      }
+  
+      // Salva mudanças de Home Images
+      try {
+        // Deleta imagens para colocar novas - Carrossel
+        if(excludedCarouselImages[0]){
+          console.log('excludedCarouselImages', excludedCarouselImages);
+          excludedCarouselImages.forEach(async (item) => {
+            if (item.file.includes(bucketAWS)) {
+              const nameWithType = item.file.split(".com/")[1];
+              const name = nameWithType.split(".")[0];
+              const type = nameWithType.split(".")[1];
+              await api.delete(`/home/images/${name}.${type}`, {
+                headers: { authorization: `bearer ${token}` },
+              });
+            }
           });
         }
-      }
-
-      // Deleta imagens para colocar novas - Products
-      if(excludedProductsImages[0]){
-        console.log('excludedProductsImages', excludedProductsImages);
-        excludedProductsImages.forEach(async (item) => {
-          if (item.file.includes(bucketAWS)) {
-            const nameWithType = item.file.split(".com/")[1];
+  
+        // Deleta imagens para colocar novas - Who We Are
+        if(excludedWhoWeAreImages.file){
+          console.log('excludedWhoWeAreImages', excludedWhoWeAreImages);
+          if (excludedWhoWeAreImages.file.includes(bucketAWS)) {
+            const nameWithType = excludedWhoWeAreImages.file.split(".com/")[1];
             const name = nameWithType.split(".")[0];
             const type = nameWithType.split(".")[1];
-            await api.delete(`/home/images?name=${name}&type=${type}`, {
+            await api.delete(`/home/images/${name}.${type}`, {
               headers: { authorization: `bearer ${token}` },
             });
           }
-        });
-      }
-
-      // Inicializa
-      // setImagesHome([])
-      // Posta novas imagens
-      if (imagesCarousel[0] && imagesCarousel[0].file) {
-
-        imagesCarousel.map(async (item) => {
-          if (!item.file.includes(bucketAWS)) {
-            let objImage = new FormData();
-
-            objImage.append("file", item.imgSrc);
-            objImage.append("imgPlace", item.imgPlace);
-            objImage.append("imgSrc", item.imgAlt);
-            objImage.append("imgAlt", item.imgAlt);
-
-            await api.post("/home/images", objImage, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                authorization: `bearer ${token}`,
-              },
-            });
-          }
-        });
-      }
-
-      if (imagesWhoWeAre.file) {
-        if (!imagesWhoWeAre.file.includes(bucketAWS)) {
-          let objImage = new FormData();
-          objImage.append("file", imagesWhoWeAre.imgSrc);
-          objImage.append("imgPlace", imagesWhoWeAre.imgPlace);
-          objImage.append("imgSrc", imagesWhoWeAre.imgAlt);
-          objImage.append("imgAlt", imagesWhoWeAre.imgAlt);
-
-          await api.post("/home/images", objImage, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              authorization: `bearer ${token}`,
-            },
+        }
+  
+        // Deleta imagens para colocar novas - Products
+        if(excludedProductsImages[0]){
+          console.log('excludedProductsImages', excludedProductsImages);
+          excludedProductsImages.forEach(async (item) => {
+            if (item.file.includes(bucketAWS)) {
+              const nameWithType = item.file.split(".com/")[1];
+              const name = nameWithType.split(".")[0];
+              const type = nameWithType.split(".")[1];
+              await api.delete(`/home/images/${name}.${type}`, {
+                headers: { authorization: `bearer ${token}` },
+              });
+            }
           });
         }
-      }
-
-      if (imagesProducts[0] && imagesProducts[0].file) {
-
-        imagesProducts.map(async (item) => {
-          if (!item.file.includes(bucketAWS)) {
+  
+        // Inicializa
+        // setImagesHome([])
+        // Posta novas imagens
+        if (imagesCarousel[0] && imagesCarousel[0].file) {
+  
+          imagesCarousel.map(async (item) => {
+            if (!item.file.includes(bucketAWS)) {
+              let objImage = new FormData();
+  
+              objImage.append("file", item.imgSrc);
+              objImage.append("imgPlace", item.imgPlace);
+              objImage.append("imgSrc", item.imgAlt);
+              objImage.append("imgAlt", item.imgAlt);
+  
+              await api.post("/home/images", objImage, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  authorization: `bearer ${token}`,
+                },
+              });
+            }
+          });
+        }
+  
+        if (imagesWhoWeAre.file) {
+          if (!imagesWhoWeAre.file.includes(bucketAWS)) {
             let objImage = new FormData();
-            objImage.append("file", item.imgSrc);
-            objImage.append("imgPlace", item.imgPlace);
-            objImage.append("imgSrc", item.imgAlt);
-            objImage.append("imgAlt", item.imgAlt);
-
+            objImage.append("file", imagesWhoWeAre.imgSrc);
+            objImage.append("imgPlace", imagesWhoWeAre.imgPlace);
+            objImage.append("imgSrc", imagesWhoWeAre.imgAlt);
+            objImage.append("imgAlt", imagesWhoWeAre.imgAlt);
+  
             await api.post("/home/images", objImage, {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -635,24 +657,44 @@ function HomeEditable() {
               },
             });
           }
-        });
+        }
+  
+        if (imagesProducts[0] && imagesProducts[0].file) {
+  
+          imagesProducts.map(async (item) => {
+            if (!item.file.includes(bucketAWS)) {
+              let objImage = new FormData();
+              objImage.append("file", item.imgSrc);
+              objImage.append("imgPlace", item.imgPlace);
+              objImage.append("imgSrc", item.imgAlt);
+              objImage.append("imgAlt", item.imgAlt);
+  
+              await api.post("/home/images", objImage, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  authorization: `bearer ${token}`,
+                },
+              });
+            }
+          });
+        }
+  
+        setTimeout(() => {
+          setLoading(false);
+          setMessageSnackbar("Alterações realizadas com sucesso!");
+          setTypeSnackbar("success");
+          setOpen(true);
+        }, 1500);
+        
+        // Refresh da página
+        // window.location.reload();
+      } catch (err) {
+        setMessageSnackbar("Falha ao atualizar os dados");
+        setTypeSnackbar("error");
+        setLoading(false)
+        console.warn(err.message);
+        return err.message;
       }
-
-      setTimeout(() => {
-        setLoading(false);
-        setMessageSnackbar("Alterações realizadas com sucesso!");
-        setTypeSnackbar("success");
-        setOpen(true);
-      }, 1500);
-
-      // Refresh da página
-      // window.location.reload();
-    } catch (err) {
-      setMessageSnackbar("Falha ao atualizar os dados");
-      setTypeSnackbar("error");
-      setLoading(false)
-      console.warn(err.message);
-      return err.message;
     }
   }
 
@@ -662,17 +704,36 @@ function HomeEditable() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
   const handleTextWhoWeAre = (value) => {
-    console.log('text who we are', value)
-    setTextoQuemSomos(value);
+    setHomeInfo( oldValue => ({
+        textWhoWeAre: value,
+        textProducts: oldValue.textProducts,
+        telephoneInfo: oldValue.telephoneInfo,
+        enderecoInfo: oldValue.enderecoInfo,
+        facebookUsername: oldValue.facebookLink,
+        instagramUsername: oldValue.instagramLink,
+        facebookLink: oldValue.facebookLink,
+        instagramLink: oldValue.instagramLink,
+        whatsAppLink: oldValue.whatsAppLink,
+      })
+    );
   }
 
   const handleProducts = (value) => {
-    setTextoProdutos(value);
+    setHomeInfo( oldValue => ({
+      textWhoWeAre: oldValue.textWhoWeAre,
+      textProducts: value,
+      telephoneInfo: oldValue.telephoneInfo,
+      enderecoInfo: oldValue.enderecoInfo,
+      facebookUsername: oldValue.facebookLink,
+      instagramUsername: oldValue.instagramLink,
+      facebookLink: oldValue.facebookLink,
+      instagramLink: oldValue.instagramLink,
+      whatsAppLink: oldValue.whatsAppLink,
+    }));
   }
 
   return (
@@ -757,8 +818,14 @@ function HomeEditable() {
         <div className="changeTextArea">
           <h2>ALTERAR TEXTO</h2>
           <div className="textWhoWeAre">
-            <textarea
-              defaultValue={textoQuemSomos}
+            <TextField
+              variant="outlined"
+              multiline={true}
+              rows={10}
+              size="medium"
+              value={homeInfo.textWhoWeAre}
+              error={errorTextWhoWeAre}
+              helperText={errorTextWhoWeAreMessage}
               onChange={(e) => handleTextWhoWeAre(e.target.value)}
             />
           </div>
@@ -827,8 +894,14 @@ function HomeEditable() {
         <div className="changeTextArea">
           <h2>ALTERAR TEXTO</h2>
           <div className="textProducts">
-            <textarea
-              defaultValue={textoProdutos}
+            <TextField
+              variant="outlined"
+              multiline={true}
+              rows={10}
+              size="medium"
+              value={homeInfo.textProducts}
+              error={errorTextProducts}
+              helperText={errorTextProductsMessage}
               onChange={(e) => handleProducts(e.target.value)}
             />
           </div>
@@ -896,25 +969,31 @@ function HomeEditable() {
         </div>
 
         <div className="changeInfoArea">
-          <InputsOrIconWithInputPhone
+          <InputsOrIconWithInput
             label={"TELEFONE"}
             placeholderInfo={"(XX) XXXX-XXXX"}
             icon={<FacebookIcon />}
-            defaultValue={telephoneInfo}
+            defaultValue={homeInfo.telephoneInfo}
             hasIcon={false}
-            setInfo={setTelephoneInfo}
+            setInfo={setHomeInfo}
+            errorBoolean={errorTelephone}
+            errorMessage={errorTelephoneMessage}
+            field={"telephone"}
           />
           <InputsOrIconWithInput
             label={"ENDEREÇO"}
             placeholderInfo={"Rua ABC"}
             icon={<FacebookIcon />}
-            defaultValue={enderecoInfo}
+            defaultValue={homeInfo.enderecoInfo}
             hasIcon={false}
-            setInfo={setEnderecoInfo}
+            setInfo={setHomeInfo}
+            errorBoolean={errorEndereco}
+            errorMessage={errorEnderecoMessage}
+            field={"endereco"}
           />
           <div className="socialMediaInfo" style={{ marginTop: "24px" }}>
             <h2>REDES SOCIAIS</h2>
-            <InputsOrIconWithInputUrl
+            <InputsOrIconWithInput
               label={"FACEBOOK"}
               placeholderInfo={"testeholder"}
               icon={
@@ -922,11 +1001,14 @@ function HomeEditable() {
                   style={{ fontSize: "45px", marginRight: "16px" }}
                 />
               }
-              defaultValue={facebookInfo}
+              defaultValue={homeInfo.facebookUsername}
               hasIcon={true}
-              setInfo={setFacebookInfo}
+              setInfo={setHomeInfo}
+              errorBoolean={errorFacebookLink}
+            errorMessage={errorFacebookLinkMessage}
+              field={"facebook"}
             />
-            <InputsOrIconWithInputUrl
+            <InputsOrIconWithInput
               label={"INSTAGRAM"}
               placeholderInfo={"testeholder"}
               icon={
@@ -934,11 +1016,14 @@ function HomeEditable() {
                   style={{ fontSize: "45px", marginRight: "16px" }}
                 />
               }
-              defaultValue={instagramInfo}
+              defaultValue={homeInfo.instagramUsername}
               hasIcon={true}
-              setInfo={setInstagramInfo}
+              setInfo={setHomeInfo}
+              errorBoolean={errorInstagramLink}
+              errorMessage={errorInstagramLinkMessage}
+              field={"instagram"}
             />
-            <InputsOrIconWithInputPhone
+            <InputsOrIconWithInput
               label={"WHATSAPP"}
               placeholderInfo={"testeholder"}
               icon={
@@ -946,9 +1031,12 @@ function HomeEditable() {
                   style={{ fontSize: "45px", marginRight: "16px" }}
                 />
               }
-              defaultValue={whatsappInfo}
+              defaultValue={homeInfo.whatsAppLink}
               hasIcon={true}
-              setInfo={setWhatsappInfo}
+              setInfo={setHomeInfo}
+              errorBoolean={errorWhatsAppLink}
+              errorMessage={errorWhatsAppLinkMessage}
+              field={"whatsapp"}
             />
           </div>
         </div>
@@ -957,16 +1045,6 @@ function HomeEditable() {
       <Button className="saveChangesButton" onClick={handleSaveChanges}>
         {loading ? <CircularProgress color="secondary" /> : "SALVAR ALTERAÇÕES"}
       </Button>
-      {/* <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-        <MuiAlert
-          onClose={handleClose}
-          elevation={6}
-          variant="filled"
-          severity="success"
-        >
-          Alterações realizadas com sucesso!
-        </MuiAlert>
-      </Snackbar> */}
       <SnackbarMessage open={open} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );

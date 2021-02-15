@@ -180,17 +180,17 @@ h1, h2, span, button{
 
 .HomeEditableContent .whoWeArePart .changeTextArea .textWhoWeAre{
     width: 100%;
-    height: 90px;
+    height: auto;
 
     margin-bottom: 16px;
 }
 
-.HomeEditableContent .whoWeArePart .changeTextArea .textWhoWeAre textarea{
+.HomeEditableContent .whoWeArePart .changeTextArea .textWhoWeAre .MuiFormControl-root{
     width: 100%;
     height: 100%;
 
     outline: none;
-    border: 1px solid #AAA;
+    /* border: 1px solid #AAA; */
 }
 
 .HomeEditableContent .whoWeArePart .changeImageArea{
@@ -272,17 +272,17 @@ h1, h2, span, button{
 
 .HomeEditableContent .productsPart .changeTextArea .textProducts{
     width: 100%;
-    height: 90px;
+    height: auto;
 
     margin-bottom: 16px;
 }
 
-.HomeEditableContent .productsPart .changeTextArea .textProducts textarea{
+.HomeEditableContent .productsPart .changeTextArea .textProducts .MuiFormControl-root{
     width: 100%;
     height: 100%;
 
     outline: none;
-    border: 1px solid #AAA;
+    /* border: 1px solid #AAA; */
 }
 
 /* PARTE INFORMAÇÕES DE CONTATO */

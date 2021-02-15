@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useState} from "react";
+import React, { useEffect, useContext, useState } from "react";
 import api from "../../../../services/api";
 import TabelaFuncionarios from "../../../../components/TabelaFuncionario/TabelaFuncionario";
 import { LoginContext } from "../../../../contexts/LoginContext";
@@ -7,8 +7,7 @@ import MetaData from "../../../../meta/reactHelmet";
 import { withRouter, useParams } from "react-router-dom";
 
 import "./EspecificEmployee.css";
-import { FaChevronLeft } from 'react-icons/fa';
-
+import { FaChevronLeft } from "react-icons/fa";
 
 const orderHistory = [
   {
@@ -28,7 +27,7 @@ const orderHistory = [
   },
 ];
 
-function EspecificEmployee( {history} ) {
+function EspecificEmployee({ history }) {
   const [Employees, setEmployees] = useState([]);
   const [Orders, setOrders] = useState([]);
   const meta = {
@@ -50,7 +49,7 @@ function EspecificEmployee( {history} ) {
   var data_br;
   var dia;
 
-  const {id} = useParams();
+  const { id } = useParams();
 
   const { token } = useContext(LoginContext);
 
@@ -64,11 +63,11 @@ function EspecificEmployee( {history} ) {
       console.warn(error);
       alert(error);
     }
-  };
+  }
 
   async function getOrders() {
     try {
-      const resultado2 = await api.get(`/shipping/deliveredby/${id}`, {
+      const resultado2 = await api.get(`/order/shipping/deliveredby/${id}`, {
         headers: { authorization: `bearer ${token}` },
       });
       setOrders([...resultado2.data]);
@@ -76,7 +75,7 @@ function EspecificEmployee( {history} ) {
       console.warn(error);
       alert(error);
     }
-  };
+  }
 
   useEffect(() => {
     getEspecificEmployee();
@@ -84,7 +83,6 @@ function EspecificEmployee( {history} ) {
   }, []); // executa assim que carregar a página
 
   return (
-
     <div className="especific-employee">
       <MetaData
         titlePage={meta.titlePage}
@@ -94,36 +92,31 @@ function EspecificEmployee( {history} ) {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      <FaChevronLeft
-        className="setaVoltar"
-        onClick={() => history.goBack()}
-      />
+      <FaChevronLeft className="setaVoltar" onClick={() => history.goBack()} />
       <div className="boxTitle">
         <h1 className="titleFuncExp">FUNCIONÁRIO ESPECÍFICO</h1>
         <hr className="titleLineExp"></hr>
       </div>
       <div className="tabela">
         {Employees.map((employee) => {
-          name_employee = employee.name
-          user_id = employee.id
-          cpf = employee.cpf
+          name_employee = employee.name;
+          user_id = employee.id;
+          cpf = employee.cpf;
         })}
         {Orders.map((order) => {
-          id_order = 3
-          idpedido = order.order_id
-          data = order.updated_at
+          id_order = 3;
+          idpedido = order.order_id;
+          data = order.updated_at;
           data_br = data.split("-");
           dia = data_br[2].split(" ");
-          data_final = dia[0]+"/"+data_br[1]+"/"+data_br[0];
+          data_final = dia[0] + "/" + data_br[1] + "/" + data_br[0];
         })}
         <TabelaFuncionarios
-          funcionario={ 
-            {
+          funcionario={{
             id: user_id,
             nome: name_employee,
             cpf: cpf,
-            }
-          }
+          }}
           orderHistory={[
             {
               id: id_order,

@@ -1,25 +1,25 @@
 import React, { useEffect, useState, useMemo } from "react";
 import "./CardPedido.css";
-import { MdInfoOutline } from 'react-icons/md';
-import { RiTruckFill } from 'react-icons/ri';
-import { Button } from 'react-bootstrap';
+import { MdInfoOutline } from "react-icons/md";
+import { RiTruckFill } from "react-icons/ri";
+import { Button } from "react-bootstrap";
 
-import api from '../../services/api';
+import api from "../../services/api";
 
-function formatOrderStatus(status){
+function formatOrderStatus(status) {
   let statusInPortuguese;
   switch (status) {
-    case 'waitingPayment':
-      statusInPortuguese = 'Aguardando Pagamento';
+    case "waitingPayment":
+      statusInPortuguese = "Aguardando Pagamento";
       break;
-    case 'pending':
-      statusInPortuguese = 'Pendente';
+    case "pending":
+      statusInPortuguese = "Pendente";
       break;
-    case 'preparing':
-      statusInPortuguese = 'Preparando';
+    case "preparing":
+      statusInPortuguese = "Preparando";
       break;
-    case 'delivering':
-      statusInPortuguese = 'Em entrega';
+    case "delivering":
+      statusInPortuguese = "Em entrega";
       break;
     default:
       break;
@@ -27,74 +27,67 @@ function formatOrderStatus(status){
   return statusInPortuguese;
 }
 
+function CardPedido({ pedido, token }) {
+  const [productsFromOrder, setProductsFromOrder] = useState([]);
 
-function CardPedido({pedido, token}){
+  const orderDate = new Date(pedido.created_at);
+  const dayOrder = orderDate.getDate();
+  const monthOrder = orderDate.getMonth() + 1;
+  const yearOrder = orderDate.getFullYear();
 
-    const [productsFromOrder, setProductsFromOrder] = useState([]);
+  const statusFormatted = formatOrderStatus(pedido.status);
 
-    const orderDate = new Date(pedido.created_at);
-    const dayOrder = orderDate.getDate();
-    const monthOrder = orderDate.getMonth() + 1;
-    const yearOrder = orderDate.getFullYear();
-
-    const statusFormatted = formatOrderStatus(pedido.status);
-
-    useEffect(() => {
-
-      async function getProductsFromOrder(){
-        const response = await api.get(`/productsfromorder/${pedido.order_id}`,
+  useEffect(() => {
+    async function getProductsFromOrder() {
+      const response = await api.get(
+        `/order/productsfromorder/${pedido.order_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        },
-        );
-
-        console.log('products from order', response);
-        if(response.data){
-          setProductsFromOrder(response.data);
         }
+      );
+
+      console.log("products from order", response);
+      if (response.data) {
+        setProductsFromOrder(response.data);
       }
+    }
 
-      getProductsFromOrder();
+    getProductsFromOrder();
+  }, []);
 
-    }, []);
-
-    const totalPriceOrder = useMemo(() => {
-      let totalAux = 0;
-      productsFromOrder.forEach( item => {
-        totalAux += ((item.product_price * item.amount) - item.discount)
-        return totalAux;
-      });
-
-      console.log('aqui', totalAux)
-
+  const totalPriceOrder = useMemo(() => {
+    let totalAux = 0;
+    productsFromOrder.forEach((item) => {
+      totalAux += item.product_price * item.amount - item.discount;
       return totalAux;
-    }, [productsFromOrder]);
+    });
 
-    return (
-      <div className="pedido">
-        <div className="pedidoNumber">ID: {pedido.order_id}</div>
-        <div className="pedidoData">Data do pedido: {dayOrder}/{monthOrder}/{yearOrder}</div>  
-        <hr className="horizontalLine"></hr>
-        <div className="pedidoStatus">
-          <MdInfoOutline style={{fontSize:'22px', marginRight: '7px'}}/>
-          <span>Status: {statusFormatted}</span>
-        </div>  
-        <div className="pedidoDestino">
-          <RiTruckFill style={{fontSize:'22px', marginRight: '7px'}}/>
-          <span>Destino: {pedido.city}/{pedido.state} - {pedido.zip_code}</span>
-        </div>  
-        <div className="pedidoTotal">Total: R$ {totalPriceOrder.toFixed(2)}</div>  
-        <Button className="pedidoBotao2">
-          Acompanhar pedido
-        </Button>
+    console.log("aqui", totalAux);
+
+    return totalAux;
+  }, [productsFromOrder]);
+
+  return (
+    <div className="pedido">
+      <div className="pedidoNumber">ID: {pedido.order_id}</div>
+      <div className="pedidoData">
+        Data do pedido: {dayOrder}/{monthOrder}/{yearOrder}
       </div>
-    );
-
+      <hr className="horizontalLine"></hr>
+      <div className="pedidoStatus">
+        <MdInfoOutline style={{ fontSize: "22px", marginRight: "7px" }} />
+        <span>Status: {statusFormatted}</span>
+      </div>
+      <div className="pedidoDestino">
+        <RiTruckFill style={{ fontSize: "22px", marginRight: "7px" }} />
+        <span>
+          Destino: {pedido.city}/{pedido.state} - {pedido.zip_code}
+        </span>
+      </div>
+      <div className="pedidoTotal">Total: R$ {totalPriceOrder.toFixed(2)}</div>
+      <Button className="pedidoBotao2">Acompanhar pedido</Button>
+    </div>
+  );
 }
 
 export default CardPedido;
-
-
-
-
-

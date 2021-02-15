@@ -55,7 +55,7 @@ function EspecificOrderAdm(props) {
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const obterPedidos = async () => {
-    const resultado = await api.get(`productsfromorder/${orderId}`, {
+    const resultado = await api.get(`/order/productsfromorder/${orderId}`, {
       headers: { authorization: `bearer ${token}` },
     });
     console.log(resultado);
@@ -104,7 +104,7 @@ function EspecificOrderAdm(props) {
       if (Code != "") {
         try {
           const response = await api.post(
-            `deliveratmail/${orderId}`,
+            `order/deliveratmail/${orderId}`,
             {
               tracking_code: Code,
             },

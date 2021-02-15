@@ -12,7 +12,6 @@ import { LoginContext } from "../../../contexts/LoginContext";
 import SnackbarMessage from "../../../components/SnackbarMessage";
 
 import "./HomeEditable.css";
-import { useHistory } from "react-router-dom";
 
 function SelectedImages({
   srcImg,
@@ -75,8 +74,8 @@ function InputsOrIconWithInput({
       textProducts: oldValue.textProducts,
       telephoneInfo: field === "telephone" ? maskPhone(value) : oldValue.telephoneInfo,
       enderecoInfo: field === "endereco" ? value : oldValue.enderecoInfo,
-      facebookUsername: field === "facebook" ? value : oldValue.facebookLink,
-      instagramUsername: field === "instagram" ? value : oldValue.instagramLink,
+      facebookUsername: field === "facebook user" ? value : oldValue.facebookUsername,
+      instagramUsername: field === "instagram user" ? value : oldValue.instagramUsername,
       facebookLink: field === "facebook" ? value : oldValue.facebookLink,
       instagramLink: field === "instagram" ? value : oldValue.instagramLink,
       whatsAppLink: field === "whatsapp" ? value : oldValue.whatsAppLink,
@@ -123,7 +122,6 @@ const validateImages = (arrayOfImages, arrayOfExcludedImages, isWhoWeAreImage = 
 
 function HomeEditable() {
   const { token } = useContext(LoginContext);
-  const history = useHistory();
 
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
@@ -145,6 +143,9 @@ function HomeEditable() {
     whatsAppLink: '',
   });
 
+  const maximumImagesCarousel = 5;
+  const maximumImagesProducts = 3;
+
   const [errorImageCarousel, setErrorImageCarousel] = useState(false);
   const [errorImageCarouselMessage, setErrorImageCarouselMessage] = useState("");
 
@@ -165,6 +166,12 @@ function HomeEditable() {
 
   const [errorEndereco, setErrorEndereco] = useState(false);
   const [errorEnderecoMessage, setErrorEnderecoMessage] = useState("");
+
+  const [errorFacebookUsername, setErrorFacebookUsername] = useState(false);
+  const [errorFacebookUsernameMessage, setErrorFacebookUsernameMessage] = useState("");
+
+  const [errorInstagramUsername, setErrorInstagramUsername] = useState(false);
+  const [errorInstagramUsernameMessage, setErrorInstagramUsernameMessage] = useState("");
 
   const [errorFacebookLink, setErrorFacebookLink] = useState(false);
   const [errorFacebookLinkMessage, setErrorFacebookLinkMessage] = useState("");
@@ -290,7 +297,6 @@ function HomeEditable() {
           });
         }
       } catch (error) {
-        // history.push("/errorPage");
         console.warn(error);
       }
     }
@@ -367,21 +373,24 @@ function HomeEditable() {
   }
 
   function handleAddImageCarouselFileInput() {
-    let fileData = new FileReader();
-    fileData.readAsDataURL(inputCarousel.current.files[0]);
 
-    fileData.onload = function () {
-      const fileLoaded = fileData.result;
-      setImagesCarousel([
-        ...imagesCarousel,
-        {
-          file: fileLoaded,
-          imgSrc: inputCarousel.current.files[0],
-          imgAlt: "Profit Uniformes",
-          imgPlace: "carousel",
-        },
-      ]);
-    };
+    if(imagesCarousel.length < maximumImagesCarousel){
+      let fileData = new FileReader();
+      fileData.readAsDataURL(inputCarousel.current.files[0]);
+  
+      fileData.onload = function () {
+        const fileLoaded = fileData.result;
+        setImagesCarousel([
+          ...imagesCarousel,
+          {
+            file: fileLoaded,
+            imgSrc: inputCarousel.current.files[0],
+            imgAlt: "Profit Uniformes",
+            imgPlace: "carousel",
+          },
+        ]);
+      };
+    }
   }
 
   // useEffect para as imagens do carrossel
@@ -446,21 +455,23 @@ function HomeEditable() {
   }
 
   function handleAddImageProductsFileInput() {
-    let fileData = new FileReader();
-    fileData.readAsDataURL(inputProducts.current.files[0]);
-
-    fileData.onload = function () {
-      const fileLoaded = fileData.result;
-      setImagesProducts([
-        ...imagesProducts,
-        {
-          file: fileLoaded,
-          imgSrc: inputProducts.current.files[0],
-          imgAlt: 'Profit Uniformes',
-          imgPlace: "products",
-        },
-      ]);
-    };
+    if(Number(imagesProducts.length) < maximumImagesProducts){
+      let fileData = new FileReader();
+      fileData.readAsDataURL(inputProducts.current.files[0]);
+      
+      fileData.onload = function () {
+        const fileLoaded = fileData.result;
+        setImagesProducts([
+          ...imagesProducts,
+          {
+            file: fileLoaded,
+            imgSrc: inputProducts.current.files[0],
+            imgAlt: 'Profit Uniformes',
+            imgPlace: "products",
+          },
+        ]);
+      };
+    }
   }
 
   // useEffect para as imagens de Produtos
@@ -502,14 +513,16 @@ function HomeEditable() {
     const textProductsValidated = validateFields(homeInfo.textProducts);
     const telephoneInfoValidated = validateFields(homeInfo.telephoneInfo);
     const enderecoInfoValidated = validateFields(homeInfo.enderecoInfo);
+    const facebookUsernameValidated = validateFields(homeInfo.facebookUsername);
+    const instagramUsernameValidated = validateFields(homeInfo.instagramUsername);
     const facebookLinkValidated = validateFields(homeInfo.facebookLink);
     const instagramLinkValidated = validateFields(homeInfo.instagramLink);
     const whatsAppLinkValidated = validateFields(homeInfo.whatsAppLink);
 
     if( !imageCarouselValidated || !imageWhoWeAreValidated || !imageProductsValidated
       || !textWhoWeAreValidated || !textProductsValidated || !telephoneInfoValidated 
-      || !enderecoInfoValidated || !facebookLinkValidated || !instagramLinkValidated 
-      || !whatsAppLinkValidated){
+      || !enderecoInfoValidated || !facebookUsernameValidated || !instagramUsernameValidated
+      || !facebookLinkValidated || !instagramLinkValidated || !whatsAppLinkValidated){
 
       if(!imageCarouselValidated){
         setErrorImageCarousel(true);
@@ -565,6 +578,22 @@ function HomeEditable() {
       }else{
         setErrorEndereco(false);
         setErrorEnderecoMessage('');
+      }
+
+      if(!facebookUsernameValidated){
+        setErrorFacebookUsername(true);
+        setErrorFacebookUsernameMessage('Campo obrigatório.');
+      }else{
+        setErrorFacebookUsername(false);
+        setErrorFacebookUsernameMessage('');
+      }
+
+      if(!instagramUsernameValidated){
+        setErrorInstagramUsername(true);
+        setErrorInstagramUsernameMessage('Campo obrigatório.');
+      }else{
+        setErrorInstagramUsername(false);
+        setErrorInstagramUsernameMessage('');
       }
 
       if(!facebookLinkValidated){
@@ -799,7 +828,7 @@ function HomeEditable() {
         </div>
 
         <div className="changeImagesPart">
-          <h2>ALTERAR IMAGENS</h2>
+          <h2>ALTERAR IMAGENS ({imagesCarousel.length}/{maximumImagesCarousel})</h2>
           <div className="boxChangeImages" style={errorImageCarousel? {marginBottom: '0px', borderColor: '#f44336'}: { marginBottom: '24px'}}>
             {imagesCarousel.map((item, index) =>
               item ? (
@@ -960,7 +989,7 @@ function HomeEditable() {
         </div>
 
         <div className="changeImagesPart">
-          <h2>ALTERAR PRODUTOS - UNIVERSITÁRIOS</h2>
+          <h2>ALTERAR PRODUTOS - UNIVERSITÁRIOS ({imagesProducts.length}/{maximumImagesProducts})</h2>
           <div className="boxChangeImages" style={errorImageProducts? {marginBottom: '0px', borderColor: '#f44336'}: { marginBottom: '24px'}}>
             {imagesProducts.map((item, index) =>
               item ? (
@@ -1049,8 +1078,8 @@ function HomeEditable() {
           <div className="socialMediaInfo" style={{ marginTop: "24px" }}>
             <h2>REDES SOCIAIS</h2>
             <InputsOrIconWithInput
-              label={"FACEBOOK"}
-              placeholderInfo={"testeholder"}
+              label={"Facebook Username"}
+              placeholderInfo={"profit"}
               icon={
                 <FacebookIcon
                   style={{ fontSize: "45px", marginRight: "16px" }}
@@ -1059,13 +1088,28 @@ function HomeEditable() {
               defaultValue={homeInfo.facebookUsername}
               hasIcon={true}
               setInfo={setHomeInfo}
+              errorBoolean={errorFacebookUsername}
+              errorMessage={errorFacebookUsernameMessage}
+              field={"facebook user"}
+            />
+            <InputsOrIconWithInput
+              label={"Facebook Link"}
+              placeholderInfo={"www.facebook.com/profit"}
+              icon={
+                <FacebookIcon
+                  style={{ fontSize: "45px", marginRight: "16px" }}
+                />
+              }
+              defaultValue={homeInfo.facebookLink}
+              hasIcon={true}
+              setInfo={setHomeInfo}
               errorBoolean={errorFacebookLink}
-            errorMessage={errorFacebookLinkMessage}
+              errorMessage={errorFacebookLinkMessage}
               field={"facebook"}
             />
             <InputsOrIconWithInput
-              label={"INSTAGRAM"}
-              placeholderInfo={"testeholder"}
+              label={"Instagram Username"}
+              placeholderInfo={"profit"}
               icon={
                 <InstagramIcon
                   style={{ fontSize: "45px", marginRight: "16px" }}
@@ -1074,13 +1118,28 @@ function HomeEditable() {
               defaultValue={homeInfo.instagramUsername}
               hasIcon={true}
               setInfo={setHomeInfo}
+              errorBoolean={errorInstagramUsername}
+              errorMessage={errorInstagramUsernameMessage}
+              field={"instagram user"}
+            />
+            <InputsOrIconWithInput
+              label={"Instagram Link"}
+              placeholderInfo={"www.instagram.com/profit"}
+              icon={
+                <InstagramIcon
+                  style={{ fontSize: "45px", marginRight: "16px" }}
+                />
+              }
+              defaultValue={homeInfo.instagramLink}
+              hasIcon={true}
+              setInfo={setHomeInfo}
               errorBoolean={errorInstagramLink}
               errorMessage={errorInstagramLinkMessage}
               field={"instagram"}
             />
             <InputsOrIconWithInput
-              label={"WHATSAPP"}
-              placeholderInfo={"testeholder"}
+              label={"WhatsApp Link"}
+              placeholderInfo={""}
               icon={
                 <WhatsAppIcon
                   style={{ fontSize: "45px", marginRight: "16px" }}

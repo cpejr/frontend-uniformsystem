@@ -171,9 +171,9 @@ function Cadastro({ history }) {
     setOpenSnackBar(false);
   };
 
-  useEffect(() => {
-    console.log(userInfo)
-  }, [userInfo]);
+  // useEffect(() => {
+  //   console.log(userInfo)
+  // }, [userInfo]);
 
   // useEffect(() => {
   //   console.log(addressInfo);
@@ -182,7 +182,7 @@ function Cadastro({ history }) {
   const handleInputChange = (e, type) => {
     // Setting User Info
     let newUserInfo;
-    let newAddressInfo;
+    let newAddressInfo; 
 
     if(type === 'name'){
       newUserInfo = {
@@ -269,7 +269,7 @@ function Cadastro({ history }) {
     const Address = {
       address: { ...addressInfo }
     }
-    console.log(Address)
+    
     setUserInfo({ ...userInfo, ...newUserInfo, ...Address });
   }
 

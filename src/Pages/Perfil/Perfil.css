@@ -1,4 +1,3 @@
-
 .profileContainer {
   width: 90%;
   min-height: 80vh;
@@ -83,6 +82,18 @@
   margin-top: 8px;
 }
 
+.button-perfil {
+  background-color: #f94444;
+  border: 1px solid white;
+  border-radius: 33px;
+  padding: 10px 20px;
+}
+
+.button-perfil:hover {
+  background-color: white;
+  border: 3px solid #f94444;
+}
+
 @media (max-width: 800px) {
 
   .profileContainer{
@@ -97,6 +108,10 @@
 
   .profileContainer .ordersContainer{
     margin-left: 0px;
+  }
+
+  .button-perfil {
+    margin: 10% 0 10% 0;
   }
 
 }

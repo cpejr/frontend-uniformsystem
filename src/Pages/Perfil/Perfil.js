@@ -3,7 +3,6 @@ import CardPedido from "../../components/CardPedido";
 import DadosPessoais from "../../components/DadosPessoais/DadosPessoais";
 import Enderecos from "../../components/Enderecos";
 import PopUpChangeAddress from "../../components/PopUpChangeAddress";
-import {Helmet} from 'react-helmet';
 import MetaData from '../../meta/reactHelmet';
 import api from '../../services/api';
 import { LoginContext } from '../../contexts/LoginContext';
@@ -14,7 +13,6 @@ import "./Perfil.css";
 function Perfil() {
 
   const { user, logOut, token } = useContext(LoginContext);
-  console.log('usuario', user)
   const currentUser = user[0];
   const [userAddress, setUserAddress] = useState({});
   const [userOrders, setUserOrders] = useState([]);
@@ -36,7 +34,7 @@ function Perfil() {
         headers: { Authorization: `Bearer ${token}` },
       });
       history.push("/")
-      logOut()
+      logOut();
     } catch (error) {
       console.warn(error);
       alert("Erro ao excluir usuário");

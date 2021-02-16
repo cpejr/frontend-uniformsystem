@@ -6,8 +6,8 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import api from "../../services/api";
-import {Helmet} from 'react-helmet';
-import MetaData from '../../meta/reactHelmet';
+import { Helmet } from "react-helmet";
+import MetaData from "../../meta/reactHelmet";
 import { HiOutlineMail } from "react-icons/hi";
 import "./Contato.css";
 
@@ -26,7 +26,7 @@ function Contato() {
     keyWords: "Contato",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   useEffect(() => {
     async function getContactInfo() {
@@ -34,26 +34,26 @@ function Contato() {
         const response = await api.get("/home/info", {
           headers: { authorization: `bearer ${token}` },
         });
-
+        console.log("oi", response);
         if (response.data.length === 0) {
           throw new Error("Home info is Empty");
         }
         const address = response.data.filter((item) =>
           item.key === "address" ? item.data : null
         )[0];
-        const facebookLink = response.data.filter((item) =>
-          item.key === "facebookLink" ? item.data : null
+        const facebookUsername = response.data.filter((item) =>
+          item.key === "facebookUsername" ? item.data : null
         )[0];
-        const instagramLink = response.data.filter((item) =>
-          item.key === "instagramLink" ? item.data : null
+        const instagramUsername = response.data.filter((item) =>
+          item.key === "instagramUsername" ? item.data : null
         )[0];
-        const whatsAppNumber = response.data.filter((item) =>
-          item.key === "whatsAppNumber" ? item.data : null
+        const whatsAppLink = response.data.filter((item) =>
+          item.key === "whatsAppLink" ? item.data : null
         )[0];
         setEnderecoInfo(address.data);
-        setFacebookInfo(facebookLink.data);
-        setInstagramInfo(instagramLink.data);
-        setWhatsappInfo(whatsAppNumber.data);
+        setFacebookInfo(facebookUsername.data);
+        setInstagramInfo(instagramUsername.data);
+        setWhatsappInfo(whatsAppLink.data);
       } catch (error) {
         console.warn(error);
       }
@@ -62,7 +62,14 @@ function Contato() {
   }, []);
   return (
     <div className="divPagContato">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="fundoCinza">
         <div className="divFundoBrancoContato">
           <div className="tituloContato">
@@ -72,7 +79,7 @@ function Contato() {
 
           <div className="divRedesSociais">
             <a
-              href= {`https://www.instagram.com/${InstagramInfo}`}
+              href={`https://www.instagram.com/${InstagramInfo}`}
               target="_blank"
               rel="noreferrer"
               className="linksContato"

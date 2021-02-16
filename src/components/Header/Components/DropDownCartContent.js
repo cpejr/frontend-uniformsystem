@@ -19,7 +19,7 @@ export default function DropDownCartContent(props) {
   const [productsInCart, setProductsInCart] = useState([]);
 
   async function getProducts() {
-    const response = await api.get('/productInCart/cart', {
+    const response = await api.get('/cart', {
       headers: { Authorization: `Bearer ${token}` },
     });
     setProductsInCart(response.data);

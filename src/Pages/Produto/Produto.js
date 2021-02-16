@@ -213,7 +213,7 @@ function Produto() {
 
       console.log("objNoProductInCart", objProdcutInCart.entries());
       try {
-        const response = await api.put("/productInCart/addtocart", objProdcutInCart, {
+        const response = await api.put("/cart/addtocart", objProdcutInCart, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("resposta", response.data);

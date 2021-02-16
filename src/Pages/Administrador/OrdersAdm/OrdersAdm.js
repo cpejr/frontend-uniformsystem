@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
 import { Link } from "react-router-dom";
@@ -8,11 +8,9 @@ import OrderTable from "../../../components/OrderTable/OrderTable";
 
 import Toggle from "../../../components/Toggle";
 
-import { FaAngleRight, FaFilter } from "react-icons/fa";
+import { FaFilter } from "react-icons/fa";
 
 import {
-  Button,
-  makeStyles,
   Table,
   TableBody,
   TableCell,
@@ -25,9 +23,7 @@ import {
 
 function OrdersAdm() {
   const [Orders, setOrders] = useState([]);
-  const [OnlyPending, setOnlyPending] = useState();
-  const [InputID, setInputID] = useState(0);
-  var date;
+  const [onlyPending, setOnlyPending] = useState(false);
 
   const { token } = useContext(LoginContext);
 
@@ -41,8 +37,8 @@ function OrdersAdm() {
     imageAlt: "",
   };
 
-  const obterPedidos = async () => {
-    if (OnlyPending === false) {
+  const obterPedidos = useCallback(async () => {
+    if(onlyPending === true){
       let query = [];
       let param = "status=pending";
       query.push(param);
@@ -55,17 +51,17 @@ function OrdersAdm() {
         console.warn(error);
         alert(error);
       }
-    } else {
-      const resultado = await api.get(`order`, {
+    }else{
+      const resultado = await api.get('order', {
         headers: { authorization: `bearer ${token}` },
       });
       setOrders(resultado.data);
     }
-  };
+  }, [onlyPending]);
 
   useEffect(() => {
     obterPedidos();
-  }, []);
+  }, [onlyPending]);
 
   return (
     <div className="orders_page">
@@ -87,7 +83,7 @@ function OrdersAdm() {
           <div className="div_pendente">
             <div className="text_pendente">Pendente</div>
             <div className="evento_pendente" onClick={obterPedidos}>
-              <Toggle className="toggle_order" Status={setOnlyPending} />
+              <Toggle className="toggle_order" Status={setOnlyPending} isChecked={onlyPending} />
             </div>
           </div>
         </div>
@@ -109,11 +105,12 @@ function OrdersAdm() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Orders.map((pedido) => {
+                {Orders.length > 0 && Orders.map((pedido) => {
                   const id = pedido.order_id;
-                  date = pedido.created_at;
+                  const createdAt = pedido.created_at;
+                  const updatedAt = pedido.updated_at;
                   const Status = pedido.status;
-                  const deliver = pedido.delivered_by;
+                  // const deliver = pedido.delivered_by;
                   const colum = (
                     <TableRow>
                       <TableCell component="td" scope="row">
@@ -127,10 +124,11 @@ function OrdersAdm() {
                           to={{
                             pathname: "/adm/pedidoespecifico",
                             state: {
-                              date: date,
+                              createdAt: createdAt,
+                              updatedAt: updatedAt,
                               orderId: id,
-                              Status: Status,
-                              deliver: deliver,
+                              status: Status,
+                              // deliver: deliver,
                             },
                           }}
                           style={{ color: "black", marginLeft:'8px' }}

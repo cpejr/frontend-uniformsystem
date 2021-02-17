@@ -7,6 +7,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PopUpChangeAddress from '../../components/PopUpChangeAddress';
+import SnackbarMessage from "../../components/SnackbarMessage";
 
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 
@@ -66,9 +67,9 @@ function Checkout() {
 
   const { token, user } = useContext(LoginContext);
 
-
-  const currentUser = user[0];
-  const user_id = currentUser.user_id;
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
 
   const serviceCode = '04014';
 
@@ -172,15 +173,25 @@ function Checkout() {
   // Post order
   async function handlePostOrder() {
     setLoadingPurchase(true);
-    
+
+    const productsWithRightAttributes = products.map(item => {
+      delete item.name;
+      delete item.img_link;
+      delete item.product_in_cart_id;
+      delete item.user_id;
+      return item;
+    });
+
+    console.log('prodto', productsWithRightAttributes);
+
     try {
       const address_id = address.address_id;
       await api.post(
-        `/order`,
+        '/order',
         {
           address_id: address_id,
           service_code: serviceCode,
-          products: products,
+          products: productsWithRightAttributes,
         },
         {
           headers: { authorization: `bearer ${token}` },
@@ -189,7 +200,12 @@ function Checkout() {
 
       setTimeout(() => {
         setLoadingPurchase(false);
-      }, 3000);
+      }, 2000);
+      setTimeout(() => {
+        setMessageSnackbar("Pedido realizado com sucesso");
+        setTypeSnackbar("success");
+        setOpenSnackbar(true);
+      }, 500);
     } catch (error) {
       console.warn(error);
       alert('Erro ao criar um pedido.');
@@ -217,6 +233,13 @@ function Checkout() {
     }
   }
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
   useEffect(() => {
     try {
       getProducts();
@@ -228,7 +251,7 @@ function Checkout() {
 
   // Pega endereço
   async function getAddress() {
-    const response = await api.get(`/address/${user_id}`, {
+    const response = await api.get(`/address`, {
       headers: { authorization: `bearer ${token}` },
     });
     setAddress({ ...response.data.adresses[0] });
@@ -469,6 +492,7 @@ function Checkout() {
         setAddress={setAddress}
         address={address}
       />
+      <SnackbarMessage open={openSnackbar} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

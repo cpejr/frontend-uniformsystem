@@ -203,29 +203,20 @@ function Produto() {
       objProdcutInCart.append("gender", formattedGender);
       objProdcutInCart.append("size", selectedValue.split("_")[1]);
       objProdcutInCart.append("amount", Number(inputQuantity.current.value));
-      objProdcutInCart.append("logo_link", logoImage? logoImage.imgSrc : null);
+      objProdcutInCart.append("file", logoImage? logoImage.imgSrc : null);
       objProdcutInCart.append("isLogoUpload", logoImage ? true: false);
       
-      // console.log("gender", formattedGender);
-      console.log("product model id", modelChoosen.product_model_id);
-      console.log("gender", formattedGender);
-      console.log("size", selectedValue.split("_")[1]);
-      console.log("amount", Number(inputQuantity.current.value));
-      console.log("logo_link", logoImage? logoImage.imgSrc : null);
-      console.log("isLogoUpload", logoImage ? true: false);
-
       try {
         const response = await api.put("/addtocart", objProdcutInCart, {
           headers: { authorization: `Bearer ${token}` },
         });
-        console.log("resposta", response.data);
 
         // Espera X milissegundos para ativar a função interna
         setTimeout(() => {
           setMessageSnackbar("Produto adicionado no carrinho!");
           setTypeSnackbar("success");
           setOpenSnackbar(true);
-        }, 500);
+        }, 800);
         
       } catch (err) {
         setMessageSnackbar("Falha ao adicionar o produto");

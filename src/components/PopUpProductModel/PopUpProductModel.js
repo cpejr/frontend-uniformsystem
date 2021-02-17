@@ -39,6 +39,16 @@ function validateGender(gender){
     return isValid;
 }
 
+function validateImage(image){
+    let isValid;
+    if(!image){
+        isValid = false;
+    }else{
+        isValid = true;
+    }
+    return isValid;
+}
+
 const PopUpProductModel = ({open, handleClose, isEdit, 
     productModelIDFromExistingInfo, setProductModelIDFromExistingInfo, setProductModelArray,
     productModelArray }) => {
@@ -62,6 +72,10 @@ const PopUpProductModel = ({open, handleClose, isEdit,
     const [errorPrice, setErrorPrice] = useState(false);
     const [errorPriceMessage, setErrorPriceMessage] = useState('');
 
+    // Estados voltados para gerenciar erros no campo Imagem
+    const [errorImage, setErrorImage] = useState(false);
+    const [errorImageMessage, setErrorImageMessage] = useState('');
+
     const [storedProductInfo, setStoredProductInfo] = useState({})
 
     const inputDescription = useRef(null);
@@ -72,6 +86,7 @@ const PopUpProductModel = ({open, handleClose, isEdit,
 
     useEffect(() => {
         const index = productModelArray.indexOf(productModelIDFromExistingInfo);
+        console.log('aqui', productModelIDFromExistingInfo)
         setStoredProductInfo({
             imgLink: productModelArray[index] === undefined ? '' : productModelArray[index].imgLink, 
             fileToShow: productModelArray[index] === undefined ? '' : productModelArray[index].fileToShow , 
@@ -88,14 +103,17 @@ const PopUpProductModel = ({open, handleClose, isEdit,
         setGenderState(productModelArray[index]? productModelArray[index].gender : '');
 
         // Seta valores de erros para ok qunado abrir popUp
-        setErrorDescription( false )
+        setErrorDescription( false );
         setErrorDescriptionMessage('');
 
-        setErrorPrice( false )
-        setErrorPriceMessage('')
+        setErrorPrice( false );
+        setErrorPriceMessage('');
 
-        setErrorGender( false )
-        setErrorGenderMessage('')
+        setErrorGender( false );
+        setErrorGenderMessage('');
+
+        setErrorImage(false);
+        setErrorImageMessage('');
         
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
@@ -110,76 +128,42 @@ const PopUpProductModel = ({open, handleClose, isEdit,
         const resultValidateDescription = validateDescription(inputDescription.current.value);
         const resultValidatePrice = validatePrice(inputPrice.current.value);
         const resultValidateGender = validateGender(genderState);
+        const resultValidateImage = validateImage(inputImg.current.files[0]);
 
         // Cobre as opções dos diferentes erros no PopUp
-        if(resultValidateDescription && !resultValidatePrice && resultValidateGender){   // description ok, price errado, gender ok
-            setErrorDescription( false )
-            setErrorDescriptionMessage('');
-            
-            setErrorPrice( true )
-            setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
+        if(!resultValidateDescription || !resultValidatePrice || !resultValidateGender || !resultValidateImage){   // description ok, price errado, gender ok
 
-            setErrorGender( false )
-            setErrorGenderMessage('');
-        }else if(resultValidateDescription && resultValidatePrice && !resultValidateGender){ // description ok, price ok, gender errado
-            setErrorDescription( false )
-            setErrorDescriptionMessage('');
+            if(!resultValidateDescription){
+                setErrorDescription( true )
+                setErrorDescriptionMessage('Campo requerido.');
+            }else{
+                setErrorDescription( false )
+                setErrorDescriptionMessage('');
+            }
 
-            setErrorPrice(false);
-            setErrorPriceMessage('');
+            if(!resultValidatePrice){
+                setErrorPrice( true )
+                setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
+            }else{
+                setErrorPrice(false);
+                setErrorPriceMessage('');
+            }
 
-            setErrorGender(true);
-            setErrorGenderMessage('Selecione um gênero.')
-            
-        }else if(!resultValidateDescription && resultValidatePrice && resultValidateGender){   // description errado, price ok, gender ok
-            setErrorDescription( true )
-            setErrorDescriptionMessage('Campo requerido.');
-            
-            setErrorPrice( false )
-            setErrorPriceMessage('');
+            if(!resultValidateGender){
+                setErrorGender(true);
+                setErrorGenderMessage('Selecione um gênero.')
+            }else{
+                setErrorGender( false )
+                setErrorGenderMessage('');
+            }
 
-            setErrorGender( false )
-            setErrorGenderMessage('');
-        }else if(!resultValidateDescription && !resultValidatePrice && resultValidateGender){ // description errado, price errado, gender ok
-            setErrorDescription( true )
-            setErrorDescriptionMessage('Campo requerido.');
-
-            setErrorPrice( true )
-            setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
-
-            setErrorGender(false);
-            setErrorGenderMessage('')
-            
-        }else if(!resultValidateDescription && resultValidatePrice && !resultValidateGender){ // description errado, price ok, gender errado
-            setErrorDescription( true )
-            setErrorDescriptionMessage('Campo requerido.');
-            
-            setErrorPrice( false );
-            setErrorPriceMessage('');
-
-            setErrorGender(true);
-            setErrorGenderMessage('Selecione um gênero.')
-
-        }else if(resultValidateDescription && !resultValidatePrice && !resultValidateGender){ // description ok, price errado, gender errado
-            setErrorDescription( false )
-            setErrorDescriptionMessage('');
-            
-            setErrorPrice( true );
-            setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
-
-            setErrorGender(true);
-            setErrorGenderMessage('Selecione um gênero.')
-
-        }else if(!resultValidateDescription && !resultValidatePrice && !resultValidateGender){ // description errado, price errado, gender errado
-            setErrorDescription( true )
-            setErrorDescriptionMessage('Campo requerido.');
-            
-            setErrorPrice( true );
-            setErrorPriceMessage('Digite um preço válido. Formato XX,XX.');
-
-            setErrorGender(true);
-            setErrorGenderMessage('Selecione um gênero.')
-
+            if(!resultValidateImage){
+                setErrorImage(true);
+                setErrorImageMessage('Campo obrigatório.')
+            }else{
+                setErrorImage(false)
+                setErrorImageMessage('');
+            }
         }else{ // description ok, price ok, gender ok
             setErrorDescription( false );
             setErrorDescriptionMessage('');
@@ -189,6 +173,10 @@ const PopUpProductModel = ({open, handleClose, isEdit,
 
             setErrorGender( false );
             setErrorGenderMessage('');
+
+            setErrorImage(false)
+            setErrorImageMessage('');
+
             if(isEdit){
                 const index = productModelArray.indexOf(productModelIDFromExistingInfo);
                 const oldObjInfo = {
@@ -297,12 +285,13 @@ const PopUpProductModel = ({open, handleClose, isEdit,
                         saveFileFromImgLink.imgFile !== '' ? saveFileFromImgLink.imgFile.name : 
                         (
                             <>
-                                <AddAPhotoIcon />   
+                                <AddAPhotoIcon style={errorImage ? {color: '#f44336'}: {color: '#000'}}/>   
                                 ADICIONAR IMAGEM
                             </>
                         )
                     }
                 </Button>
+                <span style={errorImage ? {display: 'block', fontSize: '14px', color: '#f44336'}: {display: 'none'}}>{errorImageMessage}</span>
                 <Button onClick={(e) => handleSave()} className={classes.saveButton} >
                     <SaveIcon />
                     {isEdit? 'Salvar alterações': 'Salvar modelo'}

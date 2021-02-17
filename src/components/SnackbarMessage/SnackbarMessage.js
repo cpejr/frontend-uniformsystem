@@ -8,7 +8,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 export default function SnackbarMessage({open, handleClose, message, type}) {
 
   return (
-    <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+    <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
       <MuiAlert
         onClose={handleClose}
         elevation={6}

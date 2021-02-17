@@ -1,5 +1,4 @@
 import React, { useRef, useState, useContext } from "react";
-import { Helmet } from "react-helmet";
 import MetaData from "../../../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
 
@@ -8,15 +7,14 @@ import {
   CircularProgress,
   makeStyles,
   MenuItem,
-  Snackbar,
   TextField,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
 
 import { FaChevronLeft } from "react-icons/fa";
 
 import api from "../../../../services/api";
 import { LoginContext } from "../../../../contexts/LoginContext";
+import SnackbarMessage from "../../../../components/SnackbarMessage";
 
 import "./CadastroFunc.css";
 
@@ -81,6 +79,9 @@ function CadastroFunc({ history }) {
 
   const [errorTypeEmployee, setErrorTypeEmployee] = useState(false);
   const [errorTypeEmployeeMessage, setErrorTypeEmployeeMessage] = useState("");
+
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
 
   const inputName = useRef(null);
   const inputCPF = useRef(null);
@@ -196,17 +197,19 @@ function CadastroFunc({ history }) {
           password: inputPassword.current.value,
         };
 
-        const response = await api.post("/user", newUserObj, {
+        await api.post("/user", newUserObj, {
           headers: {
-            authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
 
         setTimeout(() => {
           setLoading(false);
+          setMessageSnackbar("Funcionário cadastrado com sucesso!");
+          setTypeSnackbar("success");
           setOpenSnackBar(true);
-        }, 2000);
+        }, 1000);
 
         // Reseta as informações nos campos
         inputName.current.value = "";
@@ -215,6 +218,9 @@ function CadastroFunc({ history }) {
         inputPassword.current.value = "";
         setTypeEmployeeState("");
       } catch (err) {
+        setMessageSnackbar("Falha cadastrar funcionário");
+        setTypeSnackbar("error");
+        setLoading(false)
         console.log(err.message);
       }
     }
@@ -297,20 +303,7 @@ function CadastroFunc({ history }) {
         </Button>
       </div>
 
-      <Snackbar
-        open={openSnackBar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackBar}
-      >
-        <MuiAlert
-          onClose={handleCloseSnackBar}
-          elevation={6}
-          variant="filled"
-          severity="success"
-        >
-          Funcionário cadastrado com sucesso!
-        </MuiAlert>
-      </Snackbar>
+      <SnackbarMessage open={openSnackBar} handleClose={handleCloseSnackBar} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

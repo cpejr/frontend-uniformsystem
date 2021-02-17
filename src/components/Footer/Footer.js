@@ -110,7 +110,16 @@ function ComputerFooter() {
             <FaInstagram />
           </a>
 
-          <a href="#" className="whatsapp">
+          <a
+            href={
+              WhatsappInfo === ""
+                ? "https://www.whatsapp.com/"
+                : `${WhatsappInfo}`
+            }
+            target="_blank"
+            rel="noreferrer"
+            className="whatsapp"
+          >
             <FaWhatsapp />
           </a>
         </div>

@@ -45,6 +45,11 @@
   align-self: center;
 }
 
+.pedido .pedidoBotao2 a{
+  text-decoration: none;
+  color: #fff;
+}
+
 @media (max-width: 1030px) {
   .pedido {
     width: fit-content;

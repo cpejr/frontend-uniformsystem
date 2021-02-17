@@ -16,7 +16,7 @@ function CartProduct({ handleDelete, index, changeAmount, product }) {
       </td>
 
       <td className="productInfo">
-        R${product.price.toFixed(2).replace(".", ",")}
+        R${Number(product.price).toFixed(2).replace(".", ",")}
       </td>
 
       <td className="productInfo">

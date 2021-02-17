@@ -16,15 +16,10 @@
 
 }
 
-.productModelCardAdmFullContent .iconGarbage{
-    font-size: 30px;
-    position: absolute;
-
-    color: rgb(230, 18, 18);
-
+.productModelCardAdmFullContent .iconAvailable{
     top: 20px;
     right: 20px;
-
+    position: absolute !important;
     cursor: pointer;
 }
 

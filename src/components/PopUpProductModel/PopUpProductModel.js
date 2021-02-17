@@ -19,7 +19,7 @@ function validateDescription(description){
 
 function validatePrice(priceString){
     let isValid;
-    const regex  = /^\d+(?:\,\d{2})$/;
+    const regex  = /^\d+(?:,\d{2})$/;
     if (regex.test(priceString)){
         isValid = true;
     }
@@ -71,21 +71,21 @@ const PopUpProductModel = ({open, handleClose, isEdit,
     const classes = useStyles();
 
     useEffect(() => {
-
+        const index = productModelArray.indexOf(productModelIDFromExistingInfo);
         setStoredProductInfo({
-            imgLink: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].imgLink, 
-            fileToShow: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].fileToShow , 
-            price: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].price, 
-            modelDescription: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].modelDescription, 
-            gender: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].gender
+            imgLink: productModelArray[index] === undefined ? '' : productModelArray[index].imgLink, 
+            fileToShow: productModelArray[index] === undefined ? '' : productModelArray[index].fileToShow , 
+            price: productModelArray[index] === undefined ? '' : productModelArray[index].price, 
+            modelDescription: productModelArray[index] === undefined ? '' : productModelArray[index].modelDescription, 
+            gender: productModelArray[index] === undefined ? '' : productModelArray[index].gender
         })
     
         setSaveFileFromImgLink({
-            imgFile: productModelArray[productModelIDFromExistingInfo] === undefined ? '' : productModelArray[productModelIDFromExistingInfo].imgLink, 
-            fileToShow: productModelArray[productModelIDFromExistingInfo] === undefined ? null : productModelArray[productModelIDFromExistingInfo].fileToShow,
+            imgFile: productModelArray[index] === undefined ? '' : productModelArray[index].imgLink, 
+            fileToShow: productModelArray[index] === undefined ? null : productModelArray[index].fileToShow,
         });
 
-        setGenderState(productModelArray[productModelIDFromExistingInfo]? productModelArray[productModelIDFromExistingInfo].gender : '');
+        setGenderState(productModelArray[index]? productModelArray[index].gender : '');
 
         // Seta valores de erros para ok qunado abrir popUp
         setErrorDescription( false )
@@ -97,6 +97,7 @@ const PopUpProductModel = ({open, handleClose, isEdit,
         setErrorGender( false )
         setErrorGenderMessage('')
         
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
     
@@ -189,18 +190,18 @@ const PopUpProductModel = ({open, handleClose, isEdit,
             setErrorGender( false );
             setErrorGenderMessage('');
             if(isEdit){
+                const index = productModelArray.indexOf(productModelIDFromExistingInfo);
                 const oldObjInfo = {
-                    ...productModelArray[productModelIDFromExistingInfo],
-                    isMain: false,
+                    ...productModelArray[index],
                     imgLink: saveFileFromImgLink.imgFile,
                     fileToShow: saveFileFromImgLink.fileToShow,
-                    price: inputPrice.current.value,
+                    price: inputPrice.current.value.replace(",", "."),
                     modelDescription: inputDescription.current.value,
                     gender: genderState,
                 }
         
                 const copyProductModelsArray = [...productModelArray];
-                copyProductModelsArray.splice(productModelIDFromExistingInfo, 1, oldObjInfo)
+                copyProductModelsArray.splice(index, 1, oldObjInfo)
         
                 setProductModelArray([...copyProductModelsArray])
         
@@ -208,10 +209,9 @@ const PopUpProductModel = ({open, handleClose, isEdit,
     
             }else{
                 const objInfo = {
-                    isMain: false,
                     imgLink: saveFileFromImgLink.imgFile,
                     fileToShow: saveFileFromImgLink.fileToShow,
-                    price: inputPrice.current.value,
+                    price: inputPrice.current.value.replace(",", "."),
                     modelDescription: inputDescription.current.value,
                     gender: genderState,
                 }

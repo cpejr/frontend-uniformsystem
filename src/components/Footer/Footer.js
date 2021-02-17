@@ -52,7 +52,6 @@ function ComputerFooter() {
     }
     getContactInfo();
   }, []);
-
   return (
     <div className="all_footer">
       <div className="content_footer">

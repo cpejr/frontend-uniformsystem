@@ -18,6 +18,8 @@ import { LoginContext } from "../../contexts/LoginContext";
 
 import "./EditarPerfil.css";
 var nomeMostra, telefoneMostra;
+var enderecoId;
+
 function validateInput(type, value) {
   let isValid;
   if (type === "name") {
@@ -308,7 +310,7 @@ function EditarPerfil({ history }) {
         setLoading(true);
         const street = ruaInput.current.value + "," + numInput.current.value;
         const response = await api.put(
-          `/address/2`,
+          `/address/${addressInfo.address_id}`,
           {
             updatedFields: {
               street: street,
@@ -474,7 +476,6 @@ function EditarPerfil({ history }) {
           helperText={errorNameMessage}
           className={classes.largeInput}
           variant="outlined"
-          defaultValue={nomeMostra}
           onChange={(e) => handleInputChange(e, "name")}
         />
       )}
@@ -617,7 +618,6 @@ function EditarPerfil({ history }) {
         error={errorTelefone}
         helperText={errorTelefoneMessage}
         className={classes.mediumInput}
-        defaultValue={telefoneMostra}
         variant="outlined"
       />
 

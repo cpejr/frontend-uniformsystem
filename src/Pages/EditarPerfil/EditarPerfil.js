@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import {Helmet} from 'react-helmet';
-import MetaData from '../../meta/reactHelmet';
+import { Helmet } from "react-helmet";
+import MetaData from "../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
 
 import {
@@ -17,7 +17,7 @@ import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
 
 import "./EditarPerfil.css";
-
+var nomeMostra, telefoneMostra;
 function validateInput(type, value) {
   let isValid;
   if (type === "name") {
@@ -121,7 +121,7 @@ function EditarPerfil({ history }) {
   const bairroInput = useRef(null);
   const CEPInput = useRef(null);
   const cidadeInput = useRef(null);
-  const estadoInput = useRef("");
+  const estadoInput = useRef(null);
   const pontoRefInput = useRef(null);
   const telefoneInput = useRef(null);
 
@@ -135,19 +135,18 @@ function EditarPerfil({ history }) {
     keyWords: "Editar perfil",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   useEffect(() => {
     getUserAddress();
   }, []);
 
   async function getUserAddress() {
-    const response = await api.get("/address", {
+    const response = await api.get("/address/5", {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response);
 
     setAddressInfo({ ...response.data.adresses[0] });
     setUserInfo({ name: user[0].name });
@@ -177,7 +176,10 @@ function EditarPerfil({ history }) {
       "cidade",
       cidadeInput.current.value
     );
-    const resultValidateEstado = validateInput('estado', estadoInput.current.value);
+    const resultValidateEstado = validateInput(
+      "estado",
+      estadoInput.current.value
+    );
     const resultValidatePontoRef = validateInput(
       "pontoRef",
       pontoRefInput.current.value
@@ -300,59 +302,53 @@ function EditarPerfil({ history }) {
       setErrorTelefone(false);
       setErrorTelefoneMessage("");
 
-      const str1 = addressInfo.rua;
-      const str2 = addressInfo.number;
-
-      const halfStreet = str1.concat(',');
-      const street = halfStreet.concat(str2);
-
-     // setAddressInfo({ ...addressInfo, street: street });
-
-      delete addressInfo['number'];
-      delete addressInfo['rua'];
-
-      const newData = {
-        updatedFields: { ...addressInfo, street: street }
-      }
-
-      delete newData.updatedFields['address_id'];
-      delete newData.updatedFields['user_id'];
-
-      console.log(newData);
-
-      const newUser = {
-        updatedFields: { ...userInfo }
-      }
-      console.log(newUser);
+      // setAddressInfo({ ...addressInfo, street: street });
 
       try {
         setLoading(true);
-
+        const street = ruaInput.current.value + "," + numInput.current.value;
         const response = await api.put(
-          `address/${parseInt(addressInfo.address_id, 10)}`,
-          newData, 
+          `/address/2`,
+          {
+            updatedFields: {
+              street: street,
+              neighborhood: bairroInput.current.value,
+              city: cidadeInput.current.value,
+              state: estadoInput.current.value,
+              zip_code: CEPInput.current.value,
+              country: addressInfo.country,
+              complement: complementoInput.current.value,
+            },
+          },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
         console.log(response);
 
-        console.log(newUser);
         const responseUser = await api.put(
           `user/${user[0].user_id}`,
-          newUser,
+          {
+            updatedFields: {
+              name: nomeInput.current.value,
+              email: user[0].email,
+              telefone: telefoneInput.current.value,
+              cpf: user[0].cpf,
+            },
+          },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
-        )
-        console.log(responseUser);
+        );
+        nomeMostra = nomeInput.current.value;
+        telefoneMostra = telefoneInput.current.value;
 
         setTimeout(() => {
           setLoading(false);
           setOpenSnackBar(true);
         }, 2000);
 
-        history.push('/');
+        history.push("/");
       } catch (err) {
         console.log(err.message);
         setLoading(false);
@@ -363,65 +359,65 @@ function EditarPerfil({ history }) {
   const handleInputChange = (e, type) => {
     let newUserInfo;
     let newAddressInfo;
-  
-    if(type === 'name'){
+
+    if (type === "name") {
       newUserInfo = {
         name: e.target.value,
-      }
+      };
       setUserInfo({ ...newUserInfo });
     }
-  
-    if(type === 'rua'){
+
+    if (type === "rua") {
       newAddressInfo = {
-        rua: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+        rua: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
-  
-    if(type === 'number'){
+
+    if (type === "number") {
       newAddressInfo = {
-        number: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+        number: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
-  
-    if(type === 'city'){
+
+    if (type === "city") {
       newAddressInfo = {
         city: e.target.value,
-        country: "Brasil"
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+        country: "Brasil",
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
-  
-    if(type === 'neighborhood'){
+
+    if (type === "neighborhood") {
       newAddressInfo = {
-        neighborhood: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+        neighborhood: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
-  
-    if(type === 'zip_code'){
+
+    if (type === "zip_code") {
       newAddressInfo = {
-        zip_code: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+        zip_code: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
-  
-    if(type === 'complement'){
+
+    if (type === "complement") {
       newAddressInfo = {
-        complement: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+        complement: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
-  
-    if(type === 'state'){
+
+    if (type === "state") {
       newAddressInfo = {
-        state: e.target.value
-      }
+        state: e.target.value,
+      };
       console.log(newAddressInfo.state);
       setAddressInfo({ ...addressInfo, state: e.target.value });
     }
-  }
+  };
 
   const estados = [
     "AC",
@@ -455,25 +451,33 @@ function EditarPerfil({ history }) {
 
   return (
     <div className="registerEmployeeFullContent">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <h1 className={classes.mainTitle}>
         EDITAR DADOS PESSOAIS
         <span className={classes.spanInsideTitle} />
       </h1>
 
       <h1 className={classes.subTitle}>NOME COMPLETO</h1>
-      { user[0].name && (
+      {user[0].name && (
         <TextField
-        required
-        inputRef={nomeInput}
-        error={errorName}
-        label="Nome Completo"
-        helperText={errorNameMessage}
-        className={classes.largeInput}
-        variant="outlined"
-        defaultValue={user[0].name}
-        onChange={(e) => handleInputChange(e, 'name')}
-      />)}
+          required
+          inputRef={nomeInput}
+          error={errorName}
+          label="Nome Completo"
+          helperText={errorNameMessage}
+          className={classes.largeInput}
+          variant="outlined"
+          defaultValue={nomeMostra}
+          onChange={(e) => handleInputChange(e, "name")}
+        />
+      )}
 
       <h1 className={classes.subTitle}>ENDEREÇO</h1>
       <div className="horizontalInput">
@@ -487,13 +491,13 @@ function EditarPerfil({ history }) {
             helperText={errorRuaMessage}
             className={classes.mediumInput}
             variant="outlined"
-            defaultValue={(addressInfo.street).split(',')[0]}
-            onChange={(e) => handleInputChange(e, 'rua')}
+            defaultValue={addressInfo.street.split(",")[0]}
+            onChange={(e) => handleInputChange(e, "rua")}
           />
         )}
         <h1 className={classes.caption}>N°</h1>
 
-        {addressInfo &&
+        {addressInfo && (
           <TextField
             required
             label="Número"
@@ -501,10 +505,11 @@ function EditarPerfil({ history }) {
             error={errorNum}
             helperText={errorNumMessage}
             className={classes.smallInput}
-            defaultValue={(addressInfo.street).split(',')[1]}
+            defaultValue={addressInfo.street.split(",")[1]}
             variant="outlined"
-            onChange={(e) => handleInputChange(e, 'number')}
-          />}
+            onChange={(e) => handleInputChange(e, "number")}
+          />
+        )}
         <h1 className={classes.caption}>Complemento</h1>
 
         {addressInfo && (
@@ -517,7 +522,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.complement}
-            onChange={(e) => handleInputChange(e, 'complement')}
+            onChange={(e) => handleInputChange(e, "complement")}
           />
         )}
         <h1 className={classes.caption}>Bairro</h1>
@@ -532,7 +537,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.neighborhood}
-            onChange={(e) => handleInputChange(e, 'neighborhood')}
+            onChange={(e) => handleInputChange(e, "neighborhood")}
           />
         )}
       </div>
@@ -549,7 +554,7 @@ function EditarPerfil({ history }) {
             variant="outlined"
             className={classes.mediumInput}
             defaultValue={addressInfo.zip_code}
-            onChange={(e) => handleInputChange(e, 'zip_code')}
+            onChange={(e) => handleInputChange(e, "zip_code")}
           />
         )}
         <h1 className={classes.caption}>Cidade</h1>
@@ -563,7 +568,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.city}
-            onChange={(e) => handleInputChange(e, 'city')}
+            onChange={(e) => handleInputChange(e, "city")}
           />
         )}
         <h1 className={classes.caption}>Estado</h1>
@@ -573,10 +578,11 @@ function EditarPerfil({ history }) {
             select
             label="Estado"
             error={errorEstado}
+            inputRef={estadoInput}
             helperText={errorEstadoMessage}
             className={classes.smallInput}
             defaultValue={addressInfo.state}
-            onChange={(e) => handleInputChange(e, 'state')}
+            onChange={(e) => handleInputChange(e, "state")}
             variant="outlined"
           >
             {estados.map((estado) => (
@@ -611,6 +617,7 @@ function EditarPerfil({ history }) {
         error={errorTelefone}
         helperText={errorTelefoneMessage}
         className={classes.mediumInput}
+        defaultValue={telefoneMostra}
         variant="outlined"
       />
 
@@ -619,8 +626,8 @@ function EditarPerfil({ history }) {
           {loading ? (
             <CircularProgress color="secondary" />
           ) : (
-              "SALVAR ALTERAÇÕES"
-            )}
+            "SALVAR ALTERAÇÕES"
+          )}
         </Button>
       </div>
 

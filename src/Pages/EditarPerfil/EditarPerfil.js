@@ -347,7 +347,7 @@ function EditarPerfil({ history }) {
           setLoading(false);
           setOpenSnackBar(true);
         }, 2000);
-
+        window.alert("Dados alterados com sucesso!");
         history.push("/");
       } catch (err) {
         console.log(err.message);

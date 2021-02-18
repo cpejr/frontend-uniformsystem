@@ -3,7 +3,7 @@ import './Loja.css';
 import api from '../../services/api';
 import ProductCard from '../../components/ProductCard';
 import { useHistory } from 'react-router-dom';
-
+import MetaData from '../../meta/reactHelmet';
 import { FaFilter, FaSearch, FaTruckLoading } from 'react-icons/fa';
 import _ from 'lodash';
 
@@ -30,12 +30,21 @@ function Loja() {
   const page = useRef(1);
   const pageLoading = useRef(false);
 
+  const meta = {
+    titlePage: "Uniformes Ecommerce | Loja",
+    titleSearch: "Profit Uniformes | Loja",
+    description: "Uniformes e bonés personalizados para sua empresa, universidade, time e muito mais. Venha conhecer nossos modelos e suas possibilidades de personalização!",
+    keyWords: "Uniformes | Loja | Ecommerce | Profit",
+    imageUrl: "",
+    imageAlt: "",
+  }
+
   const inputSearch = useRef(null);
   const history = useHistory();
   async function getProducts() {
     //fazendo a requisição pro back
     try {
-      let query = [];
+      let query = ["available=true"];
       if (filter.product_type.length > 0) {
         let products_type = filter.product_type.join(',');
         let param = 'product_type=' + products_type;
@@ -63,12 +72,12 @@ function Loja() {
         query.push(param);
       }
 
-      const response = await api.get(`/productmodels?${query.join('&')}`);
-      return response.data.models;
+      const response = await api.get(`/product?${query.join('&')}`);
+      return response.data.products;
     } catch (error) {
       console.warn(error);
       alert('Erro no servidor.');
-      history.push('Error');
+      // history.push('Error');
     }
   }
 
@@ -213,8 +222,10 @@ function Loja() {
           pageLoading.current = true;
           page.current++;
           getProducts().then(newProducts => {
-            setProducts([...products, ...newProducts]);
-            pageLoading.current = false;
+            if(newProducts){
+              setProducts([...products, ...newProducts]);
+              pageLoading.current = false;
+            }
           });
         }
       }
@@ -230,6 +241,7 @@ function Loja() {
 
   return (
     <div className="shop">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="search">
         <input
           id="search"
@@ -286,9 +298,12 @@ function Loja() {
         </div>
 
         <div className="productContainer">
-          {products.map(product => (
-            <ProductCard key={product.product_model_id} product={product} />
-          ))}
+          {products ? 
+            products.map(product => (
+              <ProductCard key={product.product_id} product={product} />
+            )):
+            <h1>Sem produtos cadastrados...</h1>
+          }
         </div>
       </div>
     </div>

@@ -1,18 +1,28 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
+import { FaChevronLeft } from "react-icons/fa";
 import api from "../../../../services/api";
 import "./EspecificOrderAdm.css";
 import camisa from "../../../../Assets/camisa.jpg";
+import MetaData from "../../../../meta/reactHelmet";
 import { useHistory } from "react-router-dom";
 import { LoginContext } from "../../../../contexts/LoginContext";
 
 function EspecificOrderAdm(props) {
-  //const [status, setStatus] = useState(false);
-  var Status = props.location.state.status;
-  var deliver = props.location.state.deliver;
+  const statusFromOrder = props.location.state.status;
+  let deliver = props.location.state.deliver;
 
-  const date = props.location.state.date;
-  var created = new Date();
+  const { token, user } = useContext(LoginContext);
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
+
+  // Caso ainda não tenha um deliver e vai efetuar a mudança de status no momento
+  if(!deliver){
+    deliver = user[0].name;
+  }
+
+  const createdAt = props.location.state.createdAt;
+  const updatedAt = props.location.state.updatedAt;
+  var formatDate = new Date();
 
   const orderId = props.location.state.orderId;
   var price = [];
@@ -27,8 +37,18 @@ function EspecificOrderAdm(props) {
   const [Orders, setOrders] = useState([]);
   const [Models, setModels] = useState([]);
   const [Code, setCode] = useState([]);
-  const [status, setStatus] = useState("pending");
+  const [status, setStatus] = useState(statusFromOrder);
   const history = useHistory();
+
+  const meta = {
+    titlePage: "Administrador | Ordem Específica",
+    titleSearch: "Ordem Específica Profit",
+    description:
+      "Tendo solicitado seu pedido especifique o que é necessário para sua confecção e entrega. É possível também acompanhar o andamento do seu pedido.",
+    keyWords: "Específico, Pedido, Detalhes, Profit",
+    imageUrl: "",
+    imageAlt: "",
+  };
 
   /*function ChangeStatus() {
         setLoadingStatus(true);
@@ -37,9 +57,6 @@ function EspecificOrderAdm(props) {
             setLoadingStatus(false);
         }, 3000)
     }*/
-
-  const { token } = useContext(LoginContext);
-  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const obterPedidos = async () => {
     const resultado = await api.get(`productsfromorder/${orderId}`, {
@@ -76,7 +93,7 @@ function EspecificOrderAdm(props) {
           {
             is_paid: 1,
             status: "preparing",
-            shipping: 25.5,
+            // shipping: 25.5,
           },
           {
             headers: { authorization: `Bearer ${token}` },
@@ -88,7 +105,7 @@ function EspecificOrderAdm(props) {
         alert(error);
       }
     } else {
-      if (Code != "") {
+      if (Code !== "") {
         try {
           const response = await api.post(
             `deliveratmail/${orderId}`,
@@ -105,21 +122,54 @@ function EspecificOrderAdm(props) {
           alert(error);
         }
       } else {
-        alert("código de rastreamento não inserido");
+        alert("Código de rastreamento não inserido.");
       }
     }
   }
 
+  const setColorStatusLabel = (statusOrder) => {
+    let colorStatus;
+    switch (statusOrder) {
+      case "waitingPayment":
+        colorStatus = "#15B5DE"
+        break;
+      case "preparing":
+        colorStatus = "#FFE45A";
+        break;
+      case "pending":
+        colorStatus = "#F94444";
+        break;
+      case "delivered":
+        colorStatus = "#60F86A";
+        break;
+      default:
+        break;
+    }
+    return colorStatus;
+  }
+
   return (
     <div className="order-container">
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="especific-container">
         <div className="informations">
-          <AiOutlineLeft color="black" size={30} onClick={history.goBack} />
+          {/* <AiOutlineLeft color="black" size={30} onClick={history.goBack} /> */}
+          <FaChevronLeft
+            className="setaVoltar"
+            onClick={() => history.goBack()}
+          />
           <div className="title-status">
             <span className="title">DETALHES DO PEDIDO</span>
             <div className="status">
               <span>STATUS: </span>
-              <div>{status}</div>
+              <div className={"statusOrderLabel"} style={{backgroundColor: setColorStatusLabel(status)}}>{status}</div>
             </div>
           </div>
 
@@ -158,11 +208,16 @@ function EspecificOrderAdm(props) {
               <br />
               <span className="date">
                 <strong>Data do pedido:</strong>
-                {created.toLocaleString("pt-BR", date)}
+                {formatDate.toLocaleString("pt-BR", createdAt)}
+              </span>
+              <br />
+              <span className="date">
+                <strong>Última atualização:</strong>
+                {formatDate.toLocaleString("pt-BR", updatedAt)}
               </span>
               <br />
               <span className="price">
-                <strong>Valor do pedido:</strong> R${total}
+                <strong>Valor do pedido:</strong> R$ {total}
               </span>
             </div>
             {status === "pending" && (
@@ -177,10 +232,10 @@ function EspecificOrderAdm(props) {
               </div>
             )}
             {status === "preparing" && (
-              <div>
+              <div style={{ display: "flex", flexDirection:"column", alignItems: "center" }}>
                 <input
-                  placeholder="código de rastramento"
-                  style={{ marginRight: "10px" }}
+                  placeholder="Código de rastreamento"
+                  style={{ marginRight: "10px", marginBottom:"10px" }}
                   onChange={(e) => setCode(e.target.value)}
                 ></input>
                 <button className="button-status" onClick={ModificarStatus}>
@@ -189,8 +244,9 @@ function EspecificOrderAdm(props) {
               </div>
             )}
             {status === "delivered" && (
-              <div>
-                <span className="deliveryman">Entregador: {`${deliver}`}</span>
+              <div style={{ margin: "20px 0px"}}>
+                <span className="deliveryman">
+                  <strong>Entregador:</strong> {`${deliver}`}</span>
               </div>
             )}
           </div>

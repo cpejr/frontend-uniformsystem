@@ -1,9 +1,16 @@
 .order-container {
+  position: relative;
+  padding: 30px 0;
   display: flex;
   flex-direction: column;
   width: 100%;
   margin: auto;
 }
+
+.order-container .especific-container{
+  margin-top: 30px;
+}
+
 .adm_orders {
   display: flex;
   flex-direction: column;
@@ -16,6 +23,31 @@
   flex-direction: column;
 }
 
+.informations .setaVoltar{
+  position: absolute;
+  font-size: 35px;
+  top: 10px;
+  left: 5px;
+  color: #666;
+  cursor: pointer;
+}
+
+.informations .setaVoltar:hover{
+    color: #007bff;
+}
+
+.informations .arrowBackIcon{
+  position: absolute;
+  font-size: 35px;
+  top: 10px;
+  left: 5px;
+  color: #666;
+  cursor: pointer;
+}
+.informations .arrowBackIcon:hover{
+    color: #007bff;
+}
+  
 .title-status {
   display: flex;
   justify-content: flex-start;
@@ -51,12 +83,11 @@
 }
 
 .id-button {
-  margin-top: 5%;
-  margin-bottom: 2%;
+  width: 95%;
+  margin: 5% auto 2% auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-right: 21vw;
 }
 
 .id {

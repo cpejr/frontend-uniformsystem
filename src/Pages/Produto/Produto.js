@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { FaCheck, FaShoppingCart } from "react-icons/fa";
 
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField } from '@material-ui/core';
+import MetaData from '../../meta/reactHelmet';
 
 import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
+import SnackbarMessage from "../../components/SnackbarMessage";
 
 import "./Produto.css";
 import "./Radio.css";
@@ -48,6 +50,15 @@ function Produto() {
 
   const [errorCEP, setErrorCEP] = useState(false);
   const [errorCEPMessage, setErrorCEPMessage] = useState("");
+    const meta = {
+        titlePage: "Uniformes Ecommerce | Produto",
+        titleSearch: "Profit Uniformes | Produto",
+        description: "Produtos personalizados prontos para a compra.",
+        keyWords: "Uniformes | Produto | Ecommerce | Profit",
+        imageUrl: "",
+        imageAlt: "",
+      }
+
 
   const [errorSize, setErrorSize] = useState(false);
 
@@ -59,6 +70,10 @@ function Produto() {
   const [calculatedShipping, setCalculatedShipping] = useState(null);
 
   const [logoImage, setLogoImage] = useState(null);
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
 
   const inputQuantity = useRef(null);
   const inputSize = useRef(null);
@@ -77,18 +92,27 @@ function Produto() {
     const response = await getProductModelsFromProduct(product_id);
 
     setProduto(response);
+    const arrayOfModels = response.models;
 
     // Armazena o modela
-    setModels(response.models);
+    setModels(arrayOfModels);
 
-    const choosen = response.models.find((item) => item.is_main === 1);
 
-    // Acha modelo principal
-    setModelChoosen(choosen);
+    const choosen = arrayOfModels[Math.floor(Math.random() * arrayOfModels.length)];;
 
     // Acha modelo principal
-    setIsSelect(choosen.product_model_id);
+    setModelChoosen(!choosen? 1: choosen);
+
+    // Acha modelo principal
+    setIsSelect(!choosen? 1: choosen.product_model_id);
   }, []);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   //essa funcao tem um CSS só pra ela, pois gastou uns esquemas diferenciados pra fazer
   function Radio(gender) {
@@ -101,6 +125,7 @@ function Produto() {
     }
 
     return (
+
       <div className="radio" style={{ display: "flex" }}>
         {obj_sizes.map((size, index) => {
           let value;
@@ -172,18 +197,30 @@ function Produto() {
         "product_model_id",
         `${modelChoosen.product_model_id}`
       );
+
+      const formattedGender = selectedValue.split("_")[0] === 'Fem' ? 'F' : 'M';
+
+      objProdcutInCart.append("gender", formattedGender);
       objProdcutInCart.append("size", selectedValue.split("_")[1]);
       objProdcutInCart.append("amount", Number(inputQuantity.current.value));
-      objProdcutInCart.append("file", logoImage.imgSrc);
-      objProdcutInCart.append("isLogoUpload", true);
-
-      console.log("EAE", objProdcutInCart);
+      objProdcutInCart.append("file", logoImage? logoImage.imgSrc : null);
+      objProdcutInCart.append("isLogoUpload", logoImage ? true: false);
+      
       try {
         const response = await api.put("/addtocart", objProdcutInCart, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { authorization: `Bearer ${token}` },
         });
-        console.log("resposta", response.data);
+
+        // Espera X milissegundos para ativar a função interna
+        setTimeout(() => {
+          setMessageSnackbar("Produto adicionado no carrinho!");
+          setTypeSnackbar("success");
+          setOpenSnackbar(true);
+        }, 800);
+        
       } catch (err) {
+        setMessageSnackbar("Falha ao adicionar o produto");
+        setTypeSnackbar("error");
         console.warn(err);
       }
     }
@@ -244,6 +281,7 @@ function Produto() {
 
   return (
     <div className="productPage">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <div className="leftSide">
         <img
           src={`${process.env.REACT_APP_BUCKET_AWS}${modelChoosen.img_link}`}
@@ -292,6 +330,7 @@ function Produto() {
                   />
                 )}
               </div>
+
             </div>
 
             <div className="shipSpace">
@@ -314,7 +353,7 @@ function Produto() {
               </div>
 
               <a
-                href="http://www.buscacep.correios.com.br/sistemas/buscacep/default.cfm"
+                href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
                 target="_blank"
               >
                 <span className="forgotPassword">Não sei meu CEP</span>
@@ -382,6 +421,7 @@ function Produto() {
           </div>
         </div>
       </div>
+      <SnackbarMessage open={openSnackbar} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

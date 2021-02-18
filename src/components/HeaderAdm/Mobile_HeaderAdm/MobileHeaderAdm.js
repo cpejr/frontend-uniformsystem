@@ -30,7 +30,7 @@ function MobileHeaderAdm() {
                     <Link className="aboutTheUser" style={{textDecoration: 'none', color: "#fff"}} to="/perfil">
                         <FaUserCircle />
                         <div className="divNameFunction" >
-                            <span>{currentUser.name}</span>
+                            <span>{currentUser.name.split(" ")[0]}</span>
                             <p>{currentUser.user_type === 'adm' ? "Administrador"
                             :
                                 "Funcionário"

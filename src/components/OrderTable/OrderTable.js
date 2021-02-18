@@ -1,16 +1,16 @@
 import React from "react";
+import './OrderTable.css';
 
 function OrderTable(Props) {
   switch (Props.status) {
     case "delivered":
       return (
         <div
-          className="container"
-          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
+          className="containerOrderTable"
         >
           <div
             id="orderStyle"
-            style={{ backgroundColor: "#60F86A", color: "black" }}
+            style={{ backgroundColor: "#60F86A"}}
           >
             Entregue
           </div>
@@ -20,12 +20,11 @@ function OrderTable(Props) {
     case "pending":
       return (
         <div
-          className="container"
-          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
+          className="containerOrderTable"
         >
           <div
             id="orderStyle"
-            style={{ backgroundColor: "#F94444", color: "white" }}
+            style={{ backgroundColor: "#F94444"}}
           >
             Pendente
           </div>
@@ -35,12 +34,11 @@ function OrderTable(Props) {
     case "preparing":
       return (
         <div
-          className="container"
-          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
+          className="containerOrderTable"
         >
           <div
             id="orderStyle"
-            style={{ backgroundColor: "#FFE45A", color: "black" }}
+            style={{ backgroundColor: "#FFE45A"}}
           >
             Em Andamento
           </div>
@@ -50,12 +48,11 @@ function OrderTable(Props) {
     case "waitingPayment":
       return (
         <div
-          className="container"
-          style={{ paddingLeft: "4.5vw", paddingBottom: "1vh" }}
+          className="containerOrderTable"
         >
           <div
             id="orderStyle"
-            style={{ backgroundColor: "#15B5DE", color: "black" }}
+            style={{ backgroundColor: "#15B5DE"}}
           >
             Aguardando Pagamento
           </div>

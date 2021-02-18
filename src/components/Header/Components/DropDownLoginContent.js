@@ -155,7 +155,7 @@ export default function DropDownLoginContent(props) {
                     </button>
                     
                     <Link style={{textDecoration: 'none', color: '#000'}} to="/cadastro">
-                        <button>
+                        <button onClick={() => history.push('/cadastro')}>
                             CADASTRAR
                         </button>
                     </Link>

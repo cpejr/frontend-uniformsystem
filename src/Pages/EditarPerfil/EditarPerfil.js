@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import {Helmet} from 'react-helmet';
+import MetaData from '../../meta/reactHelmet';
 import { withRouter } from "react-router-dom";
 
 import {
@@ -109,17 +110,6 @@ function EditarPerfil({ history }) {
   const [errorTelefone, setErrorTelefone] = useState(false);
   const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
-  const [name, setName] = useState("");
-  const [rua, setRua] = useState("");
-  const [num, setNum] = useState(0);
-  const [complemento, setComplemento] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [CEP, setCEP] = useState(0);
-  const [cidade, setCidade] = useState("");
-  const [estado, setEstado] = useState("");
-  const [pontoRef, setPontoRef] = useState("");
-  const [telefone, setTelefone] = useState(0);
-
   const [addressInfo, setAddressInfo] = useState();
 
   const nomeInput = useRef(null);
@@ -129,20 +119,29 @@ function EditarPerfil({ history }) {
   const bairroInput = useRef(null);
   const CEPInput = useRef(null);
   const cidadeInput = useRef(null);
-  const estadoInput = useRef(null);
+  const estadoInput = useRef("");
   const pontoRefInput = useRef(null);
   const telefoneInput = useRef(null);
 
   const [loading, setLoading] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
+  const meta = {
+    titlePage: "Uniformes E-commerce | Editar Perfil",
+    titleSearch: "Editar Perfil",
+    description: "Mude seus dados pessoais do seu perfil de usuário",
+    keyWords: "Editar perfil",
+    imageUrl: "",
+    imageAlt: "",
+  }
+
   useEffect(() => {
     getUserData();
-  }, []);
+  }, []); // executa assim que carregar a página
 
   async function getUserData() {
     const response = await api.get("/address", {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { authorization: `Bearer ${token}` },
     });
     console.log(response.data);
 
@@ -174,7 +173,7 @@ function EditarPerfil({ history }) {
       "cidade",
       cidadeInput.current.value
     );
-    const resultValidateEstado = true; //= validateInput('estado', estadoInput.current.value);
+    const resultValidateEstado = validateInput('estado', estadoInput.current.value);
     const resultValidatePontoRef = validateInput(
       "pontoRef",
       pontoRefInput.current.value
@@ -300,11 +299,19 @@ function EditarPerfil({ history }) {
       try {
         setLoading(true);
 
-        const response = await api.get(
-          "/address/2b2b31e-31e-d86-faf-5c478e7ef07",
-          {
-            headers: { authorization: `Bearer ${token}` },
-          }
+        const addressId = addressInfo.address_id
+        delete addressInfo['address_id'];
+        delete addressInfo['user_id'];
+
+        const updated_fields = {
+            "updatedFields": { ...addressInfo }
+        }
+
+        const response = await api.put(`/address/${addressId}`,
+            updated_fields,
+            {
+                headers: { authorization: `bearer ${token}` },
+            }
         );
 
         console.log(response);
@@ -318,6 +325,54 @@ function EditarPerfil({ history }) {
       }
     }
   };
+
+  const handleInputChange = (e, type) => {
+    let newInfo;
+    let newUserInfo;
+    if(type === 'name'){
+        newUserInfo = {
+            name: e.target.value
+        }
+    }
+
+    if(type === 'street'){
+        newInfo = {
+            street: e.target.value
+        }
+    }
+
+    if(type === 'complement'){
+        newInfo = {
+            complement: e.target.value
+        }
+    }
+
+    if(type === 'neighborhood'){
+        newInfo = {
+            neighborhood: e.target.value
+        }
+    }
+
+    if(type === 'zip_code'){
+        newInfo = {
+            zip_code: e.target.value
+        }
+    }
+
+    if(type === 'city'){
+        newInfo = {
+            city: e.target.value
+        }
+    }
+
+    if(type === 'state'){
+      newInfo = {
+          state: e.target.value
+      }
+  }
+
+    setAddressInfo({...addressInfo, ...newInfo});
+}
 
   const estados = [
     "AC",
@@ -351,6 +406,7 @@ function EditarPerfil({ history }) {
 
   return (
     <div className="registerEmployeeFullContent">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1 className={classes.mainTitle}>
         EDITAR DADOS PESSOAIS
         <span className={classes.spanInsideTitle} />
@@ -366,10 +422,11 @@ function EditarPerfil({ history }) {
         className={classes.largeInput}
         variant="outlined"
         defaultValue="blablaaa"
+        onChange={(e) => handleInputChange(e, 'name')}
       />
 
       <h1 className={classes.subTitle}>ENDEREÇO</h1>
-      <div className="address01">
+      <div className="horizontalInput">
         <h1 className={classes.caption}>Rua</h1>
         {addressInfo && (
           <TextField
@@ -380,8 +437,8 @@ function EditarPerfil({ history }) {
             helperText={errorRuaMessage}
             variant="outlined"
             defaultValue={addressInfo.street}
-            onChange={(event) => setRua(event.target.value)}
             className={classes.mediumInput}
+            onChange={(e) => handleInputChange(e, 'street')}
           />
         )}
         <h1 className={classes.caption}>N°</h1>
@@ -407,7 +464,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.complement}
-            onChange={(event) => setComplemento(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'complement')}
           />
         )}
         <h1 className={classes.caption}>Bairro</h1>
@@ -422,12 +479,12 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.neighborhood}
-            onChange={(event) => setBairro(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'neighborhood')}
           />
         )}
       </div>
 
-      <div className="address01">
+      <div className="horizontalInput">
         <h1 className={classes.caption}>CEP</h1>
         {addressInfo && (
           <TextField
@@ -439,7 +496,8 @@ function EditarPerfil({ history }) {
             variant="outlined"
             className={classes.mediumInput}
             defaultValue={addressInfo.zip_code}
-            onChange={(event) => setCEP(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'zip_code')}
+
           />
         )}
         <h1 className={classes.caption}>Cidade</h1>
@@ -453,7 +511,7 @@ function EditarPerfil({ history }) {
             className={classes.mediumInput}
             variant="outlined"
             defaultValue={addressInfo.city}
-            onChange={(event) => setCidade(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'city')}
           />
         )}
         <h1 className={classes.caption}>Estado</h1>
@@ -465,8 +523,7 @@ function EditarPerfil({ history }) {
             error={errorEstado}
             helperText={errorEstadoMessage}
             className={classes.smallInput}
-            //defaultValue={addressInfo.state}
-            onChange={(event) => setEstado(event.target.value)}
+            onChange={(e) => handleInputChange(e, 'state')}
             variant="outlined"
           >
             {estados.map((estado) => (
@@ -476,7 +533,7 @@ function EditarPerfil({ history }) {
         )}
       </div>
 
-      <div className="address01">
+      <div className="horizontalInput">
         <h1 className={classes.caption}>Ponto de referência</h1>
         {addressInfo && (
           <TextField
@@ -486,11 +543,8 @@ function EditarPerfil({ history }) {
             error={errorPontoRef}
             helperText={errorPontoRefMessage}
             className={classes.mediumInput}
-            //InputLabelProps={{shrink: true}}
-            //value="jj"
             variant="outlined"
             defaultValue={addressInfo.complement}
-            onChange={(event) => setPontoRef(event.target.value)}
           />
         )}
       </div>

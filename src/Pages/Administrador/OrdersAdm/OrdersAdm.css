@@ -1,6 +1,7 @@
 /* Estlizações abaixo são para a tabela */
 #orderStyle {
   width: fit-content;
+  text-align: center;
   border-radius: 15px;
   height: fit-content;
   background-color: red;
@@ -13,6 +14,7 @@ th {
   height: 40px;
   border: 0;
   border: 0.1px solid#7FA5A0 !important;
+  padding: 0 !important;
 }
 
 .orders {
@@ -124,7 +126,23 @@ th {
 .adm_orders_id {
   padding-bottom: 1vh;
   border-bottom: 1px solid #323131;
-  width: 120%;
+  width: 100%;
+}
+
+.adm_orders_id tr {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+}
+
+.adm_orders_id tr a svg {
+  font-size: 30px;
+  color: #666;
+  cursor: pointer;
+}
+
+.adm_orders_id tr a svg:hover {
+  color: #007bff;
 }
 
 .adm_orders_status {
@@ -132,7 +150,7 @@ th {
   width: 100%;
 }
 
-.evento_pendente{
+.evento_pendente {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -180,7 +198,7 @@ th {
 }
 
 @media (max-width: 1090px) {
-  .orders_data{
+  .orders_data {
     padding: 5vh;
   }
 
@@ -206,6 +224,49 @@ th {
   .adm_div_table {
     padding: 0;
     padding-top: 20vh;
+    width: 100%;
+  }
+
+  .adm_orders_id {
+    padding-bottom: 1vh;
+    border-bottom: 1px solid #323131;
+    width: 100%;
+  }
+
+  .adm_orders_status {
+    border-bottom: 1px solid #323131;
+    width: 100%;
+  }
+}
+@media (max-width: 400px) {
+  .orders_data {
+    padding: 0;
+    padding-bottom: 25vh;
+  }
+
+  .search_order {
+    flex-direction: row;
+  }
+
+  .filterTitleProducts {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .input_div {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .div_pendente {
+    position: absolute;
+    padding-top: 5vh;
+    padding-left: 50vw;
+  }
+
+  .adm_div_table {
+    padding: 0;
+    padding-top: 2vh;
     width: 100%;
   }
 

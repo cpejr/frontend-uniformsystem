@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
-import api from "../../services/api";
-import { LoginContext } from "../../contexts/LoginContext";
-import "./Carrinho.css";
-import CartProduct from "./Components/CartProduct";
-import ShippingCalc from "./Components/ShippingCalc";
+import React, { useEffect, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import api from '../../services/api';
+import { LoginContext } from '../../contexts/LoginContext';
+import CartProduct from './Components/CartProduct';
+import MetaData from '../../meta/reactHelmet';
+import ShippingCalc from './Components/ShippingCalc';
+import './Carrinho.css';
 
 function Carrinho() {
   const history = useHistory();
@@ -14,6 +15,15 @@ function Carrinho() {
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
   const [shipping, setShipping] = useState();
+
+  const meta = {
+    titlePage: "Uniformes E-commerce | Carrinho",
+    titleSearch: "Carrinho",
+    description: "Seu carrinho de compras em Profit",
+    keyWords: "Carrinho",
+    imageUrl: "",
+    imageAlt: "",
+  }
 
   async function handleChangeAmount(number, product_key) {
     try {
@@ -78,10 +88,61 @@ function Carrinho() {
 
   return (
     <div className="cardContainer">
+      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
       <h1 className="cartTitle">Carrinho</h1>
+      <div className="cartTable">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Preço Unitário</th>
+              <th>Quantidade</th>
+              <th>Subtotal</th>
+              <th>Excluir</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product, index) => (
+              <CartProduct
+                key={index}
+                index={index}
+                product={product}
+                changeAmount={handleChangeAmount}
+                handleDelete={handleDelete}
+              />
+            ))}
+            <tr>
+              <td colSpan="3" className="subTotal">
+                Subtotal:{" "}
+              </td>
+              <td colSpan="2" className="subTotal">
+                R${subTotal.toFixed(2).replace(".", ",")}
+              </td>
+            </tr>
+            <tr>
+              <td colSpan="3">
+                <ShippingCalc setShipping={setShipping} />
+              </td>
+              <td colSpan="3">
+                {shipping && `R$${shipping.toFixed(2).replace(".", ",")}`}
+              </td>
+            </tr>
+            <tr>
+              <td colSpan="5" className="total">
+                R$
+                {shipping
+                  ? (subTotal + shipping).toFixed(2).replace(".", ",")
+                  : subTotal.toFixed(2).replace(".", ",")}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div
         classname="buttonSize"
-        style={{ width: "35vw", paddingLeft: "68vw", paddingBottom: "1vh" }}
+        style={{
+          alignSelf: 'flex-end'
+        }}
       >
         {products.length > 0 && (
           <button
@@ -92,52 +153,6 @@ function Carrinho() {
           </button>
         )}
       </div>
-      <table className="cartTable">
-        <thead>
-          <tr>
-            <th>Produto</th>
-            <th>Preço Unitário</th>
-            <th>Quantidade</th>
-            <th>Subtotal</th>
-            <th>Excluir</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product, index) => (
-            <CartProduct
-              key={index}
-              index={index}
-              product={product}
-              changeAmount={handleChangeAmount}
-              handleDelete={handleDelete}
-            />
-          ))}
-          <tr>
-            <td colSpan="3" className="subTotal">
-              Subtotal:{" "}
-            </td>
-            <td colSpan="2" className="subTotal">
-              R${subTotal.toFixed(2).replace(".", ",")}
-            </td>
-          </tr>
-          <tr>
-            <td colSpan="3">
-              <ShippingCalc setShipping={setShipping} />
-            </td>
-            <td colSpan="3">
-              {shipping && `R$${shipping.toFixed(2).replace(".", ",")}`}
-            </td>
-          </tr>
-          <tr>
-            <td colSpan="5" className="total">
-              R$
-              {shipping
-                ? (subTotal + shipping).toFixed(2).replace(".", ",")
-                : subTotal.toFixed(2).replace(".", ",")}
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   );
 }

@@ -1,17 +1,51 @@
-.setaVoltar {
-  margin-bottom: 2%;
-  font-size: 20px;
+.especific-employee {
+  width: 100%;
+  padding: 30px 0;
+  position: relative;
 }
 
-.boxTitle {
+.especific-employee .setaVoltar {
+  position: absolute;
+  font-size: 35px;
+  top: 10px;
+  left: 5px;
+  color: #666;
+  cursor: pointer;
+}
+
+.especific-employee .setaVoltar:hover {
+  color: #007bff;
+}
+
+.especific-employee .boxTitle {
   margin-left: 3%;
+  margin-top: 30px;
 }
 
-.titleLineExp {
+.especific-employee .titleLineExp {
   border-top: 3px solid #4dcdbc;
   border-radius: 20px;
   width: 42%;
   margin-left: 0.5%;
   margin-top: -1%;
   margin-bottom: 5%;
+}
+
+.tabela {
+  align-items: baseline;
+  align-content: center;
+}
+
+@media (max-width: 1000px) {
+  .especific-employee {
+    width: 60vw;
+    margin-right: 5vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .tabela {
+    overflow: auto;
+    width: 400px;
+  }
 }

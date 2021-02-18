@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
-
-import { Link } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
+import MetaData from "../../../meta/reactHelmet";
+import { Link } from "react-router-dom";
 
 import {
   Button,
@@ -27,24 +28,35 @@ const useStyles = makeStyles({
     minWidth: 650,
   },
   actions: {
-    display: 'flex',
-    justifyContent: 'space-around',
-  }
+    display: "flex",
+    justifyContent: "space-around",
+  },
 });
-
 
 function EmployeeAdm() {
   const classes = useStyles();
-  const { token } = useContext(LoginContext);
+  const { token, user } = useContext(LoginContext);
   const [employees, setEmployees] = useState([]);
-  const [dialogItem, setDialogItem] = useState({open: false, item: null});
+  const [funcionarioFiltrado, setFuncionarioFiltrado] = useState([]);;
+  const [dialogItem, setDialogItem] = useState({ open: false, item: null });
+  const inputSearch = useRef(null);
 
-  function handleClose(){
-    setDialogItem({open: false, item: null});
+  const meta = {
+    titlePage: "Administrador | Funcionário",
+    titleSearch: "Funcionário Profit Busca",
+    description:
+      "Encontre ou cadastre o funcionário que você desejar. É possível buscar, cadastrar ou deletar o funcionário do nosso banco de dados.",
+    keyWords: "Funcionário, Cadastro, Deletar, Profit",
+    imageUrl: "",
+    imageAlt: "",
+  };
+
+  function handleClose() {
+    setDialogItem({ open: false, item: null });
   }
 
-  function handleOpen(item){
-    setDialogItem({open: true, item: item});
+  function handleOpen(item) {
+    setDialogItem({ open: true, item: item });
   }
 
   async function getEmployees() {
@@ -52,19 +64,21 @@ function EmployeeAdm() {
       const response = await api.get("/employees", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(response);
       setEmployees([...response.data.employees]);
+      setFuncionarioFiltrado([...response.data.employees]);
     } catch (error) {
       console.warn(error);
       alert("Erro ao buscar funcionários");
     }
   }
 
-  async function deleteEmployee(){
+  async function deleteEmployee() {
     try {
       await api.delete(`/delAdmOrEmployee/${dialogItem.item.user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       handleClose();
       getEmployees();
     } catch (error) {
@@ -78,14 +92,52 @@ function EmployeeAdm() {
     getEmployees();
   }, []);
 
+  function FilterEmployee() {
+    //Seta para vazio
+    setFuncionarioFiltrado([]);
+
+    const employee_name = inputSearch.current.value.toLowerCase();
+    employees.map((employee) => {
+      if(employee.name.toLowerCase().includes(employee_name)){
+        //Adiciona funcionario filtrado ao array
+        setFuncionarioFiltrado(funcionarioFiltrado => [...funcionarioFiltrado, employee])
+        // funcionario.push(employee);
+        // setEmployees(funcionario);
+      }
+    });
+    
+    // Se nao tiver nada no Input de busca, cooca todos
+    if(employee_name === ''){
+      setFuncionarioFiltrado([...employees]);
+    }
+  }
+
   return (
     <div>
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
+      <div className="topEmployee">
+      <div className="searchEmployee">
+        <input
+          id="searchEmployee"
+          type="text"
+          ref={inputSearch}
+          placeholder="Buscar Funcionário"
+        />
+
+        <FaSearch onClick={FilterEmployee} className="searchButtonEmployee" />
+      </div>
       <div>
-        <Link  className="buttonEmployee" to="/adm/cadastrofuncionarios">
-          <Button type="button">
-            CADASTRAR FUNCIONÁRIO
-          </Button>
+        <Link className="buttonEmployee" to="/adm/funcionarios/cadastro">
+          <Button type="button">CADASTRAR FUNCIONÁRIO</Button>
         </Link>
+      </div>
       </div>
       <TableContainer component={Paper}>
         <Table
@@ -107,35 +159,52 @@ function EmployeeAdm() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {employees.length > 0 ? 
-            employees.map((employee) => (
-              <TableRow key={employee.user_id}>
-                <TableCell component="td" scope="row">
-                  {employee.name}
-                </TableCell>
-                <TableCell component="td" scope="row" >
-                  {employee.email}
-                </TableCell>
-                <TableCell component="td" scope="row" className={classes.actions}>
-                  <IconButton onClick={()=>handleOpen(employee)}>
-                    <BsFillTrashFill />
-                  </IconButton>
-                  <IconButton>
-                    <Link to={`/adm/funcionario/${employee.user_id}`}>
-                      <BsInfoCircle />
-                    </Link>
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))
-          :
+            {funcionarioFiltrado.length > 0 ? (
+              funcionarioFiltrado.map((employee) => {
+                const id = employee.user_id;
+                const colum = (
+                <TableRow key={employee.user_id}>
+                  <TableCell component="td" scope="row">
+                    {employee.name}
+                  </TableCell>
+                  <TableCell component="td" scope="row">
+                    {employee.email}
+                  </TableCell>
+                  <TableCell
+                    component="td"
+                    scope="row"
+                    className={classes.actions}
+                  >
+                    {
+                      id !== user[0].user_id ? 
+                        <IconButton onClick={() => handleOpen(employee)}>
+                          <BsFillTrashFill />
+                        </IconButton>:
+                      null
+                    }
+                    <IconButton>
+                      <Link to={`/adm/funcionario/`+id}>
+                        <BsInfoCircle />
+                      </Link>
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              );
+              return colum;
+            })
+            ) : (
               <span>Nenhum funcionário cadastrado</span>
-          }
+            )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <ExcludeDialog open={dialogItem.open} handleClose={handleClose} title={dialogItem.item?.name} callback={deleteEmployee} />
+      <ExcludeDialog
+        open={dialogItem.open}
+        handleClose={handleClose}
+        title={dialogItem.item?.name}
+        callback={deleteEmployee}
+      />
     </div>
   );
 }

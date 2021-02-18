@@ -55,7 +55,7 @@ function Header() {
                                 to="/perfil"
                             >
                                 <FaUser className="user_icon" />
-                                <div style={{ width: "fit-content", cursor: "pointer"}}>{currentUser.name.toUpperCase()}</div>
+                                <div style={{ width: "fit-content", cursor: "pointer"}}>{currentUser.name.split(" ")[0].toUpperCase()}</div>
                             </Link>
                             :
                                 <>

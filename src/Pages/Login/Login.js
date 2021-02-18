@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from 'react-router-dom';
 import { Button, TextField, CircularProgress } from '@material-ui/core';
-import {Helmet} from 'react-helmet';
 import MetaData from '../../meta/reactHelmet';
 import { LoginContext } from "../../contexts/LoginContext";
 import api from "../../services/api";

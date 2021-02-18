@@ -70,6 +70,7 @@
 
 .productPage .rightSide .productsInfo {
     height: 100%;
+    min-height: 550px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -127,7 +128,7 @@
 .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoSpaceDiv .logoImgClass{
     /* width: auto; */
     max-width: 70%;
-    max-height: 150px;
+    max-height: 100%;
 }
 
 .productPage .rightSide .productsInfo .leftSideInside .shipSpace{

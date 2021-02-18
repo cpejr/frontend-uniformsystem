@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Helmet } from "react-helmet";
 import MetaData from "../../../meta/reactHelmet";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
@@ -10,13 +9,14 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+// import Snackbar from "@material-ui/core/Snackbar";
+// import MuiAlert from "@material-ui/lab/Alert";
 
 import Button from "@material-ui/core/Button";
 
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
+import SnackbarMessage from "../../../components/SnackbarMessage";
 
 import "./HomeEditable.css";
 import { useHistory } from "react-router-dom";
@@ -52,6 +52,17 @@ function SelectedImages({
   }
 }
 
+const maskPhone = value => {
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d{5})(\d{4})(\d)/, "$1-$2");
+};
+
+const maskOnlyLetters = value => {
+  return value.replace(/[!@#¨$%^&*)(+=._-]+/g, "");
+};
+
 function InputsOrIconWithInput({
   label,
   placeholderInfo,
@@ -74,7 +85,63 @@ function InputsOrIconWithInput({
           outline: "none",
         }}
         placeholder={placeholderInfo}
+        onChange={(e) => setInfo(maskOnlyLetters(e.target.value))}
+      />
+    </div>
+  );
+}
+
+function InputsOrIconWithInputUrl({
+  label,
+  placeholderInfo,
+  icon,
+  hasIcon,
+  defaultValue,
+  setInfo,
+}) {
+  return (
+    <div className="labelWithInputHomeEditable">
+      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label}</label>}
+      <input
+        type="url"
+        name="inputFromLabel"
+        value={defaultValue}
+        style={{
+          border: "1px solid #aaa",
+          borderRadius: "15px",
+          padding: "5px 10px",
+          outline: "none",
+        }}
+        placeholder={placeholderInfo}
         onChange={(e) => setInfo(e.target.value)}
+      />
+    </div>
+  );
+}
+
+function InputsOrIconWithInputPhone({
+  label,
+  placeholderInfo,
+  icon,
+  hasIcon,
+  defaultValue,
+  setInfo,
+}) {
+  return (
+    <div className="labelWithInputHomeEditable">
+      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label}</label>}
+      <input
+        type="text"
+        name="inputFromLabel"
+        value={defaultValue}
+        style={{
+          border: "1px solid #aaa",
+          borderRadius: "15px",
+          padding: "5px 10px",
+          outline: "none",
+        }}
+        placeholder={placeholderInfo}
+        onChange={(e) => setInfo(maskPhone(e.target.value))}
       />
     </div>
   );
@@ -99,6 +166,10 @@ function HomeEditable() {
 
   // Estado para armazenar Imagens de Produtos
   const [imagesProducts, setImagesProducts] = useState([]);
+
+
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
 
   // Estados para armazenar imagens selecionadas do Carrossel
   const [imagemCarousel01, setImagemCarousel01] = useState(false);
@@ -162,6 +233,7 @@ function HomeEditable() {
   const [facebookInfo, setFacebookInfo] = useState("");
   const [instagramInfo, setInstagramInfo] = useState("");
   const [whatsappInfo, setWhatsappInfo] = useState("");
+  const [phone, setPhone] = useState("");
 
   // UseEffect para inicializar as informações da Home
   useEffect(() => {
@@ -568,12 +640,16 @@ function HomeEditable() {
 
       setTimeout(() => {
         setLoading(false);
+        setMessageSnackbar("Alterações realizadas com sucesso!");
+        setTypeSnackbar("success");
         setOpen(true);
-      }, 3000);
+      }, 1500);
 
       // Refresh da página
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
+      setMessageSnackbar("Falha ao atualizar os dados");
+      setTypeSnackbar("error");
       setLoading(false)
       console.warn(err.message);
       return err.message;
@@ -820,7 +896,7 @@ function HomeEditable() {
         </div>
 
         <div className="changeInfoArea">
-          <InputsOrIconWithInput
+          <InputsOrIconWithInputPhone
             label={"TELEFONE"}
             placeholderInfo={"(XX) XXXX-XXXX"}
             icon={<FacebookIcon />}
@@ -838,7 +914,7 @@ function HomeEditable() {
           />
           <div className="socialMediaInfo" style={{ marginTop: "24px" }}>
             <h2>REDES SOCIAIS</h2>
-            <InputsOrIconWithInput
+            <InputsOrIconWithInputUrl
               label={"FACEBOOK"}
               placeholderInfo={"testeholder"}
               icon={
@@ -850,7 +926,7 @@ function HomeEditable() {
               hasIcon={true}
               setInfo={setFacebookInfo}
             />
-            <InputsOrIconWithInput
+            <InputsOrIconWithInputUrl
               label={"INSTAGRAM"}
               placeholderInfo={"testeholder"}
               icon={
@@ -862,7 +938,7 @@ function HomeEditable() {
               hasIcon={true}
               setInfo={setInstagramInfo}
             />
-            <InputsOrIconWithInput
+            <InputsOrIconWithInputPhone
               label={"WHATSAPP"}
               placeholderInfo={"testeholder"}
               icon={
@@ -881,7 +957,7 @@ function HomeEditable() {
       <Button className="saveChangesButton" onClick={handleSaveChanges}>
         {loading ? <CircularProgress color="secondary" /> : "SALVAR ALTERAÇÕES"}
       </Button>
-      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+      {/* <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <MuiAlert
           onClose={handleClose}
           elevation={6}
@@ -890,7 +966,8 @@ function HomeEditable() {
         >
           Alterações realizadas com sucesso!
         </MuiAlert>
-      </Snackbar>
+      </Snackbar> */}
+      <SnackbarMessage open={open} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

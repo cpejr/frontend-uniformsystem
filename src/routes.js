@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import React, { useState, useContext, useEffect} from "react";
+import {BrowserRouter, Route, Switch, Redirect, Link} from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import Home from "./Pages/Home";
@@ -21,7 +21,6 @@ import EditarPerfil from "./Pages/EditarPerfil";
 import Login from "./Pages/Login";
 import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
-// import SignUp from "./Pages/Sign_Up";
 import Checkout from "./Pages/Checkout";
 import Cadastro from "./Pages/Cadastro";
 import Pedidos from "./Pages/Pedidos";
@@ -33,6 +32,7 @@ import Footer from "./components/Footer";
 import HeaderAdm from "./components/HeaderAdm";
 import FooterAdm from "./components/FooterAdm";
 import SidebarAdm from "./components/SidebarAdm";
+import SidebarClient from "./components/SidebarClient";
 
 import {
   isAuthenticated,
@@ -41,6 +41,18 @@ import {
   isClientOrADMOrEmployee,
 } from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
+import Fab from "@material-ui/core/Fab";
+import EditIcon from "@material-ui/icons/Edit";
+import HomeIcon from '@material-ui/icons/Home';
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+
+  return {
+      width,
+      height,
+  };
+}
 
 // Controle de rotas para Cliente
 const PrivateClientRoute = ({ component: Component, ...rest }) => {
@@ -121,33 +133,92 @@ export default function Routes() {
 }
 
 function MenuRoutes() {
-  return (
-    <div>
-      <Header />
-      <Switch>
-        <Route path="/" export exact component={Home} />
-
-        <Route path="/shop" export component={Loja} />
-        <Route path="/product/:product_id" export component={Produto} />
-        <PrivateClientRoute path="/checkout" export component={Checkout} />
-        {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
-                logado, você será redirecionado para a página Login. */}
-
-        <PrivateClientRoute path="/perfil" export exact component={Perfil} />
-        <PrivateClientRoute path="/editarPerfil" export exact component={EditarPerfil} />
-
-        <PrivateClientRoute path="/cart" export component={Carrinho} />
-        <Route path="/login" export component={Login} />
-        <Route path="/contact" export component={Contato} />
-        <Route path="/cadastro" export component={Cadastro} />
-        {/* <Route path="/orders" export component={Pedidos} /> */}
-
-        {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
-        <Route path="*" exact component={Error} />
-      </Switch>
-      <Footer />
-    </div>
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
   );
+  const { user } = useContext(LoginContext);
+  useEffect(() => {
+    function handleResize() {
+        setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+}, []);
+  if (windowDimensions.width <= 850) {
+    return (
+      <div>
+        <Header />
+        <SidebarClient>
+        <Switch>
+          <Route path="/" export exact component={Home} />
+  
+          <Route path="/shop" export component={Loja} />
+          <Route path="/checkout" export component={Checkout} />
+          <Route path="/product/:product_id" export component={Produto} />
+          {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
+                  logado, você será redirecionado para a página Login. */}
+  
+          <Route path="/perfil" export exact component={Perfil} />
+          <Route path="/editarPerfil" export exact component={EditarPerfil} />
+          
+          <Route path="/cart" export component={Carrinho} />
+          <Route path="/login" export component={Login} />
+          <Route path="/contact" export component={Contato} />
+          <Route path="/cadastro" export component={Cadastro} />
+          <Route path="/orders" export component={Pedidos} />
+  
+          {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
+          <Route path='*' exact component={Error} />
+        </Switch>
+        </SidebarClient>
+        {(user !== null && user[0].user_type === "adm") ?
+          <Link to="/adm/home" style={{position: 'fixed', right: 10, bottom: 10}}>
+            <Fab color="primary" aria-label="edit">
+              <EditIcon />
+            </Fab>
+          </Link>
+          : null}
+        <Footer />
+      </div>
+    );
+  }
+  else{
+    return (
+      <div>
+        <Header />
+        <Switch>
+          <Route path="/" export exact component={Home} />
+  
+          <Route path="/shop" export component={Loja} />
+          <Route path="/checkout" export component={Checkout} />
+          <Route path="/product/:product_id" export component={Produto} />
+          {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
+                  logado, você será redirecionado para a página Login. */}
+  
+          <Route path="/perfil" export exact component={Perfil} />
+          <Route path="/editarPerfil" export exact component={EditarPerfil} />
+          
+          <Route path="/cart" export component={Carrinho} />
+          <Route path="/login" export component={Login} />
+          <Route path="/contact" export component={Contato} />
+          <Route path="/cadastro" export component={Cadastro} />
+          <Route path="/orders" export component={Pedidos} />
+  
+          {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
+          <Route path='*' exact component={Error} />
+        </Switch>
+        {(user !== null && user[0].user_type === "adm") ?
+          <Link to="/adm/home" style={{position: 'fixed', right: '1vw', bottom: '11vh'}}>
+            <Fab color="primary" aria-label="edit">
+              <EditIcon />
+            </Fab>
+          </Link>
+          : null}
+        <Footer />
+      </div>
+    );
+  }
 }
 
 function AdmRoutes() {
@@ -161,19 +232,24 @@ function AdmRoutes() {
       <HeaderAdm />
       <SidebarAdm>
         <Switch>
-          <PrivateADMRoute path="/adm/home" component={HomeEditable} />
-          <PrivateADMOrEmployeeRoute path="/adm/pedidos" component={OrdersAdm} />
+          <PrivateADMRoute
+            path="/adm/home"
+            component={HomeEditable}
+          />
+          <PrivateADMOrEmployeeRoute
+            path="/adm/pedidos"
+            exact
+            component={OrdersAdm}
+          />
           <PrivateADMOrEmployeeRoute
             path="/adm/pedidoespecifico"
             export
             component={EspecificOrderAdm}
           />
-          <PrivateADMRoute path="/adm/produtos" component={ProductsAdm} />
-          <PrivateADMRoute path="/adm/funcionarios" export component={EmployeeAdm} />
-          <PrivateADMRoute
-            path="/adm/cadastrofuncionarios"
-            export
-            component={CadastroFunc}
+          <PrivateADMRoute 
+            path="/adm/produtos" 
+            exact
+            component={ProductsAdm} 
           />
           <PrivateADMRoute
             path="/adm/produtos/cadastro"
@@ -185,6 +261,17 @@ function AdmRoutes() {
             export
             component={EditProduct}
           />
+          <PrivateADMRoute 
+            path="/adm/funcionarios" 
+            export
+            exact 
+            component={EmployeeAdm} 
+          />
+          <PrivateADMRoute
+            path="/adm/funcionarios/cadastro"
+            export
+            component={CadastroFunc}
+          />
           <PrivateADMRoute
             path="/adm/funcionario/:id"
             export
@@ -193,6 +280,13 @@ function AdmRoutes() {
           <Route path="*" exact={true} component={Error} />
         </Switch>
       </SidebarAdm>
+      {(user !== null && user[0].user_type === "adm") ?
+        <Link to="/" style={{position: 'fixed', right: '1vw', bottom: '11vh'}}>
+          <Fab color="primary" aria-label="home">
+            <HomeIcon />
+          </Fab>
+        </Link>
+        : null}
       <FooterAdm />
     </div>
   );

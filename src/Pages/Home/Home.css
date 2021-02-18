@@ -18,7 +18,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
+    
     margin-bottom: 40px;
     /* background-color: #aa2b2b; */
 }
@@ -44,6 +44,8 @@ justify-content: center;
 
 .carousel-control-prev, .carousel-control-next{
     width: fit-content;
+    height: 20vh;
+    margin-top: 40vh;
 }
 
 .carousel-control-prev svg, .carousel-control-next svg{

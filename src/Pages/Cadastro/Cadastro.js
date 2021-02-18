@@ -17,8 +17,8 @@ import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
 
 import "./Cadastro.css";
-import { Helmet } from 'react-helmet';
-import MetaData from '../../meta/reactHelmet';
+import { Helmet } from "react-helmet";
+import MetaData from "../../meta/reactHelmet";
 
 function validateInput(type, value) {
   let isValid;
@@ -35,7 +35,7 @@ function validateInput(type, value) {
   }
 
   if (type === "email") {
-    if (!value.includes('@') || !value.includes('.com') || value === '') {
+    if (!value.includes("@") || !value.includes(".com") || value === "") {
       isValid = false;
     } else {
       isValid = true;
@@ -43,7 +43,7 @@ function validateInput(type, value) {
   }
 
   if (type === "password") {
-    if (value.length < 6 || value === '') {
+    if (value.length < 6 || value === "") {
       isValid = false;
     } else {
       isValid = true;
@@ -182,95 +182,110 @@ function Cadastro({ history }) {
   }, [addressInfo.state]);
 
   const handleInputChange = (e, type) => {
-    let newAddressInfo;
+    // Setting User Info
     let newUserInfo;
+    let newAddressInfo;
 
-    if (type === 'name') {
+    if (type === "name") {
       newUserInfo = {
         name: e.target.value,
-        user_type: "client"
-      }
+        user_type: "client",
+      };
     }
 
-    if (type === 'email') {
+    if (type === "email") {
       newUserInfo = {
-        email: e.target.value
-      }
+        email: e.target.value,
+      };
     }
 
-    if (type === 'password') {
+    if (type === "password") {
       newUserInfo = {
-        password: e.target.value
-      }
+        password: e.target.value,
+      };
     }
 
-    if (type === 'cpf') {
+    if (type === "cpf") {
       newUserInfo = {
-        cpf: e.target.value
-      }
+        cpf: e.target.value,
+      };
     }
 
-    if (type === 'rua') {
-      newAddressInfo = {
-        rua: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
+    if (type === "telefone") {
+      newUserInfo = {
+        telefone: e.target.value,
+      };
     }
 
-    if (type === 'number') {
+    // Setting Address Info
+    if (type === "rua") {
       newAddressInfo = {
-        number: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
-    }
-
-    if (type === 'city') {
-      newAddressInfo = {
-        city: e.target.value,
-        country: "Brasil"
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
-    }
-
-    if (type === 'neighborhood') {
-      newAddressInfo = {
-        neighborhood: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
-    }
-
-    if (type === 'zip_code') {
-      newAddressInfo = {
-        zip_code: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
-    }
-
-    if (type === 'complement') {
-      newAddressInfo = {
-        complement: e.target.value
-      }
-      setAddressInfo({ ...addressInfo, ...newAddressInfo })
-    }
-
-    if (type === 'state') {
-      newAddressInfo = {
-        state: e.target.value
-      }
-      console.log(newAddressInfo.state);
+        street: e.target.value,
+      };
       setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
 
-    setUserInfo({ ...userInfo, ...newUserInfo, address: { ...addressInfo } });
+    if (type === "number") {
+      newAddressInfo = {
+        number: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
+    }
 
-    // console.log(userInfo);
-  }
+    if (type === "city") {
+      newAddressInfo = {
+        city: e.target.value,
+        country: "Brasil",
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
+    }
+
+    if (type === "neighborhood") {
+      newAddressInfo = {
+        neighborhood: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
+    }
+
+    if (type === "zip_code") {
+      newAddressInfo = {
+        zip_code: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
+    }
+
+    if (type === "complement") {
+      newAddressInfo = {
+        complement: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, ...newAddressInfo });
+    }
+
+    if (type === "state") {
+      newAddressInfo = {
+        state: e.target.value,
+      };
+      setAddressInfo({ ...addressInfo, state: e.target.value });
+    }
+
+    const Address = {
+      address: { ...addressInfo },
+    };
+
+    setUserInfo({ ...userInfo, ...newUserInfo, ...Address });
+  };
 
   const handleSubmit = async () => {
     const resultValidateName = validateInput("name", nomeInput.current.value);
     const resultValidateCPF = validateInput("CPF", CPFInput.current.value);
-    const resultValidateEmail = validateInput("email", emailInput.current.value);
-    const resultValidatePassword = validateInput("password", passwordInput.current.value);
+    const resultValidateEmail = validateInput(
+      "email",
+      emailInput.current.value
+    );
+    const resultValidatePassword = validateInput(
+      "password",
+      passwordInput.current.value
+    );
     const resultValidateRua = validateInput("rua", ruaInput.current.value);
     const resultValidateNum = validateInput("numero", numInput.current.value);
     const resultValidateComplemento = validateInput(
@@ -286,7 +301,10 @@ function Cadastro({ history }) {
       "cidade",
       cidadeInput.current.value
     );
-    const resultValidateEstado = validateInput('estado', estadoInput.current.value);
+    const resultValidateEstado = validateInput(
+      "estado",
+      estadoInput.current.value
+    );
     const resultValidatePontoRef = validateInput(
       "pontoRef",
       pontoRefInput.current.value
@@ -442,30 +460,34 @@ function Cadastro({ history }) {
       setErrorTelefone(false);
       setErrorTelefoneMessage("");
 
-      const str1 = addressInfo.rua;
+      const str1 = addressInfo.street;
       const str2 = addressInfo.number;
 
-      const halfStreet = str1.concat(',');
-      const street = halfStreet.concat(str2);
+      const halfStreet = str1.concat(" ");
+      const street = halfStreet.concat(", número:", str2);
+      // const street = str1 + " " + str2;
 
-      console.log('street = ', street);
+      console.log(street);
 
       setAddressInfo({ ...addressInfo, street: street });
 
-      delete addressInfo['number'];
-      delete addressInfo['rua'];
+      delete addressInfo["number"];
+      delete addressInfo["rua"];
 
-      delete userInfo.address['number'];
-      delete userInfo.address['rua'];
+      delete userInfo.address["number"];
+      delete userInfo.address["rua"];
 
-      setUserInfo({ ...userInfo, address: { ...addressInfo } });
+      const Address = {
+        address: { ...addressInfo },
+      };
+
+      setUserInfo({ ...userInfo, ...Address });
+
+      console.log(userInfo.address);
+
       try {
         setLoading(true);
-
-        const response = await api.post(
-          "/user",
-          userInfo,
-        );
+        const response = await api.post("/user", userInfo);
 
         console.log(response);
 
@@ -474,7 +496,7 @@ function Cadastro({ history }) {
           setOpenSnackBar(true);
         }, 2000);
 
-        history.push('/login');
+        history.push("/login");
       } catch (err) {
         console.log(err);
         setLoading(false);
@@ -515,16 +537,23 @@ function Cadastro({ history }) {
   const meta = {
     titlePage: "Uniformes Ecommerce | Cadastro",
     titleSearch: "Profit Uniformes | Cadastro",
-    description: "Cadastre-se no nosso ecommerce e tenha a melhor experiência possível com sua conta profit e nossos uniformes personalizados!",
+    description:
+      "Cadastre-se no nosso ecommerce e tenha a melhor experiência possível com sua conta profit e nossos uniformes personalizados!",
     keyWords: "Uniformes | Cadastro | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   return (
-
     <div className="registerEmployeeFullContent">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <h1 className={classes.mainTitle}>
         CADASTRO
         <span className={classes.spanInsideTitle} />
@@ -535,24 +564,23 @@ function Cadastro({ history }) {
         <h1 className={classes.caption}>Nome</h1>
         <TextField
           required
-
           label="Nome"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           inputRef={nomeInput}
           error={errorName}
           helperText={errorNameMessage}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'name')}
+          onChange={(event) => handleInputChange(event, "name")}
           className={classes.largeInput}
         />
 
@@ -560,23 +588,29 @@ function Cadastro({ history }) {
         <TextField
           required
           label="CPF"
+          type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
+          }}
+          onInput={(e) => {
+            e.target.value = Math.max(0, parseInt(e.target.value))
+              .toString()
+              .slice(0, 11);
           }}
           inputRef={CPFInput}
           error={errorCPF}
           helperText={errorCPFMessage}
           className={classes.mediumInput}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'cpf')}
+          onChange={(event) => handleInputChange(event, "cpf")}
         />
       </div>
 
@@ -588,20 +622,20 @@ function Cadastro({ history }) {
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           inputRef={emailInput}
           error={errorEmail}
           helperText={errorEmailMessage}
           className={classes.largeInput}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'email')}
+          onChange={(event) => handleInputChange(event, "email")}
         />
         <h1 className={classes.caption}>Senha</h1>
 
@@ -611,13 +645,13 @@ function Cadastro({ history }) {
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           type="password"
           inputRef={passwordInput}
@@ -625,7 +659,7 @@ function Cadastro({ history }) {
           helperText={errorPasswordMessage}
           className={classes.mediumInput}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'password')}
+          onChange={(event) => handleInputChange(event, "password")}
         />
       </div>
 
@@ -638,19 +672,19 @@ function Cadastro({ history }) {
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           inputRef={ruaInput}
           error={errorRua}
           helperText={errorRuaMessage}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'rua')}
+          onChange={(event) => handleInputChange(event, "rua")}
           className={classes.mediumInput}
         />
         <h1 className={classes.caption}>N°</h1>
@@ -658,23 +692,24 @@ function Cadastro({ history }) {
         <TextField
           required
           label="N°"
+          type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           inputRef={numInput}
           error={errorNum}
           helperText={errorNumMessage}
           className={classes.smallInput}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'number')}
+          onChange={(event) => handleInputChange(event, "number")}
         />
         <h1 className={classes.caption}>Complemento</h1>
 
@@ -684,20 +719,20 @@ function Cadastro({ history }) {
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           inputRef={complementoInput}
           error={errorComplemento}
           helperText={errorComplementoMessage}
           className={classes.mediumInput}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'complement')}
+          onChange={(event) => handleInputChange(event, "complement")}
         />
         <h1 className={classes.caption}>Bairro</h1>
 
@@ -707,20 +742,20 @@ function Cadastro({ history }) {
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           inputRef={bairroInput}
           error={errorBairro}
           helperText={errorBairroMessage}
           className={classes.mediumInput}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'neighborhood')}
+          onChange={(event) => handleInputChange(event, "neighborhood")}
         />
       </div>
 
@@ -729,23 +764,29 @@ function Cadastro({ history }) {
         <TextField
           required
           label="CEP"
+          type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
+          }}
+          onInput={(e) => {
+            e.target.value = Math.max(0, parseInt(e.target.value))
+              .toString()
+              .slice(0, 8);
           }}
           inputRef={CEPInput}
           error={errorCEP}
           helperText={errorCEPMessage}
           variant="outlined"
           className={classes.mediumInput}
-          onChange={(event) => handleInputChange(event, 'zip_code')}
+          onChange={(event) => handleInputChange(event, "zip_code")}
         />
         <h1 className={classes.caption}>Cidade</h1>
         <TextField
@@ -754,20 +795,20 @@ function Cadastro({ history }) {
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           inputRef={cidadeInput}
           error={errorCidade}
           helperText={errorCidadeMessage}
           className={classes.mediumInput}
           variant="outlined"
-          onChange={(event) => handleInputChange(event, 'city')}
+          onChange={(event) => handleInputChange(event, "city")}
         />
         <h1 className={classes.caption}>Estado</h1>
         <TextField
@@ -777,20 +818,20 @@ function Cadastro({ history }) {
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           InputProps={{
             classes: {
-              root: classes.inputBox
-            }
+              root: classes.inputBox,
+            },
           }}
           inputRef={estadoInput}
           error={errorEstado}
           helperText={errorEstadoMessage}
           className={classes.mediumInput}
           defaultValue=""
-          onChange={(event) => handleInputChange(event, 'state')}
+          onChange={(event) => handleInputChange(event, "state")}
           variant="outlined"
         >
           {estados.map((estado) => (
@@ -807,43 +848,45 @@ function Cadastro({ history }) {
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
-              focused: classes.inputLabelFocused
-            }
+              focused: classes.inputLabelFocused,
+            },
           }}
           inputRef={pontoRefInput}
           error={errorPontoRef}
           helperText={errorPontoRefMessage}
           className={classes.mediumInput}
           variant="outlined"
-        //onChange={(event) => setPontoRef(event.target.value)}
+          //onChange={(event) => setPontoRef(event.target.value)}
         />
-
       </div>
 
       <h1 className={classes.subTitle}>TELEFONE DE CONTATO</h1>
       <TextField
         required
         label="Telefone"
+        type="number"
         InputLabelProps={{
           classes: {
             root: classes.inputLabel,
-            focused: classes.inputLabelFocused
-          }
+            focused: classes.inputLabelFocused,
+          },
+        }}
+        onInput={(e) => {
+          e.target.value = Math.max(0, parseInt(e.target.value))
+            .toString()
+            .slice(0, 12);
         }}
         inputRef={telefoneInput}
         error={errorTelefone}
         helperText={errorTelefoneMessage}
         className={classes.mediumInput}
         variant="outlined"
+        onChange={(event) => handleInputChange(event, "telefone")}
       />
 
       <div className={classes.divButtons}>
         <Button className={classes.saveButton} onClick={() => handleSubmit()}>
-          {loading ? (
-            <CircularProgress color="secondary" />
-          ) : (
-              "CADASTRAR"
-            )}
+          {loading ? <CircularProgress color="secondary" /> : "CADASTRAR"}
         </Button>
       </div>
 
@@ -965,7 +1008,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   inputLabel: {
-    color: '#000000',
+    color: "#000000",
     marginLeft: 15,
   },
 

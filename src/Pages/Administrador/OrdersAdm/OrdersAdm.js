@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
-import { useHistory, Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
 import MetaData from "../../../meta/reactHelmet";
 import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
@@ -11,20 +10,24 @@ import Toggle from "../../../components/Toggle";
 
 import { FaAngleRight, FaFilter } from "react-icons/fa";
 
-const PEDIDOS = [
-  { status: "Entregue", ID: 2050 },
-  { status: "Pendente", ID: 2051 },
-  { status: "Em Andamento", ID: 2052 },
-  { status: "Aguardando Pagamento", ID: 2053 },
-];
+import {
+  Button,
+  makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+} from "@material-ui/core";
 
 function OrdersAdm() {
   const [Orders, setOrders] = useState([]);
   const [OnlyPending, setOnlyPending] = useState();
-  //const { token } = useContext(LoginContext);
   const [InputID, setInputID] = useState(0);
   var date;
-  const history = useHistory();
 
   const { token } = useContext(LoginContext);
 
@@ -64,37 +67,6 @@ function OrdersAdm() {
     obterPedidos();
   }, []);
 
-  function FilteredData() {
-    return PEDIDOS.map((pedido, index) => {
-      {
-        /*Usar .filter*/
-      }
-      if (pedido.ID === InputID) {
-        return (
-          <tr key={index} className="singleOrder">
-            <td className="id_table">
-              <div className="id_camp">
-                <div
-                  className="pedido_text"
-                  style={{
-                    width: "fit-content",
-                  }}
-                >
-                  {pedido.ID}{" "}
-                </div>{" "}
-                <FaAngleRight className="icon_table" />
-              </div>
-            </td>
-
-            <td className="status_table">
-              <OrderTable Order={pedido.status} />{" "}
-            </td>
-          </tr>
-        );
-      }
-    });
-  }
-
   return (
     <div className="orders_page">
       <MetaData
@@ -121,63 +93,60 @@ function OrdersAdm() {
         </div>
 
         <div className="adm_div_table">
-          <table className="orders">
-            <tr>
-              <th>ID</th>
-              <th>Status</th>
-            </tr>
-            <tr>
-              <td>
-                <tr>
-                  {Orders.map((pedido) => {
-                    const id = pedido.order_id;
-                    date = pedido.created_at;
-                    const Status = pedido.status;
-                    const deliver = pedido.delivered_by;
-                    const colum = (
-                      <div className="adm_orders_id">
-                        <tr>
-                          {id}
-                          <Link
-                            to={{
-                              pathname: "/adm/pedidoespecifico",
-                              state: {
-                                date: date,
-                                orderId: id,
-                                Status: Status,
-                                deliver: deliver,
-                              },
-                            }}
-                            style={{ color: "black" }}
-                          >
-                            <FaAngleRight className="icon_table" />
-                          </Link>
-                        </tr>
-                      </div>
-                    );
-
-                    return colum;
-                  })}
-                </tr>
-              </td>
-
-              <td>
+          <TableContainer component={Paper}>
+            <Table className="orders" size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center" className="header-table">
+                    ID
+                  </TableCell>
+                  <TableCell align="center" className="header-table">
+                    STATUS
+                  </TableCell>
+                  <TableCell align="center" className="header-table">
+                    ESPECIFICAÇÕES
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {Orders.map((pedido) => {
-                  const status = pedido.status;
+                  const id = pedido.order_id;
+                  date = pedido.created_at;
+                  const Status = pedido.status;
+                  const deliver = pedido.delivered_by;
                   const colum = (
-                    <div className="adm_orders_status">
-                      <tr>{<OrderTable status={status} />}</tr>
-                    </div>
+                    <TableRow>
+                      <TableCell component="td" scope="row">
+                        {pedido.order_id}
+                      </TableCell>
+                      <TableCell component="td" scope="row">
+                        {<OrderTable status={pedido.status} />}
+                      </TableCell>
+                      <TableCell component="td" scope="row">
+                        <Link
+                          to={{
+                            pathname: "/adm/pedidoespecifico",
+                            state: {
+                              date: date,
+                              orderId: id,
+                              Status: Status,
+                              deliver: deliver,
+                            },
+                          }}
+                          style={{ color: "black", marginLeft:'8px' }}
+                        >
+                          Detalhes...
+                        </Link>
+                      </TableCell>
+                    </TableRow>
                   );
                   return colum;
                 })}
-              </td>
-            </tr>
-          </table>
+              </TableBody>
+            </Table>
+          </TableContainer>
 
           {/* Os <th> sao o cabeçalho da tabela. O tr é uma linha da tabela. */}
-
-          <tr />
         </div>
       </div>
     </div>

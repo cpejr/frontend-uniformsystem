@@ -26,14 +26,14 @@ function MobileHeader() {
 
     return (
         <div className="cell_header">
-             <div className="logo_container">
-                    <Link to="/">
-                        <img src={Logo} alt="Logo" className="Logo" />
-                    </Link>
-                </div>
+            <div className="logo_container">
+                <Link to="/">
+                    <img src={Logo} alt="Logo" className="Logo" />
+                </Link>
+            </div>
             <div className="header_content_comum">
                 <div className="icons">
-                    <Link className="icon" to="/">
+                    {/* <Link className="icon" to="/">
                         HOME
                     </Link>
                     <Link className="icon" to="/shop">
@@ -41,7 +41,7 @@ function MobileHeader() {
                     </Link>
                     <Link className="icon" to="/contact">
                         CONTATO
-                    </Link>
+                    </Link> */}
 
                     <div
                         className="login"
@@ -54,10 +54,13 @@ function MobileHeader() {
                                 to="/perfil"
                             >
                                 <FaUser className="user_icon" />
-                                <div style={{ width: "fit-content", cursor: "pointer"}}>{currentUser.name.toUpperCase()}</div>
+                                <div className="aboutTheUser" style={{ width: "fit-content", cursor: "pointer"}}>
+                                    {currentUser.name.split(" ")[0].toUpperCase()}
+                                </div>
                             </Link>
                             :
                                 <>
+                                    <div style={{width: "230px", height:"2px"}}></div>
                                     <div
                                         className="icons_log"
                                         onClick={() => {
@@ -74,7 +77,7 @@ function MobileHeader() {
                     {
                         currentUser ? 
                             <>
-                                <div
+                                {/* <div
                                     className="all_cart"
                                     style={{ position: "relative", margin: 0 }}
                                 >
@@ -90,7 +93,7 @@ function MobileHeader() {
                                     {ClickCart && (
                                         <DropDownCartContent setClickCart={setClickCart} />
                                     )}
-                                </div>
+                                </div> */}
                                 <div className="logoutPart" onClick={() => handleLogOut()}>
                                     <span>LOGOUT</span>
                                     <FaSignOutAlt/>
@@ -107,3 +110,4 @@ function MobileHeader() {
 }
 
 export default MobileHeader;
+

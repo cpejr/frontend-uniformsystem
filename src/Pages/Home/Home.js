@@ -214,7 +214,7 @@ function Home() {
         
         imagesCarousel.length === 1 ?
           <div className="imgCarousel">
-            <img src={imagesCarousel[0].file} alt={imagesCarousel[0].imgAlt} />
+            <img src={imagesCarousel[0].file} alt={imagesCarousel[0].imgAlt} style={{height: "100vh"}}/>
           </div>
         :
           (
@@ -229,7 +229,7 @@ function Home() {
                 return (
                   <Carousel.Item>
                     <div className="imgCarousel">
-                      <img src={item.file} alt={item.imgAlt} />
+                      <img src={item.file} alt={item.imgAlt} style={{height: "100vh"}}/>
                     </div>
                   </Carousel.Item>
                 );

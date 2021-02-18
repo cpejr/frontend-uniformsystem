@@ -21,6 +21,9 @@ import { useHistory } from 'react-router-dom';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+//Skeleton
+import HeroSquareSkeleton from '../../components/Skeletons/HeroSquareSkeleton'; 
+
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
     <div className="divInputLabelError">
@@ -44,6 +47,8 @@ function Checkout() {
   const [cardNumberStored, setCardNumber] = useState('');
   const [securityNumberStored, setSecurityNumber] = useState('');
   const [cardNameStored, setCardName] = useState('');
+
+  const [loading, setLoading] = useState(false);
 
   const [errorInputCardNumber, setErrorInputCardNumber] = useState('');
   const [errorInputSecurityNumber, setErrorInputSecurityNumber] = useState('');
@@ -209,13 +214,14 @@ function Checkout() {
     } catch (error) {
       console.warn(error);
       alert('Erro ao criar um pedido.');
-      history.push('Error');
+      // history.push('Error');
     }
   }
 
   // Lista dos produtos para finalizar pedido
   async function getProducts() {
     try {
+      setLoading(true);
       const response = await api.get('/cart', {
         headers: {
           authorization: `bearer ${token}`,
@@ -229,7 +235,7 @@ function Checkout() {
       // }
     } catch (error) {
       console.warn(error);
-      history.push('Error');
+      // history.push('Error');
     }
   }
 
@@ -243,6 +249,9 @@ function Checkout() {
   useEffect(() => {
     try {
       getProducts();
+      setTimeout(() => {
+        setLoading(false);
+      }, [600]);
     } catch (error) {
       console.warn(error);
       alert('Erro ao buscar os produtos.');
@@ -263,7 +272,7 @@ function Checkout() {
     } catch (error) {
       console.warn(error);
       alert('Erro ao buscar o endereço.');
-      history.push('Error');
+      // history.push('Error');
     }
   }, []);
 
@@ -307,32 +316,36 @@ function Checkout() {
       <div className="mainContent">
         <div className="leftSide">
           <div className="aboutListProducts">
-            {products.length == 0 ? (
-              <div className="aboutProduct">
-                <div className="infoProduct">
-                  <span>Sem produtos</span>
-                </div>
-              </div>
-            ) : (
-              products.map((product, index) => {
-                return (
-                  <div className="aboutProduct" key={index}>
-                    <img
-                      src={bucketAWS + product.img_link}
-                      alt={product.name}
-                    />
+          {!loading ? (
+              <>
+                {products.length == 0 ? (
+                  <div className="aboutProduct">
                     <div className="infoProduct">
-                      <span>Nome do produto: {product.name}</span>
-                      <span>Quantidade total: {product.amount} uni.</span>
-                      <span>Tamanho: {product.size}</span>
-                      <span>Gênero: {product.gender === 'F'? 'Feminino' : 'Masculino'}</span>
-                      <span>Preço único: R$ {product.price}</span>
-                      <span>Total: R$ {product.amount * product.price}</span>
+                      <span>Sem produtos</span>
                     </div>
                   </div>
-                );
-              })
-            )}
+                ) : (
+                  products.map((product, index) => {
+                    return (
+                      <div className="aboutProduct" key={index}>
+                        <img
+                          src={bucketAWS + product.img_link}
+                          alt={product.name}
+                        />
+                        <div className="infoProduct">
+                          <span>Nome do produto: {product.name}</span>
+                          <span>Quantidade total: {product.amount} uni.</span>
+                          <span>Tamanho: {product.size}</span>
+                          <span>Gênero: {product.gender === 'F'? 'Feminino' : 'Masculino'}</span>
+                          <span>Preço único: R$ {product.price}</span>
+                          <span>Total: R$ {product.amount * product.price}</span>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </>
+            ) : <HeroSquareSkeleton/>}
           </div>
           <div className="aboutPayment">
             <h2>Pagamento</h2>
@@ -439,15 +452,19 @@ function Checkout() {
 
             <div className="addressInfo">
               <div className="addressConfirmation">
-                <strong>Endereço de entrega</strong>
-                <span>
-                  {address.street}/ {address.complement}
-                </span>
-                <span>Bairro: {address.neighborhood}</span>
-                <span>
-                  Cidade: {address.city} - {address.state} - {address.country}
-                </span>
-                <span>CEP: {address.zip_code}</span>
+                {!loading ? (
+                  <>
+                    <strong>Endereço de entrega</strong>
+                    <span>
+                      {address.street}/ {address.complement}
+                    </span>
+                    <span>Bairro: {address.neighborhood}</span>
+                    <span>
+                      Cidade: {address.city} - {address.state} - {address.country}
+                    </span>
+                    <span>CEP: {address.zip_code}</span>
+                  </>
+                ) : <HeroSquareSkeleton/>}
               </div>
 
               <div className="changeAddressArea">

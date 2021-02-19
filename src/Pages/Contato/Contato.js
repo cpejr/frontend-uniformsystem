@@ -6,7 +6,6 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import api from "../../services/api";
-import { Helmet } from "react-helmet";
 import MetaData from "../../meta/reactHelmet";
 import { HiOutlineMail } from "react-icons/hi";
 import "./Contato.css";

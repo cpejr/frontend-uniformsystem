@@ -1,34 +1,14 @@
-import React, {useEffect, useContext, useState} from "react";
+import React, { useEffect, useContext, useState } from "react";
 import api from "../../../../services/api";
 import TabelaFuncionarios from "../../../../components/TabelaFuncionario/TabelaFuncionario";
 import { LoginContext } from "../../../../contexts/LoginContext";
-import { Helmet } from "react-helmet";
 import MetaData from "../../../../meta/reactHelmet";
 import { withRouter, useParams } from "react-router-dom";
 
 import "./EspecificEmployee.css";
-import { FaChevronLeft } from 'react-icons/fa';
+import { FaChevronLeft } from "react-icons/fa";
 
-
-const orderHistory = [
-  {
-    id: 3,
-    idpedido: "#0003",
-    data: "05/11/2020",
-  },
-  {
-    id: 2,
-    idpedido: "#0002",
-    data: "04/11/2020",
-  },
-  {
-    id: 1,
-    idpedido: "#0001",
-    data: "03/11/2020",
-  },
-];
-
-function EspecificEmployee( {history} ) {
+function EspecificEmployee({ history }) {
   const [Employees, setEmployees] = useState([]);
   const [Orders, setOrders] = useState([]);
   const meta = {
@@ -50,7 +30,7 @@ function EspecificEmployee( {history} ) {
   var data_br;
   var dia;
 
-  const {id} = useParams();
+  const { id } = useParams();
 
   const { token } = useContext(LoginContext);
 
@@ -64,7 +44,7 @@ function EspecificEmployee( {history} ) {
       console.warn(error);
       alert(error);
     }
-  };
+  }
 
   async function getOrders() {
     try {
@@ -76,7 +56,7 @@ function EspecificEmployee( {history} ) {
       console.warn(error);
       alert(error);
     }
-  };
+  }
 
   useEffect(() => {
     getEspecificEmployee();
@@ -84,7 +64,6 @@ function EspecificEmployee( {history} ) {
   }, []); // executa assim que carregar a página
 
   return (
-
     <div className="especific-employee">
       <MetaData
         titlePage={meta.titlePage}
@@ -94,36 +73,31 @@ function EspecificEmployee( {history} ) {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      <FaChevronLeft
-        className="setaVoltar"
-        onClick={() => history.goBack()}
-      />
+      <FaChevronLeft className="setaVoltar" onClick={() => history.goBack()} />
       <div className="boxTitle">
         <h1 className="titleFuncExp">FUNCIONÁRIO ESPECÍFICO</h1>
         <hr className="titleLineExp"></hr>
       </div>
       <div className="tabela">
-        {Employees.map((employee) => {
-          name_employee = employee.name
-          user_id = employee.id
-          cpf = employee.cpf
+        {Employees.forEach((employee) => {
+          name_employee = employee.name;
+          user_id = employee.id;
+          cpf = employee.cpf;
         })}
-        {Orders.map((order) => {
-          id_order = 3
-          idpedido = order.order_id
-          data = order.updated_at
+        {Orders.forEach((order) => {
+          id_order = 3;
+          idpedido = order.order_id;
+          data = order.updated_at;
           data_br = data.split("-");
           dia = data_br[2].split(" ");
-          data_final = dia[0]+"/"+data_br[1]+"/"+data_br[0];
+          data_final = dia[0] + "/" + data_br[1] + "/" + data_br[0];
         })}
         <TabelaFuncionarios
-          funcionario={ 
-            {
+          funcionario={{
             id: user_id,
             nome: name_employee,
             cpf: cpf,
-            }
-          }
+          }}
           orderHistory={[
             {
               id: id_order,

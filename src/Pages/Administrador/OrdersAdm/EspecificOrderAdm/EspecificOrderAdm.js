@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import { AiOutlineLeft } from "react-icons/ai";
 import { FaChevronLeft } from "react-icons/fa";
 import api from "../../../../services/api";
 import "./EspecificOrderAdm.css";
@@ -16,7 +15,7 @@ function EspecificOrderAdm(props) {
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   // Caso ainda não tenha um deliver e vai efetuar a mudança de status no momento
-  if(!deliver){
+  if (!deliver) {
     deliver = user[0].name;
   }
 
@@ -88,17 +87,6 @@ function EspecificOrderAdm(props) {
   async function ModificarStatus() {
     if (status === "pending") {
       try {
-        const response = await api.put(
-          `order/${orderId}`,
-          {
-            is_paid: 1,
-            status: "preparing",
-            // shipping: 25.5,
-          },
-          {
-            headers: { authorization: `Bearer ${token}` },
-          }
-        );
         setStatus("preparing");
       } catch (error) {
         console.warn(error);
@@ -107,15 +95,6 @@ function EspecificOrderAdm(props) {
     } else {
       if (Code !== "") {
         try {
-          const response = await api.post(
-            `deliveratmail/${orderId}`,
-            {
-              tracking_code: Code,
-            },
-            {
-              headers: { authorization: `Bearer ${token}` },
-            }
-          );
           setStatus("delivered");
         } catch (error) {
           console.warn(error);
@@ -131,7 +110,7 @@ function EspecificOrderAdm(props) {
     let colorStatus;
     switch (statusOrder) {
       case "waitingPayment":
-        colorStatus = "#15B5DE"
+        colorStatus = "#15B5DE";
         break;
       case "preparing":
         colorStatus = "#FFE45A";
@@ -146,7 +125,7 @@ function EspecificOrderAdm(props) {
         break;
     }
     return colorStatus;
-  }
+  };
 
   return (
     <div className="order-container">
@@ -169,7 +148,12 @@ function EspecificOrderAdm(props) {
             <span className="title">DETALHES DO PEDIDO</span>
             <div className="status">
               <span>STATUS: </span>
-              <div className={"statusOrderLabel"} style={{backgroundColor: setColorStatusLabel(status)}}>{status}</div>
+              <div
+                className={"statusOrderLabel"}
+                style={{ backgroundColor: setColorStatusLabel(status) }}
+              >
+                {status}
+              </div>
             </div>
           </div>
 
@@ -232,10 +216,16 @@ function EspecificOrderAdm(props) {
               </div>
             )}
             {status === "preparing" && (
-              <div style={{ display: "flex", flexDirection:"column", alignItems: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
                 <input
                   placeholder="Código de rastreamento"
-                  style={{ marginRight: "10px", marginBottom:"10px" }}
+                  style={{ marginRight: "10px", marginBottom: "10px" }}
                   onChange={(e) => setCode(e.target.value)}
                 ></input>
                 <button className="button-status" onClick={ModificarStatus}>
@@ -244,9 +234,10 @@ function EspecificOrderAdm(props) {
               </div>
             )}
             {status === "delivered" && (
-              <div style={{ margin: "20px 0px"}}>
+              <div style={{ margin: "20px 0px" }}>
                 <span className="deliveryman">
-                  <strong>Entregador:</strong> {`${deliver}`}</span>
+                  <strong>Entregador:</strong> {`${deliver}`}
+                </span>
               </div>
             )}
           </div>

@@ -710,7 +710,7 @@ function Cadastro({ history }) {
         <TextField
           required
           label="N°"
-          // type="number"
+          type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,

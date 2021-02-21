@@ -173,9 +173,9 @@ function Cadastro({ history }) {
     setOpenSnackBar(false);
   };
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
+  // useEffect(() => {
+  //   console.log(userInfo);
+  // }, [userInfo]);
 
   useEffect(() => {
     flag1 = true;
@@ -463,31 +463,49 @@ function Cadastro({ history }) {
       const str1 = addressInfo.street;
       const str2 = addressInfo.number;
 
-      const halfStreet = str1.concat(" ");
-      const street = halfStreet.concat(", número:", str2);
+      
+      const fullStreet = `${str1}, ${str2}`;
       // const street = str1 + " " + str2;
 
-      console.log(street);
+      // console.log(fullStreet);
 
-      setAddressInfo({ ...addressInfo, street: street });
-
+      // setAddressInfo({ ...addressInfo, street: street });
+      // console.log(addressInfo);
       delete addressInfo["number"];
       delete addressInfo["rua"];
 
       delete userInfo.address["number"];
       delete userInfo.address["rua"];
-
+      // console.log(addressInfo);
       const Address = {
         address: { ...addressInfo },
       };
 
       setUserInfo({ ...userInfo, ...Address });
 
-      console.log(userInfo.address);
+      // console.log(userInfo.address);
 
       try {
         setLoading(true);
-        const response = await api.post("/user", userInfo);
+        const response = await api.post( "/user", 
+        {
+          name: userInfo.name,
+          user_type: userInfo.user_type,
+          email: userInfo.email,
+          telefone: userInfo.telefone,
+          cpf: userInfo.cpf,
+          password: userInfo.password,
+          address: {
+                      street: fullStreet,
+                      neighborhood: userInfo.address.neighborhood,
+                      city: userInfo.address.city,
+                      state: userInfo.address.state,
+                      zip_code: userInfo.address.zip_code,
+                      country: userInfo.address.country,
+                      complement: userInfo.address.complement,
+                     }
+        }
+        );
 
         console.log(response);
 
@@ -692,7 +710,7 @@ function Cadastro({ history }) {
         <TextField
           required
           label="N°"
-          type="number"
+          // type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,

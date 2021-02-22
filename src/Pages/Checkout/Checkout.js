@@ -1,25 +1,25 @@
-import React, { useEffect, useState, useContext } from 'react';
-import MetaData from '../../meta/reactHelmet';
-import api from '../../services/api';
+import React, { useEffect, useState, useContext } from "react";
+import MetaData from "../../meta/reactHelmet";
+import api from "../../services/api";
 
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import PopUpChangeAddress from '../../components/PopUpChangeAddress';
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import PopUpChangeAddress from "../../components/PopUpChangeAddress";
 
-import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 
-import { LoginContext } from '../../contexts/LoginContext'; 
+import { LoginContext } from "../../contexts/LoginContext";
 
-import './Checkout.css';
+import "./Checkout.css";
 
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
-import HeroSquareSkeleton from '../../components/Skeletons/HeroSquareSkeleton';
+import HeroSquareSkeleton from "../../components/Skeletons/HeroSquareSkeleton";
 
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
@@ -30,10 +30,10 @@ function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
         name="input"
         style={{ width: `${width}px` }}
         maxLength={`${maxLenght}`}
-        onChange={e => setInfo(e.target.value)}
+        onChange={(e) => setInfo(e.target.value)}
         // onChange={(e) => validateInput(e, type)}
       />
-      <span style={{ color: '#ff0033', fontSize: '15px' }}>{error}</span>
+      <span style={{ color: "#ff0033", fontSize: "15px" }}>{error}</span>
     </div>
   );
 }
@@ -41,24 +41,24 @@ function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
 function Checkout() {
   const history = useHistory();
 
-  const [cardNumberStored, setCardNumber] = useState('');
-  const [securityNumberStored, setSecurityNumber] = useState('');
-  const [cardNameStored, setCardName] = useState('');
+  const [cardNumberStored, setCardNumber] = useState("");
+  const [securityNumberStored, setSecurityNumber] = useState("");
+  const [cardNameStored, setCardName] = useState("");
 
   const [loading, setLoading] = useState(false);
 
-  const [errorInputCardNumber, setErrorInputCardNumber] = useState('');
-  const [errorInputSecurityNumber, setErrorInputSecurityNumber] = useState('');
-  const [errorInputCardName, setErrorInputCardName] = useState('');
+  const [errorInputCardNumber, setErrorInputCardNumber] = useState("");
+  const [errorInputSecurityNumber, setErrorInputSecurityNumber] = useState("");
+  const [errorInputCardName, setErrorInputCardName] = useState("");
 
-  const [errorBirthInput, setErrorBirthInput] = useState('');
-  const [errorInstallmentOptions, setErrorInstallmentOptions] = useState('');
+  const [errorBirthInput, setErrorBirthInput] = useState("");
+  const [errorInstallmentOptions, setErrorInstallmentOptions] = useState("");
 
-  const [dayStored, setDayStored] = useState('');
-  const [monthStored, setMonthStored] = useState('');
-  const [yearStored, setYearStored] = useState('');
+  const [dayStored, setDayStored] = useState("");
+  const [monthStored, setMonthStored] = useState("");
+  const [yearStored, setYearStored] = useState("");
 
-  const [installmentOptions, setInstallmentOptions] = useState(' ');
+  const [installmentOptions, setInstallmentOptions] = useState(" ");
 
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState({});
@@ -69,11 +69,10 @@ function Checkout() {
 
   const { token, user } = useContext(LoginContext);
 
-
   const currentUser = user[0];
   const user_id = currentUser.user_id;
 
-  const serviceCode = '04014';
+  const serviceCode = "04014";
 
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
@@ -84,93 +83,78 @@ function Checkout() {
     keyWords: "Checkout",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
-  useEffect(
-    () => {
-      function validateBirthInput(type) {
-        if (type === 'day') {
-          if (
-            parseInt(dayStored, 10) <= 31 &&
-            parseInt(dayStored, 10) > 0 &&
-            !isNaN(Number(dayStored))
-          ) {
-            setErrorBirthInput('');
-          } else {
-            setErrorBirthInput('Data inválida');
-          }
-        } else if (type === 'month') {
-          if (
-            Number(monthStored) <= 12 &&
-            Number(monthStored) > 0 &&
-            !isNaN(Number(monthStored))
-          ) {
-            setErrorBirthInput('');
-          } else {
-            setErrorBirthInput('Data inválida');
-          }
-        } else {
-          var today = new Date();
-          if (
-            parseInt(yearStored, 10) <= today.getFullYear() &&
-            parseInt(yearStored, 10) > 0 &&
-            !isNaN(Number(yearStored))
-          ) {
-            setErrorBirthInput('');
-          } else {
-            setErrorBirthInput('Data inválida');
-          }
-        }
-      }
-
-      validateBirthInput('day');
-      validateBirthInput('month');
-      validateBirthInput('year');
-    },
-    [dayStored, monthStored, yearStored],
-  );
-
-  useEffect(
-    () => {
-      const maximumInstallment = 10;
-
-      function validateInstallmentOptions() {
+  useEffect(() => {
+    function validateBirthInput(type) {
+      if (type === "day") {
         if (
-          parseInt(installmentOptions, 10) >= 0 &&
-          parseInt(installmentOptions, 10) <= maximumInstallment &&
-          !isNaN(parseInt(installmentOptions, 10))
+          parseInt(dayStored, 10) <= 31 &&
+          parseInt(dayStored, 10) > 0 &&
+          !isNaN(Number(dayStored))
         ) {
-          setErrorInstallmentOptions('');
+          setErrorBirthInput("");
         } else {
-          setErrorInstallmentOptions('Parcelamento inválido');
+          setErrorBirthInput("Data inválida");
+        }
+      } else if (type === "month") {
+        if (
+          Number(monthStored) <= 12 &&
+          Number(monthStored) > 0 &&
+          !isNaN(Number(monthStored))
+        ) {
+          setErrorBirthInput("");
+        } else {
+          setErrorBirthInput("Data inválida");
+        }
+      } else {
+        var today = new Date();
+        if (
+          parseInt(yearStored, 10) <= today.getFullYear() &&
+          parseInt(yearStored, 10) > 0 &&
+          !isNaN(Number(yearStored))
+        ) {
+          setErrorBirthInput("");
+        } else {
+          setErrorBirthInput("Data inválida");
         }
       }
+    }
 
-      validateInstallmentOptions();
-    },
-    [installmentOptions],
-  );
+    validateBirthInput("day");
+    validateBirthInput("month");
+    validateBirthInput("year");
+  }, [dayStored, monthStored, yearStored]);
 
-  useEffect(
-    () => {
-      validateInput('cardNumber');
-    },
-    [cardNumberStored],
-  );
+  useEffect(() => {
+    const maximumInstallment = 10;
 
-  useEffect(
-    () => {
-      validateInput('securityNumber');
-    },
-    [securityNumberStored],
-  );
+    function validateInstallmentOptions() {
+      if (
+        parseInt(installmentOptions, 10) >= 0 &&
+        parseInt(installmentOptions, 10) <= maximumInstallment &&
+        !isNaN(parseInt(installmentOptions, 10))
+      ) {
+        setErrorInstallmentOptions("");
+      } else {
+        setErrorInstallmentOptions("Parcelamento inválido");
+      }
+    }
 
-  useEffect(
-    () => {
-      validateInput('cardName');
-    },
-    [cardNameStored],
-  );
+    validateInstallmentOptions();
+  }, [installmentOptions]);
+
+  useEffect(() => {
+    validateInput("cardNumber");
+  }, [cardNumberStored]);
+
+  useEffect(() => {
+    validateInput("securityNumber");
+  }, [securityNumberStored]);
+
+  useEffect(() => {
+    validateInput("cardName");
+  }, [cardNameStored]);
 
   // Post order
   async function handlePostOrder() {
@@ -187,7 +171,7 @@ function Checkout() {
         },
         {
           headers: { authorization: `bearer ${token}` },
-        },
+        }
       );
 
       setTimeout(() => {
@@ -195,8 +179,8 @@ function Checkout() {
       }, 3000);
     } catch (error) {
       console.warn(error);
-      alert('Erro ao criar um pedido.');
-      history.push('Error');
+      alert("Erro ao criar um pedido.");
+      history.push("Error");
     }
   }
 
@@ -204,7 +188,7 @@ function Checkout() {
   async function getProducts() {
     setLoading(true);
     try {
-      const response = await api.get('/cart', {
+      const response = await api.get("/cart", {
         headers: {
           authorization: `bearer ${token}`,
         },
@@ -217,7 +201,7 @@ function Checkout() {
       // }
     } catch (error) {
       console.warn(error);
-      history.push('Error');
+      history.push("Error");
     }
   }
 
@@ -229,7 +213,7 @@ function Checkout() {
       }, [500]);
     } catch (error) {
       console.warn(error);
-      alert('Erro ao buscar os produtos.');
+      alert("Erro ao buscar os produtos.");
     }
   }, []);
 
@@ -246,8 +230,8 @@ function Checkout() {
       getAddress();
     } catch (error) {
       console.warn(error);
-      alert('Erro ao buscar o endereço.');
-      history.push('Error');
+      alert("Erro ao buscar o endereço.");
+      history.push("Error");
     }
   }, []);
 
@@ -255,23 +239,23 @@ function Checkout() {
   useEffect(() => {}, [address]);
 
   function validateInput(type) {
-    if (type === 'cardNumber') {
+    if (type === "cardNumber") {
       if (!isNaN(Number(cardNumberStored))) {
-        setErrorInputCardNumber('');
+        setErrorInputCardNumber("");
       } else {
-        setErrorInputCardNumber('Número de cartão incorreto');
+        setErrorInputCardNumber("Número de cartão incorreto");
       }
-    } else if (type === 'securityNumber') {
+    } else if (type === "securityNumber") {
       if (!isNaN(Number(securityNumberStored))) {
-        setErrorInputSecurityNumber('');
+        setErrorInputSecurityNumber("");
       } else {
-        setErrorInputSecurityNumber('Código incorreto');
+        setErrorInputSecurityNumber("Código incorreto");
       }
     } else {
       if (!isNaN(Number(cardNameStored))) {
-        setErrorInputCardName('Nome inválido');
+        setErrorInputCardName("Nome inválido");
       } else {
-        setErrorInputCardName('');
+        setErrorInputCardName("");
       }
     }
   }
@@ -286,7 +270,14 @@ function Checkout() {
 
   return (
     <div className="fullContent">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <h1>Lista de Produtos</h1>
       <div className="mainContent">
         <div className="leftSide">
@@ -311,16 +302,23 @@ function Checkout() {
                           <span>Nome do produto: {product.name}</span>
                           <span>Quantidade total: {product.amount} uni.</span>
                           <span>Tamanho: {product.size}</span>
-                          <span>Gênero: {product.gender === 'F'? 'Feminino' : 'Masculino'}</span>
+                          <span>
+                            Gênero:{" "}
+                            {product.gender === "F" ? "Feminino" : "Masculino"}
+                          </span>
                           <span>Preço único: R$ {product.price}</span>
-                          <span>Total: R$ {product.amount * product.price}</span>
+                          <span>
+                            Total: R$ {product.amount * product.price}
+                          </span>
                         </div>
                       </div>
                     );
                   })
                 )}
               </>
-            ) : <HeroSquareSkeleton/>}
+            ) : (
+              <HeroSquareSkeleton />
+            )}
           </div>
           <div className="aboutPayment">
             <h2>Pagamento</h2>
@@ -337,7 +335,7 @@ function Checkout() {
                       width={280}
                       setInfo={setCardNumber}
                       maxLenght={16}
-                      error={cardNumberStored ? errorInputCardNumber : ''}
+                      error={cardNumberStored ? errorInputCardNumber : ""}
                     />
                     <InputWithLabel
                       label="Código de segurança"
@@ -345,7 +343,7 @@ function Checkout() {
                       setInfo={setSecurityNumber}
                       maxLenght={3}
                       error={
-                        securityNumberStored ? errorInputSecurityNumber : ''
+                        securityNumberStored ? errorInputSecurityNumber : ""
                       }
                     />
                   </div>
@@ -355,7 +353,7 @@ function Checkout() {
                       width={280}
                       setInfo={setCardName}
                       maxLenght={50}
-                      error={cardNameStored ? errorInputCardName : ''}
+                      error={cardNameStored ? errorInputCardName : ""}
                     />
                     <div className="divInputLabelError">
                       <label htmlFor="input">Data de Nascimento</label>
@@ -363,20 +361,20 @@ function Checkout() {
                         <input
                           type="text"
                           name="dayBirth"
-                          onChange={e => setDayStored(e.target.value)}
+                          onChange={(e) => setDayStored(e.target.value)}
                         />
                         <input
                           type="text"
                           name="monthBirth"
-                          onChange={e => setMonthStored(e.target.value)}
+                          onChange={(e) => setMonthStored(e.target.value)}
                         />
                         <input
                           type="text"
                           name="yearBirth"
-                          onChange={e => setYearStored(e.target.value)}
+                          onChange={(e) => setYearStored(e.target.value)}
                         />
                       </div>
-                      <span style={{ color: '#ff0033', fontSize: '15px' }}>
+                      <span style={{ color: "#ff0033", fontSize: "15px" }}>
                         {errorBirthInput}
                       </span>
                     </div>
@@ -389,11 +387,13 @@ function Checkout() {
                         <input
                           type="text"
                           name="input"
-                          style={{ width: '150px' }}
-                          onChange={e => setInstallmentOptions(e.target.value)}
+                          style={{ width: "150px" }}
+                          onChange={(e) =>
+                            setInstallmentOptions(e.target.value)
+                          }
                         />
                       </div>
-                      <span style={{ color: '#ff0033', fontSize: '15px' }}>
+                      <span style={{ color: "#ff0033", fontSize: "15px" }}>
                         {errorInstallmentOptions}
                       </span>
                     </div>
@@ -424,7 +424,7 @@ function Checkout() {
             <div className="summaryTitle">
               <strong>Resumo do Pedido</strong>
             </div>
-            
+
             <div className="addressInfo">
               <div className="addressConfirmation">
                 {!loading ? (
@@ -435,11 +435,14 @@ function Checkout() {
                     </span>
                     <span>Bairro: {address.neighborhood}</span>
                     <span>
-                      Cidade: {address.city} - {address.state} - {address.country}
+                      Cidade: {address.city} - {address.state} -{" "}
+                      {address.country}
                     </span>
                     <span>CEP: {address.zip_code}</span>
                   </>
-                ) : <HeroSquareSkeleton/>}
+                ) : (
+                  <HeroSquareSkeleton />
+                )}
               </div>
 
               <div className="changeAddressArea">
@@ -476,7 +479,15 @@ function Checkout() {
         className="purchaseFinished"
         onClick={() => handlePostOrder()}
       >
-        {loadingPurchase ? <CircularProgress size={40} color='secondary' className="circular-progress" /> : "FINALIZAR COMPRA"}
+        {loadingPurchase ? (
+          <CircularProgress
+            size={40}
+            color="secondary"
+            className="circular-progress"
+          />
+        ) : (
+          "FINALIZAR COMPRA"
+        )}
       </Button>
       <PopUpChangeAddress
         open={openModal}

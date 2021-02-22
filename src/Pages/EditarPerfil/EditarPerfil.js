@@ -17,8 +17,7 @@ import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
 
 import "./EditarPerfil.css";
-var nomeMostra, telefoneMostra;
-var enderecoId;
+var telefoneMostra;
 
 function validateInput(type, value) {
   let isValid;
@@ -342,8 +341,6 @@ function EditarPerfil({ history }) {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        nomeMostra = nomeInput.current.value;
-        telefoneMostra = telefoneInput.current.value;
 
         setTimeout(() => {
           setLoading(false);
@@ -476,6 +473,7 @@ function EditarPerfil({ history }) {
           helperText={errorNameMessage}
           className={classes.largeInput}
           variant="outlined"
+          defaultValue={userInfo.name}
           onChange={(e) => handleInputChange(e, "name")}
         />
       )}
@@ -618,6 +616,7 @@ function EditarPerfil({ history }) {
         error={errorTelefone}
         helperText={errorTelefoneMessage}
         className={classes.mediumInput}
+        defaultValue={user[0].telefone}
         variant="outlined"
       />
 

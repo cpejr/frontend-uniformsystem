@@ -473,7 +473,6 @@ function EditarPerfil({ history }) {
           helperText={errorNameMessage}
           className={classes.largeInput}
           variant="outlined"
-          defaultValue={userInfo.name}
           onChange={(e) => handleInputChange(e, "name")}
         />
       )}
@@ -616,7 +615,6 @@ function EditarPerfil({ history }) {
         error={errorTelefone}
         helperText={errorTelefoneMessage}
         className={classes.mediumInput}
-        defaultValue={user[0].telefone}
         variant="outlined"
       />
 

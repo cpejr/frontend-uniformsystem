@@ -7,7 +7,6 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PopUpChangeAddress from '../../components/PopUpChangeAddress';
-import SnackbarMessage from "../../components/SnackbarMessage";
 
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 
@@ -20,9 +19,7 @@ import './Checkout.css';
 import { useHistory } from 'react-router-dom';
 
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-//Skeleton
-import HeroSquareSkeleton from '../../components/Skeletons/HeroSquareSkeleton'; 
+import HeroSquareSkeleton from '../../components/Skeletons/HeroSquareSkeleton';
 
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
@@ -72,9 +69,9 @@ function Checkout() {
 
   const { token, user } = useContext(LoginContext);
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [messageSnackbar, setMessageSnackbar] = useState("");
-  const [typeSnackbar, setTypeSnackbar] = useState("success");
+
+  const currentUser = user[0];
+  const user_id = currentUser.user_id;
 
   const serviceCode = '04014';
 
@@ -179,24 +176,14 @@ function Checkout() {
   async function handlePostOrder() {
     setLoadingPurchase(true);
 
-    const productsWithRightAttributes = products.map(item => {
-      delete item.name;
-      delete item.img_link;
-      delete item.product_in_cart_id;
-      delete item.user_id;
-      return item;
-    });
-
-    console.log('prodto', productsWithRightAttributes);
-
     try {
       const address_id = address.address_id;
       await api.post(
-        '/order',
+        `/order`,
         {
           address_id: address_id,
           service_code: serviceCode,
-          products: productsWithRightAttributes,
+          products: products,
         },
         {
           headers: { authorization: `bearer ${token}` },
@@ -205,23 +192,18 @@ function Checkout() {
 
       setTimeout(() => {
         setLoadingPurchase(false);
-      }, 2000);
-      setTimeout(() => {
-        setMessageSnackbar("Pedido realizado com sucesso");
-        setTypeSnackbar("success");
-        setOpenSnackbar(true);
-      }, 500);
+      }, 3000);
     } catch (error) {
       console.warn(error);
       alert('Erro ao criar um pedido.');
-      // history.push('Error');
+      history.push('Error');
     }
   }
 
   // Lista dos produtos para finalizar pedido
   async function getProducts() {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await api.get('/cart', {
         headers: {
           authorization: `bearer ${token}`,
@@ -235,23 +217,16 @@ function Checkout() {
       // }
     } catch (error) {
       console.warn(error);
-      // history.push('Error');
+      history.push('Error');
     }
   }
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
 
   useEffect(() => {
     try {
       getProducts();
       setTimeout(() => {
         setLoading(false);
-      }, [600]);
+      }, [500]);
     } catch (error) {
       console.warn(error);
       alert('Erro ao buscar os produtos.');
@@ -260,7 +235,7 @@ function Checkout() {
 
   // Pega endereço
   async function getAddress() {
-    const response = await api.get(`/address`, {
+    const response = await api.get(`/address/${user_id}`, {
       headers: { authorization: `bearer ${token}` },
     });
     setAddress({ ...response.data.adresses[0] });
@@ -272,7 +247,7 @@ function Checkout() {
     } catch (error) {
       console.warn(error);
       alert('Erro ao buscar o endereço.');
-      // history.push('Error');
+      history.push('Error');
     }
   }, []);
 
@@ -316,7 +291,7 @@ function Checkout() {
       <div className="mainContent">
         <div className="leftSide">
           <div className="aboutListProducts">
-          {!loading ? (
+            {!loading ? (
               <>
                 {products.length == 0 ? (
                   <div className="aboutProduct">
@@ -449,7 +424,7 @@ function Checkout() {
             <div className="summaryTitle">
               <strong>Resumo do Pedido</strong>
             </div>
-
+            
             <div className="addressInfo">
               <div className="addressConfirmation">
                 {!loading ? (
@@ -509,7 +484,6 @@ function Checkout() {
         setAddress={setAddress}
         address={address}
       />
-      <SnackbarMessage open={openSnackbar} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

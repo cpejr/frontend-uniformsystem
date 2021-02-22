@@ -77,8 +77,8 @@ function validateInput(type, value) {
 }
 
 function EditarPerfil({ history }) {
-  const { token } = useContext(LoginContext);
-  const { user } = useContext(LoginContext);
+  const { token, user, setUser } = useContext(LoginContext);
+
   const classes = useStyles();
 
   const [errorName, setErrorName] = useState(false);
@@ -326,7 +326,13 @@ function EditarPerfil({ history }) {
           }
         );
         console.log(response);
-
+        setUser([
+          {
+            ...user[0],
+            name: nomeInput.current.value,
+            telefone: telefoneInput.current.value,
+          },
+        ]);
         const responseUser = await api.put(
           `user/${user[0].user_id}`,
           {
@@ -473,6 +479,7 @@ function EditarPerfil({ history }) {
           helperText={errorNameMessage}
           className={classes.largeInput}
           variant="outlined"
+          defaultValue={user[0].name}
           onChange={(e) => handleInputChange(e, "name")}
         />
       )}
@@ -616,6 +623,7 @@ function EditarPerfil({ history }) {
         helperText={errorTelefoneMessage}
         className={classes.mediumInput}
         variant="outlined"
+        defaultValue={user[0].telefone}
       />
 
       <div className={classes.divButtons}>

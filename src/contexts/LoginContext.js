@@ -10,7 +10,6 @@ const LoginContextProvider = (props) => {
   //Nao era pra fazer isso.
 
   useEffect(() => {
-    
     async function verify(token) {
       try {
         const config = {
@@ -43,7 +42,7 @@ const LoginContextProvider = (props) => {
   function signIn(token, user) {
     const existsToken = localStorage.getItem("accessToken");
 
-    if(existsToken){
+    if (existsToken) {
       localStorage.removeItem("accessToken");
     }
     localStorage.setItem("accessToken", token);
@@ -58,7 +57,7 @@ const LoginContextProvider = (props) => {
   }
 
   return (
-    <LoginContext.Provider value={{ token, user, signIn, logOut }}>
+    <LoginContext.Provider value={{ token, user, signIn, logOut, setUser }}>
       {props.children}
     </LoginContext.Provider>
   );

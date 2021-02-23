@@ -322,7 +322,10 @@ function Checkout() {
                         {product.gender === "F" ? "Feminino" : "Masculino"}
                       </span>
                       <span>Preço único: R$ {product.price}</span>
-                      <span>Total: R$ {product.amount * product.price}</span>
+                      <span>
+                        Total: R${" "}
+                        {(100 * (product.amount * product.price)) / 100}
+                      </span>
                     </div>
                   </div>
                 );

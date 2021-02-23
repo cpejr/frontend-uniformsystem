@@ -105,6 +105,9 @@ function OrdersAdm() {
                   <TableCell align="center" className="header-table">
                     ESPECIFICAÇÕES
                   </TableCell>
+                  <TableCell align="center" className="header-table">
+                    CRIAÇÃO
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -114,6 +117,7 @@ function OrdersAdm() {
                     const createdAt = pedido.created_at;
                     const updatedAt = pedido.updated_at;
                     const Status = pedido.status;
+                    var formatDate = new Date(pedido.created_at);
                     // const deliver = pedido.delivered_by;
                     const colum = (
                       <TableRow>
@@ -123,7 +127,7 @@ function OrdersAdm() {
                         <TableCell component="td" scope="row">
                           {<OrderTable status={pedido.status} />}
                         </TableCell>
-                        <TableCell component="td" scope="row">
+                        <TableCell align="center" component="td" scope="row">
                           <Link
                             to={{
                               pathname: "/adm/pedidoespecifico",
@@ -139,6 +143,13 @@ function OrdersAdm() {
                           >
                             Detalhes...
                           </Link>
+                        </TableCell>
+                        <TableCell align="center" component="td" scope="row">
+                          {formatDate.toLocaleString(
+                            "pt-BR",
+                            pedido.created_at
+                          )}
+                          {console.log("DATA", pedido.created_at)}
                         </TableCell>
                       </TableRow>
                     );

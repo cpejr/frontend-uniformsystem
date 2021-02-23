@@ -21,14 +21,14 @@ function EspecificOrderAdm(props) {
 
   const createdAt = props.location.state.createdAt;
   const updatedAt = props.location.state.updatedAt;
-  var formatDate = new Date();
 
   const orderId = props.location.state.orderId;
   var price = [];
   var discount = [];
   var total;
   var id;
-
+  var formatDate = new Date(createdAt);
+  var formatUpdate = new Date(updatedAt);
   var modelos = {
     id: [],
     description: [],
@@ -197,7 +197,7 @@ function EspecificOrderAdm(props) {
               <br />
               <span className="date">
                 <strong>Última atualização:</strong>
-                {formatDate.toLocaleString("pt-BR", updatedAt)}
+                {formatUpdate.toLocaleString("pt-BR", updatedAt)}
               </span>
               <br />
               <span className="price">

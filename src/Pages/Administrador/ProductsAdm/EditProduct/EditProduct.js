@@ -15,12 +15,14 @@ import MuiAlert from "@material-ui/lab/Alert";
 
 import ProductModelCardAdm from "../../../../components/ProductModelCardAdm";
 import PopUpProductModel from "../../../../components/PopUpProductModel";
+import ProductEditModal from "../../../../components/ProductEditModal";
 
 import AddIcon from "@material-ui/icons/Add";
 
-import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronLeft, FaEdit } from "react-icons/fa";
 
 import "./EditProduct.css";
+import validators from './Validators';
 
 function validateInputWithTypeText(valueFromInput) {
   let isValid;
@@ -251,8 +253,79 @@ function EditProduct({ history }) {
   // Re-renderiza a tela depois que productModelsArray foi atualizado
   useEffect(() => {}, [productModelsArray]);
 
+
+
+  // -----------------------------------------------------
+  //                   CODIGO DO LIMA
+  // -----------------------------------------------------
+
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [dialogInfo, setDialogInfo] = useState();
+
+  function handleOpenDialog(fieldKey, fieldName, modelId){
+    if(modelId){
+      setDialogInfo({
+        fieldKey,
+        fieldName,
+        validator: validators[fieldKey],
+        callback: updateModelInfo,
+        modelId,
+      })
+    }
+    else{
+      setDialogInfo({
+        fieldKey,
+        fieldName,
+        validator: validators[fieldKey],
+        callback: updateProductInfo,
+      })
+    }
+    console.log("oi")
+    setOpenEditDialog(true);
+  }
+
+  const handleClose = ()=>setOpenEditDialog(false);
+
+  function updateProductInfo(fieldKey, value){
+    try {
+      const updated_fields = {}
+      updated_fields[fieldKey] = value;
+      api.put(`/product/${product_id}`, {updated_fields});
+      handleClose();
+    } catch (error) {
+      alert("Erro na atualização do produto");
+      console.warn(error);
+    }
+  }
+
+  function updateModelInfo(modelId, fieldKey, value){
+    try {
+      const updated_fields = {}
+      updated_fields[fieldKey] = value;
+      api.put(`/model/${modelId}`, {updated_fields});
+      handleClose();
+    } catch (error) {
+      alert("Erro na atualização do produto");
+      console.warn(error);
+    }
+  }
+
+  // -----------------------------------------------------
+  //                   CODIGO DO LIMA
+  // -----------------------------------------------------
+
   return (
     <div className="editProductFullContent">
+      {
+        dialogInfo &&
+        <ProductEditModal
+        fieldName={dialogInfo.fieldName}
+        fieldKey={dialogInfo.fieldKey}
+        validator={dialogInfo.validator}
+        callback={dialogInfo.callback}
+        open={openEditDialog}
+        handleClose={handleClose}
+      />}
       <FaChevronLeft
         className="iconToReturn"
         onClick={() => history.goBack()}
@@ -266,31 +339,29 @@ function EditProduct({ history }) {
 
         <form className="formEditProduct">
           <div className="spanWithInput">
-            <span>NOME:</span>
+            <div>
+              <span>NOME:</span>
+              <FaEdit onClick={()=>{handleOpenDialog("name", "nome")}}/>
+            </div>
             {productInfo && (
               <TextField
-                required
-                inputRef={inputName}
                 defaultValue={productInfo.name}
                 className={classes.inputText}
-                error={errorNameProduct}
-                helperText={errorNameProductMessage}
-                onChange={(e) => handleCompleteProductInfo(e, "name")}
                 variant="outlined"
+                disabled={true}
               />
             )}
           </div>
           <div className="spanWithInput">
-            <span>DESCRIÇÃO:</span>
+            <div>
+              <span>DESCRIÇÃO:</span>
+              <FaEdit/>
+            </div>
             {productInfo && (
               <TextField
-                required
                 defaultValue={productInfo.description}
-                inputRef={inputDescription}
                 className={classes.inputText}
-                error={errorDescriptionProduct}
-                helperText={errorDescriptionProductMessage}
-                onChange={(e) => handleCompleteProductInfo(e, "description")}
+                disabled={true}
                 variant="outlined"
               />
             )}

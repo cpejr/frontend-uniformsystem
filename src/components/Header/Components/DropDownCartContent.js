@@ -5,9 +5,8 @@ import { FaShoppingCart } from "react-icons/fa";
 import "./style.css";
 import { useHistory } from "react-router-dom";
 
-import api from '../../../services/api';
-import { LoginContext } from '../../../contexts/LoginContext';
-
+import api from "../../../services/api";
+import { LoginContext } from "../../../contexts/LoginContext";
 
 export default function DropDownCartContent(props) {
   let Subtotal = 0;
@@ -19,7 +18,7 @@ export default function DropDownCartContent(props) {
   const [productsInCart, setProductsInCart] = useState([]);
 
   async function getProducts() {
-    const response = await api.get('/cart', {
+    const response = await api.get("/cart", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setProductsInCart(response.data);
@@ -30,10 +29,9 @@ export default function DropDownCartContent(props) {
       getProducts();
     } catch (error) {
       console.warn(error);
-      alert('Erro ao Buscar carrinho');
+      alert("Erro ao Buscar carrinho");
     }
   }, []);
-
 
   function handleClickAway() {
     props.setClickCart(false);
@@ -45,53 +43,60 @@ export default function DropDownCartContent(props) {
         <div className="blueLine"></div>
 
         <div className="products">
-          {
-            productsInCart.length === 0 || productsInCart.length === undefined ?
-              <span style={{color: '#000'}}>Nenhum produto</span>
-            :
-              productsInCart.map((produto) => {
-                Subtotal =
-                  Subtotal + parseFloat(produto.price) * parseFloat(produto.amount);
-        
-                return (
-                  <>
-                    <div className="singleProduct">
-                      <div className="photo">
-                        <img
-                          src={bucketAWS + produto.img_link}
-                          alt={produto.name}
-                          className="FotoCamisa"
-                        />
-                      </div>
-                      <div className="texts">
-                        <h4 className="Prod_Title">{produto.name}</h4>
-                        <div className="description">
-                          <div className="pt1">
-                            <p className="size">Tamanho: {produto.size}</p>
-                          </div>
-                          <div className="pt1">
-                            <p className="gender">Gênero: {produto.gender === 'F'? 'Feminino': 'Masculino'}</p>
-                            <p>R$ {Number(produto.price).toFixed(2)}</p>
-                          </div>
-                          <div className="pt2">
-                            <p className="color">Cor: Branca</p>
-                            <p className="total_price">
-                              {produto.amount} x R$ {Number(produto.price).toFixed(2)}
-                            </p>
-                          </div>
+          {productsInCart.length === 0 ||
+          productsInCart.length === undefined ? (
+            <span style={{ color: "#000" }}>Nenhum produto</span>
+          ) : (
+            productsInCart.map((produto) => {
+              Subtotal =
+                Subtotal +
+                (100 *
+                  (parseFloat(produto.price) * parseFloat(produto.amount))) /
+                  100;
+
+              return (
+                <>
+                  <div className="singleProduct">
+                    <div className="photo">
+                      <img
+                        src={bucketAWS + produto.img_link}
+                        alt={produto.name}
+                        className="FotoCamisa"
+                      />
+                    </div>
+                    <div className="texts">
+                      <h4 className="Prod_Title">{produto.name}</h4>
+                      <div className="description">
+                        <div className="pt1">
+                          <p className="size">Tamanho: {produto.size}</p>
+                        </div>
+                        <div className="pt1">
+                          <p className="gender">
+                            Gênero:{" "}
+                            {produto.gender === "F" ? "Feminino" : "Masculino"}
+                          </p>
+                          <p>R$ {Number(produto.price).toFixed(2)}</p>
+                        </div>
+                        <div className="pt2">
+                          <p className="color">Cor: Branca</p>
+                          <p className="total_price">
+                            {produto.amount} x R${" "}
+                            {Number(produto.price).toFixed(2)}
+                          </p>
                         </div>
                       </div>
                     </div>
-                    <hr
-                      style={{
-                        width: "90%",
-                        margin: "-1px auto",
-                      }}
-                    />
-                  </>
-                );
+                  </div>
+                  <hr
+                    style={{
+                      width: "90%",
+                      margin: "-1px auto",
+                    }}
+                  />
+                </>
+              );
             })
-          }
+          )}
         </div>
 
         <div className="subtotal_div">

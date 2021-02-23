@@ -1,27 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './Loja.css';
-import api from '../../services/api';
-import ProductCard from '../../components/ProductCard';
-import { useHistory } from 'react-router-dom';
-import MetaData from '../../meta/reactHelmet';
-import { FaFilter, FaSearch, FaTruckLoading } from 'react-icons/fa';
-import _ from 'lodash';
+import React, { useState, useEffect, useRef } from "react";
+import "./Loja.css";
+import api from "../../services/api";
+import ProductCard from "../../components/ProductCard";
+import MetaData from "../../meta/reactHelmet";
+import { FaFilter, FaSearch } from "react-icons/fa";
+import _ from "lodash";
 
 const FILTER_OPTIONS = [
-  'FEMININO',
-  'MASCULINO',
-  'ESPORTIVO',
-  'UNIVERSITÁRIO',
-  'EMPRESARIAL',
-  'BONÉS',
+  "FEMININO",
+  "MASCULINO",
+  "ESPORTIVO",
+  "UNIVERSITÁRIO",
+  "EMPRESARIAL",
+  "BONÉS",
 ];
 const PRICE_OPTIONS = [
-  'Até R$25,00',
-  'R$25,00 - R$50,00',
-  'R$50,00 - R$100,00',
-  'R$100,00 - R$150,00',
-  'Acima de R$150,00',
-  'Qualquer valor',
+  "Até R$25,00",
+  "R$25,00 - R$50,00",
+  "R$50,00 - R$100,00",
+  "R$100,00 - R$150,00",
+  "Acima de R$150,00",
+  "Qualquer valor",
 ];
 
 function Loja() {
@@ -33,91 +32,88 @@ function Loja() {
   const meta = {
     titlePage: "Uniformes Ecommerce | Loja",
     titleSearch: "Profit Uniformes | Loja",
-    description: "Uniformes e bonés personalizados para sua empresa, universidade, time e muito mais. Venha conhecer nossos modelos e suas possibilidades de personalização!",
+    description:
+      "Uniformes e bonés personalizados para sua empresa, universidade, time e muito mais. Venha conhecer nossos modelos e suas possibilidades de personalização!",
     keyWords: "Uniformes | Loja | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   const inputSearch = useRef(null);
-  const history = useHistory();
   async function getProducts() {
     //fazendo a requisição pro back
     try {
       let query = ["available=true"];
       if (filter.product_type.length > 0) {
-        let products_type = filter.product_type.join(',');
-        let param = 'product_type=' + products_type;
+        let products_type = filter.product_type.join(",");
+        let param = "product_type=" + products_type;
         query.push(param);
       }
       if (filter.gender.length === 1) {
-        let genders = filter.gender.join(',');
-        let param = 'gender=' + genders;
+        let genders = filter.gender.join(",");
+        let param = "gender=" + genders;
         query.push(param);
       }
       if (filter.max) {
-        const param = 'maxprice=' + filter.max;
+        const param = "maxprice=" + filter.max;
         query.push(param);
       }
       if (filter.min) {
-        const param = 'minprice=' + filter.min;
+        const param = "minprice=" + filter.min;
         query.push(param);
       }
       if (filter.name) {
-        const param = 'name=' + filter.name;
+        const param = "name=" + filter.name;
         query.push(param);
       }
       if (page.current !== 1) {
-        const param = 'page=' + page.current;
+        const param = "page=" + page.current;
         query.push(param);
       }
 
-      const response = await api.get(`/product?${query.join('&')}`);
+      const response = await api.get(`/product?${query.join("&")}`);
       return response.data.products;
     } catch (error) {
       console.warn(error);
-      alert('Erro no servidor.');
+      alert("Erro no servidor.");
       // history.push('Error');
     }
   }
 
-  useEffect(
-    () => {
-      page.current = 1;
-      getProducts().then(newProducts => {
-        setProducts(newProducts);
-      });
-    },
-    [filter],
-  );
+  useEffect(() => {
+    page.current = 1;
+    getProducts().then((newProducts) => {
+      setProducts(newProducts);
+    });
+  }, [filter]);
 
   function handleInputChange(e) {
     const newFilter = { ...filter };
     let fieldProductType;
     let fieldGender;
     switch (e.target.name) {
-      case 'FEMININO':
-        fieldGender = 'F';
+      case "FEMININO":
+        fieldGender = "F";
         break;
 
-      case 'MASCULINO':
-        fieldGender = 'M';
+      case "MASCULINO":
+        fieldGender = "M";
         break;
 
-      case 'ESPORTIVO':
-        fieldProductType = 'sport';
+      case "ESPORTIVO":
+        fieldProductType = "sport";
         break;
 
-      case 'UNIVERSITÁRIO':
-        fieldProductType = 'university';
+      case "UNIVERSITÁRIO":
+        fieldProductType = "university";
         break;
 
-      case 'EMPRESARIAL':
-        fieldProductType = 'company';
+      case "EMPRESARIAL":
+        fieldProductType = "company";
         break;
 
-      case 'BONÉS':
-        fieldProductType = 'cap';
+      case "BONÉS":
+        fieldProductType = "cap";
         break;
       default:
         break;
@@ -130,9 +126,9 @@ function Loja() {
       else if (fieldGender) newFilter.gender.push(fieldGender);
     } else {
       if (fieldProductType)
-        _.remove(newFilter.product_type, el => el === fieldProductType);
+        _.remove(newFilter.product_type, (el) => el === fieldProductType);
       else if (fieldGender)
-        _.remove(newFilter.gender, el => el === fieldGender);
+        _.remove(newFilter.gender, (el) => el === fieldGender);
     }
     setFilter(newFilter);
   }
@@ -145,27 +141,27 @@ function Loja() {
     delete newFilter.max;
 
     switch (e.target.value) {
-      case 'Até R$25,00':
+      case "Até R$25,00":
         min = 0;
         max = 25;
         break;
-      case 'R$25,00 - R$50,00':
+      case "R$25,00 - R$50,00":
         min = 25;
         max = 50;
         break;
-      case 'R$50,00 - R$100,00':
+      case "R$50,00 - R$100,00":
         min = 50;
         max = 100;
         break;
-      case 'R$100,00 - R$150,00':
+      case "R$100,00 - R$150,00":
         min = 100;
         max = 150;
         break;
-      case 'Acima de R$150,00':
+      case "Acima de R$150,00":
         min = 150;
         break;
 
-      case 'Qualquer valor':
+      case "Qualquer valor":
         min = 0;
         max = 0;
         break;
@@ -192,56 +188,60 @@ function Loja() {
     // alert("Você está pesquisando!")
   }
 
-  useEffect(
-    () => {
-      function handleScroll() {
-        const windowHeight =
-          'innerHeight' in window
-            ? window.innerHeight
-            : document.documentElement.offsetHeight;
-        const body = document.body;
-        const html = document.documentElement;
-        const docHeight = Math.max(
-          body.scrollHeight,
-          body.offsetHeight,
-          html.clientHeight,
-          html.scrollHeight,
-          html.offsetHeight,
-        );
-        const windowBottom = windowHeight + window.pageYOffset;
-        if (windowBottom >= docHeight) {
-          //bottom reached
-          //Fuçã que faz requisição no back pela proxima pagina
-          loadNextPage();
-          //.then(setOngsData)
-          //.catch((error) => console.error(error));
-        }
+  useEffect(() => {
+    function handleScroll() {
+      const windowHeight =
+        "innerHeight" in window
+          ? window.innerHeight
+          : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.pageYOffset;
+      if (windowBottom >= docHeight) {
+        //bottom reached
+        //Fuçã que faz requisição no back pela proxima pagina
+        loadNextPage();
+        //.then(setOngsData)
+        //.catch((error) => console.error(error));
       }
-      function loadNextPage() {
-        if (!pageLoading.current) {
-          pageLoading.current = true;
-          page.current++;
-          getProducts().then(newProducts => {
-            if(newProducts){
-              setProducts([...products, ...newProducts]);
-              pageLoading.current = false;
-            }
-          });
-        }
+    }
+    function loadNextPage() {
+      if (!pageLoading.current) {
+        pageLoading.current = true;
+        page.current++;
+        getProducts().then((newProducts) => {
+          if (newProducts) {
+            setProducts([...products, ...newProducts]);
+            pageLoading.current = false;
+          }
+        });
       }
-      window.addEventListener('scroll', handleScroll);
+    }
+    window.addEventListener("scroll", handleScroll);
 
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    },
-    [products],
-  );
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products]);
 
   return (
     <div className="shop">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="search">
         <input
           id="search"
@@ -298,12 +298,13 @@ function Loja() {
         </div>
 
         <div className="productContainer">
-          {products ? 
-            products.map(product => (
+          {products ? (
+            products.map((product) => (
               <ProductCard key={product.product_id} product={product} />
-            )):
+            ))
+          ) : (
             <h1>Sem produtos cadastrados...</h1>
-          }
+          )}
         </div>
       </div>
     </div>

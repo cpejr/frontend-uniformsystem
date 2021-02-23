@@ -5,7 +5,7 @@ import InstagramIcon from "@material-ui/icons/Instagram";
 import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { Button, CircularProgress, TextField} from "@material-ui/core";
+import { Button, CircularProgress, TextField } from "@material-ui/core";
 
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
@@ -44,17 +44,12 @@ function SelectedImages({
   }
 }
 
-const maskPhone = value => {
+const maskPhone = (value) => {
   return value
     .replace(/\D/g, "")
     .replace(/(\d{2})(\d)/, "($1) $2")
     .replace(/(\d{5})(\d{4})(\d)/, "$1-$2");
 };
-
-const maskOnlyLetters = value => {
-  return value.replace(/[!@#¨$%^&*)(+=._-]+/g, "");
-};
-
 
 function InputsOrIconWithInput({
   label,
@@ -65,25 +60,31 @@ function InputsOrIconWithInput({
   setInfo,
   field,
   errorBoolean,
-  errorMessage
+  errorMessage,
 }) {
-
   const handleChangeText = (value) => {
-    setInfo( oldValue => ({
+    setInfo((oldValue) => ({
       textWhoWeAre: oldValue.textWhoWeAre,
       textProducts: oldValue.textProducts,
-      telephoneInfo: field === "telephone" ? maskPhone(value) : oldValue.telephoneInfo,
+      telephoneInfo:
+        field === "telephone" ? maskPhone(value) : oldValue.telephoneInfo,
       enderecoInfo: field === "endereco" ? value : oldValue.enderecoInfo,
-      facebookUsername: field === "facebook user" ? value : oldValue.facebookUsername,
-      instagramUsername: field === "instagram user" ? value : oldValue.instagramUsername,
+      facebookUsername:
+        field === "facebook user" ? value : oldValue.facebookUsername,
+      instagramUsername:
+        field === "instagram user" ? value : oldValue.instagramUsername,
       facebookLink: field === "facebook" ? value : oldValue.facebookLink,
       instagramLink: field === "instagram" ? value : oldValue.instagramLink,
       whatsAppLink: field === "whatsapp" ? value : oldValue.whatsAppLink,
     }));
-  }
+  };
   return (
     <div className="labelWithInputHomeEditable">
-      {hasIcon ? icon : <label style={{ marginRight: "16px" }}>{label.toUpperCase()}</label>}
+      {hasIcon ? (
+        icon
+      ) : (
+        <label style={{ marginRight: "16px" }}>{label.toUpperCase()}</label>
+      )}
       <TextField
         variant="outlined"
         type="text"
@@ -99,26 +100,33 @@ function InputsOrIconWithInput({
 }
 
 const validateFields = (value) => {
-    let isValid = true;
-    if(value === ''){
+  let isValid = true;
+  if (value === "") {
+    isValid = false;
+  }
+  return isValid;
+};
+
+const validateImages = (
+  arrayOfImages,
+  arrayOfExcludedImages,
+  isWhoWeAreImage = false
+) => {
+  let isValid = true;
+  if (isWhoWeAreImage) {
+    if (!arrayOfImages.file) {
       isValid = false;
     }
-    return isValid;
-} 
-
-const validateImages = (arrayOfImages, arrayOfExcludedImages, isWhoWeAreImage = false) => {
-    let isValid = true;
-    if(isWhoWeAreImage){
-      if(!arrayOfImages.file){
-        isValid = false;
-      }
-    }else{
-      if((arrayOfImages.length === 0 && arrayOfExcludedImages.length === 0) || arrayOfImages.length - arrayOfExcludedImages.length <= 0){
-        isValid = false;
-      }
+  } else {
+    if (
+      (arrayOfImages.length === 0 && arrayOfExcludedImages.length === 0) ||
+      arrayOfImages.length - arrayOfExcludedImages.length <= 0
+    ) {
+      isValid = false;
     }
-    return isValid;
-} 
+  }
+  return isValid;
+};
 
 function HomeEditable() {
   const { token } = useContext(LoginContext);
@@ -128,32 +136,36 @@ function HomeEditable() {
   const [loading, setLoading] = useState(false);
 
   // Estado para armazenar todas as imagens da Home
-  const [imagesHome, setImagesHome] = useState([]);
-
   // Estados para armazenar textos
   const [homeInfo, setHomeInfo] = useState({
-    textWhoWeAre: '',
-    textProducts: '',
-    telephoneInfo: '',
-    enderecoInfo: '',
-    facebookUsername: '',
-    instagramUsername: '',
-    facebookLink: '',
-    instagramLink: '',
-    whatsAppLink: '',
+    textWhoWeAre: "",
+    textProducts: "",
+    telephoneInfo: "",
+    enderecoInfo: "",
+    facebookUsername: "",
+    instagramUsername: "",
+    facebookLink: "",
+    instagramLink: "",
+    whatsAppLink: "",
   });
 
   const maximumImagesCarousel = 5;
   const maximumImagesProducts = 3;
 
   const [errorImageCarousel, setErrorImageCarousel] = useState(false);
-  const [errorImageCarouselMessage, setErrorImageCarouselMessage] = useState("");
+  const [errorImageCarouselMessage, setErrorImageCarouselMessage] = useState(
+    ""
+  );
 
   const [errorImageWhoWeAre, setErrorImageWhoWeAre] = useState(false);
-  const [errorImageWhoWeAreMessage, setErrorImageWhoWeAreMessage] = useState("");
+  const [errorImageWhoWeAreMessage, setErrorImageWhoWeAreMessage] = useState(
+    ""
+  );
 
   const [errorImageProducts, setErrorImageProducts] = useState(false);
-  const [errorImageProductsMessage, setErrorImageProductsMessage] = useState("");
+  const [errorImageProductsMessage, setErrorImageProductsMessage] = useState(
+    ""
+  );
 
   const [errorTextWhoWeAre, setErrorTextWhoWeAre] = useState(false);
   const [errorTextWhoWeAreMessage, setErrorTextWhoWeAreMessage] = useState("");
@@ -168,16 +180,24 @@ function HomeEditable() {
   const [errorEnderecoMessage, setErrorEnderecoMessage] = useState("");
 
   const [errorFacebookUsername, setErrorFacebookUsername] = useState(false);
-  const [errorFacebookUsernameMessage, setErrorFacebookUsernameMessage] = useState("");
+  const [
+    errorFacebookUsernameMessage,
+    setErrorFacebookUsernameMessage,
+  ] = useState("");
 
   const [errorInstagramUsername, setErrorInstagramUsername] = useState(false);
-  const [errorInstagramUsernameMessage, setErrorInstagramUsernameMessage] = useState("");
+  const [
+    errorInstagramUsernameMessage,
+    setErrorInstagramUsernameMessage,
+  ] = useState("");
 
   const [errorFacebookLink, setErrorFacebookLink] = useState(false);
   const [errorFacebookLinkMessage, setErrorFacebookLinkMessage] = useState("");
 
   const [errorInstagramLink, setErrorInstagramLink] = useState(false);
-  const [errorInstagramLinkMessage, setErrorInstagramLinkMessage] = useState("");
+  const [errorInstagramLinkMessage, setErrorInstagramLinkMessage] = useState(
+    ""
+  );
 
   const [errorWhatsAppLink, setErrorWhatsAppLink] = useState(false);
   const [errorWhatsAppLinkMessage, setErrorWhatsAppLinkMessage] = useState("");
@@ -190,7 +210,6 @@ function HomeEditable() {
 
   // Estado para armazenar Imagens de Produtos
   const [imagesProducts, setImagesProducts] = useState([]);
-
 
   const [messageSnackbar, setMessageSnackbar] = useState("");
   const [typeSnackbar, setTypeSnackbar] = useState("success");
@@ -255,7 +274,7 @@ function HomeEditable() {
         const response = await api.get("/home/info", {
           headers: { authorization: `bearer ${token}` },
         });
-        if(response.data){
+        if (response.data) {
           const textWhoWeAre = response.data.filter((item) =>
             item.key === "textWhoWeAre" ? item.data : null
           )[0];
@@ -267,12 +286,6 @@ function HomeEditable() {
           )[0];
           const address = response.data.filter((item) =>
             item.key === "address" ? item.data : null
-          )[0];
-          const facebookUsername = response.data.filter((item) =>
-            item.key === "facebookUsername" ? item.data : null
-          )[0];
-          const instagramUsername = response.data.filter((item) =>
-            item.key === "instagramUsername" ? item.data : null
           )[0];
           const facebookLink = response.data.filter((item) =>
             item.key === "facebookLink" ? item.data : null
@@ -360,7 +373,6 @@ function HomeEditable() {
       setImagesCarousel([...imagesCarousel]);
       setImagesWhoWeAre(imagesWhoWeAre);
       setImagesProducts([...imagesProducts]);
-      setImagesHome([...imagesCarousel, imagesWhoWeAre, ...imagesProducts]);
     }
     getHomeImages();
   }, []);
@@ -373,11 +385,10 @@ function HomeEditable() {
   }
 
   function handleAddImageCarouselFileInput() {
-
-    if(imagesCarousel.length < maximumImagesCarousel){
+    if (imagesCarousel.length < maximumImagesCarousel) {
       let fileData = new FileReader();
       fileData.readAsDataURL(inputCarousel.current.files[0]);
-  
+
       fileData.onload = function () {
         const fileLoaded = fileData.result;
         setImagesCarousel([
@@ -455,10 +466,10 @@ function HomeEditable() {
   }
 
   function handleAddImageProductsFileInput() {
-    if(Number(imagesProducts.length) < maximumImagesProducts){
+    if (Number(imagesProducts.length) < maximumImagesProducts) {
       let fileData = new FileReader();
       fileData.readAsDataURL(inputProducts.current.files[0]);
-      
+
       fileData.onload = function () {
         const fileLoaded = fileData.result;
         setImagesProducts([
@@ -466,7 +477,7 @@ function HomeEditable() {
           {
             file: fileLoaded,
             imgSrc: inputProducts.current.files[0],
-            imgAlt: 'Profit Uniformes',
+            imgAlt: "Profit Uniformes",
             imgPlace: "products",
           },
         ]);
@@ -504,156 +515,149 @@ function HomeEditable() {
 
   // Função para salvar as informações depois de editar a Home
   async function handleSaveChanges() {
+    const imageCarouselValidated = validateImages(
+      imagesCarousel,
+      excludedCarouselImages
+    );
+    const imageWhoWeAreValidated = validateImages(
+      imagesWhoWeAre,
+      excludedWhoWeAreImages,
+      true
+    );
+    const imageProductsValidated = validateImages(
+      imagesProducts,
+      excludedProductsImages
+    );
 
-    const imageCarouselValidated = validateImages(imagesCarousel, excludedCarouselImages);
-    const imageWhoWeAreValidated = validateImages(imagesWhoWeAre, excludedWhoWeAreImages, true);
-    const imageProductsValidated = validateImages(imagesProducts, excludedProductsImages);
-    
     const textWhoWeAreValidated = validateFields(homeInfo.textWhoWeAre);
     const textProductsValidated = validateFields(homeInfo.textProducts);
     const telephoneInfoValidated = validateFields(homeInfo.telephoneInfo);
     const enderecoInfoValidated = validateFields(homeInfo.enderecoInfo);
     const facebookUsernameValidated = validateFields(homeInfo.facebookUsername);
-    const instagramUsernameValidated = validateFields(homeInfo.instagramUsername);
+    const instagramUsernameValidated = validateFields(
+      homeInfo.instagramUsername
+    );
     const facebookLinkValidated = validateFields(homeInfo.facebookLink);
     const instagramLinkValidated = validateFields(homeInfo.instagramLink);
     const whatsAppLinkValidated = validateFields(homeInfo.whatsAppLink);
 
-    if( !imageCarouselValidated || !imageWhoWeAreValidated || !imageProductsValidated
-      || !textWhoWeAreValidated || !textProductsValidated || !telephoneInfoValidated 
-      || !enderecoInfoValidated || !facebookUsernameValidated || !instagramUsernameValidated
-      || !facebookLinkValidated || !instagramLinkValidated || !whatsAppLinkValidated){
-
-      if(!imageCarouselValidated){
+    if (
+      !imageCarouselValidated ||
+      !imageWhoWeAreValidated ||
+      !imageProductsValidated ||
+      !textWhoWeAreValidated ||
+      !textProductsValidated ||
+      !telephoneInfoValidated ||
+      !enderecoInfoValidated ||
+      !facebookUsernameValidated ||
+      !instagramUsernameValidated ||
+      !facebookLinkValidated ||
+      !instagramLinkValidated ||
+      !whatsAppLinkValidated
+    ) {
+      if (!imageCarouselValidated) {
         setErrorImageCarousel(true);
-        setErrorImageCarouselMessage('Campo obrigatório.');
-      }else{
+        setErrorImageCarouselMessage("Campo obrigatório.");
+      } else {
         setErrorImageCarousel(false);
-        setErrorImageCarouselMessage('');
+        setErrorImageCarouselMessage("");
       }
 
-      if(!imageWhoWeAreValidated){
+      if (!imageWhoWeAreValidated) {
         setErrorImageWhoWeAre(true);
-        setErrorImageWhoWeAreMessage('Campo obrigatório.');
-      }else{
+        setErrorImageWhoWeAreMessage("Campo obrigatório.");
+      } else {
         setErrorImageWhoWeAre(false);
-        setErrorImageWhoWeAreMessage('');
+        setErrorImageWhoWeAreMessage("");
       }
 
-      if(!imageProductsValidated){
+      if (!imageProductsValidated) {
         setErrorImageProducts(true);
-        setErrorImageProductsMessage('Campo obrigatório.');
-      }else{
+        setErrorImageProductsMessage("Campo obrigatório.");
+      } else {
         setErrorImageProducts(false);
-        setErrorImageProductsMessage('');
+        setErrorImageProductsMessage("");
       }
 
-      if(!textWhoWeAreValidated){
+      if (!textWhoWeAreValidated) {
         setErrorTextWhoWeAre(true);
-        setErrorTextWhoWeAreMessage('Campo obrigatório.');
-      }else{
+        setErrorTextWhoWeAreMessage("Campo obrigatório.");
+      } else {
         setErrorTextWhoWeAre(false);
-        setErrorTextWhoWeAreMessage('');
+        setErrorTextWhoWeAreMessage("");
       }
 
-      if(!textProductsValidated){
+      if (!textProductsValidated) {
         setErrorTextProducts(true);
-        setErrorTextProductsMessage('Campo obrigatório.');
-      }else{
+        setErrorTextProductsMessage("Campo obrigatório.");
+      } else {
         setErrorTextProducts(false);
-        setErrorTextProductsMessage('');
+        setErrorTextProductsMessage("");
       }
 
-      if(!telephoneInfoValidated){
+      if (!telephoneInfoValidated) {
         setErrorTelephone(true);
-        setErrorTelephoneMessage('Campo obrigatório.');
-      }else{
+        setErrorTelephoneMessage("Campo obrigatório.");
+      } else {
         setErrorTelephone(false);
-        setErrorTelephoneMessage('');
+        setErrorTelephoneMessage("");
       }
 
-      if(!enderecoInfoValidated){
+      if (!enderecoInfoValidated) {
         setErrorEndereco(true);
-        setErrorEnderecoMessage('Campo obrigatório.');
-      }else{
+        setErrorEnderecoMessage("Campo obrigatório.");
+      } else {
         setErrorEndereco(false);
-        setErrorEnderecoMessage('');
+        setErrorEnderecoMessage("");
       }
 
-      if(!facebookUsernameValidated){
+      if (!facebookUsernameValidated) {
         setErrorFacebookUsername(true);
-        setErrorFacebookUsernameMessage('Campo obrigatório.');
-      }else{
+        setErrorFacebookUsernameMessage("Campo obrigatório.");
+      } else {
         setErrorFacebookUsername(false);
-        setErrorFacebookUsernameMessage('');
+        setErrorFacebookUsernameMessage("");
       }
 
-      if(!instagramUsernameValidated){
+      if (!instagramUsernameValidated) {
         setErrorInstagramUsername(true);
-        setErrorInstagramUsernameMessage('Campo obrigatório.');
-      }else{
+        setErrorInstagramUsernameMessage("Campo obrigatório.");
+      } else {
         setErrorInstagramUsername(false);
-        setErrorInstagramUsernameMessage('');
+        setErrorInstagramUsernameMessage("");
       }
 
-      if(!facebookLinkValidated){
+      if (!facebookLinkValidated) {
         setErrorFacebookLink(true);
-        setErrorFacebookLinkMessage('Campo obrigatório.');
-      }else{
+        setErrorFacebookLinkMessage("Campo obrigatório.");
+      } else {
         setErrorFacebookLink(false);
-        setErrorFacebookLinkMessage('');
+        setErrorFacebookLinkMessage("");
       }
 
-      if(!instagramLinkValidated){
+      if (!instagramLinkValidated) {
         setErrorInstagramLink(true);
-        setErrorInstagramLinkMessage('Campo obrigatório.');
-      }else{
+        setErrorInstagramLinkMessage("Campo obrigatório.");
+      } else {
         setErrorInstagramLink(false);
-        setErrorInstagramLinkMessage('');
+        setErrorInstagramLinkMessage("");
       }
 
-      if(!whatsAppLinkValidated){
+      if (!whatsAppLinkValidated) {
         setErrorWhatsAppLink(true);
-        setErrorWhatsAppLinkMessage('Campo obrigatório.');
-      }else{
+        setErrorWhatsAppLinkMessage("Campo obrigatório.");
+      } else {
         setErrorWhatsAppLink(false);
-        setErrorWhatsAppLinkMessage('');
+        setErrorWhatsAppLinkMessage("");
       }
-
-    }else{
-      
+    } else {
       setLoading(true);
       // Salva mudanças de Home Info
-      try {
-        const objTeste = {
-          textWhoWeAre: homeInfo.textWhoWeAre,
-          textProducts: homeInfo.textProducts,
-          contactInfo: {
-            cellphone: homeInfo.telephoneInfo,
-            address: homeInfo.enderecoInfo,
-            facebookUsername: homeInfo.facebookLink,
-            instagramUsername: homeInfo.instagramLink,
-            facebookLink: homeInfo.facebookLink,
-            instagramLink: homeInfo.instagramLink,
-            whatsAppLink: homeInfo.whatsAppLink,
-          },
-        }
-        const teste = await api.put(
-          "/home/info",
-          objTeste,
-          {
-            headers: { authorization: `bearer ${token}` },
-          }
-        );
-  
-      } catch (err) {
-        console.warn(err.message);
-      }
-  
+
       // Salva mudanças de Home Images
       try {
         // Deleta imagens para colocar novas - Carrossel
-        if(excludedCarouselImages[0]){
+        if (excludedCarouselImages[0]) {
           excludedCarouselImages.forEach(async (item) => {
             if (item.file.includes(bucketAWS)) {
               const nameWithType = item.file.split(".com/")[1];
@@ -665,9 +669,9 @@ function HomeEditable() {
             }
           });
         }
-  
+
         // Deleta imagens para colocar novas - Who We Are
-        if(excludedWhoWeAreImages.file){
+        if (excludedWhoWeAreImages.file) {
           if (excludedWhoWeAreImages.file.includes(bucketAWS)) {
             const nameWithType = excludedWhoWeAreImages.file.split(".com/")[1];
             const name = nameWithType.split(".")[0];
@@ -677,9 +681,9 @@ function HomeEditable() {
             });
           }
         }
-  
+
         // Deleta imagens para colocar novas - Products
-        if(excludedProductsImages[0]){
+        if (excludedProductsImages[0]) {
           excludedProductsImages.forEach(async (item) => {
             if (item.file.includes(bucketAWS)) {
               const nameWithType = item.file.split(".com/")[1];
@@ -691,7 +695,7 @@ function HomeEditable() {
             }
           });
         }
-  
+
         // Inicializa
         // setImagesHome([])
         // Posta novas imagens
@@ -699,12 +703,12 @@ function HomeEditable() {
           imagesCarousel.map(async (item) => {
             if (!item.file.includes(bucketAWS)) {
               let objImage = new FormData();
-  
+
               objImage.append("file", item.imgSrc);
               objImage.append("imgPlace", item.imgPlace);
               objImage.append("imgSrc", item.imgAlt);
               objImage.append("imgAlt", item.imgAlt);
-  
+
               await api.post("/home/images", objImage, {
                 headers: {
                   "Content-Type": "multipart/form-data",
@@ -714,7 +718,7 @@ function HomeEditable() {
             }
           });
         }
-  
+
         if (imagesWhoWeAre.file) {
           if (!imagesWhoWeAre.file.includes(bucketAWS)) {
             let objImage = new FormData();
@@ -722,7 +726,7 @@ function HomeEditable() {
             objImage.append("imgPlace", imagesWhoWeAre.imgPlace);
             objImage.append("imgSrc", imagesWhoWeAre.imgAlt);
             objImage.append("imgAlt", imagesWhoWeAre.imgAlt);
-  
+
             await api.post("/home/images", objImage, {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -731,9 +735,8 @@ function HomeEditable() {
             });
           }
         }
-  
+
         if (imagesProducts[0] && imagesProducts[0].file) {
-  
           imagesProducts.map(async (item) => {
             if (!item.file.includes(bucketAWS)) {
               let objImage = new FormData();
@@ -741,7 +744,7 @@ function HomeEditable() {
               objImage.append("imgPlace", item.imgPlace);
               objImage.append("imgSrc", item.imgAlt);
               objImage.append("imgAlt", item.imgAlt);
-  
+
               await api.post("/home/images", objImage, {
                 headers: {
                   "Content-Type": "multipart/form-data",
@@ -751,20 +754,20 @@ function HomeEditable() {
             }
           });
         }
-  
+
         setTimeout(() => {
           setLoading(false);
           setMessageSnackbar("Alterações realizadas com sucesso!");
           setTypeSnackbar("success");
           setOpen(true);
         }, 1500);
-        
+
         // Refresh da página
         // window.location.reload();
       } catch (err) {
         setMessageSnackbar("Falha ao atualizar os dados");
         setTypeSnackbar("error");
-        setLoading(false)
+        setLoading(false);
         console.warn(err.message);
         return err.message;
       }
@@ -781,22 +784,21 @@ function HomeEditable() {
   };
 
   const handleTextWhoWeAre = (value) => {
-    setHomeInfo( oldValue => ({
-        textWhoWeAre: value,
-        textProducts: oldValue.textProducts,
-        telephoneInfo: oldValue.telephoneInfo,
-        enderecoInfo: oldValue.enderecoInfo,
-        facebookUsername: oldValue.facebookLink,
-        instagramUsername: oldValue.instagramLink,
-        facebookLink: oldValue.facebookLink,
-        instagramLink: oldValue.instagramLink,
-        whatsAppLink: oldValue.whatsAppLink,
-      })
-    );
-  }
+    setHomeInfo((oldValue) => ({
+      textWhoWeAre: value,
+      textProducts: oldValue.textProducts,
+      telephoneInfo: oldValue.telephoneInfo,
+      enderecoInfo: oldValue.enderecoInfo,
+      facebookUsername: oldValue.facebookLink,
+      instagramUsername: oldValue.instagramLink,
+      facebookLink: oldValue.facebookLink,
+      instagramLink: oldValue.instagramLink,
+      whatsAppLink: oldValue.whatsAppLink,
+    }));
+  };
 
   const handleProducts = (value) => {
-    setHomeInfo( oldValue => ({
+    setHomeInfo((oldValue) => ({
       textWhoWeAre: oldValue.textWhoWeAre,
       textProducts: value,
       telephoneInfo: oldValue.telephoneInfo,
@@ -807,7 +809,7 @@ function HomeEditable() {
       instagramLink: oldValue.instagramLink,
       whatsAppLink: oldValue.whatsAppLink,
     }));
-  }
+  };
 
   return (
     <div className="HomeEditableContent">
@@ -828,8 +830,17 @@ function HomeEditable() {
         </div>
 
         <div className="changeImagesPart">
-          <h2>ALTERAR IMAGENS ({imagesCarousel.length}/{maximumImagesCarousel})</h2>
-          <div className="boxChangeImages" style={errorImageCarousel? {marginBottom: '0px', borderColor: '#f44336'}: { marginBottom: '24px'}}>
+          <h2>
+            ALTERAR IMAGENS ({imagesCarousel.length}/{maximumImagesCarousel})
+          </h2>
+          <div
+            className="boxChangeImages"
+            style={
+              errorImageCarousel
+                ? { marginBottom: "0px", borderColor: "#f44336" }
+                : { marginBottom: "24px" }
+            }
+          >
             {imagesCarousel.map((item, index) =>
               item ? (
                 <SelectedImages
@@ -842,7 +853,18 @@ function HomeEditable() {
               ) : null
             )}
           </div>
-          <span style={errorImageCarousel? {display:'block', color: '#f44336', fontSize: '14px', marginBottom: '24px'}: {display: 'none'}}>
+          <span
+            style={
+              errorImageCarousel
+                ? {
+                    display: "block",
+                    color: "#f44336",
+                    fontSize: "14px",
+                    marginBottom: "24px",
+                  }
+                : { display: "none" }
+            }
+          >
             {errorImageCarouselMessage}
           </span>
           <div className="buttonsCarouselPart">
@@ -909,8 +931,23 @@ function HomeEditable() {
         <div className="changeImageArea">
           <h2>ALTERAR IMAGEM</h2>
           <div className="imageWhoWeAre">
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: '100%', width: '60%'}}>
-              <div className="boxChangeImageWhoWeAre" style={errorImageWhoWeAre? {marginBottom: '0px', borderColor: '#f44336'}: { marginBottom: '24px'}}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                height: "100%",
+                width: "60%",
+              }}
+            >
+              <div
+                className="boxChangeImageWhoWeAre"
+                style={
+                  errorImageWhoWeAre
+                    ? { marginBottom: "0px", borderColor: "#f44336" }
+                    : { marginBottom: "24px" }
+                }
+              >
                 {imagesWhoWeAre.file ? (
                   <SelectedImages
                     srcImg={imagesWhoWeAre.file}
@@ -921,7 +958,13 @@ function HomeEditable() {
                   <span>Sem imagem</span>
                 )}
               </div>
-              <span style={errorImageWhoWeAre? {display:'block', color: '#f44336', fontSize: '14px'}: {display: 'none'}}>
+              <span
+                style={
+                  errorImageWhoWeAre
+                    ? { display: "block", color: "#f44336", fontSize: "14px" }
+                    : { display: "none" }
+                }
+              >
                 {errorImageWhoWeAreMessage}
               </span>
             </div>
@@ -989,8 +1032,18 @@ function HomeEditable() {
         </div>
 
         <div className="changeImagesPart">
-          <h2>ALTERAR PRODUTOS - UNIVERSITÁRIOS ({imagesProducts.length}/{maximumImagesProducts})</h2>
-          <div className="boxChangeImages" style={errorImageProducts? {marginBottom: '0px', borderColor: '#f44336'}: { marginBottom: '24px'}}>
+          <h2>
+            ALTERAR PRODUTOS - UNIVERSITÁRIOS ({imagesProducts.length}/
+            {maximumImagesProducts})
+          </h2>
+          <div
+            className="boxChangeImages"
+            style={
+              errorImageProducts
+                ? { marginBottom: "0px", borderColor: "#f44336" }
+                : { marginBottom: "24px" }
+            }
+          >
             {imagesProducts.map((item, index) =>
               item ? (
                 <SelectedImages
@@ -1003,7 +1056,18 @@ function HomeEditable() {
               ) : null
             )}
           </div>
-          <span style={errorImageProducts? {display:'block', color: '#f44336', fontSize: '14px', marginBottom: '24px'}: {display: 'none', marginBottom: '24px'}}>
+          <span
+            style={
+              errorImageProducts
+                ? {
+                    display: "block",
+                    color: "#f44336",
+                    fontSize: "14px",
+                    marginBottom: "24px",
+                  }
+                : { display: "none", marginBottom: "24px" }
+            }
+          >
             {errorImageProductsMessage}
           </span>
           <div className="buttonsCarouselPart">
@@ -1159,7 +1223,12 @@ function HomeEditable() {
       <Button className="saveChangesButton" onClick={handleSaveChanges}>
         {loading ? <CircularProgress color="secondary" /> : "SALVAR ALTERAÇÕES"}
       </Button>
-      <SnackbarMessage open={open} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
+      <SnackbarMessage
+        open={open}
+        handleClose={handleClose}
+        message={messageSnackbar}
+        type={typeSnackbar}
+      />
     </div>
   );
 }

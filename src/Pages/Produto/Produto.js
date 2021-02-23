@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { FaCheck, FaShoppingCart } from "react-icons/fa";
 
-import { Button, TextField } from '@material-ui/core';
-import MetaData from '../../meta/reactHelmet';
+import { Button, TextField } from "@material-ui/core";
+import MetaData from "../../meta/reactHelmet";
 
 import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
@@ -50,15 +50,14 @@ function Produto() {
 
   const [errorCEP, setErrorCEP] = useState(false);
   const [errorCEPMessage, setErrorCEPMessage] = useState("");
-    const meta = {
-        titlePage: "Uniformes Ecommerce | Produto",
-        titleSearch: "Profit Uniformes | Produto",
-        description: "Produtos personalizados prontos para a compra.",
-        keyWords: "Uniformes | Produto | Ecommerce | Profit",
-        imageUrl: "",
-        imageAlt: "",
-      }
-
+  const meta = {
+    titlePage: "Uniformes Ecommerce | Produto",
+    titleSearch: "Profit Uniformes | Produto",
+    description: "Produtos personalizados prontos para a compra.",
+    keyWords: "Uniformes | Produto | Ecommerce | Profit",
+    imageUrl: "",
+    imageAlt: "",
+  };
 
   const [errorSize, setErrorSize] = useState(false);
 
@@ -97,14 +96,14 @@ function Produto() {
     // Armazena o modela
     setModels(arrayOfModels);
 
-
-    const choosen = arrayOfModels[Math.floor(Math.random() * arrayOfModels.length)];;
-
-    // Acha modelo principal
-    setModelChoosen(!choosen? 1: choosen);
+    const choosen =
+      arrayOfModels[Math.floor(Math.random() * arrayOfModels.length)];
 
     // Acha modelo principal
-    setIsSelect(!choosen? 1: choosen.product_model_id);
+    setModelChoosen(!choosen ? 1 : choosen);
+
+    // Acha modelo principal
+    setIsSelect(!choosen ? 1 : choosen.product_model_id);
   }, []);
 
   const handleClose = (event, reason) => {
@@ -125,7 +124,6 @@ function Produto() {
     }
 
     return (
-
       <div className="radio" style={{ display: "flex" }}>
         {obj_sizes.map((size, index) => {
           let value;
@@ -198,14 +196,14 @@ function Produto() {
         `${modelChoosen.product_model_id}`
       );
 
-      const formattedGender = selectedValue.split("_")[0] === 'Fem' ? 'F' : 'M';
+      const formattedGender = selectedValue.split("_")[0] === "Fem" ? "F" : "M";
 
       objProdcutInCart.append("gender", formattedGender);
       objProdcutInCart.append("size", selectedValue.split("_")[1]);
       objProdcutInCart.append("amount", Number(inputQuantity.current.value));
-      objProdcutInCart.append("file", logoImage? logoImage.imgSrc : null);
-      objProdcutInCart.append("isLogoUpload", logoImage ? true: false);
-      
+      objProdcutInCart.append("file", logoImage ? logoImage.imgSrc : null);
+      objProdcutInCart.append("isLogoUpload", logoImage ? true : false);
+
       try {
         const response = await api.put("/addtocart", objProdcutInCart, {
           headers: { authorization: `Bearer ${token}` },
@@ -217,7 +215,6 @@ function Produto() {
           setTypeSnackbar("success");
           setOpenSnackbar(true);
         }, 800);
-        
       } catch (err) {
         setMessageSnackbar("Falha ao adicionar o produto");
         setTypeSnackbar("error");
@@ -281,7 +278,14 @@ function Produto() {
 
   return (
     <div className="productPage">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="leftSide">
         <img
           src={`${process.env.REACT_APP_BUCKET_AWS}${modelChoosen.img_link}`}
@@ -330,7 +334,6 @@ function Produto() {
                   />
                 )}
               </div>
-
             </div>
 
             <div className="shipSpace">
@@ -421,7 +424,12 @@ function Produto() {
           </div>
         </div>
       </div>
-      <SnackbarMessage open={openSnackbar} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
+      <SnackbarMessage
+        open={openSnackbar}
+        handleClose={handleClose}
+        message={messageSnackbar}
+        type={typeSnackbar}
+      />
     </div>
   );
 }

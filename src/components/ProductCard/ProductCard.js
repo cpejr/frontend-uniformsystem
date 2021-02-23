@@ -2,6 +2,7 @@ import React from "react";
 import "./ProductCard.css";
 import { Link } from "react-router-dom";
 
+const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 function ProductCard({ product }) {
   if (product)
     return (
@@ -11,7 +12,7 @@ function ProductCard({ product }) {
           <img
             className="imageProduct"
             alt="Imagem do produto"
-            src={`${process.env.REACT_APP_BUCKET_AWS}${product.model.img_link}`}
+            src={`${bucketAWS}${product.model.img_link}`}
           ></img>
         </div>
         <div className="productName">{product.name}</div>

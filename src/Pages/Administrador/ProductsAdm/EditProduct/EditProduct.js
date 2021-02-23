@@ -81,20 +81,22 @@ function EditProduct({ history }) {
 
       if (response.data) {
         const { models, ...product } = response.data;
-        const ohCaray = models.map(() => {
-          return {};
+        const productModelsAuxiliar = models.map(({img_link, ...model}) => {
+          return {
+            imgLink:
+              img_link !== "Sem imagem"
+                ? `${bucketAWS}${img_link}`
+                : "Sem imagem",
+            ...model
+          };
         });
-        const temporariamente = models.map(() => {
-          return {};
-        });
-        console.log("🚀 ~ file: EditProduct.js ~ line 88 ~ getProductInfo ~ ohCaray", ohCaray)
         console.log(
-          "🚀 ~ file: EditProduct.js ~ line 94 ~ productModelsAuxiliar ~ productModelsAuxiliar",
-          temporariamente
+          "🚀 ~ file: EditProduct.js ~ line 88 ~ getProductInfo ~ ohCaray",
+          productModelsAuxiliar
         );
 
-        setProductModelsArray(temporariamente);
-        setOldProductModelsArray(ohCaray);
+        setProductModelsArray(productModelsAuxiliar);
+        setOldProductModelsArray(productModelsAuxiliar);
         setProductInfo({ ...product });
       } else {
         setProductModelsArray([]);
@@ -102,13 +104,6 @@ function EditProduct({ history }) {
         setProductInfo([]);
       }
     }
-
-    // ...model,
-    // imgLink:
-    //   img_link !== "Sem imagem"
-    //     ? `${bucketAWS}${img_link}`
-    //     : "Sem imagem",
-    // available: "batata",
     try {
       getProductInfo();
     } catch (error) {
@@ -224,7 +219,7 @@ function EditProduct({ history }) {
 
         // Caso tenha product_models
         if (productModelsArray.length > 0) {
-          productModelsArray.map(async (item) => {
+          productModelsArray.forEach(async (item) => {
             let objImage = new FormData();
             objImage.append(
               "file",
@@ -395,7 +390,7 @@ function EditProduct({ history }) {
                     key={index}
                     handleSelectToEdit={handleOpenToEdit}
                     productModelArray={productModelsArray}
-                    fullProduct={item}
+                    fullProduct={{ ...item }}
                   />
                 ) : null
               )}
@@ -416,7 +411,7 @@ function EditProduct({ history }) {
         </form>
       </div>
 
-      {/* <PopUpProductModel
+      <PopUpProductModel
         open={openModal}
         handleClose={handleCloseModal}
         isEdit={isEditProduct}
@@ -424,7 +419,7 @@ function EditProduct({ history }) {
         setProductModelIDFromExistingInfo={setProductModelIdToEdit}
         setProductModelArray={setProductModelsArray}
         productModelArray={productModelsArray}
-      /> */}
+      />
 
       <Snackbar
         open={openSnackBar}

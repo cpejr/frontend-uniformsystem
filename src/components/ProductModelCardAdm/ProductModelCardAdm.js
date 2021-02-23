@@ -23,8 +23,6 @@ function ProductModelCardAdm({
     product_model_id,
   } = fullProduct;
 
-  fullProduct.available = false;
-
   const handleEditModel = () => {
     handleSelectToEdit(product_model_id);
     // handleClose();

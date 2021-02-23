@@ -5,7 +5,6 @@ import { withRouter } from "react-router-dom";
 import {
   Button,
   CircularProgress,
-  colors,
   makeStyles,
   MenuItem,
   Snackbar,
@@ -14,10 +13,9 @@ import {
 import MuiAlert from "@material-ui/lab/Alert";
 
 import api from "../../services/api";
-import { LoginContext } from "../../contexts/LoginContext";
+import SnackbarMessage from "../../components/SnackbarMessage";
 
 import "./Cadastro.css";
-import { Helmet } from "react-helmet";
 import MetaData from "../../meta/reactHelmet";
 
 function validateInput(type, value) {
@@ -102,7 +100,6 @@ function validateInput(type, value) {
 }
 
 function Cadastro({ history }) {
-  // const { token } = useContext(LoginContext);
   const classes = useStyles();
 
   const [errorName, setErrorName] = useState(false);
@@ -147,6 +144,11 @@ function Cadastro({ history }) {
   const [userInfo, setUserInfo] = useState({});
   const [addressInfo, setAddressInfo] = useState({});
 
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
+
+  const [open, setOpen] = useState(false);
+
   const nomeInput = useRef(null);
   const CPFInput = useRef(null);
   const emailInput = useRef(null);
@@ -162,20 +164,8 @@ function Cadastro({ history }) {
   const telefoneInput = useRef(null);
 
   const [loading, setLoading] = useState(false);
-  const [openSnackBar, setOpenSnackBar] = useState(false);
 
   let flag1 = false;
-
-  const handleCloseSnackBar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackBar(false);
-  };
-
-  // useEffect(() => {
-  //   console.log(userInfo);
-  // }, [userInfo]);
 
   useEffect(() => {
     flag1 = true;
@@ -483,8 +473,6 @@ function Cadastro({ history }) {
 
       setUserInfo({ ...userInfo, ...Address });
 
-      // console.log(userInfo.address);
-
       try {
         setLoading(true);
         const response = await api.post( "/user", 
@@ -511,13 +499,18 @@ function Cadastro({ history }) {
 
         setTimeout(() => {
           setLoading(false);
-          setOpenSnackBar(true);
-        }, 2000);
-
-        history.push("/login");
+          setMessageSnackbar("Usuário cadastrado com sucesso!");
+          setTypeSnackbar("success");
+          setOpen(true);
+        }, 1000);
+        setTimeout(() => {
+          history.push("/login");
+        }, 2500);
       } catch (err) {
-        console.log(err);
+        setMessageSnackbar("Falha no cadastro. Tente novamente");
+        setTypeSnackbar("error");
         setLoading(false);
+        console.log(err);
       }
     }
   };
@@ -551,6 +544,13 @@ function Cadastro({ history }) {
     "SE",
     "TO",
   ];
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
   const meta = {
     titlePage: "Uniformes Ecommerce | Cadastro",
@@ -892,7 +892,7 @@ function Cadastro({ history }) {
         onInput={(e) => {
           e.target.value = Math.max(0, parseInt(e.target.value))
             .toString()
-            .slice(0, 12);
+            .slice(0, 11);
         }}
         inputRef={telefoneInput}
         error={errorTelefone}
@@ -908,20 +908,7 @@ function Cadastro({ history }) {
         </Button>
       </div>
 
-      <Snackbar
-        open={openSnackBar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackBar}
-      >
-        <MuiAlert
-          onClose={handleCloseSnackBar}
-          elevation={6}
-          variant="filled"
-          severity="success"
-        >
-          Funcionário cadastrado com sucesso!
-        </MuiAlert>
-      </Snackbar>
+      <SnackbarMessage open={open} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

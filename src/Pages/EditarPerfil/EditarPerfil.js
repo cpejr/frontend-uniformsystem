@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Helmet } from "react-helmet";
 import MetaData from "../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
+import SnackbarMessage from "../../components/SnackbarMessage";
 
 import {
   Button,
@@ -113,7 +113,9 @@ function EditarPerfil({ history }) {
 
   const [userInfo, setUserInfo] = useState({ name: user[0].name });
   const [addressInfo, setAddressInfo] = useState();
-  const [addressId, setAddressId] = useState();
+
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
 
   const nomeInput = useRef(null);
   const ruaInput = useRef(null);
@@ -127,7 +129,7 @@ function EditarPerfil({ history }) {
   const telefoneInput = useRef(null);
 
   const [loading, setLoading] = useState(false);
-  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const meta = {
     titlePage: "Uniformes E-commerce | Editar Perfil",
@@ -139,25 +141,25 @@ function EditarPerfil({ history }) {
   };
 
   useEffect(() => {
+    async function getUserAddress() {
+      const response = await api.get("/address", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAddressInfo({ ...response.data.adresses[0] });
+      setUserInfo({ name: user[0].name });
+    }
     getUserAddress();
   }, []);
 
-  async function getUserAddress() {
-    const response = await api.get("/address/5", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    setAddressInfo({ ...response.data.adresses[0] });
-    setUserInfo({ name: user[0].name });
-  }
 
-  const handleCloseSnackBar = (event, reason) => {
+  const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    setOpenSnackBar(false);
+    setOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -350,13 +352,15 @@ function EditarPerfil({ history }) {
 
         setTimeout(() => {
           setLoading(false);
-          setOpenSnackBar(true);
-        }, 2000);
-        window.alert("Dados alterados com sucesso!");
-        history.push("/");
+          setMessageSnackbar("Alterações realizadas com sucesso!");
+          setTypeSnackbar("success");
+          setOpen(true);
+        }, 1000);
       } catch (err) {
-        console.log(err.message);
+        setMessageSnackbar("Falha ao atualizar os dados");
+        setTypeSnackbar("error");
         setLoading(false);
+        console.log(err.message);
       }
     }
   };
@@ -618,6 +622,11 @@ function EditarPerfil({ history }) {
       <TextField
         required
         label="Telefone"
+        onInput={(e) => {
+          e.target.value = Math.max(0, parseInt(e.target.value))
+            .toString()
+            .slice(0, 11);
+        }}
         inputRef={telefoneInput}
         error={errorTelefone}
         helperText={errorTelefoneMessage}
@@ -635,21 +644,7 @@ function EditarPerfil({ history }) {
           )}
         </Button>
       </div>
-
-      <Snackbar
-        open={openSnackBar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackBar}
-      >
-        <MuiAlert
-          onClose={handleCloseSnackBar}
-          elevation={6}
-          variant="filled"
-          severity="success"
-        >
-          Dados alterados com sucesso!
-        </MuiAlert>
-      </Snackbar>
+      <SnackbarMessage open={open} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

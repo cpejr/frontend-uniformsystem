@@ -22,7 +22,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { FaChevronLeft, FaEdit } from "react-icons/fa";
 
 import "./EditProduct.css";
-import validators from './Validators';
+import validators from "./Validators";
 
 function validateInputWithTypeText(valueFromInput) {
   let isValid;
@@ -81,18 +81,20 @@ function EditProduct({ history }) {
 
       if (response.data) {
         const { models, ...product } = response.data;
-        const productModelsAuxiliar = models.map(({ img_link, ...model }) => {
-          return {
-            imgLink:
-              img_link !== "Sem imagem"
-                ? `${bucketAWS}${img_link}`
-                : "Sem imagem",
-            ...model,
-          };
+        const ohCaray = models.map(() => {
+          return {};
         });
+        const temporariamente = models.map(() => {
+          return {};
+        });
+        console.log("🚀 ~ file: EditProduct.js ~ line 88 ~ getProductInfo ~ ohCaray", ohCaray)
+        console.log(
+          "🚀 ~ file: EditProduct.js ~ line 94 ~ productModelsAuxiliar ~ productModelsAuxiliar",
+          temporariamente
+        );
 
-        setProductModelsArray([...productModelsAuxiliar]);
-        setOldProductModelsArray([...productModelsAuxiliar]);
+        setProductModelsArray(temporariamente);
+        setOldProductModelsArray(ohCaray);
         setProductInfo({ ...product });
       } else {
         setProductModelsArray([]);
@@ -100,12 +102,19 @@ function EditProduct({ history }) {
         setProductInfo([]);
       }
     }
+
+    // ...model,
+    // imgLink:
+    //   img_link !== "Sem imagem"
+    //     ? `${bucketAWS}${img_link}`
+    //     : "Sem imagem",
+    // available: "batata",
     try {
       getProductInfo();
     } catch (error) {
       console.error(error);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreateModal = () => {
@@ -200,21 +209,15 @@ function EditProduct({ history }) {
             description: productInfo.description,
           },
         };
-        await api.put(
-          `/product/${productInfo.product_id}`,
-          updated_fields,
-          {
-            headers: { authorization: `bearer ${token}` },
-          }
-        );
+        await api.put(`/product/${productInfo.product_id}`, updated_fields, {
+          headers: { authorization: `bearer ${token}` },
+        });
 
         // Deleto todos os product models de início
         if (oldProductModelsArray.length > 0) {
-
           oldProductModelsArray.map(async (item) => {
-
             await api.delete(`/model/${item.product_model_id}`, {
-              headers: { authorization: `bearer ${token}` }
+              headers: { authorization: `bearer ${token}` },
             });
           });
         }
@@ -232,7 +235,10 @@ function EditProduct({ history }) {
             objImage.append("price", item.price); // substitui "," por ".", pois backend tem validação por "." em price
             objImage.append("model_description", item.modelDescription);
             objImage.append("gender", item.gender);
-            console.log("🚀 ~ file: EditProduct.js ~ line 249 ~ productModelsArray.map ~ objImage", objImage)
+            console.log(
+              "🚀 ~ file: EditProduct.js ~ line 249 ~ productModelsArray.map ~ objImage",
+              objImage
+            );
 
             await api.post(`/newmodel/${productInfo.product_id}`, objImage, {
               headers: { authorization: `bearer ${token}` },
@@ -253,8 +259,6 @@ function EditProduct({ history }) {
   // Re-renderiza a tela depois que productModelsArray foi atualizado
   useEffect(() => {}, [productModelsArray]);
 
-
-
   // -----------------------------------------------------
   //                   CODIGO DO LIMA
   // -----------------------------------------------------
@@ -262,35 +266,34 @@ function EditProduct({ history }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [dialogInfo, setDialogInfo] = useState();
 
-  function handleOpenDialog(fieldKey, fieldName, modelId){
-    if(modelId){
+  function handleOpenDialog(fieldKey, fieldName, modelId) {
+    if (modelId) {
       setDialogInfo({
         fieldKey,
         fieldName,
         validator: validators[fieldKey],
         callback: updateModelInfo,
         modelId,
-      })
-    }
-    else{
+      });
+    } else {
       setDialogInfo({
         fieldKey,
         fieldName,
         validator: validators[fieldKey],
         callback: updateProductInfo,
-      })
+      });
     }
-    console.log("oi")
+    console.log("oi");
     setOpenEditDialog(true);
   }
 
-  const handleClose = ()=>setOpenEditDialog(false);
+  const handleClose = () => setOpenEditDialog(false);
 
-  function updateProductInfo(fieldKey, value){
+  function updateProductInfo(fieldKey, value) {
     try {
-      const updated_fields = {}
+      const updated_fields = {};
       updated_fields[fieldKey] = value;
-      api.put(`/product/${product_id}`, {updated_fields});
+      api.put(`/product/${product_id}`, { updated_fields });
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -298,11 +301,11 @@ function EditProduct({ history }) {
     }
   }
 
-  function updateModelInfo(modelId, fieldKey, value){
+  function updateModelInfo(modelId, fieldKey, value) {
     try {
-      const updated_fields = {}
+      const updated_fields = {};
       updated_fields[fieldKey] = value;
-      api.put(`/model/${modelId}`, {updated_fields});
+      api.put(`/model/${modelId}`, { updated_fields });
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -316,16 +319,16 @@ function EditProduct({ history }) {
 
   return (
     <div className="editProductFullContent">
-      {
-        dialogInfo &&
+      {dialogInfo && (
         <ProductEditModal
-        fieldName={dialogInfo.fieldName}
-        fieldKey={dialogInfo.fieldKey}
-        validator={dialogInfo.validator}
-        callback={dialogInfo.callback}
-        open={openEditDialog}
-        handleClose={handleClose}
-      />}
+          fieldName={dialogInfo.fieldName}
+          fieldKey={dialogInfo.fieldKey}
+          validator={dialogInfo.validator}
+          callback={dialogInfo.callback}
+          open={openEditDialog}
+          handleClose={handleClose}
+        />
+      )}
       <FaChevronLeft
         className="iconToReturn"
         onClick={() => history.goBack()}
@@ -341,7 +344,11 @@ function EditProduct({ history }) {
           <div className="spanWithInput">
             <div>
               <span>NOME:</span>
-              <FaEdit onClick={()=>{handleOpenDialog("name", "nome")}}/>
+              <FaEdit
+                onClick={() => {
+                  handleOpenDialog("name", "Nome");
+                }}
+              />
             </div>
             {productInfo && (
               <TextField
@@ -355,7 +362,11 @@ function EditProduct({ history }) {
           <div className="spanWithInput">
             <div>
               <span>DESCRIÇÃO:</span>
-              <FaEdit/>
+              <FaEdit
+                onClick={() => {
+                  handleOpenDialog("description", "Descrição do Produto");
+                }}
+              />
             </div>
             {productInfo && (
               <TextField
@@ -384,9 +395,7 @@ function EditProduct({ history }) {
                     key={index}
                     handleSelectToEdit={handleOpenToEdit}
                     productModelArray={productModelsArray}
-                    setProductModelArray={setProductModelsArray}
                     fullProduct={item}
-                    whichMethodIs={'edit'}
                   />
                 ) : null
               )}
@@ -407,7 +416,7 @@ function EditProduct({ history }) {
         </form>
       </div>
 
-      <PopUpProductModel
+      {/* <PopUpProductModel
         open={openModal}
         handleClose={handleCloseModal}
         isEdit={isEditProduct}
@@ -415,7 +424,7 @@ function EditProduct({ history }) {
         setProductModelIDFromExistingInfo={setProductModelIdToEdit}
         setProductModelArray={setProductModelsArray}
         productModelArray={productModelsArray}
-      />
+      /> */}
 
       <Snackbar
         open={openSnackBar}

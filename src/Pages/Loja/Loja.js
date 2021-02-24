@@ -79,15 +79,8 @@ function Loja() {
         query.push(param);
       }
 
-      const response = await api.get(`/productmodels?${query.join("&")}`);
-
-      let result;; 
-      if(response.data){
-        result  = response.data.models
-      }else{
-        result = [];
-      }
-      return result;
+      const response = await api.get(`/product?${query.join("&")}`);
+      return response.data.products;
     } catch (error) {
       setLoading(false);
       console.warn(error);
@@ -236,8 +229,10 @@ function Loja() {
         pageLoading.current = true;
         page.current++;
         getProducts().then((newProducts) => {
-          setProducts([...products, ...newProducts]);
-          pageLoading.current = false;
+          if (newProducts) {
+            setProducts([...products, ...newProducts]);
+            pageLoading.current = false;
+          }
         });
       }
     }
@@ -265,8 +260,7 @@ function Loja() {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      {
-        products.length !== 0 && !loading ? (
+      {products.length !== 0 && !loading ? (
         <>
           <div className="search">
             <input

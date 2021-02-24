@@ -12,13 +12,13 @@ function ProductCard({ product }) {
           <img
             className="imageProduct"
             alt="Imagem do produto"
-            src={`${bucketAWS}${product.img_link}`}
+            src={`${bucketAWS}${product.model.img_link}`}
           ></img>
         </div>
         <div className="productName">{product.name}</div>
         <div className="productDescription">{product.description}</div>
         <div className="productPrice">
-          {product.price.toLocaleString("pt-BR", {
+          {product.model.price.toLocaleString("pt-BR", {
             style: "currency",
             currency: "BRL",
           })}

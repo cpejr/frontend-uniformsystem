@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { withRouter } from "react-router-dom";
 
@@ -453,7 +453,6 @@ function Cadastro({ history }) {
       const str1 = addressInfo.street;
       const str2 = addressInfo.number;
 
-      
       const fullStreet = `${str1}, ${str2}`;
       // const street = str1 + " " + str2;
 
@@ -475,8 +474,7 @@ function Cadastro({ history }) {
 
       try {
         setLoading(true);
-        const response = await api.post( "/user", 
-        {
+        const response = await api.post("/user", {
           name: userInfo.name,
           user_type: userInfo.user_type,
           email: userInfo.email,
@@ -484,16 +482,15 @@ function Cadastro({ history }) {
           cpf: userInfo.cpf,
           password: userInfo.password,
           address: {
-                      street: fullStreet,
-                      neighborhood: userInfo.address.neighborhood,
-                      city: userInfo.address.city,
-                      state: userInfo.address.state,
-                      zip_code: userInfo.address.zip_code,
-                      country: userInfo.address.country,
-                      complement: userInfo.address.complement,
-                     }
-        }
-        );
+            street: fullStreet,
+            neighborhood: userInfo.address.neighborhood,
+            city: userInfo.address.city,
+            state: userInfo.address.state,
+            zip_code: userInfo.address.zip_code,
+            country: userInfo.address.country,
+            complement: userInfo.address.complement,
+          },
+        });
 
         console.log(response);
 
@@ -908,7 +905,12 @@ function Cadastro({ history }) {
         </Button>
       </div>
 
-      <SnackbarMessage open={open} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
+      <SnackbarMessage
+        open={open}
+        handleClose={handleClose}
+        message={messageSnackbar}
+        type={typeSnackbar}
+      />
     </div>
   );
 }

@@ -160,10 +160,20 @@ function Checkout() {
   async function handlePostOrder() {
     setLoadingPurchase(true);
 
+    const productsWithRightAttributes = products.map((item) => {
+      delete item.name;
+      delete item.img_link;
+      delete item.product_in_cart_id;
+      delete item.user_id;
+      return item;
+    });
+
+    console.log("prodto", productsWithRightAttributes);
+
     try {
       const address_id = address.address_id;
       await api.post(
-        `/order`,
+        "/order",
         {
           address_id: address_id,
           service_code: serviceCode,

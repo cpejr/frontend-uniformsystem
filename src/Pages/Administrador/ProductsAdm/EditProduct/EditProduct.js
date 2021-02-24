@@ -90,11 +90,6 @@ function EditProduct({ history }) {
             ...model
           };
         });
-        console.log(
-          "🚀 ~ file: EditProduct.js ~ line 88 ~ getProductInfo ~ ohCaray",
-          productModelsAuxiliar
-        );
-
         setProductModelsArray(productModelsAuxiliar);
         setOldProductModelsArray(productModelsAuxiliar);
         setProductInfo({ ...product });
@@ -262,6 +257,7 @@ function EditProduct({ history }) {
   const [dialogInfo, setDialogInfo] = useState();
 
   function handleOpenDialog(fieldKey, fieldName, modelId) {
+    console.log("🚀 ~ file: EditProduct.js ~ line 260 ~ handleOpenDialog ~ fieldKey", fieldKey)
     if (modelId) {
       setDialogInfo({
         fieldKey,
@@ -278,17 +274,16 @@ function EditProduct({ history }) {
         callback: updateProductInfo,
       });
     }
-    console.log("oi");
     setOpenEditDialog(true);
   }
 
   const handleClose = () => setOpenEditDialog(false);
 
-  function updateProductInfo(fieldKey, value) {
+  async function updateProductInfo(fieldKey, value) {
     try {
-      const updated_fields = {};
+      let updated_fields = {};
       updated_fields[fieldKey] = value;
-      api.put(`/product/${product_id}`, { updated_fields });
+      await api.put(`/product/${product_id}`, { updated_fields });
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -296,11 +291,14 @@ function EditProduct({ history }) {
     }
   }
 
-  function updateModelInfo(modelId, fieldKey, value) {
+  async function updateModelInfo(modelId, fieldKey, value) {
     try {
-      const updated_fields = {};
+      if (fieldKey==="price"){
+        value = value.replace(",", ".")
+      }
+      let updated_fields = {};
       updated_fields[fieldKey] = value;
-      api.put(`/model/${modelId}`, { updated_fields });
+      await api.put(`/model/${modelId}`, updated_fields);
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -320,6 +318,7 @@ function EditProduct({ history }) {
           fieldKey={dialogInfo.fieldKey}
           validator={dialogInfo.validator}
           callback={dialogInfo.callback}
+          modelId={dialogInfo.modelId}
           open={openEditDialog}
           handleClose={handleClose}
         />
@@ -388,8 +387,7 @@ function EditProduct({ history }) {
                 item ? (
                   <ProductModelCardAdm
                     key={index}
-                    handleSelectToEdit={handleOpenToEdit}
-                    productModelArray={productModelsArray}
+                    handleOpenDialog={handleOpenDialog}
                     fullProduct={{ ...item }}
                   />
                 ) : null

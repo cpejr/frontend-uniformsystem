@@ -8,14 +8,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { useState } from 'react';
 import { Button } from '@material-ui/core';
 
-export default function ProductEditModal({fieldName, fieldkey, validator, callback, modelId, open, handleClose}) {
+export default function ProductEditModal({fieldName, fieldKey, validator, callback, modelId, open, handleClose}) {
   const [value, setValue] = useState();
   const [error, setError] = useState();
-  
   function handleSend(){
     const validation = validator(value);
     if(validation==="ok"){
-      modelId ? callback(modelId, fieldkey, value) : callback(fieldkey, value);
+      modelId ? callback(modelId, fieldKey, value) : callback(fieldKey, value);
     }
     else{
       setError(validation);

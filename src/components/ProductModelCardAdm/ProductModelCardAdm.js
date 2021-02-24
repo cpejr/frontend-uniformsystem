@@ -7,9 +7,8 @@ import Switch from "react-switch";
 import api from "../../services/api";
 
 function ProductModelCardAdm({
-  handleSelectToEdit,
+  handleOpenDialog,
   fullProduct,
-  whichMethodIs
 }) {
   const [isAvailable, setIsAvailable] = useState(fullProduct.available);
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
@@ -23,10 +22,6 @@ function ProductModelCardAdm({
     product_model_id,
   } = fullProduct;
 
-  const handleEditModel = () => {
-    handleSelectToEdit(product_model_id);
-    // handleClose();
-  };
 
   const handleSwitchChange = async (type) => {
 
@@ -52,17 +47,17 @@ function ProductModelCardAdm({
       ) : (
         "Sem imagem"
       )}
-      <div className="iconWithText" onClick={() => handleEditModel()}>
+      <div className="iconWithText" onClick={() => handleOpenDialog("model_description", "Nome do Modelo", product_model_id)}>
         <FaEdit className="iconProductModelCard" />
         <p>Nome do modelo: {model_description}</p>
       </div>
 
-      <div className="iconWithText" onClick={() => handleEditModel()}>
+      <div className="iconWithText" onClick={() => handleOpenDialog("price", "Preço", product_model_id)}>
         <FaEdit className="iconProductModelCard" />
         <p>Preço: {`R$ ${Number(price).toFixed(2).replace(".", ",")}`}</p>
       </div>
 
-      <div className="iconWithText" onClick={() => handleEditModel()}>
+      <div className="iconWithText" onClick={() => handleOpenDialog("gender", "Gênero do modelo", product_model_id)}>
         <FaEdit className="iconProductModelCard" />
         <p>Gênero: {gender === "M" ? "Masculino" : "Feminino"}</p>
       </div>

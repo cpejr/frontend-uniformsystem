@@ -18,7 +18,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
 } from "@material-ui/core";
 
 function OrdersAdm() {
@@ -38,7 +37,7 @@ function OrdersAdm() {
   };
 
   const obterPedidos = useCallback(async () => {
-    if(onlyPending === true){
+    if (onlyPending === true) {
       let query = [];
       let param = "status=pending";
       query.push(param);
@@ -51,13 +50,19 @@ function OrdersAdm() {
         console.warn(error);
         alert(error);
       }
-    }else{
-      const resultado = await api.get('order', {
+    } else {
+      const resultado = await api.get("order", {
         headers: { authorization: `bearer ${token}` },
       });
       setOrders(resultado.data);
     }
+    Orders.reverse();
   }, [onlyPending]);
+
+  function Invert() {
+    console.log("Orders", Orders);
+    return true;
+  }
 
   useEffect(() => {
     obterPedidos();
@@ -83,7 +88,11 @@ function OrdersAdm() {
           <div className="div_pendente">
             <div className="text_pendente">Pendente</div>
             <div className="evento_pendente" onClick={obterPedidos}>
-              <Toggle className="toggle_order" Status={setOnlyPending} isChecked={onlyPending} />
+              <Toggle
+                className="toggle_order"
+                Status={setOnlyPending}
+                isChecked={onlyPending}
+              />
             </div>
           </div>
         </div>
@@ -102,44 +111,59 @@ function OrdersAdm() {
                   <TableCell align="center" className="header-table">
                     ESPECIFICAÇÕES
                   </TableCell>
+                  <TableCell align="center" className="header-table">
+                    DATA
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Orders.length > 0 && Orders.map((pedido) => {
-                  const id = pedido.order_id;
-                  const createdAt = pedido.created_at;
-                  const updatedAt = pedido.updated_at;
-                  const Status = pedido.status;
-                  // const deliver = pedido.delivered_by;
-                  const colum = (
-                    <TableRow>
-                      <TableCell component="td" scope="row">
-                        {pedido.order_id}
-                      </TableCell>
-                      <TableCell component="td" scope="row">
-                        {<OrderTable status={pedido.status} />}
-                      </TableCell>
-                      <TableCell component="td" scope="row">
-                        <Link
-                          to={{
-                            pathname: "/adm/pedidoespecifico",
-                            state: {
-                              createdAt: createdAt,
-                              updatedAt: updatedAt,
-                              orderId: id,
-                              status: Status,
-                              // deliver: deliver,
-                            },
-                          }}
-                          style={{ color: "black", marginLeft:'8px' }}
-                        >
-                          Detalhes...
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  );
-                  return colum;
-                })}
+                {Invert() &&
+                  Orders.length > 0 &&
+                  Orders.slice(0)
+                    .reverse()
+                    .map((pedido) => {
+                      const id = pedido.order_id;
+                      const createdAt = pedido.created_at;
+                      const updatedAt = pedido.updated_at;
+                      const Status = pedido.status;
+                      var formatDate = new Date(pedido.created_at);
+                      // const deliver = pedido.delivered_by;
+                      const colum = (
+                        <TableRow>
+                          <TableCell component="td" scope="row">
+                            {pedido.order_id}
+                          </TableCell>
+                          <TableCell component="td" scope="row">
+                            {<OrderTable status={pedido.status} />}
+                          </TableCell>
+                          <TableCell align="center" component="td" scope="row">
+                            <Link
+                              to={{
+                                pathname: "/adm/pedidoespecifico",
+                                state: {
+                                  createdAt: createdAt,
+                                  updatedAt: updatedAt,
+                                  orderId: id,
+                                  status: Status,
+                                  // deliver: deliver,
+                                },
+                              }}
+                              style={{ color: "black", marginLeft: "8px" }}
+                            >
+                              Detalhes...
+                            </Link>
+                          </TableCell>
+                          <TableCell align="center" component="td" scope="row">
+                            {formatDate.toLocaleString(
+                              "pt-BR",
+                              pedido.created_at
+                            )}
+                            {console.log("DATA", pedido.created_at)}
+                          </TableCell>
+                        </TableRow>
+                      );
+                      return colum;
+                    })}
               </TableBody>
             </Table>
           </TableContainer>

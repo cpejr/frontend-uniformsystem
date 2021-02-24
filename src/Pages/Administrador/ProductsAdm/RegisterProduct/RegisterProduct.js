@@ -81,7 +81,6 @@ function RegisterProduct({ history }) {
   const [productModelsArray, setProductModelsArray] = useState([]);
 
   // Estados voltados para gerenciar erros no campo Type
-  const [errorTypeProduct, setErrorTypeProduct] = useState(false);
   const [errorTypeProductMessage, setErrorTypeProductMessage] = useState("");
 
   // Estados voltados para gerenciar erros no campo Name
@@ -174,7 +173,6 @@ function RegisterProduct({ history }) {
       resultValidateDescription
     ) {
       // tipo ok, nome errado, descrição ok
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
 
       setErrorNameProduct(true);
@@ -188,7 +186,6 @@ function RegisterProduct({ history }) {
       !resultValidateDescription
     ) {
       // tipo ok, nome ok, descrição errado
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
 
       setErrorNameProduct(false);
@@ -202,7 +199,6 @@ function RegisterProduct({ history }) {
       resultValidateDescription
     ) {
       // tipo errado, nome ok, descrição errado
-      setErrorTypeProduct(true);
       setErrorTypeProductMessage("Escolha um tipo.");
 
       setErrorNameProduct(false);
@@ -216,7 +212,6 @@ function RegisterProduct({ history }) {
       resultValidateDescription
     ) {
       // tipo errado, nome errado, descrição ok
-      setErrorTypeProduct(true);
       setErrorTypeProductMessage("Escolha um tipo.");
 
       setErrorNameProduct(true);
@@ -230,7 +225,6 @@ function RegisterProduct({ history }) {
       !resultValidateDescription
     ) {
       // tipo errado, nome ok, descrição errado
-      setErrorTypeProduct(true);
       setErrorTypeProductMessage("Escolha um tipo.");
 
       setErrorNameProduct(false);
@@ -244,7 +238,6 @@ function RegisterProduct({ history }) {
       !resultValidateDescription
     ) {
       // tipo ok, nome errado, descrição errado
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
 
       setErrorNameProduct(true);
@@ -258,7 +251,6 @@ function RegisterProduct({ history }) {
       !resultValidateDescription
     ) {
       // tipo errado, nome errado, descrição errado
-      setErrorTypeProduct(true);
       setErrorTypeProductMessage("Escolha um tipo.");
 
       setErrorNameProduct(true);
@@ -269,7 +261,6 @@ function RegisterProduct({ history }) {
     } else {
       // tipo ok, nome ok, descrição ok
 
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
 
       setErrorNameProduct(false);
@@ -462,7 +453,7 @@ function RegisterProduct({ history }) {
                     productModelID={index}
                     handleSelectToEdit={handleOpenToEdit}
                     fullProduct={item}
-                    whichMethodIs={'register'}
+                    whichMethodIs={"register"}
                   />
                 ) : null
               )}

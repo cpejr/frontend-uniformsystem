@@ -12,6 +12,8 @@ import SnackbarMessage from "../../components/SnackbarMessage";
 import "./Produto.css";
 import "./Radio.css";
 
+import ProductSkeleton from "../../components/Skeletons/ProductSkeleton";
+
 function validateFields(value, type) {
   let isValid;
   switch (type) {
@@ -91,7 +93,6 @@ function Produto() {
     const response = await getProductModelsFromProduct(product_id);
 
     setProduto(response);
-    const arrayOfModels = response.models;
 
     // Armazena o modela
     setModels(arrayOfModels);
@@ -206,8 +207,9 @@ function Produto() {
 
       try {
         const response = await api.put("/addtocart", objProdcutInCart, {
-          headers: { authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
+        console.log("resposta", response.data);
 
         // Espera X milissegundos para ativar a função interna
         setTimeout(() => {
@@ -278,158 +280,171 @@ function Produto() {
 
   return (
     <div className="productPage">
-      <MetaData
-        titlePage={meta.titlePage}
-        titleSearch={meta.titleSearch}
-        description={meta.description}
-        keyWords={meta.keyWords}
-        imageUrl={meta.imageUrl}
-        imageAlt={meta.imageAlt}
-      />
-      <div className="leftSide">
-        <img
-          src={`${process.env.REACT_APP_BUCKET_AWS}${modelChoosen.img_link}`}
-          alt={`${modelChoosen.model_description}`}
-        />
-      </div>
+      {models.length !== 0 ? (
+        <>
+          <MetaData
+            titlePage={meta.titlePage}
+            titleSearch={meta.titleSearch}
+            description={meta.description}
+            keyWords={meta.keyWords}
+            imageUrl={meta.imageUrl}
+            imageAlt={meta.imageAlt}
+          />
+          <div className="leftSide">
+            <img
+              src={`${process.env.REACT_APP_BUCKET_AWS}${modelChoosen.img_link}`}
+              alt={`${modelChoosen.model_description}`}
+            />
+          </div>
 
-      <div className="rightSide">
-        <h1 className="productsName">{Produto.name}</h1>
-        <div className="titleArea">
-          <strong>Descrição do produto:</strong>
-          <span>{Produto.description}</span>
-        </div>
-        <div className="productsInfo">
-          <div className="leftSideInside">
-            <div className="priceWIthPhotos">
-              <strong>
-                {modelChoosen ? `R$ ${modelChoosen.price?.toFixed(2)}` : "none"}
-              </strong>
-              <div className="productsPhotos">
-                {models.length > 0 ? (
-                  models.map((item) => {
-                    return (
+          <div className="rightSide">
+            <h1 className="productsName">{Produto.name}</h1>
+            <div className="titleArea">
+              <strong>Descrição do produto:</strong>
+              <span>{Produto.description}</span>
+            </div>
+            <div className="productsInfo">
+              <div className="leftSideInside">
+                <div className="priceWIthPhotos">
+                  <strong>
+                    {modelChoosen
+                      ? `R$ ${modelChoosen.price?.toFixed(2)}`
+                      : "none"}
+                  </strong>
+                  <div className="productsPhotos">
+                    {models.length > 0 ? (
+                      models.map((item) => {
+                        return (
+                          <img
+                            src={`${process.env.REACT_APP_BUCKET_AWS}${item.img_link}`}
+                            alt={item.model_description}
+                            className={
+                              isSelect === item.product_model_id
+                                ? "productSelect"
+                                : null
+                            }
+                            onClick={() =>
+                              handleSelectModel(item.product_model_id)
+                            }
+                          />
+                        );
+                      })
+                    ) : (
+                      <span>Sem modelo</span>
+                    )}
+                  </div>
+                  <div className="logoSpaceDiv">
+                    {logoImage && (
                       <img
-                        src={`${process.env.REACT_APP_BUCKET_AWS}${item.img_link}`}
-                        alt={item.model_description}
-                        className={
-                          isSelect === item.product_model_id
-                            ? "productSelect"
-                            : null
-                        }
-                        onClick={() => handleSelectModel(item.product_model_id)}
+                        className="logoImgClass"
+                        src={logoImage.file}
+                        alt={logoImage.imgAlt}
                       />
-                    );
-                  })
-                ) : (
-                  <span>Sem modelo</span>
-                )}
+                    )}
+                  </div>
+                </div>
+
+                <div className="shipSpace">
+                  <span>
+                    Calcule o CEP:{" "}
+                    {calculatedShipping && `R$ ${calculatedShipping}`}
+                  </span>
+                  <div className="calculateCEPArea">
+                    <TextField
+                      variant="outlined"
+                      type="text"
+                      inputProps={{ maxLength: 8 }}
+                      inputRef={inputCEP}
+                      error={errorCEP}
+                      helperText={errorCEPMessage}
+                    />
+                    <Button
+                      className="calculateCEPButton"
+                      onClick={CalculateCEP}
+                    >
+                      Calcular
+                    </Button>
+                  </div>
+
+                  <a
+                    href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
+                    target="_blank"
+                  >
+                    <span className="forgotPassword">Não sei meu CEP</span>
+                  </a>
+                </div>
               </div>
-              <div className="logoSpaceDiv">
-                {logoImage && (
-                  <img
-                    className="logoImgClass"
-                    src={logoImage.file}
-                    alt={logoImage.imgAlt}
+              <div className="sizeAndQuantity">
+                <strong>Tamanho</strong>
+                <div className="divCheckboxes">
+                  <div className="genderCheckboxes">
+                    <h6>Feminino</h6>
+                    {Radio("Fem")}
+                  </div>
+                  <div className="genderCheckboxes">
+                    <h6>Masculino</h6>
+                    {Radio("Mas")}
+                  </div>
+                </div>
+
+                <div className="quantity">
+                  <strong>Quantidade</strong>
+                  <TextField
+                    variant="outlined"
+                    type="text"
+                    inputProps={{ maxLength: 5 }}
+                    inputRef={inputQuantity}
+                    error={errorQuantity}
+                    helperText={errorQuantityMessage}
                   />
+                </div>
+
+                <div className="loadLogo">
+                  <div className="titleUploadLogo">
+                    <strong>Logo da sua empresa</strong>
+                    <span>
+                      Envie a logo da sua empresa abaixo e veja como fica:
+                    </span>
+                  </div>
+
+                  <Button onClick={() => AddLogo()}>
+                    <input
+                      type="file"
+                      hidden
+                      ref={inputLogo}
+                      onChange={(e) => handleAddLogoImage()}
+                    />
+                    Carregue a sua logo!
+                  </Button>
+                </div>
+                <Button className="addToCart" onClick={() => AddToCart()}>
+                  <FaShoppingCart className="icon" size="35px" />
+                  ADICIONAR AO CARRINHO
+                </Button>
+
+                {errorSize && (
+                  <span style={{ color: "#dc3545", fontSize: "0.9rem" }}>
+                    Escolha um tamanho
+                  </span>
+                )}
+                {errorToken && (
+                  <span style={{ color: "#dc3545", fontSize: "0.9rem" }}>
+                    Necessário logar!
+                  </span>
                 )}
               </div>
             </div>
-
-            <div className="shipSpace">
-              <span>
-                Calcule o CEP:{" "}
-                {calculatedShipping && `R$ ${calculatedShipping}`}
-              </span>
-              <div className="calculateCEPArea">
-                <TextField
-                  variant="outlined"
-                  type="text"
-                  inputProps={{ maxLength: 8 }}
-                  inputRef={inputCEP}
-                  error={errorCEP}
-                  helperText={errorCEPMessage}
-                />
-                <Button className="calculateCEPButton" onClick={CalculateCEP}>
-                  Calcular
-                </Button>
-              </div>
-
-              <a
-                href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
-                target="_blank"
-              >
-                <span className="forgotPassword">Não sei meu CEP</span>
-              </a>
-            </div>
           </div>
-          <div className="sizeAndQuantity">
-            <strong>Tamanho</strong>
-            <div className="divCheckboxes">
-              <div className="genderCheckboxes">
-                <h6>Feminino</h6>
-                {Radio("Fem")}
-              </div>
-              <div className="genderCheckboxes">
-                <h6>Masculino</h6>
-                {Radio("Mas")}
-              </div>
-            </div>
-
-            <div className="quantity">
-              <strong>Quantidade</strong>
-              <TextField
-                variant="outlined"
-                type="text"
-                inputProps={{ maxLength: 5 }}
-                inputRef={inputQuantity}
-                error={errorQuantity}
-                helperText={errorQuantityMessage}
-              />
-            </div>
-
-            <div className="loadLogo">
-              <div className="titleUploadLogo">
-                <strong>Logo da sua empresa</strong>
-                <span>
-                  Envie a logo da sua empresa abaixo e veja como fica:
-                </span>
-              </div>
-
-              <Button onClick={() => AddLogo()}>
-                <input
-                  type="file"
-                  hidden
-                  ref={inputLogo}
-                  onChange={(e) => handleAddLogoImage()}
-                />
-                Carregue a sua logo!
-              </Button>
-            </div>
-            <Button className="addToCart" onClick={() => AddToCart()}>
-              <FaShoppingCart className="icon" size="35px" />
-              ADICIONAR AO CARRINHO
-            </Button>
-
-            {errorSize && (
-              <span style={{ color: "#dc3545", fontSize: "0.9rem" }}>
-                Escolha um tamanho
-              </span>
-            )}
-            {errorToken && (
-              <span style={{ color: "#dc3545", fontSize: "0.9rem" }}>
-                Necessário logar!
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-      <SnackbarMessage
-        open={openSnackbar}
-        handleClose={handleClose}
-        message={messageSnackbar}
-        type={typeSnackbar}
-      />
+          <SnackbarMessage
+            open={openSnackbar}
+            handleClose={handleClose}
+            message={messageSnackbar}
+            type={typeSnackbar}
+          />
+        </>
+      ) : (
+        <ProductSkeleton screenWidth={window.innerWidth} />
+      )}
     </div>
   );
 }

@@ -80,7 +80,14 @@ function Loja() {
       }
 
       const response = await api.get(`/productmodels?${query.join("&")}`);
-      return response.data.models;
+
+      let result;; 
+      if(response.data){
+        result  = response.data.models
+      }else{
+        result = [];
+      }
+      return result;
     } catch (error) {
       setLoading(false);
       console.warn(error);
@@ -250,16 +257,17 @@ function Loja() {
 
   return (
     <div className="shop">
-      {products.length !== 0 && !loading ? (
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
+      {
+        products.length !== 0 && !loading ? (
         <>
-          <MetaData
-            titlePage={meta.titlePage}
-            titleSearch={meta.titleSearch}
-            description={meta.description}
-            keyWords={meta.keyWords}
-            imageUrl={meta.imageUrl}
-            imageAlt={meta.imageAlt}
-          />
           <div className="search">
             <input
               id="search"

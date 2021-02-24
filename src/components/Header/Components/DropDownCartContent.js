@@ -50,9 +50,9 @@ export default function DropDownCartContent(props) {
       <div className="all_window">
         <div className="blueLine"></div>
 
+
         { !loading ? (
           <>
-
             <div className="products">
               {
                 productsInCart.length === 0 || productsInCart.length === undefined ?
@@ -112,7 +112,7 @@ export default function DropDownCartContent(props) {
               </h5>
             </div>
         </>
-        ) : <CartHeaderSkeleton/>}
+        ) : <CartHeaderSkeleton />}
         <button
           className="stylized_button"
           onClick={() => {
@@ -121,7 +121,7 @@ export default function DropDownCartContent(props) {
           }}
         >
           Ir para o carrinho
-          <FaShoppingCart className="cart_icon" style={{}} />
+          <FaShoppingCart className="cart_icon" />
         </button>
       </div>
     </ClickAwayListener>

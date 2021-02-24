@@ -104,7 +104,7 @@ export default function DropDownCartContent(props) {
             SUBTOTAL{" "}
           </h5>
           <h5 className="price" style={{ color: "black" }}>
-            R$ {Subtotal},00
+            R$ {Subtotal.toFixed(2).replace('.', ',')}
           </h5>
         </div>
         <button

@@ -321,10 +321,10 @@ function Checkout() {
                         Gênero:{" "}
                         {product.gender === "F" ? "Feminino" : "Masculino"}
                       </span>
-                      <span>Preço único: R$ {product.price}</span>
+                      <span>Preço único: R$ {product.price.toFixed(2).replace('.', ',')}</span>
                       <span>
                         Total: R${" "}
-                        {(100 * (product.amount * product.price)) / 100}
+                        {((100 * (product.amount * product.price)) / 100).toFixed(2).replace('.', ',')}
                       </span>
                     </div>
                   </div>

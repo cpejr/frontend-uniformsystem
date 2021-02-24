@@ -3,7 +3,7 @@
     width: 100%;
     padding: 30px;
   };
-  
+
   .registerEmployeeFullContent .titleCad2 {
     display: flex;
     justify-content: flex-start;
@@ -50,6 +50,10 @@
     width: 100%;
 
     align-items: center;
+  }
+
+  .address01 + .address01 {
+    margin-top: 16px;
   }
 
   .MuiTextField-root {

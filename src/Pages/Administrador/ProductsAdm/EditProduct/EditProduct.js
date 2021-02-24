@@ -81,13 +81,13 @@ function EditProduct({ history }) {
 
       if (response.data) {
         const { models, ...product } = response.data;
-        const productModelsAuxiliar = models.map(({img_link, ...model}) => {
+        const productModelsAuxiliar = models.map(({ img_link, ...model }) => {
           return {
             imgLink:
               img_link !== "Sem imagem"
                 ? `${bucketAWS}${img_link}`
                 : "Sem imagem",
-            ...model
+            ...model,
           };
         });
         setProductModelsArray(productModelsAuxiliar);
@@ -257,7 +257,10 @@ function EditProduct({ history }) {
   const [dialogInfo, setDialogInfo] = useState();
 
   function handleOpenDialog(fieldKey, fieldName, modelId) {
-    console.log("🚀 ~ file: EditProduct.js ~ line 260 ~ handleOpenDialog ~ fieldKey", fieldKey)
+    console.log(
+      "🚀 ~ file: EditProduct.js ~ line 260 ~ handleOpenDialog ~ fieldKey",
+      fieldKey
+    );
     if (modelId) {
       setDialogInfo({
         fieldKey,
@@ -284,6 +287,8 @@ function EditProduct({ history }) {
       let updated_fields = {};
       updated_fields[fieldKey] = value;
       await api.put(`/product/${product_id}`, { updated_fields });
+      productInfo[fieldKey] = value;
+      setProductInfo({...productInfo});
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -293,12 +298,15 @@ function EditProduct({ history }) {
 
   async function updateModelInfo(modelId, fieldKey, value) {
     try {
-      if (fieldKey==="price"){
-        value = value.replace(",", ".")
+      if (fieldKey === "price") {
+        value = value.replace(",", ".");
       }
       let updated_fields = {};
       updated_fields[fieldKey] = value;
       await api.put(`/model/${modelId}`, updated_fields);
+      const index = (productModelsArray.map((model)=>model.product_model_id)).indexOf(modelId);
+      productModelsArray[index][fieldKey] = value;
+      setProductModelsArray([...productModelsArray]);
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -346,7 +354,7 @@ function EditProduct({ history }) {
             </div>
             {productInfo && (
               <TextField
-                defaultValue={productInfo.name}
+                value={productInfo.name}
                 className={classes.inputText}
                 variant="outlined"
                 disabled={true}
@@ -364,7 +372,7 @@ function EditProduct({ history }) {
             </div>
             {productInfo && (
               <TextField
-                defaultValue={productInfo.description}
+                value={productInfo.description}
                 className={classes.inputText}
                 disabled={true}
                 variant="outlined"

@@ -2,10 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Loja.css";
 import api from "../../services/api";
 import ProductCard from "../../components/ProductCard";
+import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import MetaData from "../../meta/reactHelmet";
-import { FaFilter, FaSearch } from "react-icons/fa";
+import { FaFilter, FaSearch, FaTruckLoading } from "react-icons/fa";
 import _ from "lodash";
-
+import ShopSkeleton from "../../components/Skeletons/ShopSkeleton";
+import MobileShopSkeleton from "../../components/Skeletons/MobileShopSkeleton";
 const FILTER_OPTIONS = [
   "FEMININO",
   "MASCULINO",
@@ -25,6 +28,7 @@ const PRICE_OPTIONS = [
 
 function Loja() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState({ product_type: [], gender: [] });
   const page = useRef(1);
   const pageLoading = useRef(false);
@@ -40,10 +44,14 @@ function Loja() {
   };
 
   const inputSearch = useRef(null);
+  const history = useHistory();
+
   async function getProducts() {
     //fazendo a requisição pro back
+    setLoading(true);
+
     try {
-      let query = ["available=true"];
+      let query = [];
       if (filter.product_type.length > 0) {
         let products_type = filter.product_type.join(",");
         let param = "product_type=" + products_type;
@@ -74,9 +82,10 @@ function Loja() {
       const response = await api.get(`/product?${query.join("&")}`);
       return response.data.products;
     } catch (error) {
+      setLoading(false);
       console.warn(error);
       alert("Erro no servidor.");
-      // history.push('Error');
+      history.push("Error");
     }
   }
 
@@ -84,6 +93,9 @@ function Loja() {
     page.current = 1;
     getProducts().then((newProducts) => {
       setProducts(newProducts);
+      setTimeout(() => {
+        setLoading(false);
+      }, [500]);
     });
   }, [filter]);
 
@@ -232,6 +244,12 @@ function Loja() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products]);
 
+  function selectSkeleton() {
+    if (window.innerWidth < 500) {
+      return <MobileShopSkeleton />;
+    } else return <ShopSkeleton />;
+  }
+
   return (
     <div className="shop">
       <MetaData
@@ -242,71 +260,72 @@ function Loja() {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      <div className="search">
-        <input
-          id="search"
-          type="text"
-          ref={inputSearch}
-          placeholder="O que você precisa?"
-        />
+      {products.length !== 0 && !loading ? (
+        <>
+          <div className="search">
+            <input
+              id="search"
+              type="text"
+              ref={inputSearch}
+              placeholder="O que você precisa?"
+            />
 
-        <FaSearch onClick={findProduct} className="searchButton" />
-      </div>
-
-      <div className="shopContainer">
-        <div className="filterContainer">
-          <div className="filterTitleProducts">
-            <FaFilter /> FILTRAR
+            <FaSearch onClick={findProduct} className="searchButton" />
           </div>
-          <div className="filterContent">
-            {FILTER_OPTIONS.map((option, index) => {
-              return (
-                <div className="filtersProducts">
-                  <input
-                    type="checkbox"
-                    id={`filter-${index}`}
-                    name={option}
-                    onChange={handleInputChange}
-                    className="checkbox"
-                  />
-                  <label for={`filter-${index}`}>{option}</label>
+          <div className="shopContainer">
+            <div className="filterContainer">
+              <div className="filterTitleProducts">
+                <FaFilter /> FILTRAR
+              </div>
+              <div className="filterContent">
+                {FILTER_OPTIONS.map((option, index) => {
+                  return (
+                    <div className="filtersProducts">
+                      <input
+                        type="checkbox"
+                        id={`filter-${index}`}
+                        name={option}
+                        onChange={handleInputChange}
+                        className="checkbox"
+                      />
+                      <label for={`filter-${index}`}>{option}</label>
+                    </div>
+                  );
+                })}
+
+                <div className="priceContainer">
+                  <br />
+                  <p>PREÇO</p>
+
+                  {PRICE_OPTIONS.map((price, index) => {
+                    return (
+                      <div className="filterPrice">
+                        <input
+                          type="radio"
+                          id={`price-${index}`}
+                          name="price"
+                          onChange={handlePriceChange}
+                          value={price}
+                          className="radio"
+                        />
+                        <label for={`price-${index}`}>{price}</label>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
+              </div>
+            </div>
 
-            <div className="priceContainer">
-              <br />
-              <p>PREÇO</p>
-
-              {PRICE_OPTIONS.map((price, index) => {
-                return (
-                  <div className="filterPrice">
-                    <input
-                      type="radio"
-                      id={`price-${index}`}
-                      name="price"
-                      onChange={handlePriceChange}
-                      value={price}
-                      className="radio"
-                    />
-                    <label for={`price-${index}`}>{price}</label>
-                  </div>
-                );
-              })}
+            <div className="productContainer">
+              {products.map((product) => (
+                <ProductCard key={product.product_model_id} product={product} />
+              ))}
             </div>
           </div>
-        </div>
-
-        <div className="productContainer">
-          {products ? (
-            products.map((product) => (
-              <ProductCard key={product.product_id} product={product} />
-            ))
-          ) : (
-            <h1>Sem produtos cadastrados...</h1>
-          )}
-        </div>
-      </div>
+        </>
+      ) : (
+        <>{selectSkeleton()}</>
+      )}
     </div>
   );
 }

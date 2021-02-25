@@ -7,7 +7,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PopUpChangeAddress from "../../components/PopUpChangeAddress";
-import SnackbarMessage from "../../components/SnackbarMessage";
 
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 
@@ -20,6 +19,7 @@ import "./Checkout.css";
 import { useHistory } from "react-router-dom";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
+import HeroSquareSkeleton from "../../components/Skeletons/HeroSquareSkeleton";
 
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
@@ -45,6 +45,8 @@ function Checkout() {
   const [securityNumberStored, setSecurityNumber] = useState("");
   const [cardNameStored, setCardName] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const [errorInputCardNumber, setErrorInputCardNumber] = useState("");
   const [errorInputSecurityNumber, setErrorInputSecurityNumber] = useState("");
   const [errorInputCardName, setErrorInputCardName] = useState("");
@@ -65,11 +67,10 @@ function Checkout() {
 
   const [loadingPurchase, setLoadingPurchase] = useState(false);
 
-  const { token } = useContext(LoginContext);
+  const { token, user } = useContext(LoginContext);
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [messageSnackbar, setMessageSnackbar] = useState("");
-  const [typeSnackbar, setTypeSnackbar] = useState("success");
+  const currentUser = user[0];
+  const user_id = currentUser.user_id;
 
   const serviceCode = "04014";
 
@@ -176,7 +177,7 @@ function Checkout() {
         {
           address_id: address_id,
           service_code: serviceCode,
-          products: productsWithRightAttributes,
+          products: products,
         },
         {
           headers: { authorization: `bearer ${token}` },
@@ -185,12 +186,7 @@ function Checkout() {
 
       setTimeout(() => {
         setLoadingPurchase(false);
-      }, 2000);
-      setTimeout(() => {
-        setMessageSnackbar("Pedido realizado com sucesso");
-        setTypeSnackbar("success");
-        setOpenSnackbar(true);
-      }, 500);
+      }, 3000);
     } catch (error) {
       console.warn(error);
       alert("Erro ao criar um pedido.");
@@ -200,6 +196,7 @@ function Checkout() {
 
   // Lista dos produtos para finalizar pedido
   async function getProducts() {
+    setLoading(true);
     try {
       const response = await api.get("/cart", {
         headers: {
@@ -218,16 +215,12 @@ function Checkout() {
     }
   }
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
-
   useEffect(() => {
     try {
       getProducts();
+      setTimeout(() => {
+        setLoading(false);
+      }, [500]);
     } catch (error) {
       console.warn(error);
       alert("Erro ao buscar os produtos.");
@@ -236,7 +229,7 @@ function Checkout() {
 
   // Pega endereço
   async function getAddress() {
-    const response = await api.get(`/address`, {
+    const response = await api.get(`/address/${user_id}`, {
       headers: { authorization: `bearer ${token}` },
     });
     setAddress({ ...response.data.adresses[0] });
@@ -299,37 +292,42 @@ function Checkout() {
       <div className="mainContent">
         <div className="leftSide">
           <div className="aboutListProducts">
-            {products.length === 0 ? (
-              <div className="aboutProduct">
-                <div className="infoProduct">
-                  <span>Sem produtos</span>
-                </div>
-              </div>
-            ) : (
-              products.map((product, index) => {
-                return (
-                  <div className="aboutProduct" key={index}>
-                    <img
-                      src={bucketAWS + product.img_link}
-                      alt={product.name}
-                    />
+            {!loading ? (
+              <>
+                {products.length == 0 ? (
+                  <div className="aboutProduct">
                     <div className="infoProduct">
-                      <span>Nome do produto: {product.name}</span>
-                      <span>Quantidade total: {product.amount} uni.</span>
-                      <span>Tamanho: {product.size}</span>
-                      <span>
-                        Gênero:{" "}
-                        {product.gender === "F" ? "Feminino" : "Masculino"}
-                      </span>
-                      <span>Preço único: R$ {product.price}</span>
-                      <span>
-                        Total: R${" "}
-                        {(100 * (product.amount * product.price)) / 100}
-                      </span>
+                      <span>Sem produtos</span>
                     </div>
                   </div>
-                );
-              })
+                ) : (
+                  products.map((product, index) => {
+                    return (
+                      <div className="aboutProduct" key={index}>
+                        <img
+                          src={bucketAWS + product.img_link}
+                          alt={product.name}
+                        />
+                        <div className="infoProduct">
+                          <span>Nome do produto: {product.name}</span>
+                          <span>Quantidade total: {product.amount} uni.</span>
+                          <span>Tamanho: {product.size}</span>
+                          <span>
+                            Gênero:{" "}
+                            {product.gender === "F" ? "Feminino" : "Masculino"}
+                          </span>
+                          <span>Preço único: R$ {product.price}</span>
+                          <span>
+                            Total: R$ {product.amount * product.price}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </>
+            ) : (
+              <HeroSquareSkeleton />
             )}
           </div>
           <div className="aboutPayment">
@@ -439,15 +437,22 @@ function Checkout() {
 
             <div className="addressInfo">
               <div className="addressConfirmation">
-                <strong>Endereço de entrega</strong>
-                <span>
-                  {address.street}/ {address.complement}
-                </span>
-                <span>Bairro: {address.neighborhood}</span>
-                <span>
-                  Cidade: {address.city} - {address.state} - {address.country}
-                </span>
-                <span>CEP: {address.zip_code}</span>
+                {!loading ? (
+                  <>
+                    <strong>Endereço de entrega</strong>
+                    <span>
+                      {address.street}/ {address.complement}
+                    </span>
+                    <span>Bairro: {address.neighborhood}</span>
+                    <span>
+                      Cidade: {address.city} - {address.state} -{" "}
+                      {address.country}
+                    </span>
+                    <span>CEP: {address.zip_code}</span>
+                  </>
+                ) : (
+                  <HeroSquareSkeleton />
+                )}
               </div>
 
               <div className="changeAddressArea">
@@ -499,12 +504,6 @@ function Checkout() {
         handleClose={handleCloseModal}
         setAddress={setAddress}
         address={address}
-      />
-      <SnackbarMessage
-        open={openSnackbar}
-        handleClose={handleClose}
-        message={messageSnackbar}
-        type={typeSnackbar}
       />
     </div>
   );

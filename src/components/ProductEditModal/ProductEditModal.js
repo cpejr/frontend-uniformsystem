@@ -23,7 +23,7 @@ export default function ProductEditModal({
   function handleSend() {
     const validation = validator(value);
     if (validation === "ok") {
-      modelId ? callback(modelId, fieldKey, value) : callback(fieldKey, value);
+      (modelId!==null && modelId !== undefined) ? callback(modelId, fieldKey, value) : callback(fieldKey, value);
     } else {
       setErrorFlag(true);
       setError(validation);

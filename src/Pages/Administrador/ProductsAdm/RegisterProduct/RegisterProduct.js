@@ -20,6 +20,8 @@ import AddIcon from "@material-ui/icons/Add";
 import { FaChevronLeft } from "react-icons/fa";
 
 import "./RegisterProduct.css";
+import validators from "./Validators";
+import ProductEditModal from "../../../../components/ProductEditModal";
 
 function validateInputWithTypeRadio(
   valueFromInputCap,
@@ -322,8 +324,46 @@ function RegisterProduct({ history }) {
     }
   };
 
-  // Re-renderiza a tela depois que productModelsArray foi atualizado
-  useEffect(() => {}, [productModelsArray]);
+  // -----------------------------------------------------
+  //                   CODIGO DO LIMA
+  // -----------------------------------------------------
+
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [dialogInfo, setDialogInfo] = useState();
+
+  function handleOpenDialog(fieldKey, fieldName, modelId) {
+    setDialogInfo({
+      fieldKey,
+      fieldName,
+      validator: validators[fieldKey],
+      modelId,
+    });
+    setOpenEditDialog(true);
+  }
+
+  const handleClose = () => setOpenEditDialog(false);
+
+  async function updateModelInfo(modelId, fieldKey, value) {
+    if (fieldKey === "price") {
+      value = value.replace(",", ".");
+    }
+    const index = productModelsArray
+      .map((model) => model.product_model_id)
+      .indexOf(modelId);
+    productModelsArray[index][fieldKey] = value;
+    setProductModelsArray([...productModelsArray]);
+    handleClose();
+  }
+
+  async function createModel(model) {
+    model.available=true;
+    model.product_model_id=productModelsArray.length;
+    setProductModelsArray([...productModelsArray, model]);
+  }
+
+  // -----------------------------------------------------
+  //                   CODIGO DO LIMA
+  // -----------------------------------------------------
 
   return (
     <div className="registerProductFullContent">
@@ -459,10 +499,9 @@ function RegisterProduct({ history }) {
                 item ? (
                   <ProductModelCardAdm
                     key={index}
-                    productModelID={index}
-                    handleSelectToEdit={handleOpenToEdit}
-                    fullProduct={item}
-                    whichMethodIs={'register'}
+                    handleOpenDialog={handleOpenDialog}
+                    fullProduct={{...item}}
+                    updateModelInfo={updateModelInfo}
                   />
                 ) : null
               )}
@@ -482,12 +521,20 @@ function RegisterProduct({ history }) {
       <PopUpProductModel
         open={openModal}
         handleClose={handleCloseModal}
-        isEdit={isEditProduct}
-        productModelIDFromExistingInfo={productModelIdToEdit}
-        setProductModelIDFromExistingInfo={setProductModelIdToEdit}
-        setProductModelArray={setProductModelsArray}
-        productModelArray={productModelsArray}
+        createModel={createModel}
       />
+
+      {dialogInfo && (
+        <ProductEditModal
+          fieldName={dialogInfo.fieldName}
+          fieldKey={dialogInfo.fieldKey}
+          validator={dialogInfo.validator}
+          callback={updateModelInfo}
+          modelId={dialogInfo.modelId}
+          open={openEditDialog}
+          handleClose={handleClose}
+        />
+      )}
 
       <Snackbar
         open={openSnackBar}

@@ -73,32 +73,33 @@ function EditProduct({ history }) {
 
   const classes = useStyles();
 
-  useEffect(() => {
-    async function getProductInfo() {
-      const response = await api.get(`/productmodels/${product_id}`, {
-        headers: { authorization: `bearer ${token}` },
-      });
+  async function getProductInfo() {
+    const response = await api.get(`/productmodels/${product_id}`, {
+      headers: { authorization: `bearer ${token}` },
+    });
 
-      if (response.data) {
-        const { models, ...product } = response.data;
-        const productModelsAuxiliar = models.map(({ img_link, ...model }) => {
-          return {
-            imgLink:
-              img_link !== "Sem imagem"
-                ? `${bucketAWS}${img_link}`
-                : "Sem imagem",
-            ...model,
-          };
-        });
-        setProductModelsArray(productModelsAuxiliar);
-        setOldProductModelsArray(productModelsAuxiliar);
-        setProductInfo({ ...product });
-      } else {
-        setProductModelsArray([]);
-        setOldProductModelsArray([]);
-        setProductInfo([]);
-      }
+    if (response.data) {
+      const { models, ...product } = response.data;
+      const productModelsAuxiliar = models.map(({ img_link, ...model }) => {
+        return {
+          imgLink:
+            img_link !== "Sem imagem"
+              ? `${bucketAWS}${img_link}`
+              : "Sem imagem",
+          ...model,
+        };
+      });
+      setProductModelsArray(productModelsAuxiliar);
+      setOldProductModelsArray(productModelsAuxiliar);
+      setProductInfo({ ...product });
+    } else {
+      setProductModelsArray([]);
+      setOldProductModelsArray([]);
+      setProductInfo([]);
     }
+  }
+
+  useEffect(() => {
     try {
       getProductInfo();
     } catch (error) {
@@ -288,7 +289,7 @@ function EditProduct({ history }) {
       updated_fields[fieldKey] = value;
       await api.put(`/product/${product_id}`, { updated_fields });
       productInfo[fieldKey] = value;
-      setProductInfo({...productInfo});
+      setProductInfo({ ...productInfo });
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -304,13 +305,37 @@ function EditProduct({ history }) {
       let updated_fields = {};
       updated_fields[fieldKey] = value;
       await api.put(`/model/${modelId}`, updated_fields);
-      const index = (productModelsArray.map((model)=>model.product_model_id)).indexOf(modelId);
+      const index = productModelsArray
+        .map((model) => model.product_model_id)
+        .indexOf(modelId);
       productModelsArray[index][fieldKey] = value;
       setProductModelsArray([...productModelsArray]);
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
       console.warn(error);
+    }
+  }
+
+  async function createModel(model) {
+    try {
+      let objImage = new FormData();
+      objImage.append("file", model.imgLink);
+      // objImage.append("is_main", model.isMain);
+      objImage.append("available", true);
+      objImage.append("img_link", ".");
+      objImage.append("price", model.price.replace(",", ".")); // substitui "," por ".", pois backend tem validação por "." em price
+      objImage.append("model_description", model.modelDescription);
+      objImage.append("gender", model.gender);
+
+      await api.post(`/newmodel/${product_id}`, objImage, {
+        headers: { authorization: `bearer ${token}` },
+      });
+
+      getProductInfo();
+    } catch (error) {
+      alert("Erro ao criar o modelo")
+      console.warn(error)
     }
   }
 
@@ -397,6 +422,7 @@ function EditProduct({ history }) {
                     key={index}
                     handleOpenDialog={handleOpenDialog}
                     fullProduct={{ ...item }}
+                    updateModelInfo={updateModelInfo}
                   />
                 ) : null
               )}
@@ -420,11 +446,7 @@ function EditProduct({ history }) {
       <PopUpProductModel
         open={openModal}
         handleClose={handleCloseModal}
-        isEdit={isEditProduct}
-        productModelIDFromExistingInfo={productModelIdToEdit}
-        setProductModelIDFromExistingInfo={setProductModelIdToEdit}
-        setProductModelArray={setProductModelsArray}
-        productModelArray={productModelsArray}
+        createModel={createModel}
       />
 
       <Snackbar

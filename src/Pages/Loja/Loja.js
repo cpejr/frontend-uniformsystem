@@ -48,7 +48,6 @@ function Loja() {
 
   async function getProducts() {
     //fazendo a requisição pro back
-    setLoading(true);
 
     try {
       let query = [];
@@ -78,8 +77,9 @@ function Loja() {
         const param = "page=" + page.current;
         query.push(param);
       }
-
+      setLoading(true);
       const response = await api.get(`/product?${query.join("&")}`);
+
       return response.data.products;
     } catch (error) {
       setLoading(false);
@@ -228,12 +228,14 @@ function Loja() {
       if (!pageLoading.current) {
         pageLoading.current = true;
         page.current++;
+
         getProducts().then((newProducts) => {
           if (newProducts) {
             setProducts([...products, ...newProducts]);
             pageLoading.current = false;
           }
         });
+        setLoading(false);
       }
     }
     window.addEventListener("scroll", handleScroll);

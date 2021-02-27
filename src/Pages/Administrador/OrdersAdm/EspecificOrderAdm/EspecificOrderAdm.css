@@ -83,12 +83,11 @@
 }
 
 .id-button {
-  margin-top: 5%;
-  margin-bottom: 2%;
+  width: 95%;
+  margin: 5% auto 2% auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-right: 21vw;
 }
 
 .id {

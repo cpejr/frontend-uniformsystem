@@ -9,7 +9,6 @@ import {
   Snackbar,
   TextField,
 } from "@material-ui/core";
-import { Helmet } from "react-helmet";
 import MetaData from "../../../../meta/reactHelmet";
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -82,7 +81,6 @@ function RegisterProduct({ history }) {
   const [productModelsArray, setProductModelsArray] = useState([]);
 
   // Estados voltados para gerenciar erros no campo Type
-  const [errorTypeProduct, setErrorTypeProduct] = useState(false);
   const [errorTypeProductMessage, setErrorTypeProductMessage] = useState("");
 
   // Estados voltados para gerenciar erros no campo Name
@@ -175,7 +173,6 @@ function RegisterProduct({ history }) {
       resultValidateDescription
     ) {
       // tipo ok, nome errado, descrição ok
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
 
       setErrorNameProduct(true);
@@ -189,7 +186,6 @@ function RegisterProduct({ history }) {
       !resultValidateDescription
     ) {
       // tipo ok, nome ok, descrição errado
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
 
       setErrorNameProduct(false);
@@ -203,7 +199,6 @@ function RegisterProduct({ history }) {
       resultValidateDescription
     ) {
       // tipo errado, nome ok, descrição errado
-      setErrorTypeProduct(true);
       setErrorTypeProductMessage("Escolha um tipo.");
 
       setErrorNameProduct(false);
@@ -217,7 +212,6 @@ function RegisterProduct({ history }) {
       resultValidateDescription
     ) {
       // tipo errado, nome errado, descrição ok
-      setErrorTypeProduct(true);
       setErrorTypeProductMessage("Escolha um tipo.");
 
       setErrorNameProduct(true);
@@ -231,7 +225,6 @@ function RegisterProduct({ history }) {
       !resultValidateDescription
     ) {
       // tipo errado, nome ok, descrição errado
-      setErrorTypeProduct(true);
       setErrorTypeProductMessage("Escolha um tipo.");
 
       setErrorNameProduct(false);
@@ -245,7 +238,6 @@ function RegisterProduct({ history }) {
       !resultValidateDescription
     ) {
       // tipo ok, nome errado, descrição errado
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
 
       setErrorNameProduct(true);
@@ -259,7 +251,6 @@ function RegisterProduct({ history }) {
       !resultValidateDescription
     ) {
       // tipo errado, nome errado, descrição errado
-      setErrorTypeProduct(true);
       setErrorTypeProductMessage("Escolha um tipo.");
 
       setErrorNameProduct(true);
@@ -270,7 +261,6 @@ function RegisterProduct({ history }) {
     } else {
       // tipo ok, nome ok, descrição ok
 
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
 
       setErrorNameProduct(false);
@@ -290,7 +280,8 @@ function RegisterProduct({ history }) {
           productModelsArray.map(async (item) => {
             let objImage = new FormData();
             objImage.append("file", item.imgLink);
-            objImage.append("is_main", item.isMain);
+            // objImage.append("is_main", item.isMain);
+            objImage.append("available", item.available);
             objImage.append("img_link", ".");
             objImage.append("price", item.price.replace(",", ".")); // substitui "," por ".", pois backend tem validação por "." em price
             objImage.append("model_description", item.modelDescription);
@@ -315,7 +306,7 @@ function RegisterProduct({ history }) {
           inputName.current.value = "";
           inputDescription.current.value = "";
           setProductModelsArray([]);
-        }, 3000);
+        }, 2000);
       } catch (err) {
         console.log(err.message);
       }
@@ -461,9 +452,8 @@ function RegisterProduct({ history }) {
                     key={index}
                     productModelID={index}
                     handleSelectToEdit={handleOpenToEdit}
-                    productModelArray={productModelsArray}
-                    setProductModelArray={setProductModelsArray}
                     fullProduct={item}
+                    whichMethodIs={"register"}
                   />
                 ) : null
               )}

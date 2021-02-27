@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { withRouter, useParams } from "react-router-dom";
 import api from "../../../../services/api";
 import { LoginContext } from "../../../../contexts/LoginContext";
-import { Helmet } from "react-helmet";
-import MetaData from "../../../../meta/reactHelmet";
+
 import {
   Button,
   CircularProgress,
@@ -72,69 +71,39 @@ function EditProduct({ history }) {
 
   const classes = useStyles();
 
-  const meta = {
-    titlePage: "Administrador | Editar",
-    titleSearch: "Editar Uniformes Profit",
-    description:
-      "Sinta-se à vontade para editar seus uniformes da melhor maneira que preferir. Faça todas as alterações que julgar necessárias e encontre o que melhor combina com você.",
-    keyWords: "Editar, Combinação, Uniformes, Profit",
-    imageUrl: "",
-    imageAlt: "",
-  };
-
   useEffect(() => {
     async function getProductInfo() {
-      const responseProduct = await api.get(`/product/${product_id}`, {
+      const response = await api.get(`/productmodels/${product_id}`, {
         headers: { authorization: `bearer ${token}` },
       });
 
-      setProductInfo({ ...responseProduct.data.product[0] });
-
-      if (responseProduct.data) {
-        let productModelInfo;
-
-        const responseProductModels = await api.get(
-          `/productmodels/${responseProduct.data.product[0].product_id}`,
-          {
-            headers: { authorization: `bearer ${token}` },
-          }
-        );
-
-        const productModelsAuxiliar = [];
-        responseProductModels.data.models.map((item) => {
-          const {
-            gender,
-            img_link,
-            is_main,
-            model_description,
-            price,
-            product_model_id,
-          } = item;
-
-          productModelInfo = {
-            product_model_id: product_model_id,
-            gender: gender,
+      if (response.data) {
+        const { models, ...product } = response.data;
+        const productModelsAuxiliar = models.map(({ img_link, ...model }) => {
+          return {
             imgLink:
               img_link !== "Sem imagem"
                 ? `${bucketAWS}${img_link}`
                 : "Sem imagem",
-            isMain: is_main === 0 ? false : true,
-            modelDescription: model_description,
-            price: price,
+            ...model,
           };
-          productModelsAuxiliar.push(productModelInfo);
         });
 
         setProductModelsArray([...productModelsAuxiliar]);
-
         setOldProductModelsArray([...productModelsAuxiliar]);
+        setProductInfo({ ...product });
       } else {
         setProductModelsArray([]);
         setOldProductModelsArray([]);
+        setProductInfo([]);
       }
     }
-
-    getProductInfo();
+    try {
+      getProductInfo();
+    } catch (error) {
+      console.error(error);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreateModal = () => {
@@ -229,7 +198,7 @@ function EditProduct({ history }) {
             description: productInfo.description,
           },
         };
-        const response = await api.put(
+        await api.put(
           `/product/${productInfo.product_id}`,
           updated_fields,
           {
@@ -239,25 +208,11 @@ function EditProduct({ history }) {
 
         // Deleto todos os product models de início
         if (oldProductModelsArray.length > 0) {
-          let params;
 
           oldProductModelsArray.map(async (item) => {
-            if (item.imgLink !== "Sem imagem") {
-              let nameWithType = item.imgLink.split(bucketAWS)[1];
-              params = {
-                name: nameWithType.split(".")[0],
-                type: nameWithType.split(".")[1],
-              };
-            } else {
-              params = {
-                name: "Sem imagem",
-                type: null,
-              };
-            }
 
             await api.delete(`/model/${item.product_model_id}`, {
-              headers: { authorization: `bearer ${token}` },
-              params,
+              headers: { authorization: `bearer ${token}` }
             });
           });
         }
@@ -272,9 +227,10 @@ function EditProduct({ history }) {
             );
             objImage.append("is_main", item.isMain);
             objImage.append("img_link", item.imgLink.name ? "." : item.imgLink);
-            objImage.append("price", item.price.replace(",", ".")); // substitui "," por ".", pois backend tem validação por "." em price
+            objImage.append("price", item.price); // substitui "," por ".", pois backend tem validação por "." em price
             objImage.append("model_description", item.modelDescription);
             objImage.append("gender", item.gender);
+            console.log("🚀 ~ file: EditProduct.js ~ line 249 ~ productModelsArray.map ~ objImage", objImage)
 
             await api.post(`/newmodel/${productInfo.product_id}`, objImage, {
               headers: { authorization: `bearer ${token}` },
@@ -297,14 +253,6 @@ function EditProduct({ history }) {
 
   return (
     <div className="editProductFullContent">
-      <MetaData
-        titlePage={meta.titlePage}
-        titleSearch={meta.titleSearch}
-        description={meta.description}
-        keyWords={meta.keyWords}
-        imageUrl={meta.imageUrl}
-        imageAlt={meta.imageAlt}
-      />
       <FaChevronLeft
         className="iconToReturn"
         onClick={() => history.goBack()}
@@ -363,11 +311,11 @@ function EditProduct({ history }) {
                 item ? (
                   <ProductModelCardAdm
                     key={index}
-                    productModelID={index}
                     handleSelectToEdit={handleOpenToEdit}
                     productModelArray={productModelsArray}
                     setProductModelArray={setProductModelsArray}
                     fullProduct={item}
+                    whichMethodIs={'edit'}
                   />
                 ) : null
               )}

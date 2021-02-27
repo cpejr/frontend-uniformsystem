@@ -23,7 +23,6 @@ import Carrinho from "./Pages/Carrinho";
 import Contato from "./Pages/Contato";
 import Checkout from "./Pages/Checkout";
 import Cadastro from "./Pages/Cadastro";
-import Pedidos from "./Pages/Pedidos";
 import Error from "./Pages/Error";
 
 import Header from "./components/Header";
@@ -166,7 +165,6 @@ function MenuRoutes() {
           <Route path="/login" export component={Login} />
           <Route path="/contact" export component={Contato} />
           <Route path="/cadastro" export component={Cadastro} />
-          <Route path="/orders" export component={Pedidos} />
   
           {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
           <Route path='*' exact component={Error} />
@@ -203,7 +201,6 @@ function MenuRoutes() {
           <Route path="/login" export component={Login} />
           <Route path="/contact" export component={Contato} />
           <Route path="/cadastro" export component={Cadastro} />
-          <Route path="/orders" export component={Pedidos} />
   
           {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
           <Route path='*' exact component={Error} />

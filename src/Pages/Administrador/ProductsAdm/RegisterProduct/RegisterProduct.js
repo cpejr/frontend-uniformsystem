@@ -89,10 +89,23 @@ function RegisterProduct({ history }) {
 
   // Estados voltados para gerenciar erros no campo Description
   const [errorDescriptionProduct, setErrorDescriptionProduct] = useState(false);
-  const [
-    errorDescriptionProductMessage,
-    setErrorDescriptionProductMessage,
-  ] = useState("");
+  const [errorDescriptionProductMessage, setErrorDescriptionProductMessage] = useState("");
+
+  // Estados voltados para gerenciar erros no campo Height
+  const [errorHeightProduct, setErrorHeightProduct ] = useState(false);
+  const [errorHeightProductMessage, setErrorHeightProductMessage] = useState("");
+  
+  // Estados voltados para gerenciar erros no campo Lenght
+  const [errorLenghtProduct, setErrorLenghtProduct] = useState(false);
+  const [errorLenghtProductMessage, setErrorLenghtProductMessage] = useState("");
+  
+  // Estados voltados para gerenciar erros no campo Weight
+  const [errorWeightProduct, setErrorWeightProduct] = useState(false);
+  const [errorWeightProductMessage, setErrorWeightProductMessage] = useState("");
+
+  // Estados voltados para gerenciar erros no campo Width
+  const [errorWidthProduct, setErrorWidthProduct] = useState(false);
+  const [errorWidthProductMessage, setErrorWidthProductMessage] = useState("");
 
   const inputTypeCap = useRef(null);
   const inputTypeShirt = useRef(null);
@@ -102,6 +115,11 @@ function RegisterProduct({ history }) {
 
   const inputName = useRef(null);
   const inputDescription = useRef(null);
+  const inputHeight = useRef(null);
+  const inputLenght = useRef(null);
+  const inputWeight = useRef(null);
+  const inputWidth = useRef(null);
+
 
   const classes = useStyles();
 
@@ -431,6 +449,56 @@ function RegisterProduct({ history }) {
               error={errorDescriptionProduct}
               helperText={errorDescriptionProductMessage}
               onChange={(e) => handleCompleteProductInfo(e, "description")}
+              variant="outlined"
+            />
+          </div>
+          
+          {/* Campos para preenchimento de Altura, Largura, Peso e Comprimento */}
+          <div className="spanWithInput">
+            <span>ALTURA:</span>
+            <TextField
+              required
+              inputRef={inputHeight}
+              className={classes.inputText}
+              error={errorHeightProduct}
+              helperText={errorHeightProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "height")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>COMPRIMENTO:</span>
+            <TextField
+              required
+              inputRef={inputLenght}
+              className={classes.inputText}
+              error={errorLenghtProduct}
+              helperText={errorLenghtProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "length")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>PESO:</span>
+            <TextField
+              required
+              inputRef={inputWeight}
+              className={classes.inputText}
+              error={errorWeightProduct}
+              helperText={errorWeightProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "weight")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>LARGURA:</span>
+            <TextField
+              required
+              inputRef={inputWidth}
+              className={classes.inputText}
+              error={errorWidthProduct}
+              helperText={errorWidthProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "width")}
               variant="outlined"
             />
           </div>

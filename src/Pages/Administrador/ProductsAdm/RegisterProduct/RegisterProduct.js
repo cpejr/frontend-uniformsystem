@@ -152,6 +152,22 @@ function RegisterProduct({ history }) {
       newObjProductInfo = {
         description: e.target.value,
       };
+    } else if (type === "height") {
+      newObjProductInfo = {
+        height: e.target.value,
+      };
+    } else if (type === "length") {
+      newObjProductInfo = {
+        length: e.target.value,
+      };
+    } else if (type === "weight") {
+      newObjProductInfo = {
+        weight: e.target.value,
+      };
+    } else if (type === "width") {
+      newObjProductInfo = {
+        width: e.target.value,
+      };
     } else {
       newObjProductInfo = {
         product_type: e.target.value,
@@ -182,6 +198,18 @@ function RegisterProduct({ history }) {
     );
     const resultValidateDescription = validateInputWithTypeText(
       inputDescription.current.value
+    );
+    const resultValidateHeight = validateInputWithTypeText(
+      inputHeight.current.value
+    );
+    const resultValidateLenght = validateInputWithTypeText(
+      inputLenght.current.value
+    );
+    const resultValidateWeight = validateInputWithTypeText(
+      inputWeight.current.value
+    );
+    const resultValidateWidth = validateInputWithTypeText(
+      inputWidth.current.value
     );
 
     // Cobre as opções dos diferentes erros no Cadastro de um porduto novo
@@ -266,7 +294,11 @@ function RegisterProduct({ history }) {
     } else if (
       !resultValidateType &&
       !resultValidateName &&
-      !resultValidateDescription
+      !resultValidateDescription &&
+      !resultValidateHeight &&
+      !resultValidateLenght &&
+      !resultValidateWeight &&
+      !resultValidateWidth
     ) {
       // tipo errado, nome errado, descrição errado
       setErrorTypeProductMessage("Escolha um tipo.");
@@ -276,6 +308,18 @@ function RegisterProduct({ history }) {
 
       setErrorDescriptionProduct(true);
       setErrorDescriptionProductMessage("Digite uma descrição.");
+
+      setErrorHeightProduct(true);
+      setErrorHeightProductMessage("Digite uma altura");
+
+      setErrorLenghtProduct(true);
+      setErrorLenghtProductMessage("Digite um comprimento");
+
+      setErrorWeightProduct(true);
+      setErrorWeightProductMessage("Digite um peso");
+
+      setErrorWidthProduct(true);
+      setErrorWidthProductMessage("Digite uma largura");
     } else {
       // tipo ok, nome ok, descrição ok
 

@@ -4,7 +4,6 @@ import "./ProductModelCardAdm.css";
 import { FaEdit } from "react-icons/fa";
 
 import Switch from "react-switch";
-import api from "../../services/api";
 
 function ProductModelCardAdm({
   handleOpenDialog,
@@ -34,6 +33,19 @@ function ProductModelCardAdm({
           }}
           checked={isAvailable}
         />
+      </div>
+      <div
+        className="iconEditImage iconWithText"
+        onClick={() =>
+          handleOpenDialog(
+            "imgLink",
+            "Imagem do modelo",
+            product_model_id
+          )
+        }
+      >
+        <FaEdit className="iconProductModelCard" />
+        <span>Editar Imagem</span>
       </div>
       {fileToShow ? (
         <img src={fileToShow} alt={model_description} />

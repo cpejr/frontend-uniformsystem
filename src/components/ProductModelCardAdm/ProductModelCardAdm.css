@@ -13,10 +13,22 @@
   justify-content: center;
 }
 
-.productModelCardAdmFullContent .iconAvailable {
+.iconAvailable {
   width: 40%;
   top: 20px;
   right: 20px;
+  position: absolute !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 1em;
+}
+
+.iconEditImage{
+  width: 40%;
+  top: 20px;
+  left: 20px;
   position: absolute !important;
   cursor: pointer;
   display: flex;

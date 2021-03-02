@@ -350,14 +350,19 @@ function RegisterProduct({ history }) {
     const index = productModelsArray
       .map((model) => model.product_model_id)
       .indexOf(modelId);
-    productModelsArray[index][fieldKey] = value;
+    if (fieldKey === "imgLink") {
+      productModelsArray[index]["fileToShow"] = value.fileToShow;
+      productModelsArray[index]["imgLink"] = value.imgFile;
+    } else {
+      productModelsArray[index][fieldKey] = value;
+    }
     setProductModelsArray([...productModelsArray]);
     handleClose();
   }
 
   async function createModel(model) {
-    model.available=true;
-    model.product_model_id=productModelsArray.length;
+    model.available = true;
+    model.product_model_id = productModelsArray.length;
     setProductModelsArray([...productModelsArray, model]);
   }
 
@@ -500,7 +505,7 @@ function RegisterProduct({ history }) {
                   <ProductModelCardAdm
                     key={index}
                     handleOpenDialog={handleOpenDialog}
-                    fullProduct={{...item}}
+                    fullProduct={{ ...item }}
                     updateModelInfo={updateModelInfo}
                   />
                 ) : null

@@ -258,10 +258,7 @@ function EditProduct({ history }) {
   const [dialogInfo, setDialogInfo] = useState();
 
   function handleOpenDialog(fieldKey, fieldName, modelId) {
-    console.log(
-      "🚀 ~ file: EditProduct.js ~ line 260 ~ handleOpenDialog ~ fieldKey",
-      fieldKey
-    );
+    console.log("🚀 ~ file: EditProduct.js ~ line 261 ~ handleOpenDialog ~ fieldKey", fieldKey)
     if (modelId) {
       setDialogInfo({
         fieldKey,
@@ -299,17 +296,26 @@ function EditProduct({ history }) {
 
   async function updateModelInfo(modelId, fieldKey, value) {
     try {
-      if (fieldKey === "price") {
-        value = value.replace(",", ".");
+      if (fieldKey === "imgLink") {
+        let objImage = new FormData();
+        objImage.append("file", value.imgFile);
+        await api.put(`/model/${modelId}`, objImage, {
+          headers: { authorization: `bearer ${token}` },
+        });
+        getProductInfo();
+      } else {
+        if (fieldKey === "price") {
+          value = value.replace(",", ".");
+        }
+        let updated_fields = {};
+        updated_fields[fieldKey] = value;
+        await api.put(`/model/${modelId}`, updated_fields);
+        const index = productModelsArray
+          .map((model) => model.product_model_id)
+          .indexOf(modelId);
+        productModelsArray[index][fieldKey] = value;
+        setProductModelsArray([...productModelsArray]);
       }
-      let updated_fields = {};
-      updated_fields[fieldKey] = value;
-      await api.put(`/model/${modelId}`, updated_fields);
-      const index = productModelsArray
-        .map((model) => model.product_model_id)
-        .indexOf(modelId);
-      productModelsArray[index][fieldKey] = value;
-      setProductModelsArray([...productModelsArray]);
       handleClose();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -321,10 +327,9 @@ function EditProduct({ history }) {
     try {
       let objImage = new FormData();
       objImage.append("file", model.imgLink);
-      // objImage.append("is_main", model.isMain);
       objImage.append("available", true);
       objImage.append("img_link", ".");
-      objImage.append("price", model.price.replace(",", ".")); // substitui "," por ".", pois backend tem validação por "." em price
+      objImage.append("price", model.price.replace(",", "."));
       objImage.append("model_description", model.modelDescription);
       objImage.append("gender", model.gender);
 
@@ -334,8 +339,8 @@ function EditProduct({ history }) {
 
       getProductInfo();
     } catch (error) {
-      alert("Erro ao criar o modelo")
-      console.warn(error)
+      alert("Erro ao criar o modelo");
+      console.warn(error);
     }
   }
 

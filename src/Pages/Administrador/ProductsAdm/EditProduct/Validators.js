@@ -38,6 +38,13 @@ const validators = {
       return "ok";
     }
   },
+  imgLink(image) {
+    if (!image) {
+      return "Selecione uma imagem!"
+    } else {
+      return "ok"
+    }
+  }
 };
 
 export default validators;

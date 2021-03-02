@@ -83,10 +83,18 @@ function CardPedido({pedido, token}){
           <RiTruckFill style={{fontSize:'22px', marginRight: '7px'}}/>
           <span>Destino: {pedido.city}/{pedido.state} - {pedido.zip_code}</span>
         </div>  
-        <div className="pedidoTotal">Total: R$ {totalPriceOrder.toFixed(2)}</div>  
-        <Button className="pedidoBotao2">
-          Acompanhar pedido
-        </Button>
+        <div className="pedidoTotal">Total: R$ {totalPriceOrder.toFixed(2)}</div>
+        {
+          pedido.status === "delivered" && 
+          <>
+            <span className="trackingCode">Cod. Rastreamento: {pedido.tracking_code}</span>  
+            <Button className="pedidoBotao2">
+              <a href="https://www2.correios.com.br/sistemas/rastreamento/default.cfm" target="_blank" rel="noreferrer" >
+                Acompanhar pedido
+              </a>
+            </Button>
+          </>
+        }
       </div>
     );
 

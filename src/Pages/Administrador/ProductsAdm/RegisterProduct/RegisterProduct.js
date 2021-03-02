@@ -74,11 +74,7 @@ function RegisterProduct({ history }) {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const [productModelIdToEdit, setProductModelIdToEdit] = useState(null);
-
   const [productInfo, setProductInfo] = useState({});
-
-  const [isEditProduct, setIsEditProduct] = useState(false);
 
   const [productModelsArray, setProductModelsArray] = useState([]);
 
@@ -117,14 +113,7 @@ function RegisterProduct({ history }) {
   };
 
   const handleNewProduct = () => {
-    setIsEditProduct(false);
     handleCreateModal();
-  };
-
-  const handleOpenToEdit = (productModelID) => {
-    setIsEditProduct(true);
-    handleCreateModal();
-    setProductModelIdToEdit(productModelID);
   };
 
   const handleCompleteProductInfo = (e, type) => {
@@ -324,10 +313,6 @@ function RegisterProduct({ history }) {
     }
   };
 
-  // -----------------------------------------------------
-  //                   CODIGO DO LIMA
-  // -----------------------------------------------------
-
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [dialogInfo, setDialogInfo] = useState();
 
@@ -365,10 +350,6 @@ function RegisterProduct({ history }) {
     model.product_model_id = productModelsArray.length;
     setProductModelsArray([...productModelsArray, model]);
   }
-
-  // -----------------------------------------------------
-  //                   CODIGO DO LIMA
-  // -----------------------------------------------------
 
   return (
     <div className="registerProductFullContent">

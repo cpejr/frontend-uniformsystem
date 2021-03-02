@@ -89,6 +89,19 @@ td {
   font-weight: bold;
 }
 
+.checkoutButton {
+  margin-top: 5vh;
+  height: 50px;
+  width: 300px;
+  align-self: flex-end;
+  border-radius: 30px;
+  background-color: #0ec4ab;
+  border: 1px solid #707070;
+  font-size: 1.8rem;
+  font-weight: 400;
+  transition: 0.5s;
+  margin-bottom: 20px;
+}
 .cartTitle {
   margin-left: 10%;
   align-self: flex-start;

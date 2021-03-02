@@ -7,6 +7,7 @@ import MetaData from '../../meta/reactHelmet';
 import api from '../../services/api';
 import { LoginContext } from '../../contexts/LoginContext';
 import { useHistory } from 'react-router-dom';
+import ExcludeDialog from "../../components/ExcludeDialog/ExcludeDialog";
 
 import "./Perfil.css";
 
@@ -17,6 +18,7 @@ function Perfil() {
   const [userAddress, setUserAddress] = useState({});
   const [userOrders, setUserOrders] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [dialogItem, setDialogItem] = useState({ open: false, item: null });
   const history = useHistory();
 
   const meta = {
@@ -28,15 +30,25 @@ function Perfil() {
     imageAlt: "",
   }
 
+  function handleClose() {
+    setDialogItem({ open: false, item: null });
+  }
+
+  function handleOpen(item) {
+    setDialogItem({ open: true, item: item });
+  }
+
   async function deleteUser() {
     try {
       await api.delete(`/delUserClient/${currentUser.user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      handleClose();
       history.push("/")
       logOut();
     } catch (error) {
       console.warn(error);
+      handleClose();
       alert("Erro ao excluir usuário");
     }
   }
@@ -140,7 +152,7 @@ function Perfil() {
           <button
             className="button-perfil"
             style={{ width: "22vw", marginTop: "5vh" }}
-            onClick={deleteUser}
+            onClick={() => handleOpen(currentUser)}
           >
             Apagar conta
           </button>
@@ -168,6 +180,12 @@ function Perfil() {
         handleClose={handleCloseModal}
         setAddress={setUserAddress}
         address={userAddress}
+      />
+      <ExcludeDialog
+        open={dialogItem.open}
+        handleClose={handleClose}
+        title={dialogItem.item?.name}
+        callback={deleteUser}
       />
     </div>
   );

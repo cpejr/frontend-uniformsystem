@@ -6,8 +6,7 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import api from "../../services/api";
-import {Helmet} from 'react-helmet';
-import MetaData from '../../meta/reactHelmet';
+import MetaData from "../../meta/reactHelmet";
 import { HiOutlineMail } from "react-icons/hi";
 import "./Contato.css";
 
@@ -17,7 +16,10 @@ function Contato() {
   const [FacebookInfo, setFacebookInfo] = useState("");
   const [EnderecoInfo, setEnderecoInfo] = useState("");
   const [InstagramInfo, setInstagramInfo] = useState("");
-  const [WhatsappInfo, setWhatsappInfo] = useState("");
+  const [cellphoneInfo, setCellphoneInfo] = useState("");
+  const [WhatsAppInfo, setWhatsAppInfo] = useState("");
+  const [InstagramLinkInfo, setInstagramLinkInfo] = useState("");
+  const [FacebookLinkInfo, setFacebookLinkInfo] = useState("");
 
   const meta = {
     titlePage: "Uniformes E-commerce | Contato",
@@ -26,7 +28,7 @@ function Contato() {
     keyWords: "Contato",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   useEffect(() => {
     async function getContactInfo() {
@@ -34,26 +36,37 @@ function Contato() {
         const response = await api.get("/home/info", {
           headers: { authorization: `bearer ${token}` },
         });
-
         if (response.data.length === 0) {
           throw new Error("Home info is Empty");
         }
         const address = response.data.filter((item) =>
           item.key === "address" ? item.data : null
         )[0];
-        const facebookLink = response.data.filter((item) =>
-          item.key === "facebookLink" ? item.data : null
+        const facebookUsername = response.data.filter((item) =>
+          item.key === "facebookUsername" ? item.data : null
         )[0];
-        const instagramLink = response.data.filter((item) =>
+        const instagramUsername = response.data.filter((item) =>
+          item.key === "instagramUsername" ? item.data : null
+        )[0];
+        const cellphone = response.data.filter((item) =>
+          item.key === "cellphone" ? item.data : null
+        )[0];
+        const WhatsappLink = response.data.filter((item) =>
+          item.key === "whatsAppLink" ? item.data : null
+        )[0];
+        const InstagramLinkInfo = response.data.filter((item) =>
           item.key === "instagramLink" ? item.data : null
         )[0];
-        const whatsAppNumber = response.data.filter((item) =>
-          item.key === "whatsAppNumber" ? item.data : null
+        const FacebookLinkInfo = response.data.filter((item) =>
+          item.key === "facebookLink" ? item.data : null
         )[0];
         setEnderecoInfo(address.data);
-        setFacebookInfo(facebookLink.data);
-        setInstagramInfo(instagramLink.data);
-        setWhatsappInfo(whatsAppNumber.data);
+        setFacebookInfo(facebookUsername.data);
+        setInstagramInfo(instagramUsername.data);
+        setCellphoneInfo(cellphone.data);
+        setWhatsAppInfo(WhatsappLink.data);
+        setInstagramLinkInfo(InstagramLinkInfo.data);
+        setFacebookLinkInfo(FacebookLinkInfo.data);
       } catch (error) {
         console.warn(error);
       }
@@ -62,7 +75,14 @@ function Contato() {
   }, []);
   return (
     <div className="divPagContato">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="fundoCinza">
         <div className="divFundoBrancoContato">
           <div className="tituloContato">
@@ -72,7 +92,7 @@ function Contato() {
 
           <div className="divRedesSociais">
             <a
-              href= {`https://www.instagram.com/${InstagramInfo}`}
+              href={`${InstagramLinkInfo}`}
               target="_blank"
               rel="noreferrer"
               className="linksContato"
@@ -83,18 +103,18 @@ function Contato() {
               </h3>
             </a>
             <a
-              href={`https://www.whatsapp.com/${WhatsappInfo}`}
+              href={`${WhatsAppInfo}`}
               target="_blank"
               rel="noreferrer"
               className="linksContato"
             >
               <FaWhatsapp className="iconsContato" />
               <h3 className="escritaContato">
-                {WhatsappInfo === "" ? "Sem dados" : WhatsappInfo}
+                {cellphoneInfo === "" ? "Sem dados" : cellphoneInfo}
               </h3>
             </a>
             <a
-              href={`https://www.facebook.com/${FacebookInfo}`}
+              href={`${FacebookLinkInfo}`}
               target="_blank"
               rel="noreferrer"
               className="linksContato"

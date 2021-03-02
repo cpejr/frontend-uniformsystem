@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState } from "react";
 import MetaData from "../../../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
 
@@ -11,10 +11,6 @@ import {
 } from "@material-ui/core";
 
 import { FaChevronLeft } from "react-icons/fa";
-
-import api from "../../../../services/api";
-import { LoginContext } from "../../../../contexts/LoginContext";
-import SnackbarMessage from "../../../../components/SnackbarMessage";
 
 import "./CadastroFunc.css";
 
@@ -59,8 +55,6 @@ function validateInput(type, value) {
 }
 
 function CadastroFunc({ history }) {
-  const { token } = useContext(LoginContext);
-
   const [typeEmployeeState, setTypeEmployeeState] = useState("");
 
   const classes = useStyles();
@@ -188,21 +182,6 @@ function CadastroFunc({ history }) {
 
       try {
         setLoading(true);
-
-        const newUserObj = {
-          name: inputName.current.value,
-          user_type: typeEmployeeState,
-          email: inputEmail.current.value,
-          cpf: inputCPF.current.value,
-          password: inputPassword.current.value,
-        };
-
-        await api.post("/user", newUserObj, {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
 
         setTimeout(() => {
           setLoading(false);

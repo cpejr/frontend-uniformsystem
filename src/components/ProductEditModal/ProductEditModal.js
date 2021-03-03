@@ -25,14 +25,19 @@ export default function ProductEditModal({
   const [error, setError] = useState();
 
   function handleSend() {
-    const validation = validator(value);
-    if (validation === "ok") {
-      modelId !== null && modelId !== undefined
-        ? callback(modelId, fieldKey, value)
-        : callback(fieldKey, value);
-    } else {
-      setErrorFlag(true);
-      setError(validation);
+    if(fieldKey==="delete"){
+      callback(modelId);
+    }
+    else{
+      const validation = validator(value);
+      if (validation === "ok") {
+        modelId !== null && modelId !== undefined
+          ? callback(modelId, fieldKey, value)
+          : callback(fieldKey, value);
+      } else {
+        setErrorFlag(true);
+        setError(validation);
+      }
     }
   }
 
@@ -67,7 +72,11 @@ export default function ProductEditModal({
       onClose={handleClose}
       aria-labelledby="form-dialog-title"
     >
-      <DialogTitle>Alterar {modelId ? "modelo" : "produto"}</DialogTitle>
+      <DialogTitle>
+        {fieldKey === "delete"
+          ? "Deletar Modelo"
+          : `Alterar ${modelId ? "modelo" : "produto"}`}
+      </DialogTitle>
       {fieldKey === "imgLink" ? (
         <DialogContent>
           <Button
@@ -102,22 +111,24 @@ export default function ProductEditModal({
           </span>
         </DialogContent>
       ) : (
-        <DialogContent>
-          <DialogContentText>Digite o novo {fieldName}</DialogContentText>
-          <TextField
-            error={errorFlag}
-            helperText={error}
-            autoFocus
-            margin="dense"
-            label={fieldName}
-            fullWidth
-            onChange={(e) => {
-              setValue(e.target.value);
-              setError(null);
-              setErrorFlag(false);
-            }}
-          />
-        </DialogContent>
+        fieldKey !== "delete" && (
+          <DialogContent>
+            <DialogContentText>Digite o novo {fieldName}</DialogContentText>
+            <TextField
+              error={errorFlag}
+              helperText={error}
+              autoFocus
+              margin="dense"
+              label={fieldName}
+              fullWidth
+              onChange={(e) => {
+                setValue(e.target.value);
+                setError(null);
+                setErrorFlag(false);
+              }}
+            />
+          </DialogContent>
+        )
       )}
       <DialogActions>
         <Button onClick={handleClose} color="primary">

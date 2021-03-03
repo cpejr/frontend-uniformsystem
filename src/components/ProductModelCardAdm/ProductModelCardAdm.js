@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ProductModelCardAdm.css";
 
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 import Switch from "react-switch";
 
@@ -14,6 +14,7 @@ function ProductModelCardAdm({
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const {
+    canDelete,
     fileToShow,
     imgLink,
     model_description,
@@ -37,11 +38,7 @@ function ProductModelCardAdm({
       <div
         className="iconEditImage iconWithText"
         onClick={() =>
-          handleOpenDialog(
-            "imgLink",
-            "Imagem do modelo",
-            product_model_id
-          )
+          handleOpenDialog("imgLink", "Imagem do modelo", product_model_id)
         }
       >
         <FaEdit className="iconProductModelCard" />
@@ -85,6 +82,18 @@ function ProductModelCardAdm({
         <FaEdit className="iconProductModelCard" />
         <p>Gênero: {gender === "M" ? "Masculino" : "Feminino"}</p>
       </div>
+
+      {canDelete && (
+        <div
+          className="iconWithText"
+          onClick={() =>
+            handleOpenDialog("delete", "Deletar modelo", product_model_id)
+          }
+        >
+          <FaTrash className="iconProductModelCard" />
+          <p>Deletar Modelo</p>
+        </div>
+      )}
     </div>
   );
 }

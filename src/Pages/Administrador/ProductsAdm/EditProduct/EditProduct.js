@@ -86,13 +86,22 @@ function EditProduct({ history }) {
 
   function handleOpenDialog(fieldKey, fieldName, modelId) {
     if (modelId) {
-      setDialogInfo({
-        fieldKey,
-        fieldName,
-        validator: validators[fieldKey],
-        callback: updateModelInfo,
-        modelId,
-      });
+      if(fieldKey==="delete"){
+        setDialogInfo({
+          fieldKey,
+          callback: deleteModel,
+          modelId,
+        });
+      }
+      else{
+        setDialogInfo({
+          fieldKey,
+          fieldName,
+          validator: validators[fieldKey],
+          callback: updateModelInfo,
+          modelId,
+        });
+      }
     } else {
       setDialogInfo({
         fieldKey,
@@ -143,6 +152,21 @@ function EditProduct({ history }) {
       handleCloseDialog();
     } catch (error) {
       alert("Erro na atualização do produto");
+      console.warn(error);
+    }
+  }
+
+  async function deleteModel(modelId) {
+    try {
+      await api.delete(`/model/${modelId}`);
+      const index = productModelsArray
+          .map((model) => model.product_model_id)
+          .indexOf(modelId);
+        productModelsArray.splice(index, 1)
+        setProductModelsArray([...productModelsArray]);
+      handleCloseDialog();
+    } catch (error) {
+      alert("Erro ao deletar model");
       console.warn(error);
     }
   }

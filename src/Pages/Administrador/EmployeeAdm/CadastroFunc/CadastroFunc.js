@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import MetaData from "../../../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
 
+import SnackbarMessage from '../../../../components/SnackbarMessage'
+
 import {
   Button,
   CircularProgress,

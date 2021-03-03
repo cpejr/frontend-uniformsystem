@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { withRouter } from "react-router-dom";
 import api from "../../../../services/api";
 import { LoginContext } from "../../../../contexts/LoginContext";
@@ -308,18 +308,29 @@ function RegisterProduct({ history }) {
   const [dialogInfo, setDialogInfo] = useState();
 
   function handleOpenDialog(fieldKey, fieldName, modelId) {
-    setDialogInfo({
-      fieldKey,
-      fieldName,
-      validator: validators[fieldKey],
-      modelId,
-    });
+    if (fieldKey === "delete") {
+      setDialogInfo({
+        fieldKey,
+        fieldName,
+        validator: validators[fieldKey],
+        modelId,
+        callback: deleteModel,
+      });
+    } else {
+      setDialogInfo({
+        fieldKey,
+        fieldName,
+        validator: validators[fieldKey],
+        modelId,
+        callback: updateModelInfo,
+      });
+    }
     setOpenEditDialog(true);
   }
 
   const handleClose = () => setOpenEditDialog(false);
 
-  async function updateModelInfo(modelId, fieldKey, value) {
+  function updateModelInfo(modelId, fieldKey, value) {
     if (fieldKey === "price") {
       value = value.replace(",", ".");
     }
@@ -336,8 +347,18 @@ function RegisterProduct({ history }) {
     handleClose();
   }
 
-  async function createModel(model) {
+  function deleteModel(modelId) {
+    const index = productModelsArray
+      .map((model) => model.product_model_id)
+      .indexOf(modelId);
+    productModelsArray.splice(index, 1);
+    setProductModelsArray([...productModelsArray]);
+    handleClose();
+  }
+
+  function createModel(model) {
     model.available = true;
+    model.canDelete = true;
     model.product_model_id = productModelsArray.length;
     setProductModelsArray([...productModelsArray, model]);
   }
@@ -506,7 +527,7 @@ function RegisterProduct({ history }) {
           fieldName={dialogInfo.fieldName}
           fieldKey={dialogInfo.fieldKey}
           validator={dialogInfo.validator}
-          callback={updateModelInfo}
+          callback={dialogInfo.callback}
           modelId={dialogInfo.modelId}
           open={openEditDialog}
           handleClose={handleClose}

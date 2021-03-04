@@ -274,6 +274,20 @@ function RegisterProduct({ history }) {
         setErrorWidthProduct(false);
         setErrorWidthProductMessage("");
       }
+    } else {
+      setErrorTypeProductMessage("");
+      setErrorNameProduct(false);
+      setErrorNameProductMessage("");
+      setErrorDescriptionProduct(false);
+      setErrorDescriptionProductMessage("");
+      setErrorHeightProduct(false);
+      setErrorHeightProductMessage("");
+      setErrorLenghtProduct(false);
+      setErrorLenghtProductMessage("");
+      setErrorWeightProduct(false);
+      setErrorWeightProductMessage("");
+      setErrorWidthProduct(false);
+      setErrorWidthProductMessage("");
 
       try {
         setLoading(true);

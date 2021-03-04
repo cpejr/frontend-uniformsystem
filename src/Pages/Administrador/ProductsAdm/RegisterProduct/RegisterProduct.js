@@ -212,124 +212,68 @@ function RegisterProduct({ history }) {
       inputWidth.current.value
     );
 
-    // Cobre as opções dos diferentes erros no Cadastro de um porduto novo
     if (
-      resultValidateType &&
-      !resultValidateName &&
-      resultValidateDescription
-    ) {
-      // tipo ok, nome errado, descrição ok
-      setErrorTypeProductMessage("");
-
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      resultValidateType &&
-      resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo ok, nome ok, descrição errado
-      setErrorTypeProductMessage("");
-
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      !resultValidateType &&
-      resultValidateName &&
-      resultValidateDescription
-    ) {
-      // tipo errado, nome ok, descrição errado
-      setErrorTypeProductMessage("Escolha um tipo.");
-
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
-
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      !resultValidateType &&
-      !resultValidateName &&
-      resultValidateDescription
-    ) {
-      // tipo errado, nome errado, descrição ok
-      setErrorTypeProductMessage("Escolha um tipo.");
-
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      !resultValidateType &&
-      resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo errado, nome ok, descrição errado
-      setErrorTypeProductMessage("Escolha um tipo.");
-
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      resultValidateType &&
-      !resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo ok, nome errado, descrição errado
-      setErrorTypeProductMessage("");
-
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      !resultValidateType &&
-      !resultValidateName &&
-      !resultValidateDescription &&
-      !resultValidateHeight &&
-      !resultValidateLenght &&
-      !resultValidateWeight &&
+      !resultValidateType ||
+      !resultValidateName ||
+      !resultValidateDescription ||
+      !resultValidateHeight ||
+      !resultValidateLenght ||
+      !resultValidateWeight ||
       !resultValidateWidth
     ) {
-      // tipo errado, nome errado, descrição errado
-      setErrorTypeProductMessage("Escolha um tipo.");
+      if (!resultValidateType) {
+        setErrorTypeProductMessage("Escolha um tipo.");
+      } else {
+        setErrorTypeProductMessage("");
+      }
 
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
+      if (!resultValidateName) {
+        setErrorNameProduct(true);
+        setErrorNameProductMessage("Digite um nome.");
+      } else {
+        setErrorNameProduct(false);
+        setErrorNameProductMessage("");
+      }
 
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
+      if (!resultValidateDescription) {
+        setErrorDescriptionProduct(true);
+        setErrorDescriptionProductMessage("Digite uma descrição.");
+      } else {
+        setErrorDescriptionProduct(false);
+        setErrorDescriptionProductMessage("");
+      }
 
-      setErrorHeightProduct(true);
-      setErrorHeightProductMessage("Digite uma altura");
+      if (!resultValidateHeight) {
+        setErrorHeightProduct(true);
+        setErrorHeightProductMessage("Digite uma altura");
+      } else {
+        setErrorHeightProduct(false);
+        setErrorHeightProductMessage("");
+      }
 
-      setErrorLenghtProduct(true);
-      setErrorLenghtProductMessage("Digite um comprimento");
+      if (!resultValidateLenght) {
+        setErrorLenghtProduct(true);
+        setErrorLenghtProductMessage("Digite um comprimento");
+      } else {
+        setErrorLenghtProduct(false);
+        setErrorLenghtProductMessage("");
+      }
 
-      setErrorWeightProduct(true);
-      setErrorWeightProductMessage("Digite um peso");
+      if (!resultValidateWeight) {
+        setErrorWeightProduct(true);
+        setErrorWeightProductMessage("Digite um peso");
+      } else {
+        setErrorWeightProduct(false);
+        setErrorWeightProductMessage("");
+      }
 
-      setErrorWidthProduct(true);
-      setErrorWidthProductMessage("Digite uma largura");
-    } else {
-      // tipo ok, nome ok, descrição ok
-
-      setErrorTypeProductMessage("");
-
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
-
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
+      if (!resultValidateWidth) {
+        setErrorWidthProduct(true);
+        setErrorWidthProductMessage("Digite uma largura");
+      } else {
+        setErrorWidthProduct(false);
+        setErrorWidthProductMessage("");
+      }
 
       try {
         setLoading(true);

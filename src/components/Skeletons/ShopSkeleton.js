@@ -4,7 +4,7 @@ import ContentLoader from "react-content-loader";
 
 const ShopSkeleton = (props) => (
   <ContentLoader
-    speed={2}
+    speed={0.9}
     width={Adjust}
     height={Adjust}
     viewBox="0 0 590 240"

@@ -1,9 +1,4 @@
 
-/* GLOBAL */
-h1, h2, span, button{
-    font-family: 'Century Gothic';
-}
-
 /* COMPONENTES DA PÁGINA */
 .boxOutsideImage{
     height: 100%;

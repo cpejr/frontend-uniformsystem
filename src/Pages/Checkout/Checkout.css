@@ -1,6 +1,4 @@
-h1, h2, button, span, strong, label {
-    font-family: 'Century Gothic';
-}
+
 
 .fullContent .mainContent input{
     outline: none;
@@ -166,7 +164,6 @@ h1, h2, button, span, strong, label {
 .productSummary .addressInfo .addressConfirmation strong{
     font-size: 20px;
     font-weight: bold;
-    font-family: 'Century Gothic';
     line-height: 20px;
 }
 
@@ -182,7 +179,6 @@ h1, h2, button, span, strong, label {
 .productSummary .addressInfo .changeAddressArea > span{
     font-size: 12px;
     font-weight: normal;
-    font-family: 'Century Gothic';
     line-height: 20px;
     margin-bottom: 5px;
 }
@@ -218,7 +214,6 @@ h1, h2, button, span, strong, label {
 .productSummary .shippingInfo strong{
     font-size: 18px;
     font-weight: bold;
-    font-family: 'Century Gothic';
     line-height: 20px;
     margin-bottom: 5px;
 }
@@ -266,7 +261,6 @@ h1, h2, button, span, strong, label {
 .productSummary .totalArea strong{
     font-size: 16px;
     font-weight: bold;
-    font-family: 'Century Gothic';
     line-height: 20px;
     margin-bottom: 5px;
 }
@@ -344,7 +338,6 @@ h1, h2, button, span, strong, label {
 
 .MuiButton-contained span{
     font-size: 25px;
-    font-family: 'Century Gothic';
 }
 
 .creditCardInfo{

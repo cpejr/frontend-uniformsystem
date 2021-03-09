@@ -237,5 +237,5 @@
 }
 
 .alert_size_fix {
-  height: 34px;
+  min-height: 34px;
 }

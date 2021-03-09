@@ -168,7 +168,7 @@ function MenuRoutes() {
             <Route path="*" exact component={Error} />
           </Switch>
         </SidebarClient>
-        {user !== null && user.user_type === "adm" ? (
+        {user?.user_type === "adm" ? (
           <Link
             to="/adm/home"
             style={{ position: "fixed", right: 10, bottom: 10 }}
@@ -205,7 +205,7 @@ function MenuRoutes() {
           {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
           <Route path="*" exact component={Error} />
         </Switch>
-        {user !== null && user.user_type === "adm" ? (
+        {user?.user_type === "adm" ? (
           <Link
             to="/adm/home"
             style={{ position: "fixed", right: "1vw", bottom: "11vh" }}
@@ -224,7 +224,7 @@ function MenuRoutes() {
 function AdmRoutes() {
   const { user } = useContext(LoginContext);
 
-  if (user === null || user.user_type === "adm")
+  if (user?.user_type === "adm")
     return <Redirect to="/adm/home" />;
   else
     return (
@@ -277,7 +277,7 @@ function AdmRoutes() {
             <Route path="*" exact={true} component={Error} />
           </Switch>
         </SidebarAdm>
-        {user !== null && user.user_type === "adm" ? (
+        {user?.user_type === "adm" ? (
           <Link
             to="/"
             style={{ position: "fixed", right: "1vw", bottom: "11vh" }}

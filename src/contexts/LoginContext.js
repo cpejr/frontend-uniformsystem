@@ -14,14 +14,9 @@ const LoginContextProvider = (props) => {
   useEffect(() => {
     async function verify(token) {
       try {
-        const config = {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await api.get("/verify", config);
-        console.log("Login context: ", response);
+        const response = await api.get("/verify");
         const data = response.data;
+
         if (data.verified) {
           setToken(currentToken);
           setUser(data.user[0]);
@@ -63,10 +58,6 @@ const LoginContextProvider = (props) => {
     localStorage.removeItem("accessToken");
     setUser(null);
     setToken(null);
-  }
-
-  function getLoadingScreen() {
-    return <CircularProgress color="black" size={25} />;
   }
 
   return (

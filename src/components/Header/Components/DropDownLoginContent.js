@@ -45,8 +45,8 @@ export default function DropDownLoginContent({ onClose }) {
 
       try {
         const response = await api.post("/login", {
-          email: User,
-          password: Password,
+          email: User.current,
+          password: Password.current,
         });
 
         if (response.data?.accessToken) {
@@ -70,7 +70,8 @@ export default function DropDownLoginContent({ onClose }) {
           setErrors({ general: "Usuário e/ou senha incorretos." });
         }
       } catch (error) {
-        if (error.response.status === 400)
+        console.log(error.response);
+        if (error.response.status >= 400 && error.response.status < 500)
           setErrors({ general: "Usuário e/ou senha incorretos." });
         else {
           setErrors({

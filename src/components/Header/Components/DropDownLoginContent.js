@@ -54,7 +54,7 @@ export default function DropDownLoginContent({ onClose }) {
 
           signIn(accessToken, user);
           //Aqui manda para a rota logo apos o login
-          switch (user[0].user_type) {
+          switch (user.user_type) {
             case process.env.REACT_APP_ADM_ROLE:
               history.push("/adm/home");
               break;

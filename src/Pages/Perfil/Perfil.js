@@ -14,7 +14,6 @@ import "./Perfil.css";
 function Perfil() {
 
   const { user, logOut, token } = useContext(LoginContext);
-  const currentUser = user[0];
   const [userAddress, setUserAddress] = useState({});
   const [userOrders, setUserOrders] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -40,7 +39,7 @@ function Perfil() {
 
   async function deleteUser() {
     try {
-      await api.delete(`/delUserClient/${currentUser.user_id}`, {
+      await api.delete(`/delUserClient/${user.user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       handleClose();
@@ -56,7 +55,7 @@ function Perfil() {
   useEffect(() => {
     try{
       async function getAddress(){
-        const response = await api.get(`/address/${currentUser.user_id}`,
+        const response = await api.get(`/address/${user.user_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -71,7 +70,7 @@ function Perfil() {
 
 
       async function getOrders(){
-        const response = await api.get(`/userorder/${currentUser.user_id}`,
+        const response = await api.get(`/userorder/${user.user_id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -136,7 +135,7 @@ function Perfil() {
           <span className="titleLine"/>
         </h1>
         <div className="containerDados">
-            <DadosPessoais dado={currentUser} />
+            <DadosPessoais dado={user} />
         </div>
 
         <div className="containerEndereço">
@@ -152,7 +151,7 @@ function Perfil() {
           <button
             className="button-perfil"
             style={{ width: "22vw", marginTop: "5vh" }}
-            onClick={() => handleOpen(currentUser)}
+            onClick={() => handleOpen(user)}
           >
             Apagar conta
           </button>

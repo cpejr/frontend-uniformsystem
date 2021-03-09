@@ -178,7 +178,7 @@ function EmployeeAdm() {
                       scope="row"
                       className={classes.actions}
                     >
-                      {id !== user[0].user_id ? (
+                      {id !== user.user_id ? (
                         <IconButton onClick={() => handleOpen(employee)}>
                           <BsFillTrashFill />
                         </IconButton>

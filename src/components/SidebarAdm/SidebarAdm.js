@@ -62,7 +62,6 @@ export default function ComputerSidebar(props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { user } = useContext(LoginContext);
-  const currentUser = user[0];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -104,7 +103,7 @@ export default function ComputerSidebar(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {currentUser.user_type === "adm"
+        {user.user_type === "adm"
           ? objListOptionsAdm.map((item, index) => (
               <Link to={`${item.path}`}>
                 <ListItem button key={index}>

@@ -23,7 +23,7 @@ function Header() {
   const [ClickCart, setClickCart] = useState(false);
 
   const { user, logOut } = useContext(LoginContext);
-  const currentUser = !user || user === "notYet" ? null : user[0];
+  const currentUser = !user ? null : user;
 
   const handleLogOut = () => {
     logOut();

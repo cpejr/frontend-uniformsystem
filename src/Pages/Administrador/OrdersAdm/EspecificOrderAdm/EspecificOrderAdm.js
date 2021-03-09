@@ -16,7 +16,7 @@ function EspecificOrderAdm(props) {
 
   // Caso ainda não tenha um deliver e vai efetuar a mudança de status no momento
   if (!deliver) {
-    deliver = user[0].name;
+    deliver = user.name;
   }
 
   const createdAt = props.location.state.createdAt;

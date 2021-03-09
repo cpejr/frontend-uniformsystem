@@ -189,19 +189,28 @@
 
 .drop_content .buttons {
   display: flex;
-  justify-content: space-between;
-  padding-bottom: 8px;
+  flex-direction: column;
+  width: 100%;
 }
 
 .drop_content .buttons button {
-  width: fit-content;
-  color: black;
   background-color: #4dcdbc;
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: white;
   padding: 5px 20px;
   border-radius: 15px;
   border: 0;
   display: flex;
-  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.drop_content .buttons button.outlined {
+  background-color: transparent;
+  border: 2px solid #4dcdbc;
+  color: #4dcdbc;
 }
 
 .drop_content .forgetPassword {
@@ -227,3 +236,6 @@
   margin-left: 3%;
 }
 
+.alert_size_fix {
+  height: 34px;
+}

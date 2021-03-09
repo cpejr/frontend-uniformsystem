@@ -10,12 +10,12 @@ import { CircularProgress } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import PopUpForgotPassword from "../../../components/PopUpForgotPassword";
 
-export default function DropDownLoginContent(props) {
+export default function DropDownLoginContent({ onClose }) {
   const User = useRef();
   const Password = useRef();
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const { signIn } = useContext(LoginContext);
   const history = useHistory();
@@ -31,54 +31,75 @@ export default function DropDownLoginContent(props) {
     setForgotOpen(false);
   }
 
-  function handleClickAway(e) {
-    props.setClickLogin(false);
+  function goToRegister() {
+    history.push("/cadastro");
+    onClose();
   }
 
   async function handleLogin(e) {
     e.preventDefault();
     setLoading(true);
 
-    if (User.length > 0 && Password.length > 6) {
+    if (verifyFields()) {
+      if (errors) setErrors({});
+
       try {
         const response = await api.post("/login", {
           email: User,
           password: Password,
         });
-        if (response.data && response.data.accessToken) {
-          const token = response.data.accessToken;
-          const user = response.data.user;
-          signIn(token, user);
+
+        if (response.data?.accessToken) {
+          const { accessToken, user } = response.data;
+
+          signIn(accessToken, user);
           //Aqui manda para a rota logo apos o login
-          if (user[0].user_type === process.env.REACT_APP_ADM_ROLE) {
-            history.push("/adm/home");
-          } else if (
-            user[0].user_type === process.env.REACT_APP_EMPLOYEE_ROLE
-          ) {
-            history.push("/adm/pedidos");
-          } else {
-            history.push("/");
+          switch (user[0].user_type) {
+            case process.env.REACT_APP_ADM_ROLE:
+              history.push("/adm/home");
+              break;
+            case process.env.REACT_APP_EMPLOYEE_ROLE:
+              history.push("/adm/pedidos");
+              break;
+
+            default:
+              history.push("/");
+              break;
           }
         } else {
-          alert(`Email ou senha incorretos!`);
+          setErrors({ general: "Usuário e/ou senha incorretos." });
         }
-
-        setError(false);
       } catch (error) {
-        console.error(error);
-        setError(true);
+        if (error.response.status === 400)
+          setErrors({ general: "Usuário e/ou senha incorretos." });
+        else {
+          setErrors({
+            general:
+              "Ocorreu uma falha interna no servidor, tente novamente mais tarde",
+          });
+          console.error(error.response.data);
+        }
       }
     }
     setLoading(false);
   }
 
-  function verifyFields() {}
+  function verifyFields() {
+    const newErrors = {};
+    if (User.length === 0) newErrors.user = "Digite um usuário.";
+    if (Password.length < 6)
+      newErrors.password = "Digite uma senha com no mínimo 6 caracteres.";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  }
 
   return (
     <ClickAwayListener
       mouseEvent="onMouseDown"
       touchEvent="onTouchStart"
-      onClickAway={handleClickAway}
+      onClickAway={onClose}
     >
       <form className="drop_content">
         <div className="title_login">LOGIN</div>
@@ -91,13 +112,13 @@ export default function DropDownLoginContent(props) {
                 User.current = e.target.value;
               }}
             />
-            {User.length === 0 && (
+            {errors?.user && (
               <Alert
                 className={classes.alertStyle}
                 variant="outlined"
                 severity="error"
               >
-                Digite um usuário.
+                {errors.user}
               </Alert>
             )}
           </div>
@@ -109,24 +130,26 @@ export default function DropDownLoginContent(props) {
                 Password.current = e.target.value;
               }}
             />
-            {Password.length < 6 && (
-              <Alert
-                className={classes.alertStyle}
-                variant="outlined"
-                severity="error"
-              >
-                Digite uma senha com no mínimo 6 caracteres.
-              </Alert>
-            )}
-            {true && (
-              <Alert
-                className={classes.alertStyle}
-                variant="outlined"
-                severity="error"
-              >
-                Usuário e/ou senha incorretos.
-              </Alert>
-            )}
+            <div className="alert_size_fix">
+              {errors?.password && (
+                <Alert
+                  className={classes.alertStyle}
+                  variant="outlined"
+                  severity="error"
+                >
+                  {errors.password}
+                </Alert>
+              )}
+              {errors?.general && (
+                <Alert
+                  className={classes.alertStyle}
+                  variant="outlined"
+                  severity="error"
+                >
+                  {errors.general}
+                </Alert>
+              )}
+            </div>
           </div>
           <div className="buttons">
             <button onClick={(e) => handleLogin(e)}>
@@ -141,7 +164,7 @@ export default function DropDownLoginContent(props) {
               style={{ textDecoration: "none", color: "#000" }}
               to="/cadastro"
             >
-              <button onClick={() => history.push("/cadastro")}>
+              <button onClick={goToRegister} className="outlined">
                 CADASTRAR
               </button>
             </Link>

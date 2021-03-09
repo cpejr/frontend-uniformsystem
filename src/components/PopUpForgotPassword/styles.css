@@ -1,0 +1,55 @@
+.title-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.7rem;
+  margin-bottom: 16px;
+}
+
+.conteudo-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 300px;
+  margin: auto;
+}
+
+.conteudo-modal input {
+  color: black;
+  border-radius: 15px;
+  border: solid 1px #ccc;
+  padding: 4px 9px 4px 9px;
+  width: 100%;
+}
+
+.conteudo-modal .modalbutton {
+  margin-top: 16px;
+  background-color: #8ed7cd;
+  border: none;
+  border-radius: 40px;
+  font-size: 1.3rem;
+  color: black;
+  padding: 4px 16px;
+}
+
+.conteudo-modal p {
+  font-size: 1.1rem;
+  color: black;
+}
+
+@media (max-width: 430px) {
+  .title-modal {
+    font-size: 2rem;
+  }
+  .conteudo-modal input {
+    font-size: 1.4rem;
+  }
+  .conteudo-modal .modalbutton {
+    font-size: 1.4rem;
+  }
+  .conteudo-modal p {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+}

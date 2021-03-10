@@ -78,7 +78,6 @@ justify-content: center;
 
 .divQuemSomos h2, .divNossosProdutos h2{
     width: fit-content;
-    font-family: 'Roboto';
     font-size: 36px;
     line-height: 49px;
     font-weight: 500;

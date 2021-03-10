@@ -2,7 +2,6 @@
   background-color: white;
   padding: 20px;
   margin: 20px;
-  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
   border: 2px solid gray;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -43,6 +42,11 @@
   border-radius: 43px;
   width: auto;
   align-self: center;
+}
+
+.pedido .pedidoBotao2 a{
+  text-decoration: none;
+  color: #fff;
 }
 
 @media (max-width: 1030px) {

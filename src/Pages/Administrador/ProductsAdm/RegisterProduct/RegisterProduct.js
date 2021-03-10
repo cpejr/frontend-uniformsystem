@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { withRouter } from "react-router-dom";
 import api from "../../../../services/api";
 import { LoginContext } from "../../../../contexts/LoginContext";
@@ -20,6 +20,8 @@ import AddIcon from "@material-ui/icons/Add";
 import { FaChevronLeft } from "react-icons/fa";
 
 import "./RegisterProduct.css";
+import validators from "./Validators";
+import ProductEditModal from "../../../../components/ProductEditModal";
 
 function validateInputWithTypeRadio(
   valueFromInputCap,
@@ -72,11 +74,7 @@ function RegisterProduct({ history }) {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const [productModelIdToEdit, setProductModelIdToEdit] = useState(null);
-
   const [productInfo, setProductInfo] = useState({});
-
-  const [isEditProduct, setIsEditProduct] = useState(false);
 
   const [productModelsArray, setProductModelsArray] = useState([]);
 
@@ -132,14 +130,7 @@ function RegisterProduct({ history }) {
   };
 
   const handleNewProduct = () => {
-    setIsEditProduct(false);
     handleCreateModal();
-  };
-
-  const handleOpenToEdit = (productModelID) => {
-    setIsEditProduct(true);
-    handleCreateModal();
-    setProductModelIdToEdit(productModelID);
   };
 
   const handleCompleteProductInfo = (e, type) => {
@@ -333,8 +324,64 @@ function RegisterProduct({ history }) {
     }
   };
 
-  // Re-renderiza a tela depois que productModelsArray foi atualizado
-  useEffect(() => {}, [productModelsArray]);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [dialogInfo, setDialogInfo] = useState();
+
+  function handleOpenDialog(fieldKey, fieldName, modelId) {
+    if (fieldKey === "delete") {
+      setDialogInfo({
+        fieldKey,
+        fieldName,
+        validator: validators[fieldKey],
+        modelId,
+        callback: deleteModel,
+      });
+    } else {
+      setDialogInfo({
+        fieldKey,
+        fieldName,
+        validator: validators[fieldKey],
+        modelId,
+        callback: updateModelInfo,
+      });
+    }
+    setOpenEditDialog(true);
+  }
+
+  const handleClose = () => setOpenEditDialog(false);
+
+  function updateModelInfo(modelId, fieldKey, value) {
+    if (fieldKey === "price") {
+      value = value.replace(",", ".");
+    }
+    const index = productModelsArray
+      .map((model) => model.product_model_id)
+      .indexOf(modelId);
+    if (fieldKey === "imgLink") {
+      productModelsArray[index]["fileToShow"] = value.fileToShow;
+      productModelsArray[index]["imgLink"] = value.imgFile;
+    } else {
+      productModelsArray[index][fieldKey] = value;
+    }
+    setProductModelsArray([...productModelsArray]);
+    handleClose();
+  }
+
+  function deleteModel(modelId) {
+    const index = productModelsArray
+      .map((model) => model.product_model_id)
+      .indexOf(modelId);
+    productModelsArray.splice(index, 1);
+    setProductModelsArray([...productModelsArray]);
+    handleClose();
+  }
+
+  function createModel(model) {
+    model.available = true;
+    model.canDelete = true;
+    model.product_model_id = productModelsArray.length;
+    setProductModelsArray([...productModelsArray, model]);
+  }
 
   return (
     <div className="registerProductFullContent">
@@ -520,10 +567,9 @@ function RegisterProduct({ history }) {
                 item ? (
                   <ProductModelCardAdm
                     key={index}
-                    productModelID={index}
-                    handleSelectToEdit={handleOpenToEdit}
-                    fullProduct={item}
-                    whichMethodIs={"register"}
+                    handleOpenDialog={handleOpenDialog}
+                    fullProduct={{ ...item }}
+                    updateModelInfo={updateModelInfo}
                   />
                 ) : null
               )}
@@ -543,12 +589,20 @@ function RegisterProduct({ history }) {
       <PopUpProductModel
         open={openModal}
         handleClose={handleCloseModal}
-        isEdit={isEditProduct}
-        productModelIDFromExistingInfo={productModelIdToEdit}
-        setProductModelIDFromExistingInfo={setProductModelIdToEdit}
-        setProductModelArray={setProductModelsArray}
-        productModelArray={productModelsArray}
+        createModel={createModel}
       />
+
+      {dialogInfo && (
+        <ProductEditModal
+          fieldName={dialogInfo.fieldName}
+          fieldKey={dialogInfo.fieldKey}
+          validator={dialogInfo.validator}
+          callback={dialogInfo.callback}
+          modelId={dialogInfo.modelId}
+          open={openEditDialog}
+          handleClose={handleClose}
+        />
+      )}
 
       <Snackbar
         open={openSnackBar}

@@ -37,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DropDownLoginContent(props) {
     const { signIn } = useContext(LoginContext);
+    const { token } = useContext(LoginContext);
+
     const history = useHistory();
     const [User, setUser] = useState("");
     const [Password, setPassword] = useState("");
@@ -107,10 +109,15 @@ export default function DropDownLoginContent(props) {
 
     async function handleForgot(e) {
         try {
-            const response = await api.post("/sendpassword", {
-                email: Email,
-            });
+            const response = await api.post("/users/sendpassword", 
+            {
+              email: Email,
+            },
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },);
             console.log('aqui', response);
+            handleClickAway();
         } catch (error) {
             console.warn(error);
             alert("E-mail não reconhecido. Verifique se escreveu corretamete ou faça o cadastro! :) ");

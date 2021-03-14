@@ -41,7 +41,7 @@ function Perfil() {
 
   async function deleteUser() {
     try {
-      await api.delete(`/delUserClient/${currentUser.user_id}`, {
+      await api.delete(`/users/delClient/${currentUser.user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       handleClose();

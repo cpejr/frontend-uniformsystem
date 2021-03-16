@@ -20,6 +20,8 @@ function Perfil() {
   const [dialogItem, setDialogItem] = useState({ open: false, item: null });
   const history = useHistory();
 
+  const currentUser = user;
+
   const meta = {
     titlePage: "Uniformes Ecommerce | Perfil",
     titleSearch: "Profit Uniformes | Perfil",
@@ -54,6 +56,7 @@ function Perfil() {
   }
 
   useEffect(() => {
+    
     try {
       async function getAddress() {
         const response = await api.get("/address", {

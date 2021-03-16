@@ -58,7 +58,7 @@ function EspecificOrderAdm(props) {
     }*/
 
   const obterPedidos = async () => {
-    const resultado = await api.get(`productsfromorder/${orderId}`, {
+    const resultado = await api.get(`/order/productsfromorder/${orderId}`, {
       headers: { authorization: `bearer ${token}` },
     });
     console.log(resultado);
@@ -95,6 +95,15 @@ function EspecificOrderAdm(props) {
     } else {
       if (Code !== "") {
         try {
+          const response = await api.post(
+            `order/deliveratmail/${orderId}`,
+            {
+              tracking_code: Code,
+            },
+            {
+              headers: { authorization: `Bearer ${token}` },
+            }
+          );
           setStatus("delivered");
         } catch (error) {
           console.warn(error);

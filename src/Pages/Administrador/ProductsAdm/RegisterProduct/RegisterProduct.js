@@ -87,10 +87,23 @@ function RegisterProduct({ history }) {
 
   // Estados voltados para gerenciar erros no campo Description
   const [errorDescriptionProduct, setErrorDescriptionProduct] = useState(false);
-  const [
-    errorDescriptionProductMessage,
-    setErrorDescriptionProductMessage,
-  ] = useState("");
+  const [errorDescriptionProductMessage, setErrorDescriptionProductMessage] = useState("");
+
+  // Estados voltados para gerenciar erros no campo Height
+  const [errorHeightProduct, setErrorHeightProduct ] = useState(false);
+  const [errorHeightProductMessage, setErrorHeightProductMessage] = useState("");
+  
+  // Estados voltados para gerenciar erros no campo Lenght
+  const [errorLenghtProduct, setErrorLenghtProduct] = useState(false);
+  const [errorLenghtProductMessage, setErrorLenghtProductMessage] = useState("");
+  
+  // Estados voltados para gerenciar erros no campo Weight
+  const [errorWeightProduct, setErrorWeightProduct] = useState(false);
+  const [errorWeightProductMessage, setErrorWeightProductMessage] = useState("");
+
+  // Estados voltados para gerenciar erros no campo Width
+  const [errorWidthProduct, setErrorWidthProduct] = useState(false);
+  const [errorWidthProductMessage, setErrorWidthProductMessage] = useState("");
 
   const inputTypeCap = useRef(null);
   const inputTypeShirt = useRef(null);
@@ -100,6 +113,11 @@ function RegisterProduct({ history }) {
 
   const inputName = useRef(null);
   const inputDescription = useRef(null);
+  const inputHeight = useRef(null);
+  const inputLenght = useRef(null);
+  const inputWeight = useRef(null);
+  const inputWidth = useRef(null);
+
 
   const classes = useStyles();
 
@@ -124,6 +142,22 @@ function RegisterProduct({ history }) {
     } else if (type === "description") {
       newObjProductInfo = {
         description: e.target.value,
+      };
+    } else if (type === "height") {
+      newObjProductInfo = {
+        height: e.target.value,
+      };
+    } else if (type === "length") {
+      newObjProductInfo = {
+        length: e.target.value,
+      };
+    } else if (type === "weight") {
+      newObjProductInfo = {
+        weight: e.target.value,
+      };
+    } else if (type === "width") {
+      newObjProductInfo = {
+        width: e.target.value,
       };
     } else {
       newObjProductInfo = {
@@ -156,109 +190,95 @@ function RegisterProduct({ history }) {
     const resultValidateDescription = validateInputWithTypeText(
       inputDescription.current.value
     );
+    const resultValidateHeight = validateInputWithTypeText(
+      inputHeight.current.value
+    );
+    const resultValidateLenght = validateInputWithTypeText(
+      inputLenght.current.value
+    );
+    const resultValidateWeight = validateInputWithTypeText(
+      inputWeight.current.value
+    );
+    const resultValidateWidth = validateInputWithTypeText(
+      inputWidth.current.value
+    );
 
-    // Cobre as opções dos diferentes erros no Cadastro de um porduto novo
     if (
-      resultValidateType &&
-      !resultValidateName &&
-      resultValidateDescription
+      !resultValidateType ||
+      !resultValidateName ||
+      !resultValidateDescription ||
+      !resultValidateHeight ||
+      !resultValidateLenght ||
+      !resultValidateWeight ||
+      !resultValidateWidth
     ) {
-      // tipo ok, nome errado, descrição ok
-      setErrorTypeProductMessage("");
+      if (!resultValidateType) {
+        setErrorTypeProductMessage("Escolha um tipo.");
+      } else {
+        setErrorTypeProductMessage("");
+      }
 
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
+      if (!resultValidateName) {
+        setErrorNameProduct(true);
+        setErrorNameProductMessage("Digite um nome.");
+      } else {
+        setErrorNameProduct(false);
+        setErrorNameProductMessage("");
+      }
 
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      resultValidateType &&
-      resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo ok, nome ok, descrição errado
-      setErrorTypeProductMessage("");
+      if (!resultValidateDescription) {
+        setErrorDescriptionProduct(true);
+        setErrorDescriptionProductMessage("Digite uma descrição.");
+      } else {
+        setErrorDescriptionProduct(false);
+        setErrorDescriptionProductMessage("");
+      }
 
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
+      if (!resultValidateHeight) {
+        setErrorHeightProduct(true);
+        setErrorHeightProductMessage("Digite uma altura");
+      } else {
+        setErrorHeightProduct(false);
+        setErrorHeightProductMessage("");
+      }
 
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      !resultValidateType &&
-      resultValidateName &&
-      resultValidateDescription
-    ) {
-      // tipo errado, nome ok, descrição errado
-      setErrorTypeProductMessage("Escolha um tipo.");
+      if (!resultValidateLenght) {
+        setErrorLenghtProduct(true);
+        setErrorLenghtProductMessage("Digite um comprimento");
+      } else {
+        setErrorLenghtProduct(false);
+        setErrorLenghtProductMessage("");
+      }
 
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
+      if (!resultValidateWeight) {
+        setErrorWeightProduct(true);
+        setErrorWeightProductMessage("Digite um peso");
+      } else {
+        setErrorWeightProduct(false);
+        setErrorWeightProductMessage("");
+      }
 
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      !resultValidateType &&
-      !resultValidateName &&
-      resultValidateDescription
-    ) {
-      // tipo errado, nome errado, descrição ok
-      setErrorTypeProductMessage("Escolha um tipo.");
-
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      !resultValidateType &&
-      resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo errado, nome ok, descrição errado
-      setErrorTypeProductMessage("Escolha um tipo.");
-
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      resultValidateType &&
-      !resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo ok, nome errado, descrição errado
-      setErrorTypeProductMessage("");
-
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      !resultValidateType &&
-      !resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo errado, nome errado, descrição errado
-      setErrorTypeProductMessage("Escolha um tipo.");
-
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
+      if (!resultValidateWidth) {
+        setErrorWidthProduct(true);
+        setErrorWidthProductMessage("Digite uma largura");
+      } else {
+        setErrorWidthProduct(false);
+        setErrorWidthProductMessage("");
+      }
     } else {
-      // tipo ok, nome ok, descrição ok
-
       setErrorTypeProductMessage("");
-
       setErrorNameProduct(false);
       setErrorNameProductMessage("");
-
       setErrorDescriptionProduct(false);
       setErrorDescriptionProductMessage("");
+      setErrorHeightProduct(false);
+      setErrorHeightProductMessage("");
+      setErrorLenghtProduct(false);
+      setErrorLenghtProductMessage("");
+      setErrorWeightProduct(false);
+      setErrorWeightProductMessage("");
+      setErrorWidthProduct(false);
+      setErrorWidthProductMessage("");
 
       try {
         setLoading(true);
@@ -478,6 +498,56 @@ function RegisterProduct({ history }) {
               error={errorDescriptionProduct}
               helperText={errorDescriptionProductMessage}
               onChange={(e) => handleCompleteProductInfo(e, "description")}
+              variant="outlined"
+            />
+          </div>
+          
+          {/* Campos para preenchimento de Altura, Largura, Peso e Comprimento */}
+          <div className="spanWithInput">
+            <span>ALTURA:</span>
+            <TextField
+              required
+              inputRef={inputHeight}
+              className={classes.inputText}
+              error={errorHeightProduct}
+              helperText={errorHeightProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "height")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>COMPRIMENTO:</span>
+            <TextField
+              required
+              inputRef={inputLenght}
+              className={classes.inputText}
+              error={errorLenghtProduct}
+              helperText={errorLenghtProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "length")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>PESO:</span>
+            <TextField
+              required
+              inputRef={inputWeight}
+              className={classes.inputText}
+              error={errorWeightProduct}
+              helperText={errorWeightProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "weight")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>LARGURA:</span>
+            <TextField
+              required
+              inputRef={inputWidth}
+              className={classes.inputText}
+              error={errorWidthProduct}
+              helperText={errorWidthProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "width")}
               variant="outlined"
             />
           </div>

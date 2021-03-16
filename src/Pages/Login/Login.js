@@ -94,7 +94,7 @@ function Login() {
       setErrorPasswordMessage("");
 
       try {
-        const response = await api.post("/login", {
+        const response = await api.post("/session/login", {
           email: email,
           password: password,
         });

@@ -44,7 +44,7 @@ export default function DropDownLoginContent({ onClose }) {
       if (errors) setErrors({});
 
       try {
-        const response = await api.post("/login", {
+        const response = await api.post("/session/login", {
           email: User.current,
           password: Password.current,
         });

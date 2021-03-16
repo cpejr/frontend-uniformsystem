@@ -14,7 +14,7 @@ function PopUpForgotPassword({ onClose, open }) {
   async function handleForgot(e) {
     if (Error) setError();
     try {
-      await api.post("/sendpassword", {
+      await api.post("/users/sendpassword", {
         email: Email,
       });
       setSent(true);

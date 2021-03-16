@@ -202,7 +202,7 @@ function Produto() {
       objProdcutInCart.append("isLogoUpload", logoImage ? true : false);
 
       try {
-        const response = await api.put("/addtocart", objProdcutInCart, {
+        const response = await api.put("/cart/addtocart", objProdcutInCart, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("resposta", response.data);

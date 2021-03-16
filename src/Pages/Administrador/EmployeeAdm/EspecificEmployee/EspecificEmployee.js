@@ -36,7 +36,7 @@ function EspecificEmployee({ history }) {
 
   async function getEspecificEmployee() {
     try {
-      const resultado = await api.get(`/employees/${id}`, {
+      const resultado = await api.get(`/users/employees/${id}`, {
         headers: { authorization: `bearer ${token}` },
       });
       setEmployees([...resultado.data.user]);
@@ -48,7 +48,7 @@ function EspecificEmployee({ history }) {
 
   async function getOrders() {
     try {
-      const resultado2 = await api.get(`/shipping/deliveredby/${id}`, {
+      const resultado2 = await api.get(`/order/shipping/deliveredby/${id}`, {
         headers: { authorization: `bearer ${token}` },
       });
       setOrders([...resultado2.data]);
@@ -79,12 +79,12 @@ function EspecificEmployee({ history }) {
         <hr className="titleLineExp"></hr>
       </div>
       <div className="tabela">
-        {Employees.forEach((employee) => {
+        {Employees.map((employee) => {
           name_employee = employee.name;
           user_id = employee.id;
           cpf = employee.cpf;
         })}
-        {Orders.forEach((order) => {
+        {Orders.map((order) => {
           id_order = 3;
           idpedido = order.order_id;
           data = order.updated_at;

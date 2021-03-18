@@ -1,72 +1,99 @@
 import React, { useState } from "react";
 import "./ProductModelCardAdm.css";
 
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 import Switch from "react-switch";
-import api from "../../services/api";
 
 function ProductModelCardAdm({
-  handleSelectToEdit,
+  handleOpenDialog,
   fullProduct,
-  whichMethodIs
+  updateModelInfo,
 }) {
   const [isAvailable, setIsAvailable] = useState(fullProduct.available);
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const {
+    canDelete,
     fileToShow,
     imgLink,
-    modelDescription,
+    model_description,
     price,
     gender,
     product_model_id,
   } = fullProduct;
 
-  fullProduct.available = false;
-
-  const handleEditModel = () => {
-    handleSelectToEdit(product_model_id);
-    // handleClose();
-  };
-
-  const handleSwitchChange = async (type) => {
-    
-    if(type === 'edit'){
-      try {
-        await api.put(`/model/${product_model_id}`, { available: !isAvailable });
-        setIsAvailable(!isAvailable);
-        fullProduct.available = !isAvailable;
-      } catch (error) {
-        console.error(error);
-      }
-    }else{
-      setIsAvailable(!isAvailable);
-      fullProduct.available = !isAvailable;
-    }
-  };
-
   return (
     <div className="productModelCardAdmFullContent">
-      <Switch onChange={() => handleSwitchChange(whichMethodIs)} checked={isAvailable} className="iconAvailable"/>
+      <div className="iconAvailable">
+        <span>Disponível</span>
+        <Switch
+          onChange={() => {
+            updateModelInfo(product_model_id, "available", !isAvailable);
+            setIsAvailable(!isAvailable);
+          }}
+          checked={isAvailable}
+        />
+      </div>
+      <div
+        className="iconEditImage iconWithText"
+        onClick={() =>
+          handleOpenDialog("imgLink", "Imagem do modelo", product_model_id)
+        }
+      >
+        <FaEdit className="iconProductModelCard" />
+        <span>Editar Imagem</span>
+      </div>
       {fileToShow ? (
-        <img src={fileToShow} alt={modelDescription} />
+        <img src={fileToShow} alt={model_description} />
       ) : imgLink.includes(bucketAWS) ? (
-        <img src={imgLink} alt={modelDescription} />
+        <img src={imgLink} alt={model_description} />
       ) : (
         "Sem imagem"
       )}
-      <span className="modelName">{modelDescription}</span>
-
-      <div className="priceAndGender">
-        <span>{`R$ ${Number(price).toFixed(2).replace(".", ",")}`}</span>
-        <span>{gender === "M" ? "Masculino" : "Feminino"}</span>
-      </div>
-
-      <div className="iconWithText" onClick={() => handleEditModel()}>
+      <div
+        className="iconWithText"
+        onClick={() =>
+          handleOpenDialog(
+            "model_description",
+            "Nome do Modelo",
+            product_model_id
+          )
+        }
+      >
         <FaEdit className="iconProductModelCard" />
-        <span>EDITAR MODELO</span>
+        <p>Nome do modelo: {model_description}</p>
       </div>
+
+      <div
+        className="iconWithText"
+        onClick={() => handleOpenDialog("price", "Preço", product_model_id)}
+      >
+        <FaEdit className="iconProductModelCard" />
+        <p>Preço: {`R$ ${Number(price).toFixed(2).replace(".", ",")}`}</p>
+      </div>
+
+      <div
+        className="iconWithText"
+        onClick={() =>
+          handleOpenDialog("gender", "Gênero do modelo", product_model_id)
+        }
+      >
+        <FaEdit className="iconProductModelCard" />
+        <p>Gênero: {gender === "M" ? "Masculino" : "Feminino"}</p>
+      </div>
+
+      {canDelete && (
+        <div
+          className="iconWithText"
+          onClick={() =>
+            handleOpenDialog("delete", "Deletar modelo", product_model_id)
+          }
+        >
+          <FaTrash className="iconProductModelCard" />
+          <p>Deletar Modelo</p>
+        </div>
+      )}
     </div>
   );
 }

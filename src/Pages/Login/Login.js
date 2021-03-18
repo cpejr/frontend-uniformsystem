@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import { Link, useHistory } from 'react-router-dom';
-import { Button, TextField, CircularProgress } from '@material-ui/core';
-import MetaData from '../../meta/reactHelmet';
+import { Link, useHistory } from "react-router-dom";
+import { Button, TextField, CircularProgress } from "@material-ui/core";
+import MetaData from "../../meta/reactHelmet";
 import { LoginContext } from "../../contexts/LoginContext";
 import api from "../../services/api";
 import "./Login.css";
@@ -24,11 +24,12 @@ function Login() {
   const meta = {
     titlePage: "Uniformes Ecommerce | Login",
     titleSearch: "Profit Uniformes | Login",
-    description: "Faça login com sua conta profit e conheça nossos uniformes personalizados e funcionalidades.",
+    description:
+      "Faça login com sua conta profit e conheça nossos uniformes personalizados e funcionalidades.",
     keyWords: "Uniformes | Login | Entrar | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -93,7 +94,7 @@ function Login() {
       setErrorPasswordMessage("");
 
       try {
-        const response = await api.post("/login", {
+        const response = await api.post("/session/login", {
           email: email,
           password: password,
         });
@@ -103,10 +104,10 @@ function Login() {
           const user = response.data.user;
           signIn(token, user);
           //Aqui manda para a rota logo apos o login
-          if (user[0].user_type === process.env.REACT_APP_ADM_ROLE) {
+          if (user.user_type === process.env.REACT_APP_ADM_ROLE) {
             history.push("/adm/home");
           } else if (
-            user[0].user_type === process.env.REACT_APP_EMPLOYEE_ROLE
+            user.user_type === process.env.REACT_APP_EMPLOYEE_ROLE
           ) {
             history.push("/adm/pedidos");
           } else {
@@ -126,7 +127,14 @@ function Login() {
 
   return (
     <div className="login">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="box">
         <section className="form">
           <form>

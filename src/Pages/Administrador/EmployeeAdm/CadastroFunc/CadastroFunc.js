@@ -2,15 +2,15 @@ import React, { useRef, useState } from "react";
 import MetaData from "../../../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
 
+import SnackbarMessage from '../../../../components/SnackbarMessage'
+
 import {
   Button,
   CircularProgress,
   makeStyles,
   MenuItem,
-  Snackbar,
   TextField,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
 
 import { FaChevronLeft } from "react-icons/fa";
 
@@ -75,6 +75,9 @@ function CadastroFunc({ history }) {
 
   const [errorTypeEmployee, setErrorTypeEmployee] = useState(false);
   const [errorTypeEmployeeMessage, setErrorTypeEmployeeMessage] = useState("");
+
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
 
   const inputName = useRef(null);
   const inputCPF = useRef(null);
@@ -184,8 +187,10 @@ function CadastroFunc({ history }) {
 
         setTimeout(() => {
           setLoading(false);
+          setMessageSnackbar("Funcionário cadastrado com sucesso!");
+          setTypeSnackbar("success");
           setOpenSnackBar(true);
-        }, 2000);
+        }, 1000);
 
         // Reseta as informações nos campos
         inputName.current.value = "";
@@ -194,6 +199,9 @@ function CadastroFunc({ history }) {
         inputPassword.current.value = "";
         setTypeEmployeeState("");
       } catch (err) {
+        setMessageSnackbar("Falha cadastrar funcionário");
+        setTypeSnackbar("error");
+        setLoading(false)
         console.log(err.message);
       }
     }
@@ -276,20 +284,7 @@ function CadastroFunc({ history }) {
         </Button>
       </div>
 
-      <Snackbar
-        open={openSnackBar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackBar}
-      >
-        <MuiAlert
-          onClose={handleCloseSnackBar}
-          elevation={6}
-          variant="filled"
-          severity="success"
-        >
-          Funcionário cadastrado com sucesso!
-        </MuiAlert>
-      </Snackbar>
+      <SnackbarMessage open={openSnackBar} handleClose={handleCloseSnackBar} message={messageSnackbar} type={typeSnackbar}/>
     </div>
   );
 }

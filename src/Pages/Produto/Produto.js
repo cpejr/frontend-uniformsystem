@@ -161,12 +161,7 @@ function Produto() {
     );
     const resultSizeField = validateFields(selectedValue, "size");
 
-    if (
-      !resultQuantityField ||
-      !resultSizeField ||
-      !token ||
-      token === "notYet"
-    ) {
+    if (!resultQuantityField || !resultSizeField || !token) {
       if (!resultQuantityField) {
         setErrorQuantity(true);
         setErrorQuantityMessage("Quantidade inválida.");
@@ -181,7 +176,7 @@ function Produto() {
         setErrorSize(false);
       }
 
-      if (!token || token === "notYet") {
+      if (!token) {
         setErrorToken(true);
       } else {
         setErrorToken(false);
@@ -207,7 +202,7 @@ function Produto() {
       objProdcutInCart.append("isLogoUpload", logoImage ? true : false);
 
       try {
-        const response = await api.put("/addtocart", objProdcutInCart, {
+        const response = await api.put("/cart/addtocart", objProdcutInCart, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("resposta", response.data);

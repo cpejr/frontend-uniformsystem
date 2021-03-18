@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 
 import { withRouter } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
+import { LoginContext } from '../../contexts/LoginContext';
 
 import api from "../../services/api";
 import SnackbarMessage from "../../components/SnackbarMessage";
@@ -101,6 +102,7 @@ function validateInput(type, value) {
 
 function Cadastro({ history }) {
   const classes = useStyles();
+  const { token } = useContext(LoginContext);
 
   const [errorName, setErrorName] = useState(false);
   const [errorNameMessage, setErrorNameMessage] = useState("");
@@ -474,7 +476,8 @@ function Cadastro({ history }) {
 
       try {
         setLoading(true);
-        const response = await api.post("/user", {
+        const response = await api.post("/users", 
+        {
           name: userInfo.name,
           user_type: userInfo.user_type,
           email: userInfo.email,
@@ -490,7 +493,11 @@ function Cadastro({ history }) {
             country: userInfo.address.country,
             complement: userInfo.address.complement,
           },
-        });
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+        );
 
         console.log(response);
 
@@ -508,6 +515,7 @@ function Cadastro({ history }) {
         setTypeSnackbar("error");
         setLoading(false);
         console.log(err);
+        console.log(userInfo);
       }
     }
   };

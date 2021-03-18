@@ -69,7 +69,7 @@ function Checkout() {
 
   const { token, user } = useContext(LoginContext);
 
-  const currentUser = user[0];
+  const currentUser = user;
   const user_id = currentUser.user_id;
 
   const serviceCode = "04014";

@@ -16,7 +16,7 @@ function EspecificOrderAdm(props) {
 
   // Caso ainda não tenha um deliver e vai efetuar a mudança de status no momento
   if (!deliver) {
-    deliver = user[0].name;
+    deliver = user.name;
   }
 
   const createdAt = props.location.state.createdAt;
@@ -58,7 +58,7 @@ function EspecificOrderAdm(props) {
     }*/
 
   const obterPedidos = async () => {
-    const resultado = await api.get(`productsfromorder/${orderId}`, {
+    const resultado = await api.get(`/order/productsfromorder/${orderId}`, {
       headers: { authorization: `bearer ${token}` },
     });
     console.log(resultado);
@@ -95,6 +95,15 @@ function EspecificOrderAdm(props) {
     } else {
       if (Code !== "") {
         try {
+          const response = await api.post(
+            `order/deliveratmail/${orderId}`,
+            {
+              tracking_code: Code,
+            },
+            {
+              headers: { authorization: `Bearer ${token}` },
+            }
+          );
           setStatus("delivered");
         } catch (error) {
           console.warn(error);

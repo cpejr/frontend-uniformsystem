@@ -14,7 +14,6 @@ import "./Perfil.css";
 function Perfil() {
 
   const { user, logOut, token } = useContext(LoginContext);
-  const currentUser = user[0];
   const [userAddress, setUserAddress] = useState({});
   const [userOrders, setUserOrders] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -24,11 +23,12 @@ function Perfil() {
   const meta = {
     titlePage: "Uniformes Ecommerce | Perfil",
     titleSearch: "Profit Uniformes | Perfil",
-    description: "Verifique seus dados pessoais e informações de envio juntamente com seus pedidos no perfil profit!",
+    description:
+      "Verifique seus dados pessoais e informações de envio juntamente com seus pedidos no perfil profit!",
     keyWords: "Uniformes | Perfil | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   function handleClose() {
     setDialogItem({ open: false, item: null });
@@ -40,7 +40,7 @@ function Perfil() {
 
   async function deleteUser() {
     try {
-      await api.delete(`/delUserClient/${currentUser.user_id}`, {
+      await api.delete(`/users/delClient/${currentUser.user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       handleClose();
@@ -54,46 +54,42 @@ function Perfil() {
   }
 
   useEffect(() => {
-    try{
-      async function getAddress(){
-        const response = await api.get(`/address/${currentUser.user_id}`,
-        {
+    try {
+      async function getAddress() {
+        const response = await api.get("/address", {
           headers: { Authorization: `Bearer ${token}` },
-        },
-        );
+        });
 
-        console.log('aqi', response)
-        if(response.data.adresses.length > 0){
+        console.log("aqi", response);
+        if (response.data.adresses.length > 0) {
           setUserAddress(response.data.adresses[0]);
         }
-        console.log('resposta', response.data.adresses[0])
+        console.log("resposta", response.data.adresses[0]);
       }
 
-
-      async function getOrders(){
-        const response = await api.get(`/userorder/${currentUser.user_id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
+      async function getOrders() {
+        const response = await api.get(
+          `/order/userorder/${currentUser.user_id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
-        console.log('orders', response)
-        if(response.data){
+        console.log("orders", response);
+        if (response.data) {
           setUserOrders(response.data);
         }
       }
       getAddress();
       getOrders();
-
-    }catch(err){
+    } catch (err) {
       console.warn(err);
     }
   }, []);
 
   // Chamado quando address atualiza (depois do popUp fechar)
   useEffect(() => {
-
     const newAddress = {
-      updatedFields : {
+      updatedFields: {
         street: userAddress.street,
         neighborhood: userAddress.neighborhood,
         city: userAddress.city,
@@ -101,22 +97,18 @@ function Perfil() {
         zip_code: userAddress.zip_code,
         country: userAddress.country,
         complement: userAddress.complement,
-      }
-    }
-
-    async function updateAddress(){
-      await api.put(`/address/${userAddress.address_id}`,
-      newAddress,
-      {
-        headers: { Authorization: `Bearer ${token}` },
       },
-      );
+    };
+
+    async function updateAddress() {
+      await api.put(`/address/${userAddress.address_id}`, newAddress, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
     }
     // somente se existir endereço
-    if(userAddress.address_id){
+    if (userAddress.address_id) {
       updateAddress();
     }
-
   }, [userAddress]);
 
   function handleCloseModal() {
@@ -129,30 +121,37 @@ function Perfil() {
 
   return (
     <div className="profileContainer">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="personalDataContainer">
         <h1 className="titleProfile">
           DADOS PESSOAIS
-          <span className="titleLine"/>
+          <span className="titleLine" />
         </h1>
         <div className="containerDados">
-            <DadosPessoais dado={currentUser} />
+            <DadosPessoais dado={user} />
         </div>
 
         <div className="containerEndereço">
-          {
-            userAddress !== {} ?
-                <Enderecos endereço={userAddress} handleOpenModal={handleOpenModal}/>
-            : 
-              null
-          }
+          {userAddress !== {} ? (
+            <Enderecos
+              endereço={userAddress}
+              handleOpenModal={handleOpenModal}
+            />
+          ) : null}
         </div>
 
         <div>
           <button
             className="button-perfil"
             style={{ width: "22vw", marginTop: "5vh" }}
-            onClick={() => handleOpen(currentUser)}
+            onClick={() => handleOpen(user)}
           >
             Apagar conta
           </button>
@@ -162,17 +161,16 @@ function Perfil() {
       <div className="ordersContainer">
         <h1 className="titleProfile">
           MEUS PEDIDOS
-          <span className="titleLine"/>
+          <span className="titleLine" />
         </h1>
         <div className="containerPedidos">
-          { 
-            userOrders.length > 0 ?
-              userOrders.map((pedido, index) => (
-                <CardPedido key={index} pedido={pedido} token={token} />
-              ))
-            :
+          {userOrders.length > 0 ? (
+            userOrders.map((pedido, index) => (
+              <CardPedido key={index} pedido={pedido} token={token} />
+            ))
+          ) : (
             <span>Sem pedidos</span>
-          }
+          )}
         </div>
       </div>
       <PopUpChangeAddress

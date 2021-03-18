@@ -60,6 +60,7 @@ function Contato() {
         const FacebookLinkInfo = response.data.filter((item) =>
           item.key === "facebookLink" ? item.data : null
         )[0];
+        console.log(response);
         setEnderecoInfo(address.data);
         setFacebookInfo(facebookUsername.data);
         setInstagramInfo(instagramUsername.data);

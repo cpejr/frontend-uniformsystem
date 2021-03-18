@@ -22,7 +22,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import { LoginContext } from '../../contexts/LoginContext';
+import { LoginContext } from "../../contexts/LoginContext";
 
 const drawerWidth = 220;
 
@@ -62,7 +62,6 @@ export default function ComputerSidebar(props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { user } = useContext(LoginContext);
-  const currentUser = user[0];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -91,22 +90,21 @@ export default function ComputerSidebar(props) {
     },
   ];
 
-    const objListOptionsEmployee = [
-        {
-            itemName: 'PEDIDOS',
-            itemIcon: < FormatListBulletedIcon/>, 
-            path: '/adm/pedidos',
-        },
-    ]
+  const objListOptionsEmployee = [
+    {
+      itemName: "PEDIDOS",
+      itemIcon: <FormatListBulletedIcon />,
+      path: "/adm/pedidos",
+    },
+  ];
 
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {
-          currentUser.user_type === 'adm' ?
-            objListOptionsAdm.map((item, index) => (
+        {user.user_type === "adm"
+          ? objListOptionsAdm.map((item, index) => (
               <Link to={`${item.path}`}>
                 <ListItem button key={index}>
                   <ListItemIcon>{item.itemIcon}</ListItemIcon>
@@ -114,23 +112,20 @@ export default function ComputerSidebar(props) {
                 </ListItem>
               </Link>
             ))
-            :
-            objListOptionsEmployee.map((item, index) => (
+          : objListOptionsEmployee.map((item, index) => (
               <Link to={`${item.path}`}>
                 <ListItem button key={index}>
                   <ListItemIcon>{item.itemIcon}</ListItemIcon>
                   <ListItemText primary={item.itemName} />
                 </ListItem>
               </Link>
-              
-          ))
-        }
+            ))}
       </List>
     </div>
   );
-  
-  const container = window !== undefined ? () => window().document.body : undefined;
 
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <div className="sidebar">

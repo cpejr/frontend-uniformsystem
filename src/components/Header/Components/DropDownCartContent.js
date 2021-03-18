@@ -124,7 +124,7 @@ export default function DropDownCartContent(props) {
           className="stylized_button"
           onClick={() => {
             handleClickAway();
-            history.push("/cart");
+            history.push("/cart"); //pagina do carrinho
           }}
         >
           Ir para o carrinho

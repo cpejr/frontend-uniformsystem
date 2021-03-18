@@ -14,7 +14,7 @@ function MobileHeader() {
   const history = useHistory();
   const [ClickLogin, setClickLogin] = useState(false);
   const { user, logOut } = useContext(LoginContext);
-  const currentUser = !user || user === "notYet" ? null : user[0];
+  const currentUser = !user ? null : user;
 
   const handleLogOut = () => {
     logOut();
@@ -67,30 +67,13 @@ function MobileHeader() {
                   <FaAngleDown className="arrow_icon" />
                 </div>
                 {ClickLogin && (
-                  <DropDownLoginContent setClickLogin={setClickLogin} />
+                  <DropDownLoginContent onClose={() => setClickLogin(false)} />
                 )}
               </>
             )}
           </div>
           {currentUser ? (
             <>
-              {/* <div
-                                    className="all_cart"
-                                    style={{ position: "relative", margin: 0 }}
-                                >
-                                    <div
-                                        className="cart"
-                                        onClick={() => setClickCart(!ClickCart)}
-                                    >
-                                        <FaShoppingCart
-                                            className="cart_icon"
-                                            style={{ margin: "0 30px" }}
-                                        />
-                                    </div>
-                                    {ClickCart && (
-                                        <DropDownCartContent setClickCart={setClickCart} />
-                                    )}
-                                </div> */}
               <div className="logoutPart" onClick={() => handleLogOut()}>
                 <span>LOGOUT</span>
                 <FaSignOutAlt />

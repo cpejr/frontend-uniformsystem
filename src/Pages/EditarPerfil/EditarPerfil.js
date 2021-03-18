@@ -111,7 +111,7 @@ function EditarPerfil({ history }) {
   const [errorTelefone, setErrorTelefone] = useState(false);
   const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
-  const [userInfo, setUserInfo] = useState({ name: user[0].name });
+  const [userInfo, setUserInfo] = useState({ name: user.name });
   const [addressInfo, setAddressInfo] = useState();
 
   const [messageSnackbar, setMessageSnackbar] = useState("");
@@ -148,12 +148,10 @@ function EditarPerfil({ history }) {
         },
       });
       setAddressInfo({ ...response.data.adresses[0] });
-      setUserInfo({ name: user[0].name });
+      setUserInfo({ name: user.name });
     }
     getUserAddress();
   }, []);
-
-
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -330,19 +328,19 @@ function EditarPerfil({ history }) {
         console.log(response);
         setUser([
           {
-            ...user[0],
+            ...user,
             name: nomeInput.current.value,
             telefone: telefoneInput.current.value,
           },
         ]);
         const responseUser = await api.put(
-          `user/${user[0].user_id}`,
+          `user/${user.user_id}`,
           {
             updatedFields: {
               name: nomeInput.current.value,
-              email: user[0].email,
+              email: user.email,
               telefone: telefoneInput.current.value,
-              cpf: user[0].cpf,
+              cpf: user.cpf,
             },
           },
           {
@@ -474,7 +472,7 @@ function EditarPerfil({ history }) {
       </h1>
 
       <h1 className={classes.subTitle}>NOME COMPLETO</h1>
-      {user[0].name && (
+      {user.name && (
         <TextField
           required
           inputRef={nomeInput}
@@ -483,7 +481,7 @@ function EditarPerfil({ history }) {
           helperText={errorNameMessage}
           className={classes.largeInput}
           variant="outlined"
-          defaultValue={user[0].name}
+          defaultValue={user.name}
           onChange={(e) => handleInputChange(e, "name")}
         />
       )}
@@ -632,7 +630,7 @@ function EditarPerfil({ history }) {
         helperText={errorTelefoneMessage}
         className={classes.mediumInput}
         variant="outlined"
-        defaultValue={user[0].telefone}
+        defaultValue={user.telefone}
       />
 
       <div className={classes.divButtons}>
@@ -644,7 +642,12 @@ function EditarPerfil({ history }) {
           )}
         </Button>
       </div>
-      <SnackbarMessage open={open} handleClose={handleClose} message={messageSnackbar} type={typeSnackbar}/>
+      <SnackbarMessage
+        open={open}
+        handleClose={handleClose}
+        message={messageSnackbar}
+        type={typeSnackbar}
+      />
     </div>
   );
 }

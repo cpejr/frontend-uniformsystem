@@ -298,7 +298,7 @@ function RegisterProduct({ history }) {
             objImage.append("model_description", item.modelDescription);
             objImage.append("gender", item.gender);
 
-            await api.post(`/newmodel/${response.data.product_id}`, objImage, {
+            await api.post(`/productmodels/newmodel/${response.data.product_id}`, objImage, {
               headers: { authorization: `bearer ${token}` },
             });
           });

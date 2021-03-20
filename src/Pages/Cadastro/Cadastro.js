@@ -494,9 +494,6 @@ function Cadastro({ history }) {
             complement: userInfo.address.complement,
           },
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
         );
 
         console.log(response);

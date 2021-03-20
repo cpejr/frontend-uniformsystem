@@ -42,7 +42,7 @@ function Perfil() {
 
   async function deleteUser() {
     try {
-      await api.delete(`/users/delClient/${currentUser.user_id}`, {
+      await api.delete(`/users/delClient/${user.user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       handleClose();
@@ -72,7 +72,7 @@ function Perfil() {
 
       async function getOrders() {
         const response = await api.get(
-          `/order/userorder/${currentUser.user_id}`,
+          `/order/userorder/${user.user_id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

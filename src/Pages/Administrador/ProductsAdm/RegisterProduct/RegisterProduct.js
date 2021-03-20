@@ -164,7 +164,7 @@ function RegisterProduct({ history }) {
         product_type: e.target.value,
       };
     }
-    setProductInfo({ ...productInfo, ...newObjProductInfo, models: [] });
+    setProductInfo({ ...productInfo, ...newObjProductInfo });
   };
 
   const handleCloseSnackBar = (event, reason) => {
@@ -298,7 +298,7 @@ function RegisterProduct({ history }) {
             objImage.append("model_description", item.modelDescription);
             objImage.append("gender", item.gender);
 
-            await api.post(`/newmodel/${response.data.product_id}`, objImage, {
+            await api.post(`/productmodels/newmodel/${response.data.product_id}`, objImage, {
               headers: { authorization: `bearer ${token}` },
             });
           });
@@ -317,7 +317,7 @@ function RegisterProduct({ history }) {
           inputName.current.value = "";
           inputDescription.current.value = "";
           setProductModelsArray([]);
-        }, 2000);
+        }, 1000);
       } catch (err) {
         console.log(err.message);
       }

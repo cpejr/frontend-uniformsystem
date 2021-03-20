@@ -14,7 +14,7 @@ const LoginContextProvider = (props) => {
   useEffect(() => {
     async function verify(token) {
       try {
-        const response = await api.get("/verify");
+        const response = await api.get("/session/verify");
         const data = response.data;
 
         if (data.verified) {

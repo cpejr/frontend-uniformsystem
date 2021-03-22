@@ -132,7 +132,7 @@ function EditProduct({ history }) {
       if (fieldKey === "imgLink") {
         let objImage = new FormData();
         objImage.append("file", value.imgFile);
-        await api.put(`/model/${modelId}`, objImage, {
+        await api.put(`/productmodels/model/${modelId}`, objImage, {
           headers: { authorization: `bearer ${token}` },
         });
         getProductInfo();
@@ -142,7 +142,7 @@ function EditProduct({ history }) {
         }
         let updated_fields = {};
         updated_fields[fieldKey] = value;
-        await api.put(`/model/${modelId}`, updated_fields);
+        await api.put(`/productmodels/model/${modelId}`, updated_fields);
         const index = productModelsArray
           .map((model) => model.product_model_id)
           .indexOf(modelId);
@@ -158,7 +158,7 @@ function EditProduct({ history }) {
 
   async function deleteModel(modelId) {
     try {
-      await api.delete(`/model/${modelId}`);
+      await api.delete(`/productmodels/model/${modelId}`);
       const index = productModelsArray
           .map((model) => model.product_model_id)
           .indexOf(modelId);
@@ -181,7 +181,7 @@ function EditProduct({ history }) {
       objImage.append("model_description", model.modelDescription);
       objImage.append("gender", model.gender);
 
-      await api.post(`/newmodel/${product_id}`, objImage, {
+      await api.post(`/productmodels/newmodel/${product_id}`, objImage, {
         headers: { authorization: `bearer ${token}` },
       });
 

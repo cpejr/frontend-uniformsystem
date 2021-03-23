@@ -189,8 +189,7 @@ function Produto() {
 
       let objProdcutInCart = new FormData();
       objProdcutInCart.append(
-        "product_model_id",
-        `${modelChoosen.product_model_id}`
+        "product_model_id", modelChoosen.product_model_id
       );
 
       const formattedGender = selectedValue.split("_")[0] === "Fem" ? "F" : "M";
@@ -200,12 +199,15 @@ function Produto() {
       objProdcutInCart.append("amount", Number(inputQuantity.current.value));
       objProdcutInCart.append("file", logoImage ? logoImage.imgSrc : null);
       objProdcutInCart.append("isLogoUpload", logoImage ? true : false);
-
+      
       try {
         const response = await api.put("/cart/addtocart", objProdcutInCart, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { 
+            "Content-Type": "multipart/form-data",
+            authorization: `bearer ${token}` 
+          },
         });
-        console.log("resposta", response.data);
+        
 
         // Espera X milissegundos para ativar a função interna
         setTimeout(() => {

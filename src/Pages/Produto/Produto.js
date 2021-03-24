@@ -84,6 +84,8 @@ function Produto() {
   //Pegando o id do produto pelo link
   const { product_id } = useParams();
 
+  console.log("ID:", product_id);
+
   useEffect(async () => {
     async function getProductModelsFromProduct(product_id) {
       const response = await api.get(`/productmodels/${product_id}`);
@@ -93,6 +95,7 @@ function Produto() {
     const response = await getProductModelsFromProduct(product_id);
     console.log("OPA", response);
     const arrayOfModels = response.models;
+    console.log("Models", arrayOfModels);
     setProduto(response);
 
     // Armazena o modela
@@ -103,6 +106,7 @@ function Produto() {
 
     // Acha modelo principal
     setModelChoosen(!choosen ? 1 : choosen);
+    console.log("choosen", modelChoosen);
 
     // Acha modelo principal
     setIsSelect(!choosen ? 1 : choosen.product_model_id);
@@ -188,10 +192,9 @@ function Produto() {
       setErrorToken(false);
 
       let objProdcutInCart = new FormData();
-      objProdcutInCart.append(
-        "product_model_id",
-        `${modelChoosen.product_model_id}`
-      );
+      objProdcutInCart.append("product_model_id", 1);
+
+      console.log("OBJ", objProdcutInCart);
 
       const formattedGender = selectedValue.split("_")[0] === "Fem" ? "F" : "M";
 
@@ -202,6 +205,7 @@ function Produto() {
       objProdcutInCart.append("isLogoUpload", logoImage ? true : false);
 
       try {
+        console.log("choosen", modelChoosen);
         const response = await api.put("/cart/addtocart", objProdcutInCart, {
           headers: { Authorization: `Bearer ${token}` },
         });

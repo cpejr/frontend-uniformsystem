@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import MetaData from "../../meta/reactHelmet";
-import { withRouter } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 import SnackbarMessage from "../../components/SnackbarMessage";
+import { FaAngleLeft } from "react-icons/fa";
 
 import {
   Button,
@@ -77,6 +78,11 @@ function validateInput(type, value) {
 }
 
 function EditarPerfil({ history }) {
+  const hist = useHistory();
+
+  function back() {
+    hist.goBack();
+  }
   const { token, user, setUser } = useContext(LoginContext);
 
   const classes = useStyles();
@@ -467,6 +473,9 @@ function EditarPerfil({ history }) {
         imageAlt={meta.imageAlt}
       />
       <h1 className={classes.mainTitle}>
+        <div className="back">
+          <FaAngleLeft onClick={back} />{" "}
+        </div>{" "}
         EDITAR DADOS PESSOAIS
         <span className={classes.spanInsideTitle} />
       </h1>

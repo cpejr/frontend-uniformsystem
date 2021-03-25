@@ -142,7 +142,7 @@ function EditarPerfil({ history }) {
 
   useEffect(() => {
     async function getUserAddress() {
-      const response = await api.get("/address", {
+      const response = await api.get(`address/${user[0]}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

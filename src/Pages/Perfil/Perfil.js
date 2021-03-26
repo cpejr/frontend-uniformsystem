@@ -20,8 +20,6 @@ function Perfil() {
   const [dialogItem, setDialogItem] = useState({ open: false, item: null });
   const history = useHistory();
 
-  const currentUser = user;
-
   const meta = {
     titlePage: "Uniformes Ecommerce | Perfil",
     titleSearch: "Profit Uniformes | Perfil",

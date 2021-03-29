@@ -652,7 +652,25 @@ function HomeEditable() {
       }
     } else {
       setLoading(true);
+
+      const objHomeInfo = {
+        textWhoWeAre: homeInfo.textWhoWeAre,
+        textProducts: homeInfo.textProducts,
+        contactInfo: {
+          cellphone: homeInfo.telephoneInfo,
+          address: homeInfo.enderecoInfo,
+          facebookUsername: homeInfo.facebookUsername,
+          instagramUsername: homeInfo.instagramUsername,
+          facebookLink: homeInfo.facebookLink,
+          instagramLink: homeInfo.instagramLink,
+          whatsAppLink: homeInfo.whatsAppLink,
+        },
+      }
+
       // Salva mudanças de Home Info
+      await api.put('/home/info', objHomeInfo, {
+        headers: { authorization: `bearer ${token}` },
+      });
 
       // Salva mudanças de Home Images
       try {

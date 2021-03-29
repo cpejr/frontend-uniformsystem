@@ -54,6 +54,7 @@ function Perfil() {
   }
 
   useEffect(() => {
+    
     try {
       async function getAddress() {
         const response = await api.get("/address", {

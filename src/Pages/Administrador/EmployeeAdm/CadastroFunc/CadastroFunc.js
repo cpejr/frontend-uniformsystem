@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MetaData from "../../../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
 
@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 
 import { FaChevronLeft } from "react-icons/fa";
+import api from "../../../../services/api";
 
 import "./CadastroFunc.css";
 
@@ -184,6 +185,26 @@ function CadastroFunc({ history }) {
 
       try {
         setLoading(true);
+
+        // console.log(inputName.current.value,
+        //   inputCPF.current.value,
+        //   inputEmail.current.value,
+        //   inputPassword.current.value,
+        //   typeEmployeeState,
+        //   )
+
+        const response = await api.post("/users", 
+        {
+          name: inputName.current.value,
+          user_type: typeEmployeeState,
+          email: inputEmail.current.value,
+          cpf: inputCPF.current.value,
+          password: inputPassword.current.value,
+          telefone: '000000000' // validator nao deixa ficar sem telefone
+        },
+        );
+
+        console.log(response)
 
         setTimeout(() => {
           setLoading(false);

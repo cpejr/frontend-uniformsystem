@@ -142,7 +142,7 @@ function EditarPerfil({ history }) {
 
   useEffect(() => {
     async function getUserAddress() {
-      const response = await api.get("/address", {
+      const response = await api.get("/address/${user.user_id}", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -326,15 +326,15 @@ function EditarPerfil({ history }) {
           }
         );
         console.log(response);
-        setUser([
-          {
-            ...user,
-            name: nomeInput.current.value,
-            telefone: telefoneInput.current.value,
-          },
-        ]);
+        // setUser([
+        //   {
+        //     ...user,
+        //     name: nomeInput.current.value,
+        //     telefone: telefoneInput.current.value,
+        //   },
+        // ]);
         const responseUser = await api.put(
-          `user/${user.user_id}`,
+          `users/${user.user_id}`,
           {
             updatedFields: {
               name: nomeInput.current.value,
@@ -475,6 +475,17 @@ function EditarPerfil({ history }) {
       {user.name && (
         <TextField
           required
+          InputLabelProps={{
+            classes: {
+              root: classes.inputLabel,
+              focused: classes.inputLabelFocused,
+            },
+          }}
+          InputProps={{
+            classes: {
+              root: classes.inputBox,
+            },
+          }}
           inputRef={nomeInput}
           error={errorName}
           label="Nome Completo"
@@ -492,6 +503,17 @@ function EditarPerfil({ history }) {
         {addressInfo && (
           <TextField
             required
+            InputLabelProps={{
+              classes: {
+                root: classes.inputLabel,
+                focused: classes.inputLabelFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.inputBox,
+              },
+            }}
             label="Rua"
             inputRef={ruaInput}
             error={errorRua}
@@ -507,7 +529,18 @@ function EditarPerfil({ history }) {
         {addressInfo && (
           <TextField
             required
-            label="Número"
+            InputLabelProps={{
+              classes: {
+                root: classes.inputLabel,
+                focused: classes.inputLabelFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.inputBox,
+              },
+            }}
+            label="N°"
             inputRef={numInput}
             error={errorNum}
             helperText={errorNumMessage}
@@ -522,6 +555,17 @@ function EditarPerfil({ history }) {
         {addressInfo && (
           <TextField
             required
+            InputLabelProps={{
+              classes: {
+                root: classes.inputLabel,
+                focused: classes.inputLabelFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.inputBox,
+              },
+            }}
             label="Complemento"
             inputRef={complementoInput}
             error={errorComplemento}
@@ -537,6 +581,17 @@ function EditarPerfil({ history }) {
         {addressInfo && (
           <TextField
             required
+            InputLabelProps={{
+              classes: {
+                root: classes.inputLabel,
+                focused: classes.inputLabelFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.inputBox,
+              },
+            }}
             label="Bairro"
             inputRef={bairroInput}
             error={errorBairro}
@@ -554,6 +609,17 @@ function EditarPerfil({ history }) {
         {addressInfo && (
           <TextField
             required
+            InputLabelProps={{
+              classes: {
+                root: classes.inputLabel,
+                focused: classes.inputLabelFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.inputBox,
+              },
+            }}
             label="CEP"
             inputRef={CEPInput}
             error={errorCEP}
@@ -568,6 +634,17 @@ function EditarPerfil({ history }) {
         {addressInfo && (
           <TextField
             required
+            InputLabelProps={{
+              classes: {
+                root: classes.inputLabel,
+                focused: classes.inputLabelFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.inputBox,
+              },
+            }}
             label="Cidade"
             inputRef={cidadeInput}
             error={errorCidade}
@@ -582,6 +659,17 @@ function EditarPerfil({ history }) {
         {addressInfo && (
           <TextField
             required
+            InputLabelProps={{
+              classes: {
+                root: classes.inputLabel,
+                focused: classes.inputLabelFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.inputBox,
+              },
+            }}
             select
             label="Estado"
             error={errorEstado}
@@ -604,6 +692,17 @@ function EditarPerfil({ history }) {
         {addressInfo && (
           <TextField
             required
+            InputLabelProps={{
+              classes: {
+                root: classes.inputLabel,
+                focused: classes.inputLabelFocused,
+              },
+            }}
+            InputProps={{
+              classes: {
+                root: classes.inputBox,
+              },
+            }}
             label="Ponto de Referência"
             inputRef={pontoRefInput}
             error={errorPontoRef}
@@ -619,6 +718,17 @@ function EditarPerfil({ history }) {
       <h1 className={classes.subTitle}>TELEFONE DE CONTATO</h1>
       <TextField
         required
+        InputLabelProps={{
+          classes: {
+            root: classes.inputLabel,
+            focused: classes.inputLabelFocused,
+          },
+        }}
+        InputProps={{
+          classes: {
+            root: classes.inputBox,
+          },
+        }}
         label="Telefone"
         onInput={(e) => {
           e.target.value = Math.max(0, parseInt(e.target.value))
@@ -772,6 +882,24 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "40px",
     "&:hover": {
       backgroundColor: "#0EC4ABAA",
+    },
+  },
+
+  inputLabel: {
+    color: "#000000",
+    marginLeft: 4,
+  },
+
+  inputLabelFocused: {
+    // marginLeft: 15,
+  },
+
+  inputBox: {
+    marginRight: 40,
+    marginLeft: -10,
+
+    [theme.breakpoints.down("800")]: {
+      marginRight: 0,
     },
   },
 }));

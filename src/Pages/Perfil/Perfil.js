@@ -57,7 +57,7 @@ function Perfil() {
     
     try {
       async function getAddress() {
-        const response = await api.get("/address", {
+        const response = await api.get("/address/${user.user_id}", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -82,6 +82,7 @@ function Perfil() {
       }
       getAddress();
       getOrders();
+
     } catch (err) {
       console.warn(err);
     }
@@ -140,7 +141,7 @@ function Perfil() {
         </div>
 
         <div className="containerEndereço">
-          {userAddress !== {} ? (
+          {userAddress !== {} && user.user_type === 'client' ? (
             <Enderecos
               endereço={userAddress}
               handleOpenModal={handleOpenModal}

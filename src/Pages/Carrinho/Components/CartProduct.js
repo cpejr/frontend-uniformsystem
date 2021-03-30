@@ -6,11 +6,13 @@ import { IconContext } from "react-icons";
 
 function CartProduct({ handleDelete, index, changeAmount, product }) {
 
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
+
   return (
     <tr>
       <td className="productInfo">
         <div className="productNameCartProduct">
-          <img src="/images/blusa1.png" className="productImg" alt="productImg" />
+          <img src={bucketAWS + product.img_link} className="productImg" alt={product.name} />
           {product.name}
         </div>
       </td>

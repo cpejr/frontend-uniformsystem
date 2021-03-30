@@ -46,8 +46,8 @@ td {
 }
 
 .productImg {
-  height: 10vh;
   width: auto;
+  max-width: 250px;
 }
 
 .amountContainer {

@@ -253,16 +253,8 @@ function Loja() {
     } else return <ShopSkeleton />;
   }
 
-  function messageError() {
-    if (products.length === 0) {
-      alert("Não há produtos");
-      history.push("/");
-    }
-  }
-
   return (
     <div className="shop">
-      {messageError()}
       <MetaData
         titlePage={meta.titlePage}
         titleSearch={meta.titleSearch}

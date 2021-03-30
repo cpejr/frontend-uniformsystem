@@ -44,13 +44,15 @@ function ProductModelCardAdm({
         <FaEdit className="iconProductModelCard" />
         <span>Editar Imagem</span>
       </div>
-      {fileToShow ? (
-        <img src={fileToShow} alt={model_description} />
-      ) : imgLink.includes(bucketAWS) ? (
-        <img src={imgLink} alt={model_description} />
-      ) : (
-        "Sem imagem"
-      )}
+      <div className="image">
+        {fileToShow ? (
+          <img src={fileToShow} alt={model_description} />
+        ) : imgLink.includes(bucketAWS) ? (
+          <img src={imgLink} alt={model_description} />
+        ) : (
+          "Sem imagem"
+        )}
+      </div>
       <div
         className="iconWithText"
         onClick={() =>

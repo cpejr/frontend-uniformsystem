@@ -112,10 +112,10 @@ function Carrinho() {
               />
             ))}
             <tr>
-              <td colSpan="3" className="subTotal">
+              <td colSpan="3" className="subTotalCarrinho">
                 Subtotal:{" "}
               </td>
-              <td colSpan="2" className="subTotal">
+              <td colSpan="2" className="subTotalCarrinho">
                 R${subTotal.toFixed(2).replace(".", ",")}
               </td>
             </tr>
@@ -128,7 +128,7 @@ function Carrinho() {
               </td>
             </tr>
             <tr>
-              <td colSpan="5" className="total">
+              <td colSpan="5" className="totalCarrinho">
                 R$
                 {shipping
                   ? (subTotal + shipping).toFixed(2).replace(".", ",")

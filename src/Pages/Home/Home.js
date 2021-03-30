@@ -18,19 +18,6 @@ const CardProdutosHome = ({ imgSrcProduto, imgAltProduto, nomeProduto }) => {
 };
 
 function Home() {
-  //   function login(){
-  //     var username = prompt('Digite nome de usuario');
-  //     var password = prompt("Digite a senha");
-  //     if(username=="teste" && password=="teste")
-  //         window.location.pathname = "/checkout";
-  //     else
-  //         alert("Senha invalida nome de usuario");
-  // }
-
-  //         useEffect(() => {
-  //             login()
-  //             console.log('TESTE', window.location.pathname)
-  //         }, [])
 
   const meta = {
     titlePage: "Uniformes Ecommerce | Home",
@@ -54,6 +41,9 @@ function Home() {
   // Estados para armazenar textos
   const [textoQuemSomos, setTextoQuemSomos] = useState("");
 
+  // Estados para armazenar textos
+  const [textoProdutos, setTextoProdutos] = useState("");
+
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   // UseEffect para inicializar as informações da Home
@@ -70,7 +60,12 @@ function Home() {
           item.key === "textWhoWeAre" ? item.data : null
         )[0];
 
+        const textProducts = response.data.filter((item) =>
+          item.key === "textProducts" ? item.data : null
+        )[0];
+
         setTextoQuemSomos(textWhoWeAre.data);
+        setTextoProdutos(textProducts.data);
       } catch (error) {
         console.warn(error);
         // history.push('Error');
@@ -194,7 +189,7 @@ function Home() {
           Nossos Produtos
           <div className="lineUnderTitle" />
         </h2>
-        <span>{textoQuemSomos}</span>
+        <span>{textoProdutos}</span>
         <div className="divCardsExterna">
           {imagesProducts.length > 0 ? (
             imagesProducts.map((item) => {

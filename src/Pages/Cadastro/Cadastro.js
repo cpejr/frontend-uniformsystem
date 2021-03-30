@@ -201,12 +201,20 @@ function Cadastro({ history }) {
       newUserInfo = {
         cpf: e.target.value,
       };
+
+      let str = e.target.value;
+
+      e.target.value = str.replace(/\D/g, "");
     }
 
     if (type === "telefone") {
       newUserInfo = {
         telefone: e.target.value,
       };
+
+      let str = e.target.value;
+
+      e.target.value = str.replace(/\D/g, "");
     }
 
     // Setting Address Info
@@ -221,6 +229,11 @@ function Cadastro({ history }) {
       newAddressInfo = {
         number: e.target.value,
       };
+
+      let str = e.target.value;
+
+      e.target.value = str.replace(/\D/g, "");
+
       setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
 
@@ -243,6 +256,9 @@ function Cadastro({ history }) {
       newAddressInfo = {
         zip_code: e.target.value,
       };
+      let str = e.target.value;
+
+      e.target.value = str.replace(/\D/g, "");
       setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
 
@@ -608,7 +624,7 @@ function Cadastro({ history }) {
         <TextField
           required
           label="CPF"
-          type="number"
+          type="text"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
@@ -620,11 +636,7 @@ function Cadastro({ history }) {
               root: classes.inputBox,
             },
           }}
-          onInput={(e) => {
-            e.target.value = Math.max(0, parseInt(e.target.value))
-              .toString()
-              .slice(0, 11);
-          }}
+          inputProps={{ maxLength: 11 }}
           inputRef={CPFInput}
           error={errorCPF}
           helperText={errorCPFMessage}
@@ -694,6 +706,7 @@ function Cadastro({ history }) {
               root: classes.inputLabel,
               focused: classes.inputLabelFocused,
             },
+            style: { marginBottom: 8 }
           }}
           InputProps={{
             classes: {
@@ -712,7 +725,7 @@ function Cadastro({ history }) {
         <TextField
           required
           label="N°"
-          type="number"
+          // type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
@@ -784,7 +797,7 @@ function Cadastro({ history }) {
         <TextField
           required
           label="CEP"
-          type="number"
+          // type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
@@ -796,11 +809,7 @@ function Cadastro({ history }) {
               root: classes.inputBox,
             },
           }}
-          onInput={(e) => {
-            e.target.value = Math.max(0, parseInt(e.target.value))
-              .toString()
-              .slice(0, 8);
-          }}
+          inputProps={{ maxLength: 8 }}
           inputRef={CEPInput}
           error={errorCEP}
           helperText={errorCEPMessage}
@@ -871,6 +880,11 @@ function Cadastro({ history }) {
               focused: classes.inputLabelFocused,
             },
           }}
+          InputProps={{
+            classes: {
+              root: classes.inputBox,
+            },
+          }}
           inputRef={pontoRefInput}
           error={errorPontoRef}
           helperText={errorPontoRefMessage}
@@ -884,17 +898,17 @@ function Cadastro({ history }) {
       <TextField
         required
         label="Telefone"
-        type="number"
+        // type="number"
         InputLabelProps={{
           classes: {
             root: classes.inputLabel,
             focused: classes.inputLabelFocused,
           },
         }}
-        onInput={(e) => {
-          e.target.value = Math.max(0, parseInt(e.target.value))
-            .toString()
-            .slice(0, 11);
+        InputProps={{
+          classes: {
+            root: classes.inputBox,
+          },
         }}
         inputRef={telefoneInput}
         error={errorTelefone}
@@ -1021,11 +1035,11 @@ const useStyles = makeStyles((theme) => ({
 
   inputLabel: {
     color: "#000000",
-    marginLeft: 15,
+    marginLeft: 4,
   },
 
   inputLabelFocused: {
-    marginLeft: 15,
+    // marginLeft: 15,
   },
 
   inputBox: {

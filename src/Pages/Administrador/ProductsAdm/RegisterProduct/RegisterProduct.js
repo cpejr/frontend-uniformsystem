@@ -87,23 +87,36 @@ function RegisterProduct({ history }) {
 
   // Estados voltados para gerenciar erros no campo Description
   const [errorDescriptionProduct, setErrorDescriptionProduct] = useState(false);
-  const [errorDescriptionProductMessage, setErrorDescriptionProductMessage] = useState("");
+  const [
+    errorDescriptionProductMessage,
+    setErrorDescriptionProductMessage,
+  ] = useState("");
 
   // Estados voltados para gerenciar erros no campo Height
-  const [errorHeightProduct, setErrorHeightProduct ] = useState(false);
-  const [errorHeightProductMessage, setErrorHeightProductMessage] = useState("");
-  
+  const [errorHeightProduct, setErrorHeightProduct] = useState(false);
+  const [errorHeightProductMessage, setErrorHeightProductMessage] = useState(
+    ""
+  );
+
   // Estados voltados para gerenciar erros no campo Lenght
   const [errorLenghtProduct, setErrorLenghtProduct] = useState(false);
-  const [errorLenghtProductMessage, setErrorLenghtProductMessage] = useState("");
-  
+  const [errorLenghtProductMessage, setErrorLenghtProductMessage] = useState(
+    ""
+  );
+
   // Estados voltados para gerenciar erros no campo Weight
   const [errorWeightProduct, setErrorWeightProduct] = useState(false);
-  const [errorWeightProductMessage, setErrorWeightProductMessage] = useState("");
+  const [errorWeightProductMessage, setErrorWeightProductMessage] = useState(
+    ""
+  );
 
   // Estados voltados para gerenciar erros no campo Width
   const [errorWidthProduct, setErrorWidthProduct] = useState(false);
   const [errorWidthProductMessage, setErrorWidthProductMessage] = useState("");
+
+  // Estados voltados para gerenciar erros no vetor de ProductModels
+  const [errorProductModelArray, setErrorProductModelArray] = useState(false);
+  const [errorProductModelArrayMessage, setErrorProductModelArrayMessage] = useState("");
 
   const inputTypeCap = useRef(null);
   const inputTypeShirt = useRef(null);
@@ -117,7 +130,6 @@ function RegisterProduct({ history }) {
   const inputLenght = useRef(null);
   const inputWeight = useRef(null);
   const inputWidth = useRef(null);
-
 
   const classes = useStyles();
 
@@ -203,6 +215,8 @@ function RegisterProduct({ history }) {
       inputWidth.current.value
     );
 
+    const resultValidateProductModelArray = productModelsArray.length > 0 ? true: false;
+
     if (
       !resultValidateType ||
       !resultValidateName ||
@@ -210,7 +224,8 @@ function RegisterProduct({ history }) {
       !resultValidateHeight ||
       !resultValidateLenght ||
       !resultValidateWeight ||
-      !resultValidateWidth
+      !resultValidateWidth  ||
+      !resultValidateProductModelArray
     ) {
       if (!resultValidateType) {
         setErrorTypeProductMessage("Escolha um tipo.");
@@ -265,6 +280,15 @@ function RegisterProduct({ history }) {
         setErrorWidthProduct(false);
         setErrorWidthProductMessage("");
       }
+
+      if (!resultValidateProductModelArray) {
+        setErrorProductModelArray(true);
+        setErrorProductModelArrayMessage("Adicione um modelo.");
+      } else {
+        setErrorProductModelArray(false);
+        setErrorProductModelArrayMessage("");
+      }
+      
     } else {
       setErrorTypeProductMessage("");
       setErrorNameProduct(false);
@@ -279,6 +303,8 @@ function RegisterProduct({ history }) {
       setErrorWeightProductMessage("");
       setErrorWidthProduct(false);
       setErrorWidthProductMessage("");
+      setErrorProductModelArray(false);
+      setErrorProductModelArrayMessage("");
 
       try {
         setLoading(true);
@@ -295,12 +321,16 @@ function RegisterProduct({ history }) {
             objImage.append("available", item.available);
             objImage.append("img_link", ".");
             objImage.append("price", item.price.replace(",", ".")); // substitui "," por ".", pois backend tem validação por "." em price
-            objImage.append("model_description", item.modelDescription);
+            objImage.append("model_description", item.model_description);
             objImage.append("gender", item.gender);
 
-            await api.post(`/productmodels/newmodel/${response.data.product_id}`, objImage, {
-              headers: { authorization: `bearer ${token}` },
-            });
+            await api.post(
+              `/productmodels/newmodel/${response.data.product_id}`,
+              objImage,
+              {
+                headers: { authorization: `bearer ${token}` },
+              }
+            );
           });
         }
 
@@ -317,6 +347,11 @@ function RegisterProduct({ history }) {
           inputName.current.value = "";
           inputDescription.current.value = "";
           setProductModelsArray([]);
+          inputWeight.current.value = "";
+          inputWidth.current.value = "";
+          inputHeight.current.value = "";
+          inputLenght.current.value = "";
+
         }, 1000);
       } catch (err) {
         console.log(err.message);
@@ -467,7 +502,7 @@ function RegisterProduct({ history }) {
             </div>
             <span
               style={{
-                fontSize: "0.75rem",
+                fontSize: "1rem",
                 color: "#f44336",
                 fontFamily: "Roboto",
                 marginLeft: "14px",
@@ -501,7 +536,7 @@ function RegisterProduct({ history }) {
               variant="outlined"
             />
           </div>
-          
+
           {/* Campos para preenchimento de Altura, Largura, Peso e Comprimento */}
           <div className="spanWithInput">
             <span>ALTURA:</span>
@@ -562,7 +597,13 @@ function RegisterProduct({ history }) {
               </Button>
             </div>
 
-            <div className="boxManipulateModels">
+            <div className="boxManipulateModels"
+              style={
+                errorProductModelArray
+                  ? { marginBottom: "24px", borderColor: "#f44336" }
+                  : { marginBottom: "24px" }
+              }
+            >
               {productModelsArray.map((item, index) =>
                 item ? (
                   <ProductModelCardAdm
@@ -582,6 +623,21 @@ function RegisterProduct({ history }) {
             >
               {loading ? <CircularProgress color="secondary" /> : "CADASTRAR"}
             </Button>
+            {
+              errorProductModelArray && (
+                <span
+                  style={{
+                    fontSize: "1rem",
+                    color: "#f44336",
+                    fontFamily: "Roboto",
+                    marginLeft: "14px",
+                  }}
+                >
+                  {errorProductModelArrayMessage}
+                </span>
+              )
+            }
+
           </div>
         </form>
       </div>
@@ -625,6 +681,7 @@ function RegisterProduct({ history }) {
 const useStyles = makeStyles((theme) => ({
   inputText: {
     width: "100%",
+    cursor: "pointer!important",
     outline: "none",
     padding: "5px 10px",
     "&:focus": {

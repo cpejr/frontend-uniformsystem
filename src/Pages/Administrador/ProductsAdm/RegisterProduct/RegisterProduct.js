@@ -87,19 +87,28 @@ function RegisterProduct({ history }) {
 
   // Estados voltados para gerenciar erros no campo Description
   const [errorDescriptionProduct, setErrorDescriptionProduct] = useState(false);
-  const [errorDescriptionProductMessage, setErrorDescriptionProductMessage] = useState("");
+  const [
+    errorDescriptionProductMessage,
+    setErrorDescriptionProductMessage,
+  ] = useState("");
 
   // Estados voltados para gerenciar erros no campo Height
-  const [errorHeightProduct, setErrorHeightProduct ] = useState(false);
-  const [errorHeightProductMessage, setErrorHeightProductMessage] = useState("");
-  
+  const [errorHeightProduct, setErrorHeightProduct] = useState(false);
+  const [errorHeightProductMessage, setErrorHeightProductMessage] = useState(
+    ""
+  );
+
   // Estados voltados para gerenciar erros no campo Lenght
   const [errorLenghtProduct, setErrorLenghtProduct] = useState(false);
-  const [errorLenghtProductMessage, setErrorLenghtProductMessage] = useState("");
-  
+  const [errorLenghtProductMessage, setErrorLenghtProductMessage] = useState(
+    ""
+  );
+
   // Estados voltados para gerenciar erros no campo Weight
   const [errorWeightProduct, setErrorWeightProduct] = useState(false);
-  const [errorWeightProductMessage, setErrorWeightProductMessage] = useState("");
+  const [errorWeightProductMessage, setErrorWeightProductMessage] = useState(
+    ""
+  );
 
   // Estados voltados para gerenciar erros no campo Width
   const [errorWidthProduct, setErrorWidthProduct] = useState(false);
@@ -121,7 +130,6 @@ function RegisterProduct({ history }) {
   const inputLenght = useRef(null);
   const inputWeight = useRef(null);
   const inputWidth = useRef(null);
-
 
   const classes = useStyles();
 
@@ -316,9 +324,13 @@ function RegisterProduct({ history }) {
             objImage.append("model_description", item.model_description);
             objImage.append("gender", item.gender);
 
-            await api.post(`/productmodels/newmodel/${response.data.product_id}`, objImage, {
-              headers: { authorization: `bearer ${token}` },
-            });
+            await api.post(
+              `/productmodels/newmodel/${response.data.product_id}`,
+              objImage,
+              {
+                headers: { authorization: `bearer ${token}` },
+              }
+            );
           });
         }
 
@@ -524,7 +536,7 @@ function RegisterProduct({ history }) {
               variant="outlined"
             />
           </div>
-          
+
           {/* Campos para preenchimento de Altura, Largura, Peso e Comprimento */}
           <div className="spanWithInput">
             <span>ALTURA:</span>
@@ -669,6 +681,7 @@ function RegisterProduct({ history }) {
 const useStyles = makeStyles((theme) => ({
   inputText: {
     width: "100%",
+    cursor: "pointer!important",
     outline: "none",
     padding: "5px 10px",
     "&:focus": {

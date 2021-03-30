@@ -81,6 +81,8 @@ function Loja() {
       setLoading(true);
       const response = await api.get(`/product?${query.join("&")}`);
 
+      console.log('aqui', response)
+
       return response.data.products;
     } catch (error) {
       setLoading(false);
@@ -253,16 +255,8 @@ function Loja() {
     } else return <ShopSkeleton />;
   }
 
-  function messageError() {
-    if (products.length === 0) {
-      alert("Não há produtos");
-      history.push("/");
-    }
-  }
-
   return (
     <div className="shop">
-      {messageError()}
       <MetaData
         titlePage={meta.titlePage}
         titleSearch={meta.titleSearch}

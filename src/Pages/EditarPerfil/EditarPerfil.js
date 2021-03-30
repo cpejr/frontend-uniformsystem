@@ -391,6 +391,9 @@ function EditarPerfil({ history }) {
       newAddressInfo = {
         number: e.target.value,
       };
+      let str = e.target.value;
+
+      e.target.value = str.replace(/\D/g, "");
       setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
 
@@ -413,6 +416,9 @@ function EditarPerfil({ history }) {
       newAddressInfo = {
         zip_code: e.target.value,
       };
+      let str = e.target.value;
+
+      e.target.value = str.replace(/\D/g, "");
       setAddressInfo({ ...addressInfo, ...newAddressInfo });
     }
 
@@ -629,6 +635,7 @@ function EditarPerfil({ history }) {
                 root: classes.inputBox,
               },
             }}
+            inputProps={{ maxLength: 8 }}
             label="CEP"
             inputRef={CEPInput}
             error={errorCEP}

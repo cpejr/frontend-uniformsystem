@@ -9,6 +9,7 @@ import { FaFilter, FaSearch, FaTruckLoading } from "react-icons/fa";
 import _ from "lodash";
 import ShopSkeleton from "../../components/Skeletons/ShopSkeleton";
 import MobileShopSkeleton from "../../components/Skeletons/MobileShopSkeleton";
+
 const FILTER_OPTIONS = [
   "FEMININO",
   "MASCULINO",

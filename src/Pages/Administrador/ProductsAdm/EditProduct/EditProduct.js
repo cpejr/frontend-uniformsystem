@@ -221,6 +221,7 @@ function EditProduct({ history }) {
             <div>
               <span>NOME:</span>
               <FaEdit
+                className="iconToEditInput"
                 onClick={() => {
                   handleOpenDialog("name", "Nome");
                 }}
@@ -239,6 +240,7 @@ function EditProduct({ history }) {
             <div>
               <span>DESCRIÇÃO:</span>
               <FaEdit
+                className="iconToEditInput"
                 onClick={() => {
                   handleOpenDialog("description", "Descrição do Produto");
                 }}

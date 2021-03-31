@@ -151,15 +151,15 @@ function MenuRoutes() {
             <Route path="/" export exact component={Home} />
 
             <Route path="/shop" export component={Loja} />
-            <Route path="/checkout" export component={Checkout} />
+            <PrivateClientRoute path="/checkout" export component={Checkout} />
             <Route path="/product/:product_id" export component={Produto} />
             {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                   logado, você será redirecionado para a página Login. */}
 
-            <Route path="/perfil" export exact component={Perfil} />
-            <Route path="/editarPerfil" export exact component={EditarPerfil} />
+            <PrivateClientRoute path="/perfil" export exact component={Perfil} />
+            <PrivateClientRoute path="/editarPerfil" export exact component={EditarPerfil} />
 
-            <Route path="/cart" export component={Carrinho} />
+            <PrivateClientRoute path="/cart" export component={Carrinho} />
             <Route path="/login" export component={Login} />
             <Route path="/contact" export component={Contato} />
             <Route path="/cadastro" export component={Cadastro} />
@@ -189,15 +189,15 @@ function MenuRoutes() {
           <Route path="/" export exact component={Home} />
 
           <Route path="/shop" export component={Loja} />
-          <Route path="/checkout" export component={Checkout} />
+          <PrivateClientRoute path="/checkout" export component={Checkout} />
           <Route path="/product/:product_id" export component={Produto} />
           {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                   logado, você será redirecionado para a página Login. */}
 
-          <Route path="/perfil" export exact component={Perfil} />
-          <Route path="/editarPerfil" export exact component={EditarPerfil} />
+          <PrivateClientRoute path="/perfil" export exact component={Perfil} />
+          <PrivateClientRoute path="/editarPerfil" export exact component={EditarPerfil} />
 
-          <Route path="/cart" export component={Carrinho} />
+          <PrivateClientRoute path="/cart" export component={Carrinho} />
           <Route path="/login" export component={Login} />
           <Route path="/contact" export component={Contato} />
           <Route path="/cadastro" export component={Cadastro} />

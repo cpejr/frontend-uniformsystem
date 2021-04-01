@@ -400,6 +400,7 @@ function HomeEditable() {
             imgPlace: "carousel",
           },
         ]);
+
       };
     }
   }
@@ -436,6 +437,10 @@ function HomeEditable() {
   }
 
   function handleAddImageWhoWeAreFileInput() {
+
+    if(imagesWhoWeAre.file){
+      setExcludedWhoWeAreImages(imagesWhoWeAre);
+    }
     let fileData = new FileReader();
     fileData.readAsDataURL(inputWhoWeAre.current.files[0]);
     fileData.onload = function () {

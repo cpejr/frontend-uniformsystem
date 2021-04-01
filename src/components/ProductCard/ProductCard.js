@@ -16,7 +16,7 @@ function ProductCard({ product }) {
           ></img>
         </div>
         <div className="productName">{product.name}</div>
-        <div className="productDescription">{product.description}</div>
+        {/*<div className="productDescription">{product.description}</div>*/}
         <div className="productPrice">
           {product.model.price.toLocaleString("pt-BR", {
             style: "currency",

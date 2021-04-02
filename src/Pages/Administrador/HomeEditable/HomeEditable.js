@@ -19,16 +19,19 @@ function SelectedImages({
   whoWeAre = false,
   setSelectedImage,
   SelectedImage,
+  indexImg
 }) {
   const handleClick = () => {
-    setSelectedImage(!SelectedImage);
+    SelectedImage.map( (item, index) => index === indexImg? setSelectedImage[index](true): setSelectedImage[index](false) );
+    console.log('clicou', SelectedImage)
+    console.log('index', indexImg)
   };
 
   if (!whoWeAre) {
     return (
       <div
         className={
-          SelectedImage ? "boxOutsideImage selected" : "boxOutsideImage"
+          SelectedImage[indexImg] ? "boxOutsideImage selected" : "boxOutsideImage"
         }
         onClick={handleClick}
       >
@@ -389,7 +392,7 @@ function HomeEditable() {
       let fileData = new FileReader();
       fileData.readAsDataURL(inputCarousel.current.files[0]);
 
-      fileData.onload = function () {
+      fileData.onload = async function () {
         const fileLoaded = fileData.result;
         setImagesCarousel([
           ...imagesCarousel,
@@ -401,6 +404,24 @@ function HomeEditable() {
           },
         ]);
 
+        // Salva mudanças de Home Images
+        try{
+          let objImage = new FormData();
+  
+          objImage.append("file", inputCarousel.current.files[0]);
+          objImage.append("imgPlace", "carousel");
+          objImage.append("imgSrc", "Profit Uniformes");
+          objImage.append("imgAlt", "Profit Uniformes");
+  
+          await api.post("/home/images", objImage, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              authorization: `bearer ${token}`,
+            },
+          });
+        }catch(err){
+          console.war(err.message)
+        }
       };
     }
   }
@@ -410,13 +431,26 @@ function HomeEditable() {
 
   function handleDeleteImageCarousel() {
     const indexToExclude = [];
-    arrayImages.forEach((item, index) => {
+    arrayImages.forEach(async (item, index) => {
       if (item) {
         indexToExclude.push(index);
         arrayStateImages[index](false);
         const newExcludedCarouselImages = [...excludedCarouselImages];
         newExcludedCarouselImages.push(imagesCarousel[index]);
-        setExcludedCarouselImages(newExcludedCarouselImages);
+        
+        // Exclui imagens de Home Images
+        try{
+          const nameWithType = newExcludedCarouselImages[0].file.split(".com/")[1];
+          const name = nameWithType.split(".")[0];
+          const type = nameWithType.split(".")[1];
+          await api.delete(`/home/images/${name}.${type}`, {
+            headers: { authorization: `bearer ${token}` },
+          });
+          setExcludedCarouselImages([]);
+        }catch(err){
+          console.warn(err.message)
+        }
+
       }
     });
     const newImagesCarousel = [];
@@ -436,14 +470,27 @@ function HomeEditable() {
     inputWhoWeAre.current.click();
   }
 
-  function handleAddImageWhoWeAreFileInput() {
+  async function handleAddImageWhoWeAreFileInput() {
 
     if(imagesWhoWeAre.file){
-      setExcludedWhoWeAreImages(imagesWhoWeAre);
+
+      // // Exclui imagens de Home Images
+      try{
+        const nameWithType = imagesWhoWeAre.file.split(".com/")[1];
+        const name = nameWithType.split(".")[0];
+        const type = nameWithType.split(".")[1];
+        await api.delete(`/home/images/${name}.${type}`, {
+          headers: { authorization: `bearer ${token}` },
+        });
+        setImagesWhoWeAre({});
+        setExcludedWhoWeAreImages([]);
+      }catch(err){
+        console.warn(err.message)
+      }
     }
     let fileData = new FileReader();
     fileData.readAsDataURL(inputWhoWeAre.current.files[0]);
-    fileData.onload = function () {
+    fileData.onload = async function () {
       const fileLoaded = fileData.result;
       setImagesWhoWeAre({
         file: fileLoaded,
@@ -451,16 +498,47 @@ function HomeEditable() {
         imgAlt: "Profit Uniformes",
         imgPlace: "whoWeAre",
       });
+
+      // Salva mudanças de Home Images
+      try{
+        let objImage = new FormData();
+
+        objImage.append("file", inputWhoWeAre.current.files[0]);
+        objImage.append("imgPlace", "whoWeAre");
+        objImage.append("imgSrc", "Profit Uniformes");
+        objImage.append("imgAlt", "Profit Uniformes");
+
+        await api.post("/home/images", objImage, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authorization: `bearer ${token}`,
+          },
+        });
+      }catch(err){
+        console.war(err.message)
+      }
     };
   }
 
   // useEffect para as imagens do Quem Somos
   useEffect(() => {}, [imagesWhoWeAre, arrayImages]);
 
-  function handleDeleteImageWhoWeAre() {
+  async function handleDeleteImageWhoWeAre() {
     const auxiliarArray = {};
-    setExcludedWhoWeAreImages(imagesWhoWeAre);
-    setImagesWhoWeAre(auxiliarArray);
+    
+    // Exclui imagens de Home Images
+    try{
+      const nameWithType = imagesWhoWeAre.file.split(".com/")[1];
+      const name = nameWithType.split(".")[0];
+      const type = nameWithType.split(".")[1];
+      await api.delete(`/home/images/${name}.${type}`, {
+        headers: { authorization: `bearer ${token}` },
+      });
+      setImagesWhoWeAre(auxiliarArray);
+      setExcludedWhoWeAreImages([]);
+    }catch(err){
+      console.warn(err.message)
+    }
   }
 
   // Manipulação para as imagens de Produtos
@@ -475,7 +553,7 @@ function HomeEditable() {
       let fileData = new FileReader();
       fileData.readAsDataURL(inputProducts.current.files[0]);
 
-      fileData.onload = function () {
+      fileData.onload = async function () {
         const fileLoaded = fileData.result;
         setImagesProducts([
           ...imagesProducts,
@@ -486,6 +564,25 @@ function HomeEditable() {
             imgPlace: "products",
           },
         ]);
+
+        // Salva mudanças de Home Images
+        try{
+          let objImage = new FormData();
+  
+          objImage.append("file", inputProducts.current.files[0]);
+          objImage.append("imgPlace", "products");
+          objImage.append("imgSrc", "Profit Uniformes");
+          objImage.append("imgAlt", "Profit Uniformes");
+  
+          await api.post("/home/images", objImage, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              authorization: `bearer ${token}`,
+            },
+          });
+        }catch(err){
+          console.war(err.message)
+        }
       };
     }
   }
@@ -495,13 +592,25 @@ function HomeEditable() {
 
   function handleDeleteImageProducts() {
     const indexToExclude = [];
-    arrayImagesProducts.forEach((item, index) => {
+    arrayImagesProducts.forEach(async (item, index) => {
       if (item) {
         indexToExclude.push(index);
         arrayStateImagesProducts[index](false);
         const newExcludedProductsImages = [...excludedProductsImages];
         newExcludedProductsImages.push(imagesProducts[index]);
-        setExcludedProductsImages(newExcludedProductsImages);
+
+        // Exclui imagens de Home Images
+        try{
+          const nameWithType = newExcludedProductsImages[0].file.split(".com/")[1];
+          const name = nameWithType.split(".")[0];
+          const type = nameWithType.split(".")[1];
+          await api.delete(`/home/images/${name}.${type}`, {
+            headers: { authorization: `bearer ${token}` },
+          });
+          setExcludedProductsImages([]);
+        }catch(err){
+          console.warn(err.message)
+        }
       }
     });
 
@@ -672,111 +781,11 @@ function HomeEditable() {
         },
       }
 
-      // Salva mudanças de Home Info
-      await api.put('/home/info', objHomeInfo, {
-        headers: { authorization: `bearer ${token}` },
-      });
-
-      // Salva mudanças de Home Images
-      try {
-        // Deleta imagens para colocar novas - Carrossel
-        if (excludedCarouselImages[0]) {
-          excludedCarouselImages.forEach(async (item) => {
-            if (item.file.includes(bucketAWS)) {
-              const nameWithType = item.file.split(".com/")[1];
-              const name = nameWithType.split(".")[0];
-              const type = nameWithType.split(".")[1];
-              await api.delete(`/home/images/${name}.${type}`, {
-                headers: { authorization: `bearer ${token}` },
-              });
-            }
-          });
-        }
-
-        // Deleta imagens para colocar novas - Who We Are
-        if (excludedWhoWeAreImages.file) {
-          if (excludedWhoWeAreImages.file.includes(bucketAWS)) {
-            const nameWithType = excludedWhoWeAreImages.file.split(".com/")[1];
-            const name = nameWithType.split(".")[0];
-            const type = nameWithType.split(".")[1];
-            await api.delete(`/home/images/${name}.${type}`, {
-              headers: { authorization: `bearer ${token}` },
-            });
-          }
-        }
-
-        // Deleta imagens para colocar novas - Products
-        if (excludedProductsImages[0]) {
-          excludedProductsImages.forEach(async (item) => {
-            if (item.file.includes(bucketAWS)) {
-              const nameWithType = item.file.split(".com/")[1];
-              const name = nameWithType.split(".")[0];
-              const type = nameWithType.split(".")[1];
-              await api.delete(`/home/images/${name}.${type}`, {
-                headers: { authorization: `bearer ${token}` },
-              });
-            }
-          });
-        }
-
-        // Inicializa
-        // setImagesHome([])
-        // Posta novas imagens
-        if (imagesCarousel[0] && imagesCarousel[0].file) {
-          imagesCarousel.map(async (item) => {
-            if (!item.file.includes(bucketAWS)) {
-              let objImage = new FormData();
-
-              objImage.append("file", item.imgSrc);
-              objImage.append("imgPlace", item.imgPlace);
-              objImage.append("imgSrc", item.imgAlt);
-              objImage.append("imgAlt", item.imgAlt);
-
-              await api.post("/home/images", objImage, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  authorization: `bearer ${token}`,
-                },
-              });
-            }
-          });
-        }
-
-        if (imagesWhoWeAre.file) {
-          if (!imagesWhoWeAre.file.includes(bucketAWS)) {
-            let objImage = new FormData();
-            objImage.append("file", imagesWhoWeAre.imgSrc);
-            objImage.append("imgPlace", imagesWhoWeAre.imgPlace);
-            objImage.append("imgSrc", imagesWhoWeAre.imgAlt);
-            objImage.append("imgAlt", imagesWhoWeAre.imgAlt);
-
-            await api.post("/home/images", objImage, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                authorization: `bearer ${token}`,
-              },
-            });
-          }
-        }
-
-        if (imagesProducts[0] && imagesProducts[0].file) {
-          imagesProducts.map(async (item) => {
-            if (!item.file.includes(bucketAWS)) {
-              let objImage = new FormData();
-              objImage.append("file", item.imgSrc);
-              objImage.append("imgPlace", item.imgPlace);
-              objImage.append("imgSrc", item.imgAlt);
-              objImage.append("imgAlt", item.imgAlt);
-
-              await api.post("/home/images", objImage, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  authorization: `bearer ${token}`,
-                },
-              });
-            }
-          });
-        }
+      try{
+        // Salva mudanças de Home Info
+        await api.put('/home/info', objHomeInfo, {
+          headers: { authorization: `bearer ${token}` },
+        });
 
         setTimeout(() => {
           setLoading(false);
@@ -870,8 +879,9 @@ function HomeEditable() {
                   key={index}
                   srcImg={item.file}
                   altImg={item.imgAlt}
-                  setSelectedImage={arrayStateImages[index]}
-                  SelectedImage={arrayImages[index]}
+                  setSelectedImage={arrayStateImages}
+                  SelectedImage={arrayImages}
+                  indexImg={index}
                 />
               ) : null
             )}
@@ -1073,8 +1083,9 @@ function HomeEditable() {
                   key={index}
                   srcImg={item.file}
                   altImg={item.imgAlt}
-                  setSelectedImage={arrayStateImagesProducts[index]}
-                  SelectedImage={arrayImagesProducts[index]}
+                  setSelectedImage={arrayStateImagesProducts}
+                  SelectedImage={arrayImagesProducts}
+                  indexImg={index}
                 />
               ) : null
             )}

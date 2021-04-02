@@ -316,3 +316,8 @@
     width: 80%;
   }
 }
+
+.produtEditIcon{
+  cursor: pointer;
+  margin: 0 10px 5px 0;
+}

@@ -14,6 +14,7 @@ import ProductEditModal from "../../../../components/ProductEditModal";
 import AddIcon from "@material-ui/icons/Add";
 
 import { FaChevronLeft, FaEdit } from "react-icons/fa";
+import { IconContext } from "react-icons";
 
 import "./EditProduct.css";
 import validators from "./Validators";
@@ -86,14 +87,13 @@ function EditProduct({ history }) {
 
   function handleOpenDialog(fieldKey, fieldName, modelId) {
     if (modelId) {
-      if(fieldKey==="delete"){
+      if (fieldKey === "delete") {
         setDialogInfo({
           fieldKey,
           callback: deleteModel,
           modelId,
         });
-      }
-      else{
+      } else {
         setDialogInfo({
           fieldKey,
           fieldName,
@@ -160,10 +160,10 @@ function EditProduct({ history }) {
     try {
       await api.delete(`/productmodels/model/${modelId}`);
       const index = productModelsArray
-          .map((model) => model.product_model_id)
-          .indexOf(modelId);
-        productModelsArray.splice(index, 1)
-        setProductModelsArray([...productModelsArray]);
+        .map((model) => model.product_model_id)
+        .indexOf(modelId);
+      productModelsArray.splice(index, 1);
+      setProductModelsArray([...productModelsArray]);
       handleCloseDialog();
     } catch (error) {
       alert("Erro ao deletar model");
@@ -219,12 +219,14 @@ function EditProduct({ history }) {
         <form className="formEditProduct">
           <div className="spanWithInput">
             <div>
+              <IconContext.Provider value={{ size: "1.5em", className: "produtEditIcon" }} >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog("name", "Nome");
+                  }}
+                />
+              </IconContext.Provider>
               <span>NOME:</span>
-              <FaEdit
-                onClick={() => {
-                  handleOpenDialog("name", "Nome");
-                }}
-              />
             </div>
             {productInfo && (
               <TextField
@@ -237,12 +239,14 @@ function EditProduct({ history }) {
           </div>
           <div className="spanWithInput">
             <div>
+              <IconContext.Provider value={{ size: "1.5em", className: "produtEditIcon" }}>
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog("description", "Descrição do Produto");
+                  }}
+                />
+              </IconContext.Provider>
               <span>DESCRIÇÃO:</span>
-              <FaEdit
-                onClick={() => {
-                  handleOpenDialog("description", "Descrição do Produto");
-                }}
-              />
             </div>
             {productInfo && (
               <TextField

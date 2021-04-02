@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { BrowserRouter, Route, Switch, Redirect, Link } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import Home from "./Pages/Home";
 
@@ -27,6 +27,8 @@ import Error from "./Pages/Error";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
+import AdmButton from "./components/AdmButton";
+
 import HeaderAdm from "./components/HeaderAdm";
 import FooterAdm from "./components/FooterAdm";
 import SidebarAdm from "./components/SidebarAdm";
@@ -39,9 +41,6 @@ import {
   isClientOrADMOrEmployee,
 } from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
-import Fab from "@material-ui/core/Fab";
-import EditIcon from "@material-ui/icons/Edit";
-import HomeIcon from "@material-ui/icons/Home";
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -144,7 +143,7 @@ function MenuRoutes() {
   }, []);
   if (windowDimensions.width <= 850) {
     return (
-      <div>
+      <>
         <Header />
         <SidebarClient>
           <Switch>
@@ -169,21 +168,14 @@ function MenuRoutes() {
           </Switch>
         </SidebarClient>
         {user && user.user_type === "adm" ? (
-          <Link
-            to="/adm/home"
-            style={{ position: "fixed", right: 10, bottom: 10 }}
-          >
-            <Fab color="primary" aria-label="edit">
-              <EditIcon />
-            </Fab>
-          </Link>
+          <AdmButton linkToRedirect="/adm/home" isEdit={true} />
         ) : null}
         <Footer />
-      </div>
+      </>
     );
   } else {
     return (
-      <div>
+      <>
         <Header />
         <Switch>
           <Route path="/" export exact component={Home} />
@@ -206,17 +198,10 @@ function MenuRoutes() {
           <Route path="*" exact component={Error} />
         </Switch>
         {user && user.user_type === "adm" ? (
-          <Link
-            to="/adm/home"
-            style={{ position: "fixed", right: "1vw", bottom: "11vh" }}
-          >
-            <Fab color="primary" aria-label="edit">
-              <EditIcon />
-            </Fab>
-          </Link>
+          <AdmButton linkToRedirect="/adm/home" isEdit={true} />
         ) : null}
         <Footer />
-      </div>
+      </>
     );
   }
 }
@@ -228,7 +213,7 @@ function AdmRoutes() {
     return <Redirect to="/" />;
   else
     return (
-      <div>
+      <>
         <HeaderAdm />
         <SidebarAdm>
           <Switch>
@@ -278,16 +263,9 @@ function AdmRoutes() {
           </Switch>
         </SidebarAdm>
         {user && user.user_type === "adm" ? (
-          <Link
-            to="/"
-            style={{ position: "fixed", right: "1vw", bottom: "11vh" }}
-          >
-            <Fab color="primary" aria-label="home">
-              <HomeIcon />
-            </Fab>
-          </Link>
+          <AdmButton linkToRedirect="/" isEdit={false} />
         ) : null}
         <FooterAdm />
-      </div>
+      </>
     );
 }

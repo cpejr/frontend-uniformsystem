@@ -33,6 +33,7 @@ function CalculateShipping({ product_models, ...props }) {
 
   async function CalculateCEP() {
     const cepReceived = inputCEP.current.value;
+    setShippingResult();
 
     try {
       if (
@@ -58,9 +59,9 @@ function CalculateShipping({ product_models, ...props }) {
   }
 
   return (
-    <div {...props}>
+    <div className="quoteShipping" {...props}>
       <span>{`Calcule o Frete: `}</span>
-      <div className="calculateCEPArea">
+      <div className="calculateQuoteArea">
         <TextField
           variant="outlined"
           type="text"
@@ -69,7 +70,7 @@ function CalculateShipping({ product_models, ...props }) {
           error={!!errorMessage}
           helperText={errorMessage}
         />
-        <Button className="calculateCEPButton" onClick={CalculateCEP}>
+        <Button className="calculateQuoteButton" onClick={CalculateCEP}>
           Calcular
         </Button>
       </div>

@@ -68,7 +68,6 @@
 .productPage .rightSide .productsInfo {
   height: 100%;
   min-height: 550px;
-  width: 100%;
   display: flex;
   flex-direction: row;
 }
@@ -129,13 +128,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-
-.productPage .calculateCEPArea {
-  width: 90%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  margin: 8px;
+  width: 100%;
 }
 
 .productPage .MuiTextField-root {
@@ -144,19 +138,6 @@
 
 .productPage .MuiOutlinedInput-root {
   width: 80%;
-}
-
-.productPage .calculateCEPButton {
-  font-size: 12px;
-  border-radius: 10px;
-  background-color: #d1c9c9;
-}
-
-.productPage .calculateCEPArea input {
-  width: 70%;
-  margin-right: 10px;
-  border-radius: 10px;
-  padding: 3px 4px;
 }
 
 .productPage .forgotPassword {
@@ -177,7 +158,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-evenly;
-  margin-left: 10px;
+  margin-left: 16px;
 }
 
 .productPage .sizeAndQuantity strong {
@@ -190,8 +171,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  padding: 10px 0px;
-  margin-top: -20px;
 }
 
 .productPage .genderCheckboxes {
@@ -298,16 +277,12 @@
 
 @media (max-width: 640px) {
   .productPage .productsInfo {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: column !important;
+    align-items: center !important;
   }
 
   .productPage .leftSideInside {
     width: 100%;
-  }
-
-  .productPage .shipSpace {
-    margin: 12px 0px 12px 0px;
   }
 
   .productPage .sizeAndQuantity {

@@ -1,10 +1,21 @@
 .registerEmployeeFullContent {
   width: 100%;
   padding: 30px;
+  position: relative;
+}
+
+.back{
+  position: absolute;
+  font-size: 35px;
+  top: 10px;
+  left: 5px;
+  color: #666;
+  cursor: pointer;
+  margin-top: 16px;
 }
 
 .back:hover {
-  color: #0ec4ab;
+  color: #007bff;
   transition: color 0.19s;
 }
 

@@ -247,6 +247,7 @@ function EditProduct({ history }) {
                 />
               </IconContext.Provider>
               <span>DESCRIÇÃO:</span>
+
             </div>
             {productInfo && (
               <TextField

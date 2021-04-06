@@ -1,11 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,700;1,300&display=swap%27");
 
-#root {
-  overflow: hidden;
+*{
+  box-sizing: border-box;
 }
 
-body {
+#root {
+  overflow: hidden;
+  padding-bottom: 80px;
+}
+@media(max-width: 850px){
+  #root {
+    padding-bottom: 0px;
+  }
+}
+
+html, body {
   margin: 0;
+  position: relative;
+  min-height: 90vh;
   font-family: Roboto Condensed, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

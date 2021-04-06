@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import {
-  Button,
   TextField,
   Table,
   TableBody,
@@ -14,6 +13,10 @@ import {
 import "./CalculateShipping.css";
 import api from "../../services/api";
 
+import { FormControl, InputGroup, Button, Form } from "react-bootstrap";
+import { IconContext } from "react-icons/lib";
+import { FaTruck } from "react-icons/fa";
+
 /**
  * Exemplo de product_models:
  *
@@ -26,12 +29,12 @@ import api from "../../services/api";
  *
  */
 
-function CalculateShipping({ product_models, ...props }) {
+function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
   const [errorMessage, setErrorMessage] = useState();
   const [shippingResult, setShippingResult] = useState();
   const inputCEP = useRef();
 
-  async function CalculateCEP() {
+  async function CalculateShipping() {
     const cepReceived = inputCEP.current.value;
     setShippingResult();
 
@@ -51,6 +54,7 @@ function CalculateShipping({ product_models, ...props }) {
         });
 
         setShippingResult(response.data.ShippingSevicesArray);
+        onCalculateShipping(response.data.ShippingSevicesArray);
       }
     } catch (err) {
       setShippingResult();
@@ -62,17 +66,29 @@ function CalculateShipping({ product_models, ...props }) {
     <div className="quoteShipping" {...props}>
       <span>{`Calcule o Frete: `}</span>
       <div className="calculateQuoteArea">
-        <TextField
-          variant="outlined"
-          type="text"
-          inputProps={{ maxLength: 8 }}
-          inputRef={inputCEP}
-          error={!!errorMessage}
-          helperText={errorMessage}
-        />
-        <Button className="calculateQuoteButton" onClick={CalculateCEP}>
-          Calcular
-        </Button>
+        <InputGroup className="groupShipping">
+          <Form.Control
+            className="mr-2"
+            maxLength={8}
+            placeholder="Apenas Números"
+            aria-label="CEP"
+            isInvalid={!!errorMessage}
+            ref={inputCEP}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errorMessage}
+          </Form.Control.Feedback>
+          <Button variant="dark" onClick={CalculateShipping}>
+            <div className="d-flex">
+              <div className="mr-2">
+                <IconContext.Provider value={{ size: "20px" }}>
+                  <FaTruck />
+                </IconContext.Provider>
+              </div>
+              Calcular Frete
+            </div>
+          </Button>
+        </InputGroup>
       </div>
       {shippingResult && (
         <TableContainer component={Paper}>

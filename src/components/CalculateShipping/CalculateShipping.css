@@ -1,0 +1,5 @@
+.shipping td,
+.shipping th {
+  padding: 4px !important;
+  height: 100%;
+}

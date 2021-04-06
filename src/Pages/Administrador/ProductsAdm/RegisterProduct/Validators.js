@@ -14,7 +14,6 @@ const validators = {
     }
   },
   price: (value) => {
-    let isValid;
     const regex = /^\d+(?:,\d{2})$/;
     if (regex.test(value)) {
       return "ok";
@@ -40,11 +39,31 @@ const validators = {
   },
   imgLink(image) {
     if (!image) {
-      return "Selecione uma imagem!"
+      return "Selecione uma imagem!";
     } else {
-      return "ok"
+      return "ok";
     }
-  }
+  },
+  size(value) {
+    const regex = /^[0-9]*[1-9][0-9]*$/;
+    let isValid;
+    if (value === "" || !regex.test(value) || value>100 ) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+    return isValid;
+  },
+  weight(value) {
+    const regex = /^[1-9]\d{0,2}(?:\.\d{1,3})?$/;
+    let isValid;
+    if (value === "" || !regex.test(value) || value>30 ) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+    return isValid;
+  },
 };
 
 export default validators;

@@ -13,6 +13,7 @@ import "./Produto.css";
 import "./Radio.css";
 
 import ProductSkeleton from "../../components/Skeletons/ProductSkeleton";
+import CalculateShipping from "../../components/CalculateShipping";
 
 function validateFields(value, type) {
   let isValid;
@@ -50,8 +51,6 @@ function Produto() {
   const [modelChoosen, setModelChoosen] = useState({});
   const [isSelect, setIsSelect] = useState(0);
 
-  const [errorCEP, setErrorCEP] = useState(false);
-  const [errorCEPMessage, setErrorCEPMessage] = useState("");
   const meta = {
     titlePage: "Uniformes Ecommerce | Produto",
     titleSearch: "Profit Uniformes | Produto",
@@ -68,8 +67,6 @@ function Produto() {
   const [errorQuantity, setErrorQuantity] = useState(false);
   const [errorQuantityMessage, setErrorQuantityMessage] = useState("");
 
-  const [calculatedShipping, setCalculatedShipping] = useState(null);
-
   const [logoImage, setLogoImage] = useState(null);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -78,7 +75,6 @@ function Produto() {
 
   const inputQuantity = useRef(null);
   const inputSize = useRef(null);
-  const inputCEP = useRef(null);
   const inputLogo = useRef(null);
 
   //Pegando o id do produto pelo link
@@ -228,31 +224,6 @@ function Produto() {
     }
   };
 
-  async function CalculateCEP() {
-    const cepReceived = inputCEP.current.value;
-
-    try {
-      if (
-        cepReceived === "" ||
-        cepReceived.length < 8 ||
-        isNaN(Number(cepReceived))
-      ) {
-        setErrorCEP(true);
-        setErrorCEPMessage("Digite um CEP válido.");
-      } else {
-        setErrorCEP(false);
-        setErrorCEPMessage("");
-
-        const response = await api.get(`/shipping/${cepReceived}`);
-
-        setCalculatedShipping(response.data.shipping.Valor);
-      }
-    } catch (err) {
-      setCalculatedShipping(-1);
-      console.warn(err);
-    }
-  }
-
   function AddLogo() {
     inputLogo.current.click();
   }
@@ -348,33 +319,16 @@ function Produto() {
                 </div>
 
                 <div className="shipSpace">
-                  <span>
-                    Calcule o CEP:{" "}
-                    {calculatedShipping && `R$ ${calculatedShipping}`}
-                  </span>
-                  <div className="calculateCEPArea">
-                    <TextField
-                      variant="outlined"
-                      type="text"
-                      inputProps={{ maxLength: 8 }}
-                      inputRef={inputCEP}
-                      error={errorCEP}
-                      helperText={errorCEPMessage}
-                    />
-                    <Button
-                      className="calculateCEPButton"
-                      onClick={CalculateCEP}
-                    >
-                      Calcular
-                    </Button>
-                  </div>
-
-                  <a
-                    href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
-                    target="_blank"
-                  >
-                    <span className="forgotPassword">Não sei meu CEP</span>
-                  </a>
+                  <CalculateShipping
+                    product_models={
+                      modelChoosen && [
+                        {
+                          product_model_id: modelChoosen.product_model_id?.toString(),
+                          quantity: inputQuantity.value || 1,
+                        },
+                      ]
+                    }
+                  />
                 </div>
               </div>
               <div className="sizeAndQuantity">

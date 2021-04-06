@@ -20,6 +20,7 @@ import { useHistory } from "react-router-dom";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import HeroSquareSkeleton from "../../components/Skeletons/HeroSquareSkeleton";
+import SelectShipping from "../../components/SelectShipping";
 
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
@@ -62,6 +63,7 @@ function Checkout() {
 
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState({});
+  const [shipping, setShipping] = useState();
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -278,6 +280,16 @@ function Checkout() {
     setOpenModal(true);
   }
 
+  let price = 0;
+
+  products.forEach((product) => {
+    price += product.amount * product.price;
+  });
+
+  if (shipping) price += parseFloat(shipping.ShippingPrice);
+
+  price = `R$ ${price.toFixed(2).toString().replace(".", ",")}`;
+
   return (
     <div className="fullContent">
       <MetaData
@@ -465,20 +477,21 @@ function Checkout() {
 
             <div className="shippingInfo">
               <strong>Frete</strong>
-              <div className="valueShipping">
-                <div className="leftValueShipping">
-                  <LocalShippingIcon />
-                  <span>Valor</span>
-                </div>
-                <div className="rightValueShipping">
-                  <span>R$25,00</span>
-                </div>
-              </div>
+              <SelectShipping
+                onSelectShipping={setShipping}
+                cep={address.zip_code}
+                product_models={products?.map(
+                  ({ product_model_id, amount }) => ({
+                    product_model_id,
+                    quantity: amount,
+                  })
+                )}
+              />
             </div>
 
             <div className="totalArea">
               <strong>Total</strong>
-              <strong>R$525,00</strong>
+              <strong>{price}</strong>
             </div>
           </div>
         </div>

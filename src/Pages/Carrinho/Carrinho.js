@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
-import api from '../../services/api';
-import { LoginContext } from '../../contexts/LoginContext';
-import CartProduct from './Components/CartProduct';
-import MetaData from '../../meta/reactHelmet';
-import ShippingCalc from './Components/ShippingCalc';
-import './Carrinho.css';
+import React, { useEffect, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import api from "../../services/api";
+import { LoginContext } from "../../contexts/LoginContext";
+import CartProduct from "./Components/CartProduct";
+import MetaData from "../../meta/reactHelmet";
+import "./Carrinho.css";
+import CalculateShipping from "../../components/CalculateShipping";
 
 function Carrinho() {
   const history = useHistory();
@@ -14,7 +14,7 @@ function Carrinho() {
 
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
-  const [shipping, setShipping] = useState();
+  const [shipping, setShipping] = useState(10);
 
   const meta = {
     titlePage: "Uniformes E-commerce | Carrinho",
@@ -23,7 +23,7 @@ function Carrinho() {
     keyWords: "Carrinho",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   async function handleChangeAmount(number, product_key) {
     try {
@@ -88,7 +88,14 @@ function Carrinho() {
 
   return (
     <div className="cardContainer">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <h1 className="cartTitle">Carrinho</h1>
       <div className="cartTable">
         <table className="table">
@@ -116,23 +123,22 @@ function Carrinho() {
                 Subtotal:{" "}
               </td>
               <td colSpan="2" className="subTotalCarrinho">
-                R${( (subTotal*100)/100 ).toFixed(2).replace(".", ",")}
+                R${((subTotal * 100) / 100).toFixed(2).replace(".", ",")}
+                <p style={{ fontSize: 16, margin: 0 }}> + frete</p>
               </td>
             </tr>
             <tr>
-              <td colSpan="3">
-                <ShippingCalc setShipping={setShipping} />
-              </td>
-              <td colSpan="3">
-                {shipping && `R$${shipping.toFixed(2).replace(".", ",")}`}
-              </td>
-            </tr>
-            <tr>
-              <td colSpan="5" className="totalCarrinho">
-                R$
-                {shipping
-                  ? (((subTotal + shipping)*100)/100).toFixed(2).replace(".", ",")
-                  : ((subTotal*100)/100).toFixed(2).replace(".", ",")}
+              <td colSpan="5">
+                <CalculateShipping
+                  className="p-3"
+                  onCalculateShipping={(e) => console.log(e)}
+                  product_models={products?.map(
+                    ({ product_model_id, amount }) => ({
+                      product_model_id,
+                      quantity: amount,
+                    })
+                  )}
+                />
               </td>
             </tr>
           </tbody>
@@ -141,7 +147,7 @@ function Carrinho() {
       <div
         classname="buttonSize"
         style={{
-          alignSelf: 'flex-end'
+          alignSelf: "flex-end",
         }}
       >
         {products.length > 0 && (

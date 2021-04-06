@@ -3,10 +3,9 @@ import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
 import { Link } from "react-router-dom";
 import MetaData from "../../../meta/reactHelmet";
-import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
-
 import Toggle from "../../../components/Toggle";
+import "./OrdersAdm.css";
 
 import { FaFilter } from "react-icons/fa";
 

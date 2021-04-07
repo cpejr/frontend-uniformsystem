@@ -38,7 +38,7 @@ import {
   isAuthenticated,
   isADM,
   isADMOrEmployee,
-  isClientOrADMOrEmployee,
+  isClient,
 } from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
 
@@ -58,7 +58,7 @@ const PrivateClientRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        isAuthenticated() && isClientOrADMOrEmployee(user) ? (
+        isAuthenticated() && isClient(user) ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -151,7 +151,7 @@ function MenuRoutes() {
 
             <Route path="/shop" export component={Loja} />
             <PrivateClientRoute path="/checkout" export component={Checkout} />
-            <Route path="/product/:product_id" export component={Produto} />
+            <PrivateClientRoute path="/product/:product_id" export component={Produto} />
             {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                   logado, você será redirecionado para a página Login. */}
 
@@ -182,7 +182,7 @@ function MenuRoutes() {
 
           <Route path="/shop" export component={Loja} />
           <PrivateClientRoute path="/checkout" export component={Checkout} />
-          <Route path="/product/:product_id" export component={Produto} />
+          <PrivateClientRoute path="/product/:product_id" export component={Produto} />
           {/* Abaixo tem somente um teste do privateRoute, que se você tentar entrar na página Perfil sem estar
                   logado, você será redirecionado para a página Login. */}
 

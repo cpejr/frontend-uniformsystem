@@ -543,6 +543,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputHeight}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
               className={classes.inputText}
               error={errorHeightProduct}
               helperText={errorHeightProductMessage}
@@ -555,6 +556,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputLenght}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
               className={classes.inputText}
               error={errorLenghtProduct}
               helperText={errorLenghtProductMessage}
@@ -567,6 +569,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputWeight}
+              placeholder="Unidade em kg, até 3 casas decimais. Máximo 30"
               className={classes.inputText}
               error={errorWeightProduct}
               helperText={errorWeightProductMessage}
@@ -579,6 +582,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputWidth}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
               className={classes.inputText}
               error={errorWidthProduct}
               helperText={errorWidthProductMessage}

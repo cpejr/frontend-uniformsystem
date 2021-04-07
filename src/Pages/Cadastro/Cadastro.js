@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { withRouter } from "react-router-dom";
 
@@ -7,11 +7,8 @@ import {
   CircularProgress,
   makeStyles,
   MenuItem,
-  Snackbar,
   TextField,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
-import { LoginContext } from '../../contexts/LoginContext';
 
 import api from "../../services/api";
 import SnackbarMessage from "../../components/SnackbarMessage";
@@ -102,7 +99,6 @@ function validateInput(type, value) {
 
 function Cadastro({ history }) {
   const classes = useStyles();
-  const { token } = useContext(LoginContext);
 
   const [errorName, setErrorName] = useState(false);
   const [errorNameMessage, setErrorNameMessage] = useState("");
@@ -474,8 +470,6 @@ function Cadastro({ history }) {
       const fullStreet = `${str1}, ${str2}`;
       // const street = str1 + " " + str2;
 
-      // console.log(fullStreet);
-
       // setAddressInfo({ ...addressInfo, street: street });
       // console.log(addressInfo);
       delete addressInfo["number"];
@@ -524,9 +518,10 @@ function Cadastro({ history }) {
           history.push("/login");
         }, 2500);
       } catch (err) {
-        setMessageSnackbar("Falha no cadastro. Tente novamente");
-        setTypeSnackbar("error");
         setLoading(false);
+        setOpen(true);
+        setTypeSnackbar("error");
+        setMessageSnackbar("Falha no cadastro. Tente novamente");
         console.log(err);
         console.log(userInfo);
       }
@@ -725,7 +720,6 @@ function Cadastro({ history }) {
         <TextField
           required
           label="N°"
-          // type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
@@ -797,7 +791,6 @@ function Cadastro({ history }) {
         <TextField
           required
           label="CEP"
-          // type="number"
           InputLabelProps={{
             classes: {
               root: classes.inputLabel,
@@ -898,7 +891,6 @@ function Cadastro({ history }) {
       <TextField
         required
         label="Telefone"
-        // type="number"
         InputLabelProps={{
           classes: {
             root: classes.inputLabel,
@@ -910,6 +902,7 @@ function Cadastro({ history }) {
             root: classes.inputBox,
           },
         }}
+        inputProps={{ maxLength: 11 }}
         inputRef={telefoneInput}
         error={errorTelefone}
         helperText={errorTelefoneMessage}

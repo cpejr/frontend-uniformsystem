@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import MetaData from "../../meta/reactHelmet";
-import { withRouter, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import SnackbarMessage from "../../components/SnackbarMessage";
-import { FaAngleLeft } from "react-icons/fa";
 
 import {
   Button,
   CircularProgress,
   makeStyles,
   MenuItem,
-  Snackbar,
   TextField,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+
+import { FaChevronLeft } from "react-icons/fa";
 
 import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
@@ -77,7 +76,7 @@ function validateInput(type, value) {
   return isValid;
 }
 
-function EditarPerfil({ history }) {
+function EditarPerfil() {
   const hist = useHistory();
 
   function back() {
@@ -478,10 +477,11 @@ function EditarPerfil({ history }) {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
+        <FaChevronLeft 
+          className="back" 
+          onClick={() => back()} 
+        />
       <h1 className={classes.mainTitle}>
-        <div className="back">
-          <FaAngleLeft onClick={back} />{" "}
-        </div>{" "}
         EDITAR DADOS PESSOAIS
         <span className={classes.spanInsideTitle} />
       </h1>
@@ -783,7 +783,7 @@ const useStyles = makeStyles((theme) => ({
     width: "fit-content",
     fontSize: "32px",
     lineHeight: "49px",
-    marginTop: "5px",
+    marginTop: "48px",
     marginBottom: "30px",
     display: "flex",
     flexDirection: "column",
@@ -920,4 +920,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default withRouter(EditarPerfil);
+export default EditarPerfil;

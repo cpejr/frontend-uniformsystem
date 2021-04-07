@@ -1,333 +1,299 @@
-
-.productSelect{
-    border: 4px solid #76CCCC;
+.productSelect {
+  border: 4px solid #76cccc;
 }
 
-.productPage .MuiFormHelperText-contained{
-    margin: 2px 0px 0px 0px;
+.productPage .MuiFormHelperText-contained {
+  margin: 2px 0px 0px 0px;
 }
 
-.productPage{
-    min-height: 90vh;
-    width: 90%;
+.productPage {
+  min-height: 90vh;
+  width: 90%;
 
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    padding: 30px 0px;
-    margin: 0 auto;
+  padding: 30px 0px;
+  margin: 0 auto;
 }
 
-.productPage .leftSide{
-    width: 40%;
-    
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 80px;
+.productPage .leftSide {
+  width: 40%;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 80px;
 }
 
-.productPage .leftSide img{
-    width: 100%;
-    margin-bottom: 50px;
+.productPage .leftSide img {
+  width: 100%;
+  margin-bottom: 50px;
 }
 
-.productPage .rightSide{
-    
-    width: 60%;
-    padding-left: 10px;
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.productPage .rightSide {
+  width: 60%;
+  padding-left: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.productPage .rightSide h1{
-    
-    font-size: 40px;
-    font-weight: 600;
-    color: #000;
+.productPage .rightSide h1 {
+  font-size: 40px;
+  font-weight: 600;
+  color: #000;
 }
 
-.productPage .rightSide .titleArea{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 10px;
+.productPage .rightSide .titleArea {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.productPage .rightSide .titleArea strong{
-    font-size: 15px;
-    font-weight: 600;
+.productPage .rightSide .titleArea strong {
+  font-size: 15px;
+  font-weight: 600;
 }
 
-.productPage .rightSide .titleArea span{
-    font-size: 18px;
+.productPage .rightSide .titleArea span {
+  font-size: 18px;
 }
 
 .productPage .rightSide .productsInfo {
-    height: 100%;
-    min-height: 550px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
+  height: 100%;
+  min-height: 550px;
+  display: flex;
+  flex-direction: row;
 }
 
-.productPage .rightSide .productsInfo .leftSideInside{
+.productPage .leftSideInside {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.productPage .priceWIthPhotos {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 28px;
+}
+
+.productPage .productsPhotos {
+  height: 60%;
+  width: 90%;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(auto-fill, 150px);
+  gap: 10px;
+  margin: 10px auto 0 auto;
+}
+
+.productPage .productsPhotos img {
+  max-width: 80%;
+  max-height: 150px;
+  cursor: pointer;
+}
+
+.productPage .productsPhotos img:hover {
+  border: 1px solid #000;
+}
+
+.productPage .logoSpaceDiv {
+  max-height: 120px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 45px;
+}
+
+.productPage .logoImgClass {
+  /* width: auto; */
+  max-width: 70%;
+  max-height: 100%;
+}
+
+.productPage .shipSpace {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 8px;
+  width: 100%;
+}
+
+.productPage .MuiTextField-root {
+  margin: 3px 0px;
+}
+
+.productPage .MuiOutlinedInput-root {
+  width: 80%;
+}
+
+.productPage .forgotPassword {
+  font-size: 15px;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #979494;
+}
+
+.productPage .forgotPassword:hover {
+  color: #000;
+}
+
+.productPage .sizeAndQuantity {
+  width: 50%;
+  display: flex;
+
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  margin-left: 16px;
+}
+
+.productPage .sizeAndQuantity strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.productPage .sizeAndQuantity .divCheckboxes {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.productPage .genderCheckboxes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.productPage .divCheckboxes .genderCheckboxes + .genderCheckboxes {
+  margin-top: 8px;
+}
+
+.productPage .sizeAndQuantity .quantity {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 24px;
+}
+
+.productPage .sizeAndQuantity .quantity strong {
+  font-size: 15px;
+  margin-right: 8px;
+}
+
+.productPage .sizeAndQuantity .quantity input {
+  width: 60px;
+
+  margin: 20px 0;
+}
+
+.productPage .quantity .MuiOutlinedInput-root {
+  height: 35px;
+}
+
+.productPage .loadLogo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.productPage .titleUploadLogo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.productPage .titleUploadLogo strong {
+  font-size: 15px;
+}
+
+.productPage .titleUploadLogo span {
+  font-size: 14px;
+}
+
+.productPage .loadLogo button {
+  font-size: 12px;
+  background-color: rgb(116, 202, 228);
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+.productPage .loadLogo button:hover {
+  background-color: rgb(64, 158, 187);
+}
+
+.productPage .rightSide .addToCart {
+  font-weight: 600;
+
+  width: 100%;
+  background-color: rgb(26, 178, 224);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 20px;
+
+  margin-top: 55px;
+}
+.productPage .rightSide .addToCart:hover {
+  background-color: rgb(37, 118, 143);
+}
+
+@media (max-width: 840px) {
+  .productPage {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .productPage .leftSide {
     width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+  }
 
-.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-size: 28px;
-    
-}
-
-
-
-.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos{
-    height: 60%;
-    width: 90%;
-    overflow: auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(auto-fill, 150px);
-    gap: 10px;
-    margin: 10px auto 0 auto;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos img{
-    max-width: 80%;
-    max-height: 150px;
-    cursor: pointer;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .productsPhotos img:hover{
-    border: 1px solid #000;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoSpaceDiv{
-    max-height: 120px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 45px;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoSpaceDiv .logoImgClass{
-    /* width: auto; */
-    max-width: 70%;
-    max-height: 100%;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .shipSpace{
-    height: 20%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea{
-    width: 90%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .MuiTextField-root{
-    margin: 3px 0px;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .MuiTextField-root .MuiOutlinedInput-root{
-    width: 80%;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea .calculateCEPButton{
-    font-size: 12px;
-    border-radius: 10px;
-    background-color:  #d1c9c9;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .shipSpace .calculateCEPArea input{
-    width: 70%;
-    margin-right: 10px;
-    border-radius: 10px;
-    padding: 3px 4px;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .shipSpace .forgotPassword{
-    font-size: 15px;
-    text-decoration: underline;
-    cursor: pointer;
-    color: #979494;
-}
-
-.productPage .rightSide .productsInfo .leftSideInside .shipSpace .forgotPassword:hover{
-    color: #000;
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity{
-    width: 50%;
-    display: flex;
-    
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-evenly;
-    margin-left: 10px;
-    
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity strong{
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    padding: 10px 0px;
-    margin-top: -20px;
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes .genderCheckboxes{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes .genderCheckboxes + .genderCheckboxes{
-    margin-top: 8px;
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity .quantity{
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-top: 24px;
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity .quantity strong{
-    font-size: 15px;
-    margin-right: 8px;
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity .quantity input{
-    width: 60px;
-    
-    margin: 20px 0;
-}
-
-.productPage .rightSide .productsInfo .sizeAndQuantity .quantity .MuiOutlinedInput-root{
-    height: 35px;
-}
-
-.productPage .rightSide .productsInfo .loadLogo{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 24px;
-}
-
-.productPage .rightSide .productsInfo .loadLogo .titleUploadLogo{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.productPage .rightSide .productsInfo .loadLogo .titleUploadLogo strong{
-    font-size: 15px;
-}
-
-.productPage .rightSide .productsInfo .loadLogo .titleUploadLogo span{
-    font-size: 14px;
-}
-
-.productPage .rightSide .productsInfo .loadLogo button{
-    font-size: 12px;
-    background-color: rgb(116, 202, 228);
-    border-radius: 20px;
-    margin-top: 10px;
-}
-
-.productPage .rightSide .productsInfo .loadLogo button:hover{
-    background-color: rgb(64, 158, 187);
-}
-
-.productPage .rightSide .addToCart{
-    font-weight: 600;
-    
-    width: 100%;
-    background-color: rgb(26, 178, 224);
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    border-radius: 20px;
-    
-    margin-top: 55px;
-}
-.productPage .rightSide .addToCart:hover{
-    background-color: rgb(37, 118, 143);
-
-}
-
-@media(max-width: 840px){
-    .productPage{
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .productPage .leftSide{
-        width: 50%;
-    }
-
-    /* .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos{
+  /* .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos{
         height: auto;
     } */
 
-    .productPage .rightSide{
-        width: 100%;
-        padding: 0px;
-    }
+  .productPage .rightSide {
+    width: 100%;
+    padding: 0px;
+  }
 }
 
-@media(max-width: 640px){
+@media (max-width: 640px) {
+  .productPage .productsInfo {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
 
-    .productPage .rightSide .productsInfo{
-        flex-direction: column;
-        align-items: center;
-    }
+  .productPage .leftSideInside {
+    width: 100%;
+  }
 
-    .productPage .rightSide .productsInfo .leftSideInside{
-        width: 100%;
-    }
+  .productPage .sizeAndQuantity {
+    width: 100%;
+  }
 
-    .productPage .rightSide .productsInfo .leftSideInside .shipSpace{
-        margin: 12px 0px 12px 0px;
-    }
+  .productPage .divCheckboxes {
+    margin-top: 0px;
+  }
 
-    .productPage .rightSide .productsInfo .sizeAndQuantity{
-        width: 100%;
-    }
-
-    .productPage .rightSide .productsInfo .sizeAndQuantity .divCheckboxes{
-        margin-top: 0px;
-    }
-
-    .productPage .rightSide .productsInfo .leftSideInside .priceWIthPhotos .logoImgClass{
-        max-height: 150px;
-    }
+  .productPage .logoImgClass {
+    max-height: 150px;
+  }
 }

@@ -56,7 +56,7 @@ function ComputerFooter() {
     <div className="all_footer">
       <div className="content_footer">
         <div className="logo">
-          <Link to="/home">
+          <Link to="/">
             <img src={Logo} alt="Logo" className="Logo" />
           </Link>
         </div>

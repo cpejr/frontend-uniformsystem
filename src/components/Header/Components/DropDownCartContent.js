@@ -84,13 +84,13 @@ export default function DropDownCartContent(props) {
                                   ? "Feminino"
                                   : "Masculino"}
                               </p>
-                              <p>R$ {Number(produto.price).toFixed(2)}</p>
+                              <p>R$ {Number(produto.price).toFixed(2).replace(".", ",")}</p>
                             </div>
                             <div className="pt2">
                               <p className="color">Cor: Branca</p>
                               <p className="total_price">
                                 {produto.amount} x R${" "}
-                                {Number(produto.price).toFixed(2)}
+                                {Number(produto.price).toFixed(2).replace(".", ",")}
                               </p>
                             </div>
                           </div>
@@ -113,7 +113,7 @@ export default function DropDownCartContent(props) {
                 SUBTOTAL{" "}
               </h5>
               <h5 className="price" style={{ color: "black" }}>
-                R$ {Subtotal},00
+                R$ {((Subtotal*100)/100).toFixed(2).replace(".", ",")}
               </h5>
             </div>
           </>

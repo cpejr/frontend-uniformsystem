@@ -8,8 +8,6 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PopUpChangeAddress from "../../components/PopUpChangeAddress";
 
-import LocalShippingIcon from "@material-ui/icons/LocalShipping";
-
 import Button from "@material-ui/core/Button";
 
 import { LoginContext } from "../../contexts/LoginContext";
@@ -74,8 +72,6 @@ function Checkout() {
   const currentUser = user;
   const user_id = currentUser.user_id;
 
-  const serviceCode = "04014";
-
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
   const meta = {
@@ -86,6 +82,7 @@ function Checkout() {
     imageUrl: "",
     imageAlt: "",
   };
+
 
   useEffect(() => {
     function validateBirthInput(type) {
@@ -178,7 +175,7 @@ function Checkout() {
         "/order",
         {
           address_id: address_id,
-          service_code: serviceCode,
+          service_code: shipping.ServiceCode,
           products: products,
         },
         {

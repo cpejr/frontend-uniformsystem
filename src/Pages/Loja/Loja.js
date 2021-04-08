@@ -217,7 +217,7 @@ function Loja() {
         //bottom reached
         //Fuçã que faz requisição no back pela proxima pagina
         // loadNextPage();
-        //TODO ao ativar o scroll infinito (linha 219) os filtros param de funcionar
+        //TODO ao ativar o scroll infinito (descomentando a função loadNextPage) os filtros param de funcionar
         //.then(setOngsData)
         //.catch((error) => console.error(error));
       }

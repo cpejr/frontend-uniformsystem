@@ -77,8 +77,6 @@ function Loja() {
       setLoading(true);
       const response = await api.get(`/product?${query.join("&")}`);
 
-      console.log('aqui', response)
-
       return response.data.products;
     } catch (error) {
       setLoading(false);
@@ -218,7 +216,8 @@ function Loja() {
       if (windowBottom >= docHeight) {
         //bottom reached
         //Fuçã que faz requisição no back pela proxima pagina
-        loadNextPage();
+        // loadNextPage();
+        //TODO ao ativar o scroll infinito (linha 219) os filtros param de funcionar
         //.then(setOngsData)
         //.catch((error) => console.error(error));
       }
@@ -261,9 +260,8 @@ function Loja() {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      {!loading ? (
-        <>
-          <div className="search">
+      {/*<div style={loading? {display: 'none'} : {}}>*/}
+          <div className="search" style={loading? {display: 'none'} : {}}>
             <input
               id="search"
               type="text"
@@ -273,7 +271,7 @@ function Loja() {
 
             <FaSearch onClick={findProduct} className="searchButton" />
           </div>
-          <div className="shopContainer">
+          <div className="shopContainer"  style={loading? {display: 'none'} : {}}>
             <div className="filterContainer">
               <div className="filterTitleProducts">
                 <FaFilter /> FILTRAR
@@ -316,21 +314,17 @@ function Loja() {
                 </div>
               </div>
             </div>
-
             <div className="productContainer">
-              {products.length > 0 ? products.map((product) => (
-                <ProductCard key={product.product_model_id} product={product} />
-              ))
-            : (
-              <h1>Sem produtos</h1>
-            )
-            }
+              {products?.length > 0 && !loading ?
+                products.map((product) => (
+                  <ProductCard key={product.product_model_id} product={product} />
+                ))
+                :
+                <h1>Sem produtos</h1>
+              }
             </div>
           </div>
-        </>
-      ) : (
-        <>{selectSkeleton()}</>
-      )}
+      {loading && selectSkeleton()}
     </div>
   );
 }

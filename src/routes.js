@@ -38,7 +38,6 @@ import {
   isAuthenticated,
   isADM,
   isADMOrEmployee,
-  isClient,
 } from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
 
@@ -58,7 +57,7 @@ const PrivateClientRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        isAuthenticated() && isClient(user) ? (
+        isAuthenticated() && !isADMOrEmployee(user) ? (
           <Component {...props} />
         ) : (
           <Redirect

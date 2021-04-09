@@ -175,7 +175,7 @@ function Checkout() {
         "/order",
         {
           address_id: address_id,
-          service_code: shipping.ServiceCode,
+          shipping_service_code: shipping.ServiceCode,
           products: products,
         },
         {

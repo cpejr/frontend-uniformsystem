@@ -17,7 +17,7 @@
 html, body {
   margin: 0;
   position: relative;
-  min-height: 90vh;
+  min-height: 100vh;
   font-family: Roboto Condensed, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

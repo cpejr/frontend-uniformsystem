@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import {
-  TextField,
   Table,
   TableBody,
   TableCell,
@@ -13,7 +12,7 @@ import {
 import "./CalculateShipping.css";
 import api from "../../services/api";
 
-import { FormControl, InputGroup, Button, Form } from "react-bootstrap";
+import { InputGroup, Button, Form } from "react-bootstrap";
 import { IconContext } from "react-icons/lib";
 import { FaTruck } from "react-icons/fa";
 
@@ -31,13 +30,11 @@ import { FaTruck } from "react-icons/fa";
 
 function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
   const [errorMessage, setErrorMessage] = useState();
-  const [shippingResult, setShippingResult] = useState();
+  const [shippingResult, setShippingResult] = useState([]);
   const inputCEP = useRef();
 
   async function CalculateShipping() {
     const cepReceived = inputCEP.current.value;
-    setShippingResult();
-
     try {
       if (
         cepReceived === "" ||
@@ -46,18 +43,16 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
       ) {
         setErrorMessage("Digite um CEP válido.");
       } else {
-        setErrorMessage();
+        setErrorMessage("");
 
         const response = await api.post(`/order/shippingQuote`, {
           recipient_CEP: cepReceived,
           product_models,
         });
-
         setShippingResult(response.data.ShippingSevicesArray);
         onCalculateShipping(response.data.ShippingSevicesArray);
       }
     } catch (err) {
-      setShippingResult();
       console.warn(err);
     }
   }
@@ -78,7 +73,7 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
           <Form.Control.Feedback type="invalid">
             {errorMessage}
           </Form.Control.Feedback>
-          <Button variant="dark" onClick={CalculateShipping}>
+          <Button variant="dark" onClick={() => CalculateShipping()}>
             <div className="d-flex">
               <div className="mr-2">
                 <IconContext.Provider value={{ size: "20px" }}>
@@ -90,7 +85,7 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
           </Button>
         </InputGroup>
       </div>
-      {shippingResult && (
+      {shippingResult?.length > 0 && (
         <TableContainer component={Paper}>
           <Table className="shipping" size="small" aria-label="a dense table">
             <TableHead>
@@ -110,7 +105,7 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {shippingResult?.map((shipping) => {
+              {shippingResult.map((shipping) => {
                 const {
                   ServiceDescription,
                   Carrier,

@@ -39,9 +39,15 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
       if (
         cepReceived === "" ||
         cepReceived.length < 8 ||
-        isNaN(Number(cepReceived))
+        isNaN(Number(cepReceived)) ||
+        product_models.length === 0
       ) {
-        setErrorMessage("Digite um CEP válido.");
+
+        if(product_models.length === 0){
+          setErrorMessage("Nenhum produto no carrinho.");
+        }else{
+          setErrorMessage("Digite um CEP válido.");
+        }
       } else {
         setErrorMessage("");
 

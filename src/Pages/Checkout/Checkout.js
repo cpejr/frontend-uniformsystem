@@ -7,6 +7,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PopUpChangeAddress from "../../components/PopUpChangeAddress";
+import SnackbarMessage from "../../components/SnackbarMessage";
 
 import Button from "@material-ui/core/Button";
 
@@ -66,6 +67,10 @@ function Checkout() {
   const [openModal, setOpenModal] = useState(false);
 
   const [loadingPurchase, setLoadingPurchase] = useState(false);
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
 
   const { token, user } = useContext(LoginContext);
 
@@ -185,11 +190,18 @@ function Checkout() {
 
       setTimeout(() => {
         setLoadingPurchase(false);
-      }, 3000);
+        setMessageSnackbar("Pedido feito com sucesso");
+        setTypeSnackbar("success");
+        setOpenSnackbar(true);
+      }, 2000);
+      setTimeout(() => {
+        history.push("/perfil");
+      }, 4000);
     } catch (error) {
       console.warn(error);
-      alert("Erro ao criar um pedido.");
-      history.push("Error");
+      setMessageSnackbar("Falha ao realizar o pedido");
+      setTypeSnackbar("error");
+      // history.push("/Error");
     }
   }
 
@@ -213,6 +225,13 @@ function Checkout() {
       history.push("Error");
     }
   }
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   useEffect(() => {
     try {
@@ -509,6 +528,12 @@ function Checkout() {
           "FINALIZAR COMPRA"
         )}
       </Button>
+      <SnackbarMessage
+        open={openSnackbar}
+        handleClose={handleClose}
+        message={messageSnackbar}
+        type={typeSnackbar}
+      />
       <PopUpChangeAddress
         open={openModal}
         handleClose={handleCloseModal}

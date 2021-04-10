@@ -132,7 +132,7 @@ justify-content: center;
 
 .divNossosProdutos .divCardsExterna{
     width: 100%;
-    height: 400px;
+    min-height: 400px;
 
     margin: 40px 0;
     display: flex;

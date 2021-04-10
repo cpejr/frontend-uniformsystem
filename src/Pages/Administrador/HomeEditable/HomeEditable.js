@@ -954,6 +954,7 @@ function HomeEditable() {
               multiline={true}
               rows={10}
               size="medium"
+              placeholder="Limite de 150 palavras"
               value={homeInfo.textWhoWeAre}
               error={errorTextWhoWeAre}
               helperText={errorTextWhoWeAreMessage}
@@ -1056,6 +1057,7 @@ function HomeEditable() {
               multiline={true}
               rows={10}
               size="medium"
+              placeholder="Limite de 150 palavras"
               value={homeInfo.textProducts}
               error={errorTextProducts}
               helperText={errorTextProductsMessage}

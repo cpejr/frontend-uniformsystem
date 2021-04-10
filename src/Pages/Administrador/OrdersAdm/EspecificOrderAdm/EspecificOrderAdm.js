@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import api from "../../../../services/api";
 import "./EspecificOrderAdm.css";
-import camisa from "../../../../Assets/camisa.jpg";
 import MetaData from "../../../../meta/reactHelmet";
 import { useHistory } from "react-router-dom";
 import { LoginContext } from "../../../../contexts/LoginContext";
@@ -32,6 +31,7 @@ function EspecificOrderAdm(props) {
   var modelos = {
     id: [],
     description: [],
+    imgLink: [],
   };
   const [Orders, setOrders] = useState([]);
   const [Models, setModels] = useState([]);
@@ -70,6 +70,7 @@ function EspecificOrderAdm(props) {
       headers: { authorization: `bearer ${token}` },
     });
 
+
     setModels(resultado.data.models);
   };
 
@@ -78,10 +79,10 @@ function EspecificOrderAdm(props) {
     obterModelos();
   }, []);
 
-  Models.map((produto) => {
+  Models.forEach((produto) => {
     modelos.id.push(produto.product_model_id);
     modelos.description.push(produto.model_description);
-    return "";
+    modelos.imgLink.push(produto.img_link);
   });
 
   async function ModificarStatus() {
@@ -95,7 +96,7 @@ function EspecificOrderAdm(props) {
     } else {
       if (Code !== "") {
         try {
-          const response = await api.post(
+          await api.post(
             `order/deliveratmail/${orderId}`,
             {
               tracking_code: Code,
@@ -263,27 +264,35 @@ function EspecificOrderAdm(props) {
           <tbody>
             {Orders.map((pedido) => {
               var description;
+              var img_link;
 
               for (var i = 0; i < modelos.id.length; i++) {
                 var product = pedido.product_model_id;
 
                 if (modelos.id[i] === product) {
                   description = modelos.description[i];
+                  img_link = modelos.imgLink[i];
                 }
               }
               const colum = (
                 <tr className="oder-tr-content">
                   <td className="amount">{pedido.amount}</td>
                   <td className="products">
-                    <img src={camisa} className="image-product" />
+                    <img src={`${bucketAWS}${img_link}`} className="image-product" />
 
                     <span className="product-name">{description}</span>
                   </td>
                   <td className="logo">
-                    {" "}
-                    <a href={`${bucketAWS}${pedido.logo_link}`} download>
-                      Baixar Imagem
-                    </a>{" "}
+                    {
+                      pedido.logo_link === 'Sem Imagem' ? (
+                        <span>Logo não cadastrada</span>
+                      ) 
+                      : (
+                        <a href={`${bucketAWS}${pedido.logo_link}`} download>
+                          Baixar Imagem
+                        </a>
+                      )
+                    }
                   </td>
                 </tr>
               );

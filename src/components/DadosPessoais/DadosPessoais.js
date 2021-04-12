@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import "./DadosPessoais.css";
+import {isClient} from "../../services/auth";
 
 
 function DadosPessoais({dado}){
@@ -9,7 +10,7 @@ function DadosPessoais({dado}){
         <span className="dadosName">Nome: {dado.name}</span>
         <span className="dadosCpf">CPF/CNPF: {dado.cpf}</span>
         <span className="dadosEmail">E-mail: {dado.email}</span>
-        {dado.user_type !== "adm" &&
+        {isClient(dado) &&
           <Link to="/editarPerfil" className="botaoEditarDados">
             Editar meu cadastro
           </Link>

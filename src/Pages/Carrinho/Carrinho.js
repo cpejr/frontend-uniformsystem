@@ -6,6 +6,7 @@ import CartProduct from "./Components/CartProduct";
 import MetaData from "../../meta/reactHelmet";
 import "./Carrinho.css";
 import CalculateShipping from "../../components/CalculateShipping";
+import {isClient} from "../../services/auth";
 
 function Carrinho() {
   const history = useHistory();
@@ -150,7 +151,7 @@ function Carrinho() {
           alignSelf: "flex-end",
         }}
       >
-        {products.length > 0 && user.user_type !== 'adm' && (
+        {products.length > 0 && isClient(user) && (
           <button
             className="checkoutButton"
             onClick={() => history.push("checkout")}

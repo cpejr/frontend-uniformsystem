@@ -11,10 +11,9 @@ import { HiOutlineMail } from "react-icons/hi";
 import "./Contato.css";
 
 function Contato() {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJ1c2VyX2lkIjoiNzEzYjMyLWUxMzYtNmJkYi1iYjcwLWRkYWJmZTRmYmM2IiwibmFtZSI6IkZlbGlwZSIsImZpcmViYXNlX3VpZCI6ImNpU1ZUVjdISGlnU0NYdUJrUG9zNklJWm93dDEiLCJ1c2VyX3R5cGUiOiJhZG0iLCJlbWFpbCI6ImZlbGlwZUB0ZXN0ZS5jb20iLCJjcGYiOiIxMTExMTExMTExMSIsImNyZWF0ZWRfYXQiOiIyMDIxLTAxLTE1IDAwOjQ4OjEyIiwidXBkYXRlZF9hdCI6IjIwMjEtMDEtMTUgMDA6NDg6MTIifV0sImlhdCI6MTYxMDY3MTc0OCwiZXhwIjoxNjEzMjYzNzQ4fQ.vmKMvkG0_bV6DUjbHUuOeH_UnbJcud5oJ6i-ecxX21Q";
   const [FacebookInfo, setFacebookInfo] = useState("");
   const [EnderecoInfo, setEnderecoInfo] = useState("");
+  const [EmailInfo, setEmailInfo] = useState("");
   const [InstagramInfo, setInstagramInfo] = useState("");
   const [cellphoneInfo, setCellphoneInfo] = useState("");
   const [WhatsAppInfo, setWhatsAppInfo] = useState("");
@@ -33,14 +32,15 @@ function Contato() {
   useEffect(() => {
     async function getContactInfo() {
       try {
-        const response = await api.get("/home/info", {
-          headers: { authorization: `bearer ${token}` },
-        });
+        const response = await api.get("/home/info");
         if (response.data.length === 0) {
           throw new Error("Home info is Empty");
         }
         const address = response.data.filter((item) =>
           item.key === "address" ? item.data : null
+        )[0];
+        const email = response.data.filter((item) =>
+          item.key === "email" ? item.data : null
         )[0];
         const facebookUsername = response.data.filter((item) =>
           item.key === "facebookUsername" ? item.data : null
@@ -60,8 +60,8 @@ function Contato() {
         const FacebookLinkInfo = response.data.filter((item) =>
           item.key === "facebookLink" ? item.data : null
         )[0];
-        console.log(response);
         setEnderecoInfo(address.data);
+        setEmailInfo(email.data);
         setFacebookInfo(facebookUsername.data);
         setInstagramInfo(instagramUsername.data);
         setCellphoneInfo(cellphone.data);
@@ -74,6 +74,7 @@ function Contato() {
     }
     getContactInfo();
   }, []);
+
   return (
     <div className="divPagContato">
       <MetaData
@@ -134,7 +135,7 @@ function Contato() {
             className="aEmail"
           >
             <HiOutlineMail className="envelopeContato" />
-            <h3 className="escritaEmail">emailgenerico@gmail.com</h3>
+            <h3 className="escritaEmail">{ EmailInfo === "" ? "emailgenerico@gmail.com" : EmailInfo}</h3>
           </a>
 
           <a

@@ -23,8 +23,6 @@ function SelectedImages({
 }) {
   const handleClick = () => {
     SelectedImage.map( (item, index) => index === indexImg? setSelectedImage[index](true): setSelectedImage[index](false) );
-    console.log('clicou', SelectedImage)
-    console.log('index', indexImg)
   };
 
   if (!whoWeAre) {
@@ -71,6 +69,7 @@ function InputsOrIconWithInput({
       textProducts: oldValue.textProducts,
       telephoneInfo:
         field === "telephone" ? maskPhone(value) : oldValue.telephoneInfo,
+      emailInfo: field === "email" ? value : oldValue.emailInfo,
       enderecoInfo: field === "endereco" ? value : oldValue.enderecoInfo,
       facebookUsername:
         field === "facebook user" ? value : oldValue.facebookUsername,
@@ -102,10 +101,16 @@ function InputsOrIconWithInput({
   );
 }
 
-const validateFields = (value) => {
+const validateFields = (value, type = '') => {
   let isValid = true;
-  if (value === "") {
-    isValid = false;
+  if(type === 'email'){
+    if (!value.includes('@') || !value.includes('.com') || "") {
+      isValid = false;
+    }
+  }else{
+    if (value === "") {
+      isValid = false;
+    }
   }
   return isValid;
 };
@@ -144,6 +149,7 @@ function HomeEditable() {
     textWhoWeAre: "",
     textProducts: "",
     telephoneInfo: "",
+    emailInfo: "",
     enderecoInfo: "",
     facebookUsername: "",
     instagramUsername: "",
@@ -178,6 +184,9 @@ function HomeEditable() {
 
   const [errorTelephone, setErrorTelephone] = useState(false);
   const [errorTelephoneMessage, setErrorTelephoneMessage] = useState("");
+
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorEmailMessage, setErrorEmailMessage] = useState("");
 
   const [errorEndereco, setErrorEndereco] = useState(false);
   const [errorEnderecoMessage, setErrorEnderecoMessage] = useState("");
@@ -287,6 +296,9 @@ function HomeEditable() {
           const cellphone = response.data.filter((item) =>
             item.key === "cellphone" ? item.data : null
           )[0];
+          const email = response.data.filter((item) =>
+            item.key === "email" ? item.data : null
+          )[0];
           const address = response.data.filter((item) =>
             item.key === "address" ? item.data : null
           )[0];
@@ -304,6 +316,7 @@ function HomeEditable() {
             textWhoWeAre: textWhoWeAre.data,
             textProducts: textProducts.data,
             telephoneInfo: cellphone.data,
+            emailInfo: email.data,
             enderecoInfo: address.data,
             facebookUsername: facebookLink.data,
             instagramUsername: instagramLink.data,
@@ -643,17 +656,18 @@ function HomeEditable() {
       excludedProductsImages
     );
 
-    const textWhoWeAreValidated = validateFields(homeInfo.textWhoWeAre);
-    const textProductsValidated = validateFields(homeInfo.textProducts);
-    const telephoneInfoValidated = validateFields(homeInfo.telephoneInfo);
-    const enderecoInfoValidated = validateFields(homeInfo.enderecoInfo);
-    const facebookUsernameValidated = validateFields(homeInfo.facebookUsername);
+    const textWhoWeAreValidated = validateFields(homeInfo.textWhoWeAre, 'text');
+    const textProductsValidated = validateFields(homeInfo.textProducts, 'text');
+    const telephoneInfoValidated = validateFields(homeInfo.telephoneInfo, 'text');
+    const emailInfoValidated = validateFields(homeInfo.emailInfo, "email");
+    const enderecoInfoValidated = validateFields(homeInfo.enderecoInfo, 'text');
+    const facebookUsernameValidated = validateFields(homeInfo.facebookUsername, 'text');
     const instagramUsernameValidated = validateFields(
       homeInfo.instagramUsername
-    );
-    const facebookLinkValidated = validateFields(homeInfo.facebookLink);
-    const instagramLinkValidated = validateFields(homeInfo.instagramLink);
-    const whatsAppLinkValidated = validateFields(homeInfo.whatsAppLink);
+    , 'text');
+    const facebookLinkValidated = validateFields(homeInfo.facebookLink, 'text');
+    const instagramLinkValidated = validateFields(homeInfo.instagramLink, 'text');
+    const whatsAppLinkValidated = validateFields(homeInfo.whatsAppLink, 'text');
 
     if (
       !imageCarouselValidated ||
@@ -662,6 +676,7 @@ function HomeEditable() {
       !textWhoWeAreValidated ||
       !textProductsValidated ||
       !telephoneInfoValidated ||
+      !emailInfoValidated ||
       !enderecoInfoValidated ||
       !facebookUsernameValidated ||
       !instagramUsernameValidated ||
@@ -715,6 +730,14 @@ function HomeEditable() {
       } else {
         setErrorTelephone(false);
         setErrorTelephoneMessage("");
+      }
+
+      if (!emailInfoValidated) {
+        setErrorEmail(true);
+        setErrorEmailMessage("Campo inválido.");
+      } else {
+        setErrorEmail(false);
+        setErrorEmailMessage("");
       }
 
       if (!enderecoInfoValidated) {
@@ -772,6 +795,7 @@ function HomeEditable() {
         textProducts: homeInfo.textProducts,
         contactInfo: {
           cellphone: homeInfo.telephoneInfo,
+          email: homeInfo.emailInfo,
           address: homeInfo.enderecoInfo,
           facebookUsername: homeInfo.facebookUsername,
           instagramUsername: homeInfo.instagramUsername,
@@ -820,6 +844,7 @@ function HomeEditable() {
       textWhoWeAre: value,
       textProducts: oldValue.textProducts,
       telephoneInfo: oldValue.telephoneInfo,
+      emailInfo: oldValue.emailInfo,
       enderecoInfo: oldValue.enderecoInfo,
       facebookUsername: oldValue.facebookLink,
       instagramUsername: oldValue.instagramLink,
@@ -834,6 +859,7 @@ function HomeEditable() {
       textWhoWeAre: oldValue.textWhoWeAre,
       textProducts: value,
       telephoneInfo: oldValue.telephoneInfo,
+      emailInfo: oldValue.emailInfo,
       enderecoInfo: oldValue.enderecoInfo,
       facebookUsername: oldValue.facebookLink,
       instagramUsername: oldValue.instagramLink,
@@ -1163,6 +1189,17 @@ function HomeEditable() {
             errorBoolean={errorTelephone}
             errorMessage={errorTelephoneMessage}
             field={"telephone"}
+          />
+          <InputsOrIconWithInput
+            label={"EMAIL"}
+            placeholderInfo={"profit@email.com"}
+            icon={<FacebookIcon />}
+            defaultValue={homeInfo.emailInfo}
+            hasIcon={false}
+            setInfo={setHomeInfo}
+            errorBoolean={errorEmail}
+            errorMessage={errorEmailMessage}
+            field={"email"}
           />
           <InputsOrIconWithInput
             label={"ENDEREÇO"}

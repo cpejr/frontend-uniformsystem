@@ -102,7 +102,6 @@ function Login() {
           email: email,
           password: password,
         });
-        console.log("resposta", response);
         if (response.data && response.data.accessToken) {
           const token = response.data.accessToken;
           const user = response.data.user;

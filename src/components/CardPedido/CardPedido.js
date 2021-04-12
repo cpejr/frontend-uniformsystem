@@ -46,7 +46,6 @@ function CardPedido({ pedido, token }) {
         }
       );
 
-      console.log("products from order", response);
       if (response.data) {
         setProductsFromOrder(response.data);
       }
@@ -61,8 +60,6 @@ function CardPedido({ pedido, token }) {
       totalAux += item.product_price * item.amount - item.discount;
       return totalAux;
     });
-
-    console.log("aqui", totalAux);
 
     return totalAux;
   }, [productsFromOrder]);

@@ -82,7 +82,7 @@ function EditarPerfil() {
   function back() {
     hist.goBack();
   }
-  const { token, user, setUser } = useContext(LoginContext);
+  const { token, user, verify } = useContext(LoginContext);
 
   const classes = useStyles();
 
@@ -116,7 +116,6 @@ function EditarPerfil() {
   const [errorTelefone, setErrorTelefone] = useState(false);
   const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
-  const [userInfo, setUserInfo] = useState({ name: user.name });
   const [addressInfo, setAddressInfo] = useState();
 
   const [messageSnackbar, setMessageSnackbar] = useState("");
@@ -153,10 +152,10 @@ function EditarPerfil() {
         },
       });
       setAddressInfo({ ...response.data.adresses[0] });
-      setUserInfo({ name: user.name });
     }
     getUserAddress();
-  }, []);
+    console.log('user', user)
+  }, [loading]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -313,7 +312,7 @@ function EditarPerfil() {
       try {
         setLoading(true);
         const street = ruaInput.current.value + "," + numInput.current.value;
-        const response = await api.put(
+        await api.put(
           `/address/${addressInfo.address_id}`,
           {
             updatedFields: {
@@ -330,15 +329,8 @@ function EditarPerfil() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log(response);
-        // setUser([
-        //   {
-        //     ...user,
-        //     name: nomeInput.current.value,
-        //     telefone: telefoneInput.current.value,
-        //   },
-        // ]);
-        const responseUser = await api.put(
+
+        await api.put(
           `users/${user.user_id}`,
           {
             updatedFields: {
@@ -352,13 +344,15 @@ function EditarPerfil() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
-        setTimeout(() => {
+        
+        setTimeout(async () => {
           setLoading(false);
           setMessageSnackbar("Alterações realizadas com sucesso!");
           setTypeSnackbar("success");
           setOpen(true);
+          await verify(token);
         }, 1000);
+
       } catch (err) {
         setMessageSnackbar("Falha ao atualizar os dados");
         setTypeSnackbar("error");
@@ -376,7 +370,6 @@ function EditarPerfil() {
       newUserInfo = {
         name: e.target.value,
       };
-      setUserInfo({ ...newUserInfo });
     }
 
     if (type === "rua") {

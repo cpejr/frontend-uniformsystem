@@ -110,15 +110,20 @@ function Carrinho() {
             </tr>
           </thead>
           <tbody>
-            {products.map((product, index) => (
-              <CartProduct
-                key={index}
-                index={index}
-                product={product}
-                changeAmount={handleChangeAmount}
-                handleDelete={handleDelete}
-              />
-            ))}
+            { products.length > 0 ? 
+              products.map((product, index) => (
+                <CartProduct
+                  key={index}
+                  index={index}
+                  product={product}
+                  changeAmount={handleChangeAmount}
+                  handleDelete={handleDelete}
+                />
+              )) :
+              <tr>
+                Sem itens no carrinho
+              </tr>
+            }
             <tr>
               <td colSpan="3" className="subTotalCarrinho">
                 Subtotal:{" "}

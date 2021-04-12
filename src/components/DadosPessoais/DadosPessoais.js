@@ -9,9 +9,11 @@ function DadosPessoais({dado}){
         <span className="dadosName">Nome: {dado.name}</span>
         <span className="dadosCpf">CPF/CNPF: {dado.cpf}</span>
         <span className="dadosEmail">E-mail: {dado.email}</span>
-         <Link to="/editarPerfil" className="botaoEditarDados">
+        {dado.user_type !== "adm" &&
+          <Link to="/editarPerfil" className="botaoEditarDados">
             Editar meu cadastro
-         </Link> 
+          </Link>
+        }
       </div>
     );
 }

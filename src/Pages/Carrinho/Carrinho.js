@@ -10,7 +10,7 @@ import CalculateShipping from "../../components/CalculateShipping";
 function Carrinho() {
   const history = useHistory();
 
-  const { token } = useContext(LoginContext);
+  const { token, user } = useContext(LoginContext);
 
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
@@ -150,7 +150,7 @@ function Carrinho() {
           alignSelf: "flex-end",
         }}
       >
-        {products.length > 0 && (
+        {products.length > 0 && user.user_type !== 'adm' && (
           <button
             className="checkoutButton"
             onClick={() => history.push("checkout")}

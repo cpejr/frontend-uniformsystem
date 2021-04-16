@@ -170,7 +170,8 @@ function Checkout() {
 
     try {
       const address_id = address.address_id;
-      console.log("produtos: ", products);
+
+      console.log("produtos: ", products[0].price);
       await api
         .post(
           "/order",
@@ -214,9 +215,10 @@ function Checkout() {
           authorization: `bearer ${token}`,
         },
       });
+
       // if(response.data.length>0){
       setProducts([...response.data]);
-      console.log("OPA", products);
+      console.log("OPA EU", products);
       // }
       // else{
       //   history.push('/')

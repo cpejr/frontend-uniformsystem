@@ -61,11 +61,9 @@ function Perfil() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log("aqi", response);
         if (response.data.adresses.length > 0) {
           setUserAddress(response.data.adresses[0]);
         }
-        console.log("resposta", response.data.adresses[0]);
       }
 
       async function getOrders() {
@@ -75,7 +73,6 @@ function Perfil() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("orders", response);
         if (response.data) {
           setUserOrders(response.data);
         }

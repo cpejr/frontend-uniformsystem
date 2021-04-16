@@ -1,12 +1,9 @@
-import React, {useState} from "react";
+import React from "react";
 import './Toggle.css'
 
 export default function Toggle(props){
 
-    const [IsChecked, setIsChecked] = useState(props.isChecked || false)
-
     function handleChange() {
-        setIsChecked(!IsChecked);
         props.Status(!props.isChecked);
     }
 
@@ -14,7 +11,7 @@ export default function Toggle(props){
             <label className='switch'>
                 <input
                     type='checkbox'
-                    value={IsChecked}
+                    value={props.isChecked}
                     onClick={handleChange}
                 />
                 <div className='slider'></div>

@@ -7,8 +7,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PopUpChangeAddress from "../../components/PopUpChangeAddress";
-
-import LocalShippingIcon from "@material-ui/icons/LocalShipping";
+import SnackbarMessage from "../../components/SnackbarMessage";
 
 import Button from "@material-ui/core/Button";
 
@@ -20,6 +19,7 @@ import { useHistory } from "react-router-dom";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import HeroSquareSkeleton from "../../components/Skeletons/HeroSquareSkeleton";
+import SelectShipping from "../../components/SelectShipping";
 
 function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
   return (
@@ -62,17 +62,20 @@ function Checkout() {
 
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState({});
+  const [shipping, setShipping] = useState();
 
   const [openModal, setOpenModal] = useState(false);
 
   const [loadingPurchase, setLoadingPurchase] = useState(false);
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [messageSnackbar, setMessageSnackbar] = useState("");
+  const [typeSnackbar, setTypeSnackbar] = useState("success");
+
   const { token, user } = useContext(LoginContext);
 
   const currentUser = user;
   const user_id = currentUser.user_id;
-
-  const serviceCode = "04014";
 
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
@@ -84,6 +87,7 @@ function Checkout() {
     imageUrl: "",
     imageAlt: "",
   };
+
 
   useEffect(() => {
     function validateBirthInput(type) {
@@ -176,7 +180,7 @@ function Checkout() {
         "/order",
         {
           address_id: address_id,
-          service_code: serviceCode,
+          shipping_service_code: shipping.ServiceCode,
           products: products,
         },
         {
@@ -186,11 +190,18 @@ function Checkout() {
 
       setTimeout(() => {
         setLoadingPurchase(false);
-      }, 3000);
+        setMessageSnackbar("Pedido feito com sucesso");
+        setTypeSnackbar("success");
+        setOpenSnackbar(true);
+      }, 2000);
+      setTimeout(() => {
+        history.push("/perfil");
+      }, 4000);
     } catch (error) {
       console.warn(error);
-      alert("Erro ao criar um pedido.");
-      history.push("Error");
+      setMessageSnackbar("Falha ao realizar o pedido");
+      setTypeSnackbar("error");
+      // history.push("/Error");
     }
   }
 
@@ -214,6 +225,13 @@ function Checkout() {
       history.push("Error");
     }
   }
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   useEffect(() => {
     try {
@@ -277,6 +295,16 @@ function Checkout() {
   function handleOpenModal() {
     setOpenModal(true);
   }
+
+  let price = 0;
+
+  products.forEach((product) => {
+    price += product.amount * product.price;
+  });
+
+  if (shipping) price += parseFloat(shipping.ShippingPrice);
+
+  price = `R$ ${price.toFixed(2).toString().replace(".", ",")}`;
 
   return (
     <div className="fullContent">
@@ -465,20 +493,21 @@ function Checkout() {
 
             <div className="shippingInfo">
               <strong>Frete</strong>
-              <div className="valueShipping">
-                <div className="leftValueShipping">
-                  <LocalShippingIcon />
-                  <span>Valor</span>
-                </div>
-                <div className="rightValueShipping">
-                  <span>R$25,00</span>
-                </div>
-              </div>
+              <SelectShipping
+                onSelectShipping={setShipping}
+                cep={address.zip_code}
+                product_models={products?.map(
+                  ({ product_model_id, amount }) => ({
+                    product_model_id,
+                    quantity: amount,
+                  })
+                )}
+              />
             </div>
 
             <div className="totalArea">
               <strong>Total</strong>
-              <strong>R$525,00</strong>
+              <strong>{price}</strong>
             </div>
           </div>
         </div>
@@ -499,6 +528,12 @@ function Checkout() {
           "FINALIZAR COMPRA"
         )}
       </Button>
+      <SnackbarMessage
+        open={openSnackbar}
+        handleClose={handleClose}
+        message={messageSnackbar}
+        type={typeSnackbar}
+      />
       <PopUpChangeAddress
         open={openModal}
         handleClose={handleCloseModal}

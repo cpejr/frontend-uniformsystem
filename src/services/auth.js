@@ -10,6 +10,6 @@ export const isADMOrEmployee = (user) => {
     return (user.user_type === process.env.REACT_APP_EMPLOYEE_ROLE || user.user_type === process.env.REACT_APP_ADM_ROLE);
 };
 
-export const isClientOrADMOrEmployee = (user) => {
-    return ( user.user_type === process.env.REACT_APP_CLIENT_ROLE || user.user_type === process.env.REACT_APP_EMPLOYEE_ROLE || user.user_type === process.env.REACT_APP_ADM_ROLE ) ;
+export const isClient = (user) => {
+    return ( user.user_type === process.env.REACT_APP_CLIENT_ROLE ) ;
 };

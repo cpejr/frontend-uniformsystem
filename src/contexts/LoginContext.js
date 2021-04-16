@@ -1,4 +1,3 @@
-import { CircularProgress } from "@material-ui/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import React, { createContext, useState, useEffect } from "react";
 import api from "../services/api";
@@ -11,31 +10,32 @@ const LoginContextProvider = (props) => {
   const [token, setToken] = useState();
   const [user, setUser] = useState();
 
-  useEffect(() => {
-    async function verify(token) {
-      try {
-        const response = await api.get("/session/verify");
-        const data = response.data;
+  async function verify(token) {
+    try {
+      const response = await api.get("/session/verify");
+      const data = response.data;
 
-        if (data.verified) {
-          setToken(currentToken);
-          setUser(data.user[0]);
-        } else {
-          setToken(null);
-          setUser(null);
-          localStorage.removeItem("accessToken");
-        }
-
-        setLoading(false);
-      } catch (err) {
-        console.warn(err);
+      if (data.verified) {
+        setToken(token);
+        setUser(data.user[0]);
+      } else {
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem("accessToken");
       }
+
+      setLoading(false);
+    } catch (err) {
+      console.warn(err);
     }
+  }
+
+  useEffect(async () => {
 
     const currentToken = localStorage.getItem("accessToken");
 
     if (currentToken && currentToken !== " ") {
-      verify(currentToken);
+      await verify(currentToken);
     } else {
       setLoading(false);
     }
@@ -62,7 +62,7 @@ const LoginContextProvider = (props) => {
 
   return (
     <LoginContext.Provider
-      value={{ loading, token, user, signIn, logOut, setUser }}
+      value={{ loading, token, user, signIn, logOut, setUser, verify }}
     >
       {!loading ? props.children : <Loading />}
     </LoginContext.Provider>
@@ -71,8 +71,8 @@ const LoginContextProvider = (props) => {
 
 function Loading(props) {
   return (
-    <div className="loading">
-      <div className="loading-logo">
+    <div className="loading" style={{width: '100vw', height: '100vh'}}>
+      <div className="loading-logo" style={{width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
         <ClipLoader size={100} color={"#123abc"} loading={true} />
       </div>
     </div>

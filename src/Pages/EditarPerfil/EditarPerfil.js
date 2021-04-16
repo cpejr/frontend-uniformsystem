@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import MetaData from "../../meta/reactHelmet";
-import { withRouter, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import SnackbarMessage from "../../components/SnackbarMessage";
-import { FaAngleLeft } from "react-icons/fa";
 
 import {
   Button,
   CircularProgress,
   makeStyles,
   MenuItem,
-  Snackbar,
   TextField,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+
+import { FaChevronLeft } from "react-icons/fa";
 
 import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
@@ -77,13 +76,13 @@ function validateInput(type, value) {
   return isValid;
 }
 
-function EditarPerfil({ history }) {
+function EditarPerfil() {
   const hist = useHistory();
 
   function back() {
     hist.goBack();
   }
-  const { token, user, setUser } = useContext(LoginContext);
+  const { token, user, verify } = useContext(LoginContext);
 
   const classes = useStyles();
 
@@ -117,7 +116,6 @@ function EditarPerfil({ history }) {
   const [errorTelefone, setErrorTelefone] = useState(false);
   const [errorTelefoneMessage, setErrorTelefoneMessage] = useState("");
 
-  const [userInfo, setUserInfo] = useState({ name: user.name });
   const [addressInfo, setAddressInfo] = useState();
 
   const [messageSnackbar, setMessageSnackbar] = useState("");
@@ -154,10 +152,10 @@ function EditarPerfil({ history }) {
         },
       });
       setAddressInfo({ ...response.data.adresses[0] });
-      setUserInfo({ name: user.name });
     }
     getUserAddress();
-  }, []);
+    console.log('user', user)
+  }, [loading]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -314,7 +312,7 @@ function EditarPerfil({ history }) {
       try {
         setLoading(true);
         const street = ruaInput.current.value + "," + numInput.current.value;
-        const response = await api.put(
+        await api.put(
           `/address/${addressInfo.address_id}`,
           {
             updatedFields: {
@@ -331,15 +329,8 @@ function EditarPerfil({ history }) {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log(response);
-        // setUser([
-        //   {
-        //     ...user,
-        //     name: nomeInput.current.value,
-        //     telefone: telefoneInput.current.value,
-        //   },
-        // ]);
-        const responseUser = await api.put(
+
+        await api.put(
           `users/${user.user_id}`,
           {
             updatedFields: {
@@ -353,13 +344,15 @@ function EditarPerfil({ history }) {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
-        setTimeout(() => {
+        
+        setTimeout(async () => {
           setLoading(false);
           setMessageSnackbar("Alterações realizadas com sucesso!");
           setTypeSnackbar("success");
           setOpen(true);
+          await verify(token);
         }, 1000);
+
       } catch (err) {
         setMessageSnackbar("Falha ao atualizar os dados");
         setTypeSnackbar("error");
@@ -377,7 +370,6 @@ function EditarPerfil({ history }) {
       newUserInfo = {
         name: e.target.value,
       };
-      setUserInfo({ ...newUserInfo });
     }
 
     if (type === "rua") {
@@ -478,10 +470,11 @@ function EditarPerfil({ history }) {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
+        <FaChevronLeft 
+          className="back" 
+          onClick={() => back()} 
+        />
       <h1 className={classes.mainTitle}>
-        <div className="back">
-          <FaAngleLeft onClick={back} />{" "}
-        </div>{" "}
         EDITAR DADOS PESSOAIS
         <span className={classes.spanInsideTitle} />
       </h1>
@@ -783,7 +776,7 @@ const useStyles = makeStyles((theme) => ({
     width: "fit-content",
     fontSize: "32px",
     lineHeight: "49px",
-    marginTop: "5px",
+    marginTop: "48px",
     marginBottom: "30px",
     display: "flex",
     flexDirection: "column",
@@ -920,4 +913,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default withRouter(EditarPerfil);
+export default EditarPerfil;

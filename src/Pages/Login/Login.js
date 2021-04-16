@@ -6,9 +6,13 @@ import { LoginContext } from "../../contexts/LoginContext";
 import api from "../../services/api";
 import "./Login.css";
 
+import ForgotPasswordDialog from "../../components/ForgotPasswordDialog";
+
 function Login() {
   const { signIn } = useContext(LoginContext);
   const history = useHistory();
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -98,7 +102,6 @@ function Login() {
           email: email,
           password: password,
         });
-        console.log("resposta", response);
         if (response.data && response.data.accessToken) {
           const token = response.data.accessToken;
           const user = response.data.user;
@@ -123,6 +126,29 @@ function Login() {
         console.warn(err);
       }
     }
+  }
+
+  function handleCloseDialog(){
+    setOpenDialog(false);
+  }
+
+  async function sendPassword(email){
+    try {
+      await api.post("/users/sendpassword", {
+        email: email,
+      });
+    } catch (error) {
+      if (error.response) {
+        const { response } = error;
+        if (response.data?.validation?.body?.keys[0] === "email")
+          alert("E-mail inválido");
+        else if (response.data?.code === "auth/user-not-found")
+          alert(
+            "E-mail não encontrado. Verifique se escreveu corretamente ou faça o cadastro! :) "
+          );
+      }
+    }
+    handleCloseDialog();
   }
 
   return (
@@ -165,10 +191,11 @@ function Login() {
             >
               {loading ? <CircularProgress /> : "Entrar"}
             </Button>
-            <Link to="/register">Esqueci minha senha</Link>
+            <a onClick={()=>setOpenDialog(true)}>Esqueci minha senha</a>
           </form>
         </section>
       </div>
+      <ForgotPasswordDialog open={openDialog} handleClose={handleCloseDialog} handleSend={sendPassword} />
     </div>
   );
 }

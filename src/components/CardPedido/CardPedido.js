@@ -46,7 +46,6 @@ function CardPedido({ pedido, token }) {
         }
       );
 
-      console.log("products from order", response);
       if (response.data) {
         setProductsFromOrder(response.data);
       }
@@ -61,8 +60,6 @@ function CardPedido({ pedido, token }) {
       totalAux += item.product_price * item.amount - item.discount;
       return totalAux;
     });
-
-    console.log("aqui", totalAux);
 
     return totalAux;
   }, [productsFromOrder]);
@@ -95,18 +92,6 @@ function CardPedido({ pedido, token }) {
         }
       </div>
       <hr className="horizontalLine"></hr>
-      <div className="pedidoStatus">
-        <MdInfoOutline style={{ fontSize: "22px", marginRight: "7px" }} />
-        <span>Status: {statusFormatted}</span>
-      </div>
-      <div className="pedidoDestino">
-        <RiTruckFill style={{ fontSize: "22px", marginRight: "7px" }} />
-        <span>
-          Destino: {pedido.city}/{pedido.state} - {pedido.zip_code}
-        </span>
-      </div>
-      <div className="pedidoTotal">Total: R$ {totalPriceOrder.toFixed(2)}</div>
-      <Button className="pedidoBotao2">Acompanhar pedido</Button>
     </div>
   );
 }

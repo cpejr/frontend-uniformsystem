@@ -3,10 +3,9 @@ import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
 import { Link } from "react-router-dom";
 import MetaData from "../../../meta/reactHelmet";
-import "./OrdersAdm.css";
 import OrderTable from "../../../components/OrderTable/OrderTable";
-
 import Toggle from "../../../components/Toggle";
+import "./OrdersAdm.css";
 
 import { FaFilter } from "react-icons/fa";
 
@@ -36,7 +35,7 @@ function OrdersAdm() {
     imageAlt: "",
   };
 
-  const obterPedidos = useCallback(async () => {
+  const obterPedidos = async (onlyPending) => {
     if (onlyPending === true) {
       let query = [];
       let param = "status=pending";
@@ -51,21 +50,20 @@ function OrdersAdm() {
         alert(error);
       }
     } else {
-      const resultado = await api.get("order", {
+      const resultado = await api.get("/order", {
         headers: { authorization: `bearer ${token}` },
       });
       setOrders(resultado.data);
     }
     Orders.reverse();
-  }, [onlyPending]);
+  };
 
   function Invert() {
-    console.log("Orders", Orders);
     return true;
   }
 
-  useEffect(() => {
-    obterPedidos();
+  useEffect(async () => {
+    await obterPedidos(onlyPending);
   }, [onlyPending]);
 
   return (
@@ -87,7 +85,7 @@ function OrdersAdm() {
           </div>
           <div className="div_pendente">
             <div className="text_pendente">Pendente</div>
-            <div className="evento_pendente" onClick={obterPedidos}>
+            <div className="evento_pendente">
               <Toggle
                 className="toggle_order"
                 Status={setOnlyPending}
@@ -158,7 +156,6 @@ function OrdersAdm() {
                               "pt-BR",
                               pedido.created_at
                             )}
-                            {console.log("DATA", pedido.created_at)}
                           </TableCell>
                         </TableRow>
                       );

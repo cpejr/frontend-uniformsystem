@@ -6,11 +6,23 @@ import { IconContext } from "react-icons";
 
 function CartProduct({ handleDelete, index, changeAmount, product }) {
 
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
+
+  const handleChangeAmount = (numberToSumOrSub, value, productIndex) => {
+    if(numberToSumOrSub === -1){
+      if(value > 0){
+        changeAmount(numberToSumOrSub, productIndex)
+      }
+    }else{
+      changeAmount(numberToSumOrSub, productIndex)
+    }
+  }
+
   return (
     <tr>
       <td className="productInfo">
-        <div className="productName">
-          <img src="/images/blusa1.png" className="productImg" alt="productImg" />
+        <div className="productNameCartProduct">
+          <img src={bucketAWS + product.img_link} className="productImg" alt={product.name} />
           {product.name}
         </div>
       </td>
@@ -24,7 +36,7 @@ function CartProduct({ handleDelete, index, changeAmount, product }) {
           <IconContext.Provider
             value={{ size: "4vh", className: "pointerCursor" }}
           >
-            <FiMinus onClick={() => changeAmount(-1, index)} />
+            <FiMinus onClick={() => handleChangeAmount(-1, product.amount, index)} />
           </IconContext.Provider>
           <input
             className="amountInput"
@@ -37,7 +49,7 @@ function CartProduct({ handleDelete, index, changeAmount, product }) {
           <IconContext.Provider
             value={{ size: "4vh", className: "pointerCursor" }}
           >
-            <FiPlus onClick={() => changeAmount(1, index)} />
+            <FiPlus onClick={() => handleChangeAmount(1, product.amount, index)} />
           </IconContext.Provider>
         </div>
       </td>

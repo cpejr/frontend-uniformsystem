@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Loja.css";
 import api from "../../services/api";
 import ProductCard from "../../components/ProductCard";
-import { useHistory } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import MetaData from "../../meta/reactHelmet";
-import { FaFilter, FaSearch, FaTruckLoading } from "react-icons/fa";
+import { FaFilter, FaSearch } from "react-icons/fa";
 import _ from "lodash";
 import ShopSkeleton from "../../components/Skeletons/ShopSkeleton";
 import MobileShopSkeleton from "../../components/Skeletons/MobileShopSkeleton";
@@ -45,11 +43,9 @@ function Loja() {
   };
 
   const inputSearch = useRef(null);
-  const history = useHistory();
 
   async function getProducts() {
     //fazendo a requisição pro back
-
     try {
       let query = [];
       if (filter.product_type.length > 0) {
@@ -85,8 +81,6 @@ function Loja() {
     } catch (error) {
       setLoading(false);
       console.warn(error);
-      alert("Erro no servidor.");
-      history.push("Error");
     }
   }
 
@@ -97,6 +91,9 @@ function Loja() {
       setTimeout(() => {
         setLoading(false);
       }, [500]);
+    }).catch(err => {
+      console.warn(err.message)
+      setLoading(false);
     });
   }, [filter]);
 
@@ -198,7 +195,6 @@ function Loja() {
 
     setFilter(filterWithName);
 
-    // alert("Você está pesquisando!")
   }
 
   useEffect(() => {
@@ -220,7 +216,8 @@ function Loja() {
       if (windowBottom >= docHeight) {
         //bottom reached
         //Fuçã que faz requisição no back pela proxima pagina
-        loadNextPage();
+        // loadNextPage();
+        //TODO ao ativar o scroll infinito (descomentando a função loadNextPage) os filtros param de funcionar
         //.then(setOngsData)
         //.catch((error) => console.error(error));
       }
@@ -263,9 +260,8 @@ function Loja() {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      {products.length !== 0 && !loading ? (
-        <>
-          <div className="search">
+      {/*<div style={loading? {display: 'none'} : {}}>*/}
+          <div className="search" style={loading? {display: 'none'} : {}}>
             <input
               id="search"
               type="text"
@@ -275,7 +271,7 @@ function Loja() {
 
             <FaSearch onClick={findProduct} className="searchButton" />
           </div>
-          <div className="shopContainer">
+          <div className="shopContainer"  style={loading? {display: 'none'} : {}}>
             <div className="filterContainer">
               <div className="filterTitleProducts">
                 <FaFilter /> FILTRAR
@@ -318,17 +314,17 @@ function Loja() {
                 </div>
               </div>
             </div>
-
             <div className="productContainer">
-              {products.map((product) => (
-                <ProductCard key={product.product_model_id} product={product} />
-              ))}
+              {products?.length > 0 && !loading ?
+                products.map((product) => (
+                  <ProductCard key={product.product_model_id} product={product} />
+                ))
+                :
+                <h1>Sem produtos</h1>
+              }
             </div>
           </div>
-        </>
-      ) : (
-        <>{selectSkeleton()}</>
-      )}
+      {loading && selectSkeleton()}
     </div>
   );
 }

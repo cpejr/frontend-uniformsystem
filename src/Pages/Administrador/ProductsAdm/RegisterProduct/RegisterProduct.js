@@ -202,16 +202,16 @@ function RegisterProduct({ history }) {
     const resultValidateDescription = validateInputWithTypeText(
       inputDescription.current.value
     );
-    const resultValidateHeight = validateInputWithTypeText(
+    const resultValidateHeight = validators.size(
       inputHeight.current.value
     );
-    const resultValidateLenght = validateInputWithTypeText(
+    const resultValidateLenght = validators.size(
       inputLenght.current.value
     );
-    const resultValidateWeight = validateInputWithTypeText(
+    const resultValidateWeight = validators.weight(
       inputWeight.current.value
     );
-    const resultValidateWidth = validateInputWithTypeText(
+    const resultValidateWidth = validators.size(
       inputWidth.current.value
     );
 
@@ -251,7 +251,7 @@ function RegisterProduct({ history }) {
 
       if (!resultValidateHeight) {
         setErrorHeightProduct(true);
-        setErrorHeightProductMessage("Digite uma altura");
+        setErrorHeightProductMessage("Digite uma altura (em cm, sem casas decimais, máximo de 100)");
       } else {
         setErrorHeightProduct(false);
         setErrorHeightProductMessage("");
@@ -259,7 +259,7 @@ function RegisterProduct({ history }) {
 
       if (!resultValidateLenght) {
         setErrorLenghtProduct(true);
-        setErrorLenghtProductMessage("Digite um comprimento");
+        setErrorLenghtProductMessage("Digite um comprimento (em cm, sem casas decimais, máximo de 100)");
       } else {
         setErrorLenghtProduct(false);
         setErrorLenghtProductMessage("");
@@ -267,7 +267,7 @@ function RegisterProduct({ history }) {
 
       if (!resultValidateWeight) {
         setErrorWeightProduct(true);
-        setErrorWeightProductMessage("Digite um peso");
+        setErrorWeightProductMessage("Digite um peso (kg, 0 a 30, até 3 casas decimais usando o .)");
       } else {
         setErrorWeightProduct(false);
         setErrorWeightProductMessage("");
@@ -275,7 +275,7 @@ function RegisterProduct({ history }) {
 
       if (!resultValidateWidth) {
         setErrorWidthProduct(true);
-        setErrorWidthProductMessage("Digite uma largura");
+        setErrorWidthProductMessage("Digite uma largura (em cm, sem casas decimais, máximo de 100)");
       } else {
         setErrorWidthProduct(false);
         setErrorWidthProductMessage("");
@@ -539,10 +539,11 @@ function RegisterProduct({ history }) {
 
           {/* Campos para preenchimento de Altura, Largura, Peso e Comprimento */}
           <div className="spanWithInput">
-            <span>ALTURA:</span>
+            <span>ALTURA(cm):</span>
             <TextField
               required
               inputRef={inputHeight}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
               className={classes.inputText}
               error={errorHeightProduct}
               helperText={errorHeightProductMessage}
@@ -551,10 +552,11 @@ function RegisterProduct({ history }) {
             />
           </div>
           <div className="spanWithInput">
-            <span>COMPRIMENTO:</span>
+            <span>COMPRIMENTO(cm):</span>
             <TextField
               required
               inputRef={inputLenght}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
               className={classes.inputText}
               error={errorLenghtProduct}
               helperText={errorLenghtProductMessage}
@@ -563,10 +565,11 @@ function RegisterProduct({ history }) {
             />
           </div>
           <div className="spanWithInput">
-            <span>PESO:</span>
+            <span>PESO(kg):</span>
             <TextField
               required
               inputRef={inputWeight}
+              placeholder="Unidade em kg, até 3 casas decimais. Máximo 30"
               className={classes.inputText}
               error={errorWeightProduct}
               helperText={errorWeightProductMessage}
@@ -575,10 +578,11 @@ function RegisterProduct({ history }) {
             />
           </div>
           <div className="spanWithInput">
-            <span>LARGURA:</span>
+            <span>LARGURA(cm):</span>
             <TextField
               required
               inputRef={inputWidth}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
               className={classes.inputText}
               error={errorWidthProduct}
               helperText={errorWidthProductMessage}

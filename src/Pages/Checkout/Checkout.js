@@ -174,7 +174,6 @@ function Checkout() {
     try {
       const address_id = address.address_id;
 
-      console.log("produtos: ", products[0].price);
       await api
         .post(
           "/order",
@@ -189,25 +188,20 @@ function Checkout() {
         )
         .then(
           (response) => {
-            window.alert(
-              "Você será redirecionado para a página de pagamento da Cielo"
-            );
-            window.open(response.data.settings.checkoutUrl);
+            setTimeout(() => {
+              setLoadingPurchase(false);
+              setMessageSnackbar("Pedido feito com sucesso");
+              setTypeSnackbar("success");
+              setOpenSnackbar(true);
+            }, 1000);
+            setTimeout(() => {
+              window.location.href = response.data.settings.checkoutUrl;
+            }, 2000);
           },
           (error) => {
             console.log(error);
           }
         );
-
-      setTimeout(() => {
-        setLoadingPurchase(false);
-        setMessageSnackbar("Pedido feito com sucesso");
-        setTypeSnackbar("success");
-        setOpenSnackbar(true);
-      }, 2000);
-      setTimeout(() => {
-        history.push("/perfil");
-      }, 4000);
     } catch (error) {
       console.warn(error);
       setMessageSnackbar("Falha ao realizar o pedido");
@@ -228,7 +222,7 @@ function Checkout() {
 
       // if(response.data.length>0){
       setProducts([...response.data]);
-      console.log("OPA EU", products);
+
       // }
       // else{
       //   history.push('/')
@@ -448,21 +442,6 @@ function Checkout() {
         </div>
       </div>
 
-      <Button
-        type="button"
-        className="purchaseFinished"
-        onClick={() => handlePostOrder()}
-      >
-        {loadingPurchase ? (
-          <CircularProgress
-            size={40}
-            color="secondary"
-            className="circular-progress"
-          />
-        ) : (
-          "FINALIZAR COMPRA"
-        )}
-      </Button>
       <SnackbarMessage
         open={openSnackbar}
         handleClose={handleClose}

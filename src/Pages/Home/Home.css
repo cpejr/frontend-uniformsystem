@@ -18,7 +18,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
+    
     margin-bottom: 40px;
     /* background-color: #aa2b2b; */
 }
@@ -44,6 +44,8 @@ justify-content: center;
 
 .carousel-control-prev, .carousel-control-next{
     width: fit-content;
+    height: 20vh;
+    margin-top: 40vh;
 }
 
 .carousel-control-prev svg, .carousel-control-next svg{
@@ -76,7 +78,6 @@ justify-content: center;
 
 .divQuemSomos h2, .divNossosProdutos h2{
     width: fit-content;
-    font-family: 'Roboto';
     font-size: 36px;
     line-height: 49px;
     font-weight: 500;
@@ -131,7 +132,7 @@ justify-content: center;
 
 .divNossosProdutos .divCardsExterna{
     width: 100%;
-    height: 400px;
+    min-height: 400px;
 
     margin: 40px 0;
     display: flex;

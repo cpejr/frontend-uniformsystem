@@ -1,66 +1,103 @@
-import React from 'react';
-import './ProductModelCardAdm.css';
+import React, { useState } from "react";
+import "./ProductModelCardAdm.css";
 
-import { FaEdit, FaStar, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaTrash } from "react-icons/fa";
 
-function ProductModelCardAdm({productModelID, handleSelectToEdit,
-    productModelArray, setProductModelArray, fullProduct}) {
+import Switch from "react-switch";
 
-    const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
+function ProductModelCardAdm({
+  handleOpenDialog,
+  fullProduct,
+  updateModelInfo,
+}) {
+  const [isAvailable, setIsAvailable] = useState(fullProduct.available);
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
-    const {fileToShow, imgLink, modelDescription, price, gender} = fullProduct;
+  const {
+    canDelete,
+    fileToShow,
+    imgLink,
+    model_description,
+    price,
+    gender,
+    product_model_id,
+  } = fullProduct;
 
-    const handleIsMain = () => {
-
-        const objWithNewIsMain = {
-            ...productModelArray[productModelID],
-            isMain: !productModelArray[productModelID].isMain
+  return (
+    <div className="productModelCardAdmFullContent">
+      <div className="iconAvailable">
+        <span>Disponível</span>
+        <Switch
+          onChange={() => {
+            updateModelInfo(product_model_id, "available", !isAvailable);
+            setIsAvailable(!isAvailable);
+          }}
+          checked={isAvailable}
+        />
+      </div>
+      <div
+        className="iconEditImage iconWithText"
+        onClick={() =>
+          handleOpenDialog("imgLink", "Imagem do modelo", product_model_id)
         }
+      >
+        <FaEdit className="iconProductModelCard" />
+        <span>Editar Imagem</span>
+      </div>
+      <div className="image">
+        {fileToShow ? (
+          <img src={fileToShow} alt={model_description} />
+        ) : imgLink.includes(bucketAWS) ? (
+          <img src={imgLink} alt={model_description} />
+        ) : (
+          "Sem imagem"
+        )}
+      </div>
+      <div
+        className="iconWithText"
+        onClick={() =>
+          handleOpenDialog(
+            "model_description",
+            "Nome do Modelo",
+            product_model_id
+          )
+        }
+      >
+        <FaEdit className="iconProductModelCard" />
+        <p>Nome do modelo: {model_description}</p>
+      </div>
 
-        const copyProductModelArray = [...productModelArray]
-        copyProductModelArray.splice(productModelID, 1, objWithNewIsMain);
+      <div
+        className="iconWithText"
+        onClick={() => handleOpenDialog("price", "Preço", product_model_id)}
+      >
+        <FaEdit className="iconProductModelCard" />
+        <p>Preço: {`R$ ${Number(price).toFixed(2).replace(".", ",")}`}</p>
+      </div>
 
-        setProductModelArray(copyProductModelArray)
-    }
+      <div
+        className="iconWithText"
+        onClick={() =>
+          handleOpenDialog("gender", "Gênero do modelo", product_model_id)
+        }
+      >
+        <FaEdit className="iconProductModelCard" />
+        <p>Gênero: {gender === "M" ? "Masculino" : "Feminino"}</p>
+      </div>
 
-    const handleEditModel = () => {
-        handleSelectToEdit(productModelID);
-        // handleClose();
-    }
-
-    const handleDeleteModel = (productModelID) => {
-        const copyProductModelArray = [...productModelArray];
-        copyProductModelArray.splice(productModelID, 1);
-        setProductModelArray(copyProductModelArray);
-    }
-
-    return (
-        <div className="productModelCardAdmFullContent">
-            <FaTrashAlt className="iconGarbage" onClick={() => handleDeleteModel(productModelID)}/>
-            { fileToShow ? <img src={fileToShow} alt={modelDescription} />: 
-                imgLink.includes(bucketAWS) ? <img src={imgLink} alt={modelDescription} /> :
-                'Sem imagem' }
-            <span className="modelName">{modelDescription}</span>
-
-            <div className="priceAndGender">
-                <span>{`R$ ${price}`}</span>
-                <span>{gender === 'M'? 'Masculino': 'Feminino'}</span>
-            </div>
-
-            <div className="iconWithText" onClick={() => handleEditModel()}>
-                <FaEdit className="iconProductModelCard" />
-                <span>EDITAR MODELO</span>
-            </div>
-            <div className={productModelArray[productModelID].isMain ? 
-                    "iconWithText selected"
-                    : "iconWithText"}
-                    onClick={() => handleIsMain()}
-            >
-                <FaStar className="iconProductModelCard" />
-                <span >ADICIONAR COMO MODELO PRINCIPAL</span>
-            </div>
+      {canDelete && (
+        <div
+          className="iconWithText"
+          onClick={() =>
+            handleOpenDialog("delete", "Deletar modelo", product_model_id)
+          }
+        >
+          <FaTrash className="iconProductModelCard" />
+          <p>Deletar Modelo</p>
         </div>
-    );
+      )}
+    </div>
+  );
 }
 
 export default ProductModelCardAdm;

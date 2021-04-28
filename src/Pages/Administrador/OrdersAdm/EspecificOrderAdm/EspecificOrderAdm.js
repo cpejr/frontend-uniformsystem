@@ -1,36 +1,42 @@
 import React, { useEffect, useState, useContext } from "react";
-import { AiOutlineLeft } from "react-icons/ai";
 import { FaChevronLeft } from "react-icons/fa";
 import api from "../../../../services/api";
 import "./EspecificOrderAdm.css";
-import camisa from "../../../../Assets/camisa.jpg";
-import { Helmet } from "react-helmet";
 import MetaData from "../../../../meta/reactHelmet";
 import { useHistory } from "react-router-dom";
 import { LoginContext } from "../../../../contexts/LoginContext";
 
 function EspecificOrderAdm(props) {
-  //const [status, setStatus] = useState(false);
-  var Status = props.location.state.status;
-  var deliver = props.location.state.deliver;
+  const statusFromOrder = props.location.state.status;
+  let deliver = props.location.state.deliver;
 
-  const date = props.location.state.date;
-  var created = new Date();
+  const { token, user } = useContext(LoginContext);
+  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
+
+  // Caso ainda não tenha um deliver e vai efetuar a mudança de status no momento
+  if (!deliver) {
+    deliver = user.name;
+  }
+
+  const createdAt = props.location.state.createdAt;
+  const updatedAt = props.location.state.updatedAt;
 
   const orderId = props.location.state.orderId;
   var price = [];
   var discount = [];
   var total;
   var id;
-
+  var formatDate = new Date(createdAt);
+  var formatUpdate = new Date(updatedAt);
   var modelos = {
     id: [],
     description: [],
+    imgLink: [],
   };
   const [Orders, setOrders] = useState([]);
   const [Models, setModels] = useState([]);
   const [Code, setCode] = useState([]);
-  const [status, setStatus] = useState("pending");
+  const [status, setStatus] = useState(statusFromOrder);
   const history = useHistory();
 
   const meta = {
@@ -51,11 +57,8 @@ function EspecificOrderAdm(props) {
         }, 3000)
     }*/
 
-  const { token } = useContext(LoginContext);
-  const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
-
   const obterPedidos = async () => {
-    const resultado = await api.get(`productsfromorder/${orderId}`, {
+    const resultado = await api.get(`/order/productsfromorder/${orderId}`, {
       headers: { authorization: `bearer ${token}` },
     });
     console.log(resultado);
@@ -67,6 +70,7 @@ function EspecificOrderAdm(props) {
       headers: { authorization: `bearer ${token}` },
     });
 
+
     setModels(resultado.data.models);
   };
 
@@ -75,36 +79,25 @@ function EspecificOrderAdm(props) {
     obterModelos();
   }, []);
 
-  Models.map((produto) => {
+  Models.forEach((produto) => {
     modelos.id.push(produto.product_model_id);
     modelos.description.push(produto.model_description);
-    return "";
+    modelos.imgLink.push(produto.img_link);
   });
 
   async function ModificarStatus() {
     if (status === "pending") {
       try {
-        const response = await api.put(
-          `order/${orderId}`,
-          {
-            is_paid: 1,
-            status: "preparing",
-            shipping: 25.5,
-          },
-          {
-            headers: { authorization: `Bearer ${token}` },
-          }
-        );
         setStatus("preparing");
       } catch (error) {
         console.warn(error);
         alert(error);
       }
     } else {
-      if (Code != "") {
+      if (Code !== "") {
         try {
-          const response = await api.post(
-            `deliveratmail/${orderId}`,
+          await api.post(
+            `order/deliveratmail/${orderId}`,
             {
               tracking_code: Code,
             },
@@ -118,10 +111,31 @@ function EspecificOrderAdm(props) {
           alert(error);
         }
       } else {
-        alert("código de rastreamento não inserido");
+        alert("Código de rastreamento não inserido.");
       }
     }
   }
+
+  const setColorStatusLabel = (statusOrder) => {
+    let colorStatus;
+    switch (statusOrder) {
+      case "waitingPayment":
+        colorStatus = "#15B5DE";
+        break;
+      case "preparing":
+        colorStatus = "#FFE45A";
+        break;
+      case "pending":
+        colorStatus = "#F94444";
+        break;
+      case "delivered":
+        colorStatus = "#60F86A";
+        break;
+      default:
+        break;
+    }
+    return colorStatus;
+  };
 
   return (
     <div className="order-container">
@@ -144,7 +158,12 @@ function EspecificOrderAdm(props) {
             <span className="title">DETALHES DO PEDIDO</span>
             <div className="status">
               <span>STATUS: </span>
-              <div>{status}</div>
+              <div
+                className={"statusOrderLabel"}
+                style={{ backgroundColor: setColorStatusLabel(status) }}
+              >
+                {status}
+              </div>
             </div>
           </div>
 
@@ -183,11 +202,16 @@ function EspecificOrderAdm(props) {
               <br />
               <span className="date">
                 <strong>Data do pedido:</strong>
-                {created.toLocaleString("pt-BR", date)}
+                {formatDate.toLocaleString("pt-BR", createdAt)}
+              </span>
+              <br />
+              <span className="date">
+                <strong>Última atualização:</strong>
+                {formatUpdate.toLocaleString("pt-BR", updatedAt)}
               </span>
               <br />
               <span className="price">
-                <strong>Valor do pedido:</strong> R${total}
+                <strong>Valor do pedido:</strong> R$ {total}
               </span>
             </div>
             {status === "pending" && (
@@ -202,10 +226,16 @@ function EspecificOrderAdm(props) {
               </div>
             )}
             {status === "preparing" && (
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
                 <input
-                  placeholder="código de rastramento"
-                  style={{ marginRight: "10px" }}
+                  placeholder="Código de rastreamento"
+                  style={{ marginRight: "10px", marginBottom: "10px" }}
                   onChange={(e) => setCode(e.target.value)}
                 ></input>
                 <button className="button-status" onClick={ModificarStatus}>
@@ -214,8 +244,10 @@ function EspecificOrderAdm(props) {
               </div>
             )}
             {status === "delivered" && (
-              <div>
-                <span className="deliveryman">Entregador: {`${deliver}`}</span>
+              <div style={{ margin: "20px 0px" }}>
+                <span className="deliveryman">
+                  <strong>Entregador:</strong> {`${deliver}`}
+                </span>
               </div>
             )}
           </div>
@@ -232,27 +264,35 @@ function EspecificOrderAdm(props) {
           <tbody>
             {Orders.map((pedido) => {
               var description;
+              var img_link;
 
               for (var i = 0; i < modelos.id.length; i++) {
                 var product = pedido.product_model_id;
 
                 if (modelos.id[i] === product) {
                   description = modelos.description[i];
+                  img_link = modelos.imgLink[i];
                 }
               }
               const colum = (
                 <tr className="oder-tr-content">
                   <td className="amount">{pedido.amount}</td>
                   <td className="products">
-                    <img src={camisa} className="image-product" />
+                    <img src={`${bucketAWS}${img_link}`} className="image-product" />
 
                     <span className="product-name">{description}</span>
                   </td>
                   <td className="logo">
-                    {" "}
-                    <a href={`${bucketAWS}${pedido.logo_link}`} download>
-                      Baixar Imagem
-                    </a>{" "}
+                    {
+                      pedido.logo_link === 'Sem Imagem' ? (
+                        <span>Logo não cadastrada</span>
+                      ) 
+                      : (
+                        <a href={`${bucketAWS}${pedido.logo_link}`} download>
+                          Baixar Imagem
+                        </a>
+                      )
+                    }
                   </td>
                 </tr>
               );

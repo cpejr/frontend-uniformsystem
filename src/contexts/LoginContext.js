@@ -1,41 +1,43 @@
+import ClipLoader from "react-spinners/ClipLoader";
 import React, { createContext, useState, useEffect } from "react";
 import api from "../services/api";
 
 export const LoginContext = createContext();
 
 const LoginContextProvider = (props) => {
-  const [token, setToken] = useState("notYet");
-  const [user, setUser] = useState("notYet");
-  //Esses not yet sao gambiarra, por algum motivo o context ta renderizando de novo na atualizacao de pagina
-  //Nao era pra fazer isso.
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    
-    async function verify(token) {
-      try {
-        const config = {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await api.get("/verify", config);
-        console.log("Login context: ", response);
-        const data = response.data;
-        if (data.verified) {
-          setToken(currentToken);
-          setUser(data.user);
-        } else {
-          setToken(null);
-          setUser(null);
-          localStorage.removeItem("accessToken");
-        }
-      } catch (err) {
-        console.warn(err);
+  const [token, setToken] = useState();
+  const [user, setUser] = useState();
+
+  async function verify(token) {
+    try {
+      const response = await api.get("/session/verify");
+      const data = response.data;
+
+      if (data.verified) {
+        setToken(token);
+        setUser(data.user[0]);
+      } else {
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem("accessToken");
       }
+
+      setLoading(false);
+    } catch (err) {
+      console.warn(err);
     }
+  }
+
+  useEffect(async () => {
+
     const currentToken = localStorage.getItem("accessToken");
+
     if (currentToken && currentToken !== " ") {
-      verify(currentToken);
+      await verify(currentToken);
+    } else {
+      setLoading(false);
     }
     console.log("UseEffect LoginContext");
   }, []);
@@ -43,11 +45,12 @@ const LoginContextProvider = (props) => {
   function signIn(token, user) {
     const existsToken = localStorage.getItem("accessToken");
 
-    if(existsToken){
+    if (existsToken) {
       localStorage.removeItem("accessToken");
     }
+
     localStorage.setItem("accessToken", token);
-    setUser(user);
+    setUser(user[0]);
     setToken(token);
   }
 
@@ -58,10 +61,22 @@ const LoginContextProvider = (props) => {
   }
 
   return (
-    <LoginContext.Provider value={{ token, user, signIn, logOut }}>
-      {props.children}
+    <LoginContext.Provider
+      value={{ loading, token, user, signIn, logOut, setUser, verify }}
+    >
+      {!loading ? props.children : <Loading />}
     </LoginContext.Provider>
   );
 };
+
+function Loading(props) {
+  return (
+    <div className="loading" style={{width: '100vw', height: '100vh'}}>
+      <div className="loading-logo" style={{width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <ClipLoader size={100} color={"#123abc"} loading={true} />
+      </div>
+    </div>
+  );
+}
 
 export default LoginContextProvider;

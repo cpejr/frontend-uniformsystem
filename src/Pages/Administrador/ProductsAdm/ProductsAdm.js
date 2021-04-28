@@ -5,7 +5,6 @@ import ProductCardAdm from "../../../components/ProductCardAdm";
 import { FaFilter, FaSearch } from "react-icons/fa";
 import _ from "lodash";
 import "./ProductsAdm.css";
-import { Helmet } from "react-helmet";
 import MetaData from "../../../meta/reactHelmet";
 
 const FILTER_OPTIONS = [
@@ -68,6 +67,7 @@ function ProductsAdm() {
     getProducts().then((newProducts) => {
       setProducts(newProducts);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   function handleInputChange(e) {
@@ -217,8 +217,8 @@ function ProductsAdm() {
         </div>
 
         <div className="cards-products">
-          {products.map((product) => (
-            <ProductCardAdm key={product.product_model_id} product={product} />
+          {products && products.map((product) => (
+            <ProductCardAdm key={product.product_id} product={product} />
           ))}
         </div>
       </div>

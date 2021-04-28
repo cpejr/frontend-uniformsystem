@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import {Helmet} from 'react-helmet';
-import MetaData from '../../meta/reactHelmet';
-import { Carousel } from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
+import MetaData from "../../meta/reactHelmet";
+import { Carousel } from "react-bootstrap";
 
-import camisa from '../../Assets/camisa.jpg';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import api from "../../services/api";
 
-import api from '../../services/api';
-
-import './Home.css';
-import { useHistory } from 'react-router-dom';
+import "./Home.css";
 
 const CardProdutosHome = ({ imgSrcProduto, imgAltProduto, nomeProduto }) => {
   return (
@@ -22,68 +18,15 @@ const CardProdutosHome = ({ imgSrcProduto, imgAltProduto, nomeProduto }) => {
 };
 
 function Home() {
-  const history = useHistory();
-  //   function login(){
-  //     var username = prompt('Digite nome de usuario');
-  //     var password = prompt("Digite a senha");
-  //     if(username=="teste" && password=="teste")
-  //         window.location.pathname = "/checkout";
-  //     else
-  //         alert("Senha invalida nome de usuario");
-  // }
-
-  //         useEffect(() => {
-  //             login()
-  //             console.log('TESTE', window.location.pathname)
-  //         }, [])
 
   const meta = {
     titlePage: "Uniformes Ecommerce | Home",
     titleSearch: "Profit Uniformes | Home",
-    description: "Loja on-line de uniformização profissional. Venha conhecer nossos produtos!",
+    description:
+      "Loja on-line de uniformização profissional. Venha conhecer nossos produtos!",
     keyWords: "Uniformes | Home | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
-  }
-
-  const conteudoHome = {
-    Carrossel: [
-      {
-        imgSrc: camisa,
-        imgAlt: 'teste',
-      },
-      {
-        imgSrc: camisa,
-        imgAlt: 'teste',
-      },
-      {
-        imgSrc: camisa,
-        imgAlt: 'teste',
-      },
-    ],
-    QuemSomos: {
-      imgSrc: camisa,
-      imgAlt: '',
-    },
-    NossosProdutos: {
-      Cards: [
-        {
-          imgSrc: camisa,
-          imgAlt: 'teste',
-          NomeProduto: 'Nome 1',
-        },
-        {
-          imgSrc: camisa,
-          imgAlt: 'teste',
-          NomeProduto: 'Nome 2',
-        },
-        {
-          imgSrc: camisa,
-          imgAlt: 'teste',
-          NomeProduto: 'Nome 3',
-        },
-      ],
-    },
   };
 
   // Estado para armazenar Imagens do Carrossel
@@ -96,14 +39,10 @@ function Home() {
   const [imagesProducts, setImagesProducts] = useState([]);
 
   // Estados para armazenar textos
-  const [textoQuemSomos, setTextoQuemSomos] = useState('');
-  const [textoProdutos, setTextoProdutos] = useState('');
+  const [textoQuemSomos, setTextoQuemSomos] = useState("");
 
-  const [telephoneInfo, setTelephoneInfo] = useState('');
-  const [enderecoInfo, setEnderecoInfo] = useState('');
-  const [facebookInfo, setFacebookInfo] = useState('');
-  const [instagramInfo, setInstagramInfo] = useState('');
-  const [whatsappInfo, setWhatsappInfo] = useState('');
+  // Estados para armazenar textos
+  const [textoProdutos, setTextoProdutos] = useState("");
 
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
 
@@ -111,41 +50,22 @@ function Home() {
   useEffect(() => {
     async function getHomeInfo() {
       try {
-        const response = await api.get('/home/info');
+        const response = await api.get("/home/info");
 
         if (response.data.length === 0) {
-          throw new Error('Home info is Empty');
+          throw new Error("Home info is Empty");
         }
 
-        const textWhoWeAre = response.data.filter(
-          item => (item.key === 'textWhoWeAre' ? item.data : null),
+        const textWhoWeAre = response.data.filter((item) =>
+          item.key === "textWhoWeAre" ? item.data : null
         )[0];
-        const textProducts = response.data.filter(
-          item => (item.key === 'textProducts' ? item.data : null),
-        )[0];
-        const cellphone = response.data.filter(
-          item => (item.key === 'cellphone' ? item.data : null),
-        )[0];
-        const address = response.data.filter(
-          item => (item.key === 'address' ? item.data : null),
-        )[0];
-        const facebookLink = response.data.filter(
-          item => (item.key === 'facebookLink' ? item.data : null),
-        )[0];
-        const instagramLink = response.data.filter(
-          item => (item.key === 'instagramLink' ? item.data : null),
-        )[0];
-        const whatsAppNumber = response.data.filter(
-          item => (item.key === 'whatsAppNumber' ? item.data : null),
+
+        const textProducts = response.data.filter((item) =>
+          item.key === "textProducts" ? item.data : null
         )[0];
 
         setTextoQuemSomos(textWhoWeAre.data);
         setTextoProdutos(textProducts.data);
-        setTelephoneInfo(cellphone.data);
-        setEnderecoInfo(address.data);
-        setFacebookInfo(facebookLink.data);
-        setInstagramInfo(instagramLink.data);
-        setWhatsappInfo(whatsAppNumber.data);
       } catch (error) {
         console.warn(error);
         // history.push('Error');
@@ -158,12 +78,11 @@ function Home() {
   // UseEffect para inicializar as imagens da Home
   useEffect(() => {
     async function getHomeImages() {
-      const responseCarousel = await api.get(
-        '/home/images?img_place=carousel');
+      const responseCarousel = await api.get("/home/images?img_place=carousel");
 
       let imagesCarousel = [];
       if (responseCarousel.data) {
-        imagesCarousel = responseCarousel.data.map(item => ({
+        imagesCarousel = responseCarousel.data.map((item) => ({
           file: `${bucketAWS}${item.image_id}`,
           imgSrc: item.imgSrc,
           imgAlt: item.imgAlt,
@@ -171,8 +90,7 @@ function Home() {
         }));
       }
 
-      const responseWhoWeAre = await api.get(
-        '/home/images?img_place=whoWeAre');
+      const responseWhoWeAre = await api.get("/home/images?img_place=whoWeAre");
 
       let imagesWhoWeAre = {};
       if (responseWhoWeAre.data[0]) {
@@ -185,12 +103,11 @@ function Home() {
         };
       }
 
-      const responseProducts = await api.get(
-        '/home/images?img_place=products');
+      const responseProducts = await api.get("/home/images?img_place=products");
       // const imagesProducts = responseProducts.data;
       let imagesProducts = [];
       if (responseProducts.data) {
-        imagesProducts = responseProducts.data.map(item => ({
+        imagesProducts = responseProducts.data.map((item) => ({
           file: `${bucketAWS}${item.image_id}`,
           imgSrc: item.imgSrc,
           imgAlt: item.imgAlt,
@@ -208,16 +125,25 @@ function Home() {
 
   return (
     <div className="fullContent">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="divCarousel">
-        {imagesCarousel.length > 0 ? 
-        
-        imagesCarousel.length === 1 ?
-          <div className="imgCarousel">
-            <img src={imagesCarousel[0].file} alt={imagesCarousel[0].imgAlt} />
-          </div>
-        :
-          (
+        {imagesCarousel.length > 0 ? (
+          imagesCarousel.length === 1 ? (
+            <div className="imgCarousel">
+              <img
+                src={imagesCarousel[0].file}
+                alt={imagesCarousel[0].imgAlt}
+                style={{ height: "100vh" }}
+              />
+            </div>
+          ) : (
             <Carousel
               controls={true}
               indicators={true}
@@ -225,20 +151,24 @@ function Home() {
               prevIcon={<MdKeyboardArrowLeft />}
               nextIcon={<MdKeyboardArrowRight />}
             >
-              {imagesCarousel.map(item => {
+              {imagesCarousel.map((item) => {
                 return (
                   <Carousel.Item>
                     <div className="imgCarousel">
-                      <img src={item.file} alt={item.imgAlt} />
+                      <img
+                        src={item.file}
+                        alt={item.imgAlt}
+                        style={{ height: "100vh" }}
+                      />
                     </div>
                   </Carousel.Item>
                 );
               })}
             </Carousel>
-          ) : (
-            <span style={{ alignSelf: 'center' }}>Sem imagem</span>
           )
-        }
+        ) : (
+          <span style={{ alignSelf: "center" }}>Sem imagem</span>
+        )}
       </div>
       <div className="divQuemSomos">
         <h2>
@@ -250,7 +180,7 @@ function Home() {
           {imagesWhoWeAre.file ? (
             <img src={imagesWhoWeAre.file} alt={imagesWhoWeAre.imgAlt} />
           ) : (
-            <span style={{ textAlign: 'center' }}>Sem imagem</span>
+            <span style={{ textAlign: "center" }}>Sem imagem</span>
           )}
         </div>
       </div>
@@ -259,10 +189,10 @@ function Home() {
           Nossos Produtos
           <div className="lineUnderTitle" />
         </h2>
-        <span>{textoQuemSomos}</span>
+        <span>{textoProdutos}</span>
         <div className="divCardsExterna">
           {imagesProducts.length > 0 ? (
-            imagesProducts.map(item => {
+            imagesProducts.map((item) => {
               return (
                 <CardProdutosHome
                   imgSrcProduto={item.file}
@@ -272,7 +202,7 @@ function Home() {
               );
             })
           ) : (
-            <span style={{ textAlign: 'center' }}>Sem imagem</span>
+            <span style={{ textAlign: "center" }}>Sem imagem</span>
           )}
         </div>
       </div>

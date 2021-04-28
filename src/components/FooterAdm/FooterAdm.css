@@ -1,6 +1,9 @@
 .all_footerAdm {
     width: 100%;
-    height: 10vh;
+    height: 80px;
+
+    position: absolute;
+    bottom: 0;
 
     color: white;
     background-color: #201f24;
@@ -9,7 +12,7 @@
     display: flex;
     justify-content: center;
 
-    padding: 24px 0 !important;
+    /* padding: 24px 0 !important; */
     margin-bottom: 0px !important;
 }
 

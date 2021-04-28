@@ -13,11 +13,12 @@ th,
 td {
   border: 1px solid #707070;
   border-collapse: collapse;
+  vertical-align: middle !important;
 }
 
 .cardContainer th {
   background-color: #d8d8d8;
-  padding: 15px;
+  padding: 8px 12px !important;
 }
 
 .cartTable {
@@ -37,15 +38,16 @@ td {
   padding: 15px;
 }
 
-.productName {
+.productNameCartProduct {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  padding: 10px 0px;
 }
 
 .productImg {
-  height: 10vh;
   width: auto;
+  max-width: 250px;
 }
 
 .amountContainer {
@@ -74,21 +76,34 @@ td {
   width: 70% !important;
 }
 
-.subTotal {
+.subTotalCarrinho {
   background-color: #d8d8d8;
-  padding: 15px;
+  padding: 8px 12px !important;
   text-align: left;
   font-size: 1.5rem;
 }
 
-.total {
+.totalCarrinho {
   background-color: #d8d8d8;
-  padding: 15px;
+  padding: 8px 12px !important;
   text-align: right;
   font-size: 2rem;
   font-weight: bold;
 }
 
+.checkoutButton {
+  margin-top: 5vh;
+  height: 50px;
+  width: 300px;
+  align-self: flex-end;
+  border-radius: 30px;
+  background-color: #0ec4ab;
+  border: 1px solid #707070;
+  font-size: 1.8rem;
+  font-weight: 400;
+  transition: 0.5s;
+  margin-bottom: 20px;
+}
 .cartTitle {
   margin-left: 10%;
   align-self: flex-start;

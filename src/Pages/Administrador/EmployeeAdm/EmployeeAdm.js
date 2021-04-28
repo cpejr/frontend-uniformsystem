@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch } from "react-icons/fa";
 import MetaData from "../../../meta/reactHelmet";
 import { Link } from "react-router-dom";
 
@@ -37,7 +37,7 @@ function EmployeeAdm() {
   const classes = useStyles();
   const { token, user } = useContext(LoginContext);
   const [employees, setEmployees] = useState([]);
-  const [funcionarioFiltrado, setFuncionarioFiltrado] = useState([]);;
+  const [funcionarioFiltrado, setFuncionarioFiltrado] = useState([]);
   const [dialogItem, setDialogItem] = useState({ open: false, item: null });
   const inputSearch = useRef(null);
 
@@ -61,7 +61,7 @@ function EmployeeAdm() {
 
   async function getEmployees() {
     try {
-      const response = await api.get("/employees", {
+      const response = await api.get("/users/employees", {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(response);
@@ -75,7 +75,7 @@ function EmployeeAdm() {
 
   async function deleteEmployee() {
     try {
-      await api.delete(`/delAdmOrEmployee/${dialogItem.item.user_id}`, {
+      await api.delete(`/users/delAdmOrEmployee/${dialogItem.item.user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -97,17 +97,20 @@ function EmployeeAdm() {
     setFuncionarioFiltrado([]);
 
     const employee_name = inputSearch.current.value.toLowerCase();
-    employees.map((employee) => {
-      if(employee.name.toLowerCase().includes(employee_name)){
+    employees.forEach((employee) => {
+      if (employee.name.toLowerCase().includes(employee_name)) {
         //Adiciona funcionario filtrado ao array
-        setFuncionarioFiltrado(funcionarioFiltrado => [...funcionarioFiltrado, employee])
+        setFuncionarioFiltrado((funcionarioFiltrado) => [
+          ...funcionarioFiltrado,
+          employee,
+        ]);
         // funcionario.push(employee);
         // setEmployees(funcionario);
       }
     });
-    
+
     // Se nao tiver nada no Input de busca, cooca todos
-    if(employee_name === ''){
+    if (employee_name === "") {
       setFuncionarioFiltrado([...employees]);
     }
   }
@@ -123,21 +126,21 @@ function EmployeeAdm() {
         imageAlt={meta.imageAlt}
       />
       <div className="topEmployee">
-      <div className="searchEmployee">
-        <input
-          id="searchEmployee"
-          type="text"
-          ref={inputSearch}
-          placeholder="Buscar Funcionário"
-        />
+        <div className="searchEmployee">
+          <input
+            id="searchEmployee"
+            type="text"
+            ref={inputSearch}
+            placeholder="Buscar Funcionário"
+          />
 
-        <FaSearch onClick={FilterEmployee} className="searchButtonEmployee" />
-      </div>
-      <div>
-        <Link className="buttonEmployee" to="/adm/funcionarios/cadastro">
-          <Button type="button">CADASTRAR FUNCIONÁRIO</Button>
-        </Link>
-      </div>
+          <FaSearch onClick={FilterEmployee} className="searchButtonEmployee" />
+        </div>
+        <div>
+          <Link className="buttonEmployee" to="/adm/funcionarios/cadastro">
+            <Button type="button">CADASTRAR FUNCIONÁRIO</Button>
+          </Link>
+        </div>
       </div>
       <TableContainer component={Paper}>
         <Table
@@ -163,35 +166,33 @@ function EmployeeAdm() {
               funcionarioFiltrado.map((employee) => {
                 const id = employee.user_id;
                 const colum = (
-                <TableRow key={employee.user_id}>
-                  <TableCell component="td" scope="row">
-                    {employee.name}
-                  </TableCell>
-                  <TableCell component="td" scope="row">
-                    {employee.email}
-                  </TableCell>
-                  <TableCell
-                    component="td"
-                    scope="row"
-                    className={classes.actions}
-                  >
-                    {
-                      id !== user[0].user_id ? 
+                  <TableRow key={employee.user_id}>
+                    <TableCell component="td" scope="row">
+                      {employee.name}
+                    </TableCell>
+                    <TableCell component="td" scope="row">
+                      {employee.email}
+                    </TableCell>
+                    <TableCell
+                      component="td"
+                      scope="row"
+                      className={classes.actions}
+                    >
+                      {id !== user.user_id ? (
                         <IconButton onClick={() => handleOpen(employee)}>
                           <BsFillTrashFill />
-                        </IconButton>:
-                      null
-                    }
-                    <IconButton>
-                      <Link to={`/adm/funcionario/`+id}>
-                        <BsInfoCircle />
-                      </Link>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-              return colum;
-            })
+                        </IconButton>
+                      ) : null}
+                      <IconButton>
+                        <Link to={`/adm/funcionario/` + id}>
+                          <BsInfoCircle />
+                        </Link>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+                return colum;
+              })
             ) : (
               <span>Nenhum funcionário cadastrado</span>
             )}

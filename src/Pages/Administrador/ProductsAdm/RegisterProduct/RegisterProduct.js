@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { withRouter } from "react-router-dom";
 import api from "../../../../services/api";
 import { LoginContext } from "../../../../contexts/LoginContext";
@@ -9,7 +9,6 @@ import {
   Snackbar,
   TextField,
 } from "@material-ui/core";
-import { Helmet } from "react-helmet";
 import MetaData from "../../../../meta/reactHelmet";
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -21,6 +20,8 @@ import AddIcon from "@material-ui/icons/Add";
 import { FaChevronLeft } from "react-icons/fa";
 
 import "./RegisterProduct.css";
+import validators from "./Validators";
+import ProductEditModal from "../../../../components/ProductEditModal";
 
 function validateInputWithTypeRadio(
   valueFromInputCap,
@@ -73,16 +74,11 @@ function RegisterProduct({ history }) {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const [productModelIdToEdit, setProductModelIdToEdit] = useState(null);
-
   const [productInfo, setProductInfo] = useState({});
-
-  const [isEditProduct, setIsEditProduct] = useState(false);
 
   const [productModelsArray, setProductModelsArray] = useState([]);
 
   // Estados voltados para gerenciar erros no campo Type
-  const [errorTypeProduct, setErrorTypeProduct] = useState(false);
   const [errorTypeProductMessage, setErrorTypeProductMessage] = useState("");
 
   // Estados voltados para gerenciar erros no campo Name
@@ -96,6 +92,32 @@ function RegisterProduct({ history }) {
     setErrorDescriptionProductMessage,
   ] = useState("");
 
+  // Estados voltados para gerenciar erros no campo Height
+  const [errorHeightProduct, setErrorHeightProduct] = useState(false);
+  const [errorHeightProductMessage, setErrorHeightProductMessage] = useState(
+    ""
+  );
+
+  // Estados voltados para gerenciar erros no campo Lenght
+  const [errorLenghtProduct, setErrorLenghtProduct] = useState(false);
+  const [errorLenghtProductMessage, setErrorLenghtProductMessage] = useState(
+    ""
+  );
+
+  // Estados voltados para gerenciar erros no campo Weight
+  const [errorWeightProduct, setErrorWeightProduct] = useState(false);
+  const [errorWeightProductMessage, setErrorWeightProductMessage] = useState(
+    ""
+  );
+
+  // Estados voltados para gerenciar erros no campo Width
+  const [errorWidthProduct, setErrorWidthProduct] = useState(false);
+  const [errorWidthProductMessage, setErrorWidthProductMessage] = useState("");
+
+  // Estados voltados para gerenciar erros no vetor de ProductModels
+  const [errorProductModelArray, setErrorProductModelArray] = useState(false);
+  const [errorProductModelArrayMessage, setErrorProductModelArrayMessage] = useState("");
+
   const inputTypeCap = useRef(null);
   const inputTypeShirt = useRef(null);
   const inputTypeBusiness = useRef(null);
@@ -104,6 +126,10 @@ function RegisterProduct({ history }) {
 
   const inputName = useRef(null);
   const inputDescription = useRef(null);
+  const inputHeight = useRef(null);
+  const inputLenght = useRef(null);
+  const inputWeight = useRef(null);
+  const inputWidth = useRef(null);
 
   const classes = useStyles();
 
@@ -116,14 +142,7 @@ function RegisterProduct({ history }) {
   };
 
   const handleNewProduct = () => {
-    setIsEditProduct(false);
     handleCreateModal();
-  };
-
-  const handleOpenToEdit = (productModelID) => {
-    setIsEditProduct(true);
-    handleCreateModal();
-    setProductModelIdToEdit(productModelID);
   };
 
   const handleCompleteProductInfo = (e, type) => {
@@ -136,12 +155,28 @@ function RegisterProduct({ history }) {
       newObjProductInfo = {
         description: e.target.value,
       };
+    } else if (type === "height") {
+      newObjProductInfo = {
+        height: e.target.value,
+      };
+    } else if (type === "length") {
+      newObjProductInfo = {
+        length: e.target.value,
+      };
+    } else if (type === "weight") {
+      newObjProductInfo = {
+        weight: e.target.value,
+      };
+    } else if (type === "width") {
+      newObjProductInfo = {
+        width: e.target.value,
+      };
     } else {
       newObjProductInfo = {
         product_type: e.target.value,
       };
     }
-    setProductInfo({ ...productInfo, ...newObjProductInfo, models: [] });
+    setProductInfo({ ...productInfo, ...newObjProductInfo });
   };
 
   const handleCloseSnackBar = (event, reason) => {
@@ -167,117 +202,109 @@ function RegisterProduct({ history }) {
     const resultValidateDescription = validateInputWithTypeText(
       inputDescription.current.value
     );
+    const resultValidateHeight = validators.size(
+      inputHeight.current.value
+    );
+    const resultValidateLenght = validators.size(
+      inputLenght.current.value
+    );
+    const resultValidateWeight = validators.weight(
+      inputWeight.current.value
+    );
+    const resultValidateWidth = validators.size(
+      inputWidth.current.value
+    );
 
-    // Cobre as opções dos diferentes erros no Cadastro de um porduto novo
+    const resultValidateProductModelArray = productModelsArray.length > 0 ? true: false;
+
     if (
-      resultValidateType &&
-      !resultValidateName &&
-      resultValidateDescription
+      !resultValidateType ||
+      !resultValidateName ||
+      !resultValidateDescription ||
+      !resultValidateHeight ||
+      !resultValidateLenght ||
+      !resultValidateWeight ||
+      !resultValidateWidth  ||
+      !resultValidateProductModelArray
     ) {
-      // tipo ok, nome errado, descrição ok
-      setErrorTypeProduct(false);
-      setErrorTypeProductMessage("");
+      if (!resultValidateType) {
+        setErrorTypeProductMessage("Escolha um tipo.");
+      } else {
+        setErrorTypeProductMessage("");
+      }
 
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
+      if (!resultValidateName) {
+        setErrorNameProduct(true);
+        setErrorNameProductMessage("Digite um nome.");
+      } else {
+        setErrorNameProduct(false);
+        setErrorNameProductMessage("");
+      }
 
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      resultValidateType &&
-      resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo ok, nome ok, descrição errado
-      setErrorTypeProduct(false);
-      setErrorTypeProductMessage("");
+      if (!resultValidateDescription) {
+        setErrorDescriptionProduct(true);
+        setErrorDescriptionProductMessage("Digite uma descrição.");
+      } else {
+        setErrorDescriptionProduct(false);
+        setErrorDescriptionProductMessage("");
+      }
 
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
+      if (!resultValidateHeight) {
+        setErrorHeightProduct(true);
+        setErrorHeightProductMessage("Digite uma altura (em cm, sem casas decimais, máximo de 100)");
+      } else {
+        setErrorHeightProduct(false);
+        setErrorHeightProductMessage("");
+      }
 
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      !resultValidateType &&
-      resultValidateName &&
-      resultValidateDescription
-    ) {
-      // tipo errado, nome ok, descrição errado
-      setErrorTypeProduct(true);
-      setErrorTypeProductMessage("Escolha um tipo.");
+      if (!resultValidateLenght) {
+        setErrorLenghtProduct(true);
+        setErrorLenghtProductMessage("Digite um comprimento (em cm, sem casas decimais, máximo de 100)");
+      } else {
+        setErrorLenghtProduct(false);
+        setErrorLenghtProductMessage("");
+      }
 
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
+      if (!resultValidateWeight) {
+        setErrorWeightProduct(true);
+        setErrorWeightProductMessage("Digite um peso (kg, 0 a 30, até 3 casas decimais usando o .)");
+      } else {
+        setErrorWeightProduct(false);
+        setErrorWeightProductMessage("");
+      }
 
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      !resultValidateType &&
-      !resultValidateName &&
-      resultValidateDescription
-    ) {
-      // tipo errado, nome errado, descrição ok
-      setErrorTypeProduct(true);
-      setErrorTypeProductMessage("Escolha um tipo.");
+      if (!resultValidateWidth) {
+        setErrorWidthProduct(true);
+        setErrorWidthProductMessage("Digite uma largura (em cm, sem casas decimais, máximo de 100)");
+      } else {
+        setErrorWidthProduct(false);
+        setErrorWidthProductMessage("");
+      }
 
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(false);
-      setErrorDescriptionProductMessage("");
-    } else if (
-      !resultValidateType &&
-      resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo errado, nome ok, descrição errado
-      setErrorTypeProduct(true);
-      setErrorTypeProductMessage("Escolha um tipo.");
-
-      setErrorNameProduct(false);
-      setErrorNameProductMessage("");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      resultValidateType &&
-      !resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo ok, nome errado, descrição errado
-      setErrorTypeProduct(false);
-      setErrorTypeProductMessage("");
-
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
-    } else if (
-      !resultValidateType &&
-      !resultValidateName &&
-      !resultValidateDescription
-    ) {
-      // tipo errado, nome errado, descrição errado
-      setErrorTypeProduct(true);
-      setErrorTypeProductMessage("Escolha um tipo.");
-
-      setErrorNameProduct(true);
-      setErrorNameProductMessage("Digite um nome.");
-
-      setErrorDescriptionProduct(true);
-      setErrorDescriptionProductMessage("Digite uma descrição.");
+      if (!resultValidateProductModelArray) {
+        setErrorProductModelArray(true);
+        setErrorProductModelArrayMessage("Adicione um modelo.");
+      } else {
+        setErrorProductModelArray(false);
+        setErrorProductModelArrayMessage("");
+      }
+      
     } else {
-      // tipo ok, nome ok, descrição ok
-
-      setErrorTypeProduct(false);
       setErrorTypeProductMessage("");
-
       setErrorNameProduct(false);
       setErrorNameProductMessage("");
-
       setErrorDescriptionProduct(false);
       setErrorDescriptionProductMessage("");
+      setErrorHeightProduct(false);
+      setErrorHeightProductMessage("");
+      setErrorLenghtProduct(false);
+      setErrorLenghtProductMessage("");
+      setErrorWeightProduct(false);
+      setErrorWeightProductMessage("");
+      setErrorWidthProduct(false);
+      setErrorWidthProductMessage("");
+      setErrorProductModelArray(false);
+      setErrorProductModelArrayMessage("");
 
       try {
         setLoading(true);
@@ -290,15 +317,20 @@ function RegisterProduct({ history }) {
           productModelsArray.map(async (item) => {
             let objImage = new FormData();
             objImage.append("file", item.imgLink);
-            objImage.append("is_main", item.isMain);
+            // objImage.append("is_main", item.isMain);
+            objImage.append("available", item.available);
             objImage.append("img_link", ".");
             objImage.append("price", item.price.replace(",", ".")); // substitui "," por ".", pois backend tem validação por "." em price
-            objImage.append("model_description", item.modelDescription);
+            objImage.append("model_description", item.model_description);
             objImage.append("gender", item.gender);
 
-            await api.post(`/newmodel/${response.data.product_id}`, objImage, {
-              headers: { authorization: `bearer ${token}` },
-            });
+            await api.post(
+              `/productmodels/newmodel/${response.data.product_id}`,
+              objImage,
+              {
+                headers: { authorization: `bearer ${token}` },
+              }
+            );
           });
         }
 
@@ -315,15 +347,76 @@ function RegisterProduct({ history }) {
           inputName.current.value = "";
           inputDescription.current.value = "";
           setProductModelsArray([]);
-        }, 3000);
+          inputWeight.current.value = "";
+          inputWidth.current.value = "";
+          inputHeight.current.value = "";
+          inputLenght.current.value = "";
+
+        }, 1000);
       } catch (err) {
         console.log(err.message);
       }
     }
   };
 
-  // Re-renderiza a tela depois que productModelsArray foi atualizado
-  useEffect(() => {}, [productModelsArray]);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [dialogInfo, setDialogInfo] = useState();
+
+  function handleOpenDialog(fieldKey, fieldName, modelId) {
+    if (fieldKey === "delete") {
+      setDialogInfo({
+        fieldKey,
+        fieldName,
+        validator: validators[fieldKey],
+        modelId,
+        callback: deleteModel,
+      });
+    } else {
+      setDialogInfo({
+        fieldKey,
+        fieldName,
+        validator: validators[fieldKey],
+        modelId,
+        callback: updateModelInfo,
+      });
+    }
+    setOpenEditDialog(true);
+  }
+
+  const handleClose = () => setOpenEditDialog(false);
+
+  function updateModelInfo(modelId, fieldKey, value) {
+    if (fieldKey === "price") {
+      value = value.replace(",", ".");
+    }
+    const index = productModelsArray
+      .map((model) => model.product_model_id)
+      .indexOf(modelId);
+    if (fieldKey === "imgLink") {
+      productModelsArray[index]["fileToShow"] = value.fileToShow;
+      productModelsArray[index]["imgLink"] = value.imgFile;
+    } else {
+      productModelsArray[index][fieldKey] = value;
+    }
+    setProductModelsArray([...productModelsArray]);
+    handleClose();
+  }
+
+  function deleteModel(modelId) {
+    const index = productModelsArray
+      .map((model) => model.product_model_id)
+      .indexOf(modelId);
+    productModelsArray.splice(index, 1);
+    setProductModelsArray([...productModelsArray]);
+    handleClose();
+  }
+
+  function createModel(model) {
+    model.available = true;
+    model.canDelete = true;
+    model.product_model_id = productModelsArray.length;
+    setProductModelsArray([...productModelsArray, model]);
+  }
 
   return (
     <div className="registerProductFullContent">
@@ -409,7 +502,7 @@ function RegisterProduct({ history }) {
             </div>
             <span
               style={{
-                fontSize: "0.75rem",
+                fontSize: "1rem",
                 color: "#f44336",
                 fontFamily: "Roboto",
                 marginLeft: "14px",
@@ -444,6 +537,60 @@ function RegisterProduct({ history }) {
             />
           </div>
 
+          {/* Campos para preenchimento de Altura, Largura, Peso e Comprimento */}
+          <div className="spanWithInput">
+            <span>ALTURA(cm):</span>
+            <TextField
+              required
+              inputRef={inputHeight}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
+              className={classes.inputText}
+              error={errorHeightProduct}
+              helperText={errorHeightProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "height")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>COMPRIMENTO(cm):</span>
+            <TextField
+              required
+              inputRef={inputLenght}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
+              className={classes.inputText}
+              error={errorLenghtProduct}
+              helperText={errorLenghtProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "length")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>PESO(kg):</span>
+            <TextField
+              required
+              inputRef={inputWeight}
+              placeholder="Unidade em kg, até 3 casas decimais. Máximo 30"
+              className={classes.inputText}
+              error={errorWeightProduct}
+              helperText={errorWeightProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "weight")}
+              variant="outlined"
+            />
+          </div>
+          <div className="spanWithInput">
+            <span>LARGURA(cm):</span>
+            <TextField
+              required
+              inputRef={inputWidth}
+              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
+              className={classes.inputText}
+              error={errorWidthProduct}
+              helperText={errorWidthProductMessage}
+              onChange={(e) => handleCompleteProductInfo(e, "width")}
+              variant="outlined"
+            />
+          </div>
+
           <div className="boxToManipulateProductModel">
             <div className="labelAndButtonAboveBox">
               <span>MODELOS:</span>
@@ -454,16 +601,20 @@ function RegisterProduct({ history }) {
               </Button>
             </div>
 
-            <div className="boxManipulateModels">
+            <div className="boxManipulateModels"
+              style={
+                errorProductModelArray
+                  ? { marginBottom: "24px", borderColor: "#f44336" }
+                  : { marginBottom: "24px" }
+              }
+            >
               {productModelsArray.map((item, index) =>
                 item ? (
                   <ProductModelCardAdm
                     key={index}
-                    productModelID={index}
-                    handleSelectToEdit={handleOpenToEdit}
-                    productModelArray={productModelsArray}
-                    setProductModelArray={setProductModelsArray}
-                    fullProduct={item}
+                    handleOpenDialog={handleOpenDialog}
+                    fullProduct={{ ...item }}
+                    updateModelInfo={updateModelInfo}
                   />
                 ) : null
               )}
@@ -476,6 +627,21 @@ function RegisterProduct({ history }) {
             >
               {loading ? <CircularProgress color="secondary" /> : "CADASTRAR"}
             </Button>
+            {
+              errorProductModelArray && (
+                <span
+                  style={{
+                    fontSize: "1rem",
+                    color: "#f44336",
+                    fontFamily: "Roboto",
+                    marginLeft: "14px",
+                  }}
+                >
+                  {errorProductModelArrayMessage}
+                </span>
+              )
+            }
+
           </div>
         </form>
       </div>
@@ -483,12 +649,20 @@ function RegisterProduct({ history }) {
       <PopUpProductModel
         open={openModal}
         handleClose={handleCloseModal}
-        isEdit={isEditProduct}
-        productModelIDFromExistingInfo={productModelIdToEdit}
-        setProductModelIDFromExistingInfo={setProductModelIdToEdit}
-        setProductModelArray={setProductModelsArray}
-        productModelArray={productModelsArray}
+        createModel={createModel}
       />
+
+      {dialogInfo && (
+        <ProductEditModal
+          fieldName={dialogInfo.fieldName}
+          fieldKey={dialogInfo.fieldKey}
+          validator={dialogInfo.validator}
+          callback={dialogInfo.callback}
+          modelId={dialogInfo.modelId}
+          open={openEditDialog}
+          handleClose={handleClose}
+        />
+      )}
 
       <Snackbar
         open={openSnackBar}
@@ -511,6 +685,7 @@ function RegisterProduct({ history }) {
 const useStyles = makeStyles((theme) => ({
   inputText: {
     width: "100%",
+    cursor: "pointer!important",
     outline: "none",
     padding: "5px 10px",
     "&:focus": {

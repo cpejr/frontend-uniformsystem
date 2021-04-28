@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./SidebarClient.css";
 
@@ -8,10 +8,10 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 
-import HomeIcon from '@material-ui/icons/Home';
-import LocalMallIcon from '@material-ui/icons/LocalMall';
-import ContactMailIcon from '@material-ui/icons/ContactMail';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import HomeIcon from "@material-ui/icons/Home";
+import LocalMallIcon from "@material-ui/icons/LocalMall";
+import ContactMailIcon from "@material-ui/icons/ContactMail";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
@@ -58,7 +58,7 @@ export default function ComputerSidebar(props) {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -83,7 +83,7 @@ export default function ComputerSidebar(props) {
     {
       itemName: "Carrinho",
       itemIcon: <ShoppingCartIcon />,
-      path: "/cart"
+      path: "/cart",
     },
   ];
 
@@ -92,22 +92,20 @@ export default function ComputerSidebar(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List className="sidebarListaClient">
-          {
-              objListOptionsClient.map((item, index) => (
-                <Link to={`${item.path}`}>
-                  <ListItem button key={index}>
-                    <ListItemIcon>{item.itemIcon}</ListItemIcon>
-                    <ListItemText primary={item.itemName.toUpperCase()} />
-                  </ListItem>
-                </Link>
-              ))
-          }
+        {objListOptionsClient.map((item, index) => (
+          <Link to={`${item.path}`}>
+            <ListItem button key={index}>
+              <ListItemIcon>{item.itemIcon}</ListItemIcon>
+              <ListItemText primary={item.itemName.toUpperCase()} />
+            </ListItem>
+          </Link>
+        ))}
       </List>
     </div>
   );
-  
-  const container = window !== undefined ? () => window().document.body : undefined;
 
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <div className="sidebarClient">

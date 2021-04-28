@@ -65,7 +65,7 @@
   margin-top: 174px;
 }
 
-.sidebarClient .MuiPaper-root {
+.sidebarClient .MuiDrawer-root {
   position: relative;
 }
 
@@ -74,7 +74,7 @@
   text-decoration: none;
 }
 
-.sidebarListaClient{
+.sidebarListaClient {
   width: 220px;
 }
 @media (max-width: 849px) {
@@ -83,7 +83,7 @@
     text-decoration: none;
   }
 
-  .sidebarClient .MuiPaper-root {
+  .sidebarClient .MuiDrawer-root {
     display: none;
   }
 

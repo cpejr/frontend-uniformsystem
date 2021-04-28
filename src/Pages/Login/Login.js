@@ -1,14 +1,18 @@
 import React, { useState, useContext } from "react";
-import { Link, useHistory } from 'react-router-dom';
-import { Button, TextField, CircularProgress } from '@material-ui/core';
-import MetaData from '../../meta/reactHelmet';
+import { Link, useHistory } from "react-router-dom";
+import { Button, TextField, CircularProgress } from "@material-ui/core";
+import MetaData from "../../meta/reactHelmet";
 import { LoginContext } from "../../contexts/LoginContext";
 import api from "../../services/api";
 import "./Login.css";
 
+import ForgotPasswordDialog from "../../components/ForgotPasswordDialog";
+
 function Login() {
   const { signIn } = useContext(LoginContext);
   const history = useHistory();
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,11 +28,12 @@ function Login() {
   const meta = {
     titlePage: "Uniformes Ecommerce | Login",
     titleSearch: "Profit Uniformes | Login",
-    description: "Faça login com sua conta profit e conheça nossos uniformes personalizados e funcionalidades.",
+    description:
+      "Faça login com sua conta profit e conheça nossos uniformes personalizados e funcionalidades.",
     keyWords: "Uniformes | Login | Entrar | Ecommerce | Profit",
     imageUrl: "",
     imageAlt: "",
-  }
+  };
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -93,20 +98,19 @@ function Login() {
       setErrorPasswordMessage("");
 
       try {
-        const response = await api.post("/login", {
+        const response = await api.post("/session/login", {
           email: email,
           password: password,
         });
-        console.log("resposta", response);
         if (response.data && response.data.accessToken) {
           const token = response.data.accessToken;
           const user = response.data.user;
           signIn(token, user);
           //Aqui manda para a rota logo apos o login
-          if (user[0].user_type === process.env.REACT_APP_ADM_ROLE) {
+          if (user.user_type === process.env.REACT_APP_ADM_ROLE) {
             history.push("/adm/home");
           } else if (
-            user[0].user_type === process.env.REACT_APP_EMPLOYEE_ROLE
+            user.user_type === process.env.REACT_APP_EMPLOYEE_ROLE
           ) {
             history.push("/adm/pedidos");
           } else {
@@ -124,9 +128,39 @@ function Login() {
     }
   }
 
+  function handleCloseDialog(){
+    setOpenDialog(false);
+  }
+
+  async function sendPassword(email){
+    try {
+      await api.post("/users/sendpassword", {
+        email: email,
+      });
+    } catch (error) {
+      if (error.response) {
+        const { response } = error;
+        if (response.data?.validation?.body?.keys[0] === "email")
+          alert("E-mail inválido");
+        else if (response.data?.code === "auth/user-not-found")
+          alert(
+            "E-mail não encontrado. Verifique se escreveu corretamente ou faça o cadastro! :) "
+          );
+      }
+    }
+    handleCloseDialog();
+  }
+
   return (
     <div className="login">
-      <MetaData titlePage={meta.titlePage} titleSearch={meta.titleSearch} description={meta.description} keyWords={meta.keyWords} imageUrl={meta.imageUrl} imageAlt={meta.imageAlt} />
+      <MetaData
+        titlePage={meta.titlePage}
+        titleSearch={meta.titleSearch}
+        description={meta.description}
+        keyWords={meta.keyWords}
+        imageUrl={meta.imageUrl}
+        imageAlt={meta.imageAlt}
+      />
       <div className="box">
         <section className="form">
           <form>
@@ -157,10 +191,11 @@ function Login() {
             >
               {loading ? <CircularProgress /> : "Entrar"}
             </Button>
-            <Link to="/register">Esqueci minha senha</Link>
+            <a onClick={()=>setOpenDialog(true)}>Esqueci minha senha</a>
           </form>
         </section>
       </div>
+      <ForgotPasswordDialog open={openDialog} handleClose={handleCloseDialog} handleSend={sendPassword} />
     </div>
   );
 }

@@ -32,7 +32,7 @@ jobs:
       
       # Passo 3: Builda o projeto     
     - name: Build the project
-      run: npm run build
+      run: CI=false npm run build
 
     # Passo 4: Copiar código para a Digital Ocean
     - name: Copy files to Digital Ocean

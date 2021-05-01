@@ -304,7 +304,7 @@ function Checkout() {
 
   if (shipping) price += parseFloat(shipping.ShippingPrice);
 
-  price = `R$ ${price.toFixed(2).toString().replace(".", ",")}`;
+  price = `R$ ${price.toFixed(2).replace(".", ",")}`;
 
   return (
     <div className="fullContent">
@@ -344,9 +344,9 @@ function Checkout() {
                             Gênero:{" "}
                             {product.gender === "F" ? "Feminino" : "Masculino"}
                           </span>
-                          <span>Preço único: R$ {product.price}</span>
+                          <span>Preço único: R$ {Math.round(product.price*100)/100}</span>
                           <span>
-                            Total: R$ {product.amount * product.price}
+                            Total: R$ {Math.round((product.amount * product.price)*100)/100}
                           </span>
                         </div>
                       </div>

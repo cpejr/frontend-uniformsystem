@@ -88,7 +88,6 @@ function Checkout() {
     imageAlt: "",
   };
 
-
   useEffect(() => {
     function validateBirthInput(type) {
       if (type === "day") {
@@ -172,31 +171,37 @@ function Checkout() {
       return item;
     });
 
-    console.log("prodto", productsWithRightAttributes);
-
     try {
       const address_id = address.address_id;
-      await api.post(
-        "/order",
-        {
-          address_id: address_id,
-          shipping_service_code: shipping.ServiceCode,
-          products: products,
-        },
-        {
-          headers: { authorization: `bearer ${token}` },
-        }
-      );
 
-      setTimeout(() => {
-        setLoadingPurchase(false);
-        setMessageSnackbar("Pedido feito com sucesso");
-        setTypeSnackbar("success");
-        setOpenSnackbar(true);
-      }, 2000);
-      setTimeout(() => {
-        history.push("/perfil");
-      }, 4000);
+      await api
+        .post(
+          "/order",
+          {
+            address_id: address_id,
+            shipping_service_code: shipping.ServiceCode,
+            products: products,
+          },
+          {
+            headers: { authorization: `bearer ${token}` },
+          }
+        )
+        .then(
+          (response) => {
+            setTimeout(() => {
+              setLoadingPurchase(false);
+              setMessageSnackbar("Pedido feito com sucesso");
+              setTypeSnackbar("success");
+              setOpenSnackbar(true);
+            }, 1000);
+            setTimeout(() => {
+              window.location.href = response.data.settings.checkoutUrl;
+            }, 2000);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     } catch (error) {
       console.warn(error);
       setMessageSnackbar("Falha ao realizar o pedido");
@@ -214,8 +219,10 @@ function Checkout() {
           authorization: `bearer ${token}`,
         },
       });
+
       // if(response.data.length>0){
       setProducts([...response.data]);
+
       // }
       // else{
       //   history.push('/')
@@ -359,102 +366,24 @@ function Checkout() {
             )}
           </div>
           <div className="aboutPayment">
-            <h2>Pagamento</h2>
-
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                Cartão de Crédito
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className="creditCardInfo">
-                  <div className="inputsTogether">
-                    <InputWithLabel
-                      label="Número do Cartão"
-                      width={280}
-                      setInfo={setCardNumber}
-                      maxLenght={16}
-                      error={cardNumberStored ? errorInputCardNumber : ""}
-                    />
-                    <InputWithLabel
-                      label="Código de segurança"
-                      width={70}
-                      setInfo={setSecurityNumber}
-                      maxLenght={3}
-                      error={
-                        securityNumberStored ? errorInputSecurityNumber : ""
-                      }
-                    />
-                  </div>
-                  <div className="inputsTogether">
-                    <InputWithLabel
-                      label="Nome gravado no cartão"
-                      width={280}
-                      setInfo={setCardName}
-                      maxLenght={50}
-                      error={cardNameStored ? errorInputCardName : ""}
-                    />
-                    <div className="divInputLabelError">
-                      <label htmlFor="input">Data de Nascimento</label>
-                      <div className="inputsBirthday">
-                        <input
-                          type="text"
-                          name="dayBirth"
-                          onChange={(e) => setDayStored(e.target.value)}
-                        />
-                        <input
-                          type="text"
-                          name="monthBirth"
-                          onChange={(e) => setMonthStored(e.target.value)}
-                        />
-                        <input
-                          type="text"
-                          name="yearBirth"
-                          onChange={(e) => setYearStored(e.target.value)}
-                        />
-                      </div>
-                      <span style={{ color: "#ff0033", fontSize: "15px" }}>
-                        {errorBirthInput}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="inputsTogether">
-                    <div className="divInputLabelError">
-                      <label>Opções de Parcelamento</label>
-                      <div className="inputsInstallment">
-                        <input
-                          type="text"
-                          name="input"
-                          style={{ width: "150px" }}
-                          onChange={(e) =>
-                            setInstallmentOptions(e.target.value)
-                          }
-                        />
-                      </div>
-                      <span style={{ color: "#ff0033", fontSize: "15px" }}>
-                        {errorInstallmentOptions}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <Button variant="contained" color="#8ED7CD">
-                  Adicionar
-                </Button>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                Boleto
-              </AccordionSummary>
-              <AccordionDetails>
-                Boleto aqui BLABLABLA
-                <Button variant="contained" color="#8ED7CD">
-                  Gerar Boleto
-                </Button>
-              </AccordionDetails>
-            </Accordion>
+            <h2>Por favor confira todos os seus dados.</h2>
           </div>
+
+          <Button
+            type="button"
+            className="purchaseFinished"
+            onClick={() => handlePostOrder()}
+          >
+            {loadingPurchase ? (
+              <CircularProgress
+                size={40}
+                color="secondary"
+                className="circular-progress"
+              />
+            ) : (
+              "FINALIZAR COMPRA"
+            )}
+          </Button>
         </div>
 
         <div className="rightSide">
@@ -513,21 +442,6 @@ function Checkout() {
         </div>
       </div>
 
-      <Button
-        type="button"
-        className="purchaseFinished"
-        onClick={() => handlePostOrder()}
-      >
-        {loadingPurchase ? (
-          <CircularProgress
-            size={40}
-            color="secondary"
-            className="circular-progress"
-          />
-        ) : (
-          "FINALIZAR COMPRA"
-        )}
-      </Button>
       <SnackbarMessage
         open={openSnackbar}
         handleClose={handleClose}

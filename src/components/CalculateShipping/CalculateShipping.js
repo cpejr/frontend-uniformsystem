@@ -61,7 +61,7 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
           product_models,
         });
 
-        onCalculateShipping(response.data.ShippingSevicesArray);
+        // onCalculateShipping(response.data.ShippingSevicesArray);
         setTimeout(() => {
           setLoadingProgress(false);
           setShippingResult(response.data.ShippingSevicesArray);
@@ -82,18 +82,24 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
       <span>{`Calcule o Frete: `}</span>
       <div className="calculateQuoteArea">
         <InputGroup className="groupShipping">
-          <Form.Control
-            className="mr-2"
-            maxLength={8}
-            placeholder="Apenas Números"
-            aria-label="CEP"
-            isInvalid={!!errorMessage}
-            ref={inputCEP}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errorMessage}
-          </Form.Control.Feedback>
-          <Button variant="dark" onClick={() => CalculateShipping()}>
+          <div className="inputCalculateShipping" >
+            <Form.Control
+              className="mr-2"
+              maxLength={8}
+              placeholder="Apenas Números"
+              aria-label="CEP"
+              isInvalid={!!errorMessage}
+              ref={inputCEP}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errorMessage}
+            </Form.Control.Feedback>
+          </div>
+          <Button 
+            variant="dark"
+            className="calculateShippingButton" 
+            onClick={() => CalculateShipping()}
+          >
             {
               loadingProgress ? (
                 <CircularProgress

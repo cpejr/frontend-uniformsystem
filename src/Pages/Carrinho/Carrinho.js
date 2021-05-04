@@ -137,7 +137,6 @@ function Carrinho() {
               <td colSpan="5">
                 <CalculateShipping
                   className="p-3"
-                  onCalculateShipping={(e) => console.log(e)}
                   product_models={products?.map(
                     ({ product_model_id, amount }) => ({
                       product_model_id,

@@ -25,8 +25,5 @@
 }
 
 .groupShipping {
-  justify-content: center;
-}
-
-.groupShipping button {
+  justify-content: space-between;
 }

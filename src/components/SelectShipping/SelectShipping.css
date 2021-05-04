@@ -27,3 +27,7 @@
 .groupShipping {
   justify-content: space-between;
 }
+
+.invalid-feedback{
+  display: block !important;
+}

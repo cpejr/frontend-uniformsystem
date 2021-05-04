@@ -60,6 +60,8 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
           recipient_CEP: cepReceived,
           product_models,
         });
+        
+        if(response.data.message === "Weight exceeded.") throw new Error ("Weight exceeded.");
 
         // onCalculateShipping(response.data.ShippingSevicesArray);
         setTimeout(() => {
@@ -71,7 +73,11 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
     } catch (err) {
       setTimeout(() => {
         setLoadingProgress(false);
-        setErrorMessage("Erro ao calcular o frete.");
+        if(err.message === "Weight exceeded."){
+          setErrorMessage("Peso excedido");
+        }else{
+          setErrorMessage("Erro ao calcular o frete");
+        }
       }, 2000);
       console.warn(err);
     }

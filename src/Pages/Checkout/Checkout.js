@@ -140,52 +140,54 @@ function Checkout() {
 
   // Post order
   async function handlePostOrder() {
-    setLoadingPurchase(true);
 
-    const productsWithRightAttributes = products.map((item) => {
-      delete item.name;
-      delete item.img_link;
-      delete item.product_in_cart_id;
-      delete item.user_id;
-      return item;
-    });
-
-    try {
-      const address_id = address.address_id;
-
-      await api
-        .post(
-          "/order",
-          {
-            address_id: address_id,
-            shipping_service_code: shipping.ServiceCode,
-            products: products,
-          },
-          {
-            headers: { authorization: `bearer ${token}` },
-          }
-        )
-        .then(
-          (response) => {
-            setTimeout(() => {
-              setLoadingPurchase(false);
-              setMessageSnackbar("Pedido feito com sucesso");
-              setTypeSnackbar("success");
-              setOpenSnackbar(true);
-            }, 1000);
-            setTimeout(() => {
-              window.location.href = response.data.settings.checkoutUrl;
-            }, 2000);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    } catch (error) {
-      console.warn(error);
-      setMessageSnackbar("Falha ao realizar o pedido");
-      setTypeSnackbar("error");
-      // history.push("/Error");
+    if(!shipping){
+      setLoadingPurchase(true);
+  
+      // const productsWithRightAttributes = products.map((item) => {
+      //   delete item.name;
+      //   delete item.img_link;
+      //   delete item.product_in_cart_id;
+      //   delete item.user_id;
+      //   return item;
+      // });
+  
+      try {
+        const address_id = address.address_id;
+  
+        await api
+          .post(
+            "/order",
+            {
+              address_id: address_id,
+              shipping_service_code: shipping.ServiceCode,
+              products: products,
+            },
+            {
+              headers: { authorization: `bearer ${token}` },
+            }
+          )
+          .then(
+            (response) => {
+              setTimeout(() => {
+                setLoadingPurchase(false);
+                setMessageSnackbar("Pedido feito com sucesso");
+                setTypeSnackbar("success");
+                setOpenSnackbar(true);
+              }, 1000);
+              setTimeout(() => {
+                window.location.href = response.data.settings.checkoutUrl;
+              }, 2000);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+      } catch (error) {
+        console.warn(error);
+        setMessageSnackbar("Falha ao realizar o pedido");
+        setTypeSnackbar("error");
+      }
     }
   }
 
@@ -220,6 +222,7 @@ function Checkout() {
   };
 
   useEffect(() => {
+    console.log('shipping', shipping)
     try {
       getProducts();
       setTimeout(() => {
@@ -282,6 +285,10 @@ function Checkout() {
     setOpenModal(true);
   }
 
+  function formatPriceToRightWay(value){
+    return (Math.round(value*100)/100).toFixed(2).replace('.', ',');
+  }
+
   let price = 0;
 
   products.forEach((product) => {
@@ -330,9 +337,9 @@ function Checkout() {
                             Gênero:{" "}
                             {product.gender === "F" ? "Feminino" : "Masculino"}
                           </span>
-                          <span>Preço único: R$ {Math.round(product.price*100)/100}</span>
+                          <span>Preço único: R$ {formatPriceToRightWay(product.price)}</span>
                           <span>
-                            Total: R$ {Math.round((product.amount * product.price)*100)/100}
+                            Total: R$ {formatPriceToRightWay(product.amount * product.price)}
                           </span>
                         </div>
                       </div>
@@ -346,11 +353,19 @@ function Checkout() {
           </div>
           <div className="aboutPayment">
             <h2>Por favor confira todos os seus dados.</h2>
+            {
+              !shipping && (
+                <span style={{color: 'red'}}>
+                  Compra não permitida. Peso limite excedido, retire itens do carrinho.
+                </span>
+              )
+            }
           </div>
 
           <Button
             type="button"
             className="purchaseFinished"
+            disabled={!shipping}
             onClick={() => handlePostOrder()}
           >
             {loadingPurchase ? (

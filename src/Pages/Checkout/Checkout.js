@@ -2,10 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import MetaData from "../../meta/reactHelmet";
 import api from "../../services/api";
 
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PopUpChangeAddress from "../../components/PopUpChangeAddress";
 import SnackbarMessage from "../../components/SnackbarMessage";
 
@@ -20,23 +16,6 @@ import { useHistory } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import HeroSquareSkeleton from "../../components/Skeletons/HeroSquareSkeleton";
 import SelectShipping from "../../components/SelectShipping";
-
-function InputWithLabel({ label, width, setInfo, error, maxLenght }) {
-  return (
-    <div className="divInputLabelError">
-      <label>{label}</label>
-      <input
-        type="text"
-        name="input"
-        style={{ width: `${width}px` }}
-        maxLength={`${maxLenght}`}
-        onChange={(e) => setInfo(e.target.value)}
-        // onChange={(e) => validateInput(e, type)}
-      />
-      <span style={{ color: "#ff0033", fontSize: "15px" }}>{error}</span>
-    </div>
-  );
-}
 
 function Checkout() {
   const history = useHistory();

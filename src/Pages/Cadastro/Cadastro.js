@@ -506,7 +506,12 @@ function Cadastro({ history }) {
         },
         );
 
-        console.log(response);
+        if(response.data.message === "The email address is already in use by another account."){
+          throw new Error("Falha no cadastro: Email já está em uso.");
+        }
+        if(response.data.message === "Cpf já existe."){
+          throw new Error("Falha no cadastro: CPF já está em uso.");
+        }
 
         setTimeout(() => {
           setLoading(false);
@@ -521,9 +526,15 @@ function Cadastro({ history }) {
         setLoading(false);
         setOpen(true);
         setTypeSnackbar("error");
-        setMessageSnackbar("Falha no cadastro. Tente novamente");
-        console.log(err);
-        console.log(userInfo);
+        
+        console.warn(err);
+        if(err.message === "Falha no cadastro: Email já está em uso." ||
+          err.message === "Falha no cadastro: CPF já está em uso."
+        ){
+          setMessageSnackbar(`${err.message}`);
+        }else{
+          setMessageSnackbar(`Falha no cadastro. Tente novamente.`);
+        }
       }
     }
   };

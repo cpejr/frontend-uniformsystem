@@ -140,17 +140,16 @@ function Checkout() {
 
   // Post order
   async function handlePostOrder() {
-
-    if(!shipping){
+    if(shipping){
       setLoadingPurchase(true);
   
-      // const productsWithRightAttributes = products.map((item) => {
-      //   delete item.name;
-      //   delete item.img_link;
-      //   delete item.product_in_cart_id;
-      //   delete item.user_id;
-      //   return item;
-      // });
+      const productsWithRightAttributes = products.map((item) => {
+        delete item.name;
+        delete item.img_link;
+        delete item.product_in_cart_id;
+        delete item.user_id;
+        return item;
+      });
   
       try {
         const address_id = address.address_id;
@@ -161,7 +160,7 @@ function Checkout() {
             {
               address_id: address_id,
               shipping_service_code: shipping.ServiceCode,
-              products: products,
+              products: productsWithRightAttributes,
             },
             {
               headers: { authorization: `bearer ${token}` },

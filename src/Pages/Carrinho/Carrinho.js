@@ -11,11 +11,10 @@ import {isClient} from "../../services/auth";
 function Carrinho() {
   const history = useHistory();
 
-  const { token, user } = useContext(LoginContext);
+  const { token, user, updateCart } = useContext(LoginContext);
 
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
-  const [shipping, setShipping] = useState(10);
 
   const meta = {
     titlePage: "Uniformes E-commerce | Carrinho",
@@ -56,18 +55,12 @@ function Carrinho() {
       });
       products.splice(product_key, 1);
       setProducts([...products]);
+      updateCart();
     } catch (error) {
       console.warn(error);
       alert(error);
       history.push("Error");
     }
-  }
-
-  async function getProducts() {
-    const response = await api.get("/cart", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setProducts([...response.data]);
   }
 
   useEffect(() => {
@@ -79,12 +72,8 @@ function Carrinho() {
   }, [products]);
 
   useEffect(() => {
-    try {
-      getProducts();
-    } catch (error) {
-      console.warn(error);
-      alert("Erro ao Buscar carrinho");
-    }
+    setProducts([...user.cart]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

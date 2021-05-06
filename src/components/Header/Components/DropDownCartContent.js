@@ -1,11 +1,10 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ClickAwayListener } from "@material-ui/core";
 import { FaShoppingCart } from "react-icons/fa";
 
 import "./style.css";
 import { useHistory } from "react-router-dom";
 
-import api from "../../../services/api";
 import { LoginContext } from "../../../contexts/LoginContext";
 
 import CartHeaderSkeleton from "../../Skeletons/CartHeaderSkeleton";
@@ -14,31 +13,8 @@ export default function DropDownCartContent(props) {
   let Subtotal = 0;
 
   const bucketAWS = process.env.REACT_APP_BUCKET_AWS;
-  const { token } = useContext(LoginContext);
+  const { user, loading } = useContext(LoginContext);
   const history = useHistory();
-
-  const [productsInCart, setProductsInCart] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  async function getProducts() {
-    setLoading(true);
-    const response = await api.get("/cart", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setProductsInCart(response.data);
-  }
-
-  useEffect(() => {
-    try {
-      getProducts();
-      setTimeout(() => {
-        setLoading(false);
-      }, [600]);
-    } catch (error) {
-      console.warn(error);
-      alert("Erro ao Buscar carrinho");
-    }
-  }, []);
 
   function handleClickAway() {
     props.setClickCart(false);
@@ -52,11 +28,11 @@ export default function DropDownCartContent(props) {
         {!loading ? (
           <>
             <div className="products">
-              {productsInCart.length === 0 ||
-              productsInCart.length === undefined ? (
+              {user.cart.length === 0 ||
+              user.cart.length === undefined ? (
                 <span style={{ color: "#000" }}>Nenhum produto</span>
               ) : (
-                productsInCart.map((produto) => {
+                user.cart.map((produto) => {
                   Subtotal =
                     Subtotal +
                     parseFloat(produto.price) * parseFloat(produto.amount);

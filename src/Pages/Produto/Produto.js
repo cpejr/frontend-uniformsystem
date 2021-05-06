@@ -14,6 +14,7 @@ import "./Radio.css";
 
 import ProductSkeleton from "../../components/Skeletons/ProductSkeleton";
 import CalculateShipping from "../../components/CalculateShipping";
+import { Modal } from "react-bootstrap";
 
 function validateFields(value, type) {
   let isValid;
@@ -42,7 +43,7 @@ function validateFields(value, type) {
 const obj_sizes = ["PP", "P", "M", "G", "GG"];
 
 function Produto() {
-  const { token } = useContext(LoginContext);
+  const { token, updateCart, user } = useContext(LoginContext);
 
   const [selectedValue, setSelectedValue] = useState(0);
   const [Produto, setProduto] = useState({});
@@ -50,6 +51,8 @@ function Produto() {
   const [models, setModels] = useState([]);
   const [modelChoosen, setModelChoosen] = useState({});
   const [isSelect, setIsSelect] = useState(0);
+
+  const [confirmDuplicateModal, setConfirmDuplicateModal] = useState(false);
 
   const meta = {
     titlePage: "Uniformes Ecommerce | Produto",
@@ -80,27 +83,26 @@ function Produto() {
   //Pegando o id do produto pelo link
   const { product_id } = useParams();
 
-  useEffect(async () => {
-    async function getProductModelsFromProduct(product_id) {
+  useEffect(() => {
+    const setup = async () => {
       const response = await api.get(`/productmodels/${product_id}`);
-      return response.data;
-    }
+      const arrayOfModels = response.data.models;
+      setProduto(response.data);
 
-    const response = await getProductModelsFromProduct(product_id);
-    const arrayOfModels = response.models;
-    setProduto(response);
+      // Armazena o modela
+      setModels(arrayOfModels);
 
-    // Armazena o modela
-    setModels(arrayOfModels);
+      const choosen =
+        arrayOfModels[Math.floor(Math.random() * arrayOfModels.length)];
 
-    const choosen =
-      arrayOfModels[Math.floor(Math.random() * arrayOfModels.length)];
+      // Acha modelo principal
+      setModelChoosen(!choosen ? 1 : choosen);
 
-    // Acha modelo principal
-    setModelChoosen(!choosen ? 1 : choosen);
-
-    // Acha modelo principal
-    setIsSelect(!choosen ? 1 : choosen.product_model_id);
+      // Acha modelo principal
+      setIsSelect(!choosen ? 1 : choosen.product_model_id);
+    };
+    setup();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClose = (event, reason) => {
@@ -150,6 +152,40 @@ function Produto() {
   }
 
   const AddToCart = async () => {
+    let objProdcutInCart = new FormData();
+    objProdcutInCart.append("product_model_id", modelChoosen.product_model_id);
+
+    const formattedGender = selectedValue.split("_")[0] === "Fem" ? "F" : "M";
+
+    objProdcutInCart.append("gender", formattedGender);
+    objProdcutInCart.append("size", selectedValue.split("_")[1]);
+    objProdcutInCart.append("amount", Number(inputQuantity.current.value));
+    objProdcutInCart.append("file", logoImage ? logoImage.imgSrc : null);
+    objProdcutInCart.append("isLogoUpload", logoImage ? true : false);
+
+    try {
+      await api.put("/cart/addtocart", objProdcutInCart, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `bearer ${token}`,
+        },
+      });
+
+      // Espera X milissegundos para ativar a função interna
+      setTimeout(() => {
+        setMessageSnackbar("Produto adicionado no carrinho!");
+        setTypeSnackbar("success");
+        setOpenSnackbar(true);
+      }, 800);
+      updateCart();
+    } catch (err) {
+      setMessageSnackbar("Falha ao adicionar o produto");
+      setTypeSnackbar("error");
+      console.warn(err);
+    }
+  };
+
+  const Verify = () => {
     const resultQuantityField = validateFields(
       inputQuantity.current.value,
       "quantity"
@@ -181,39 +217,16 @@ function Produto() {
       setErrorQuantityMessage("");
       setErrorSize(false);
       setErrorToken(false);
-
-      let objProdcutInCart = new FormData();
-      objProdcutInCart.append(
-        "product_model_id",
-        modelChoosen.product_model_id
-      );
-
-      const formattedGender = selectedValue.split("_")[0] === "Fem" ? "F" : "M";
-
-      objProdcutInCart.append("gender", formattedGender);
-      objProdcutInCart.append("size", selectedValue.split("_")[1]);
-      objProdcutInCart.append("amount", Number(inputQuantity.current.value));
-      objProdcutInCart.append("file", logoImage ? logoImage.imgSrc : null);
-      objProdcutInCart.append("isLogoUpload", logoImage ? true : false);
-
-      try {
-        await api.put("/cart/addtocart", objProdcutInCart, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            authorization: `bearer ${token}`,
-          },
-        });
-
-        // Espera X milissegundos para ativar a função interna
-        setTimeout(() => {
-          setMessageSnackbar("Produto adicionado no carrinho!");
-          setTypeSnackbar("success");
-          setOpenSnackbar(true);
-        }, 800);
-      } catch (err) {
-        setMessageSnackbar("Falha ao adicionar o produto");
-        setTypeSnackbar("error");
-        console.warn(err);
+  
+      if (
+        user.cart &&
+        user.cart
+          .map((item) => item.product_model_id)
+          .indexOf(modelChoosen.product_model_id.toString()) !== -1
+      ) {
+        setConfirmDuplicateModal(true);
+      } else {
+        AddToCart();
       }
     }
   };
@@ -368,7 +381,7 @@ function Produto() {
                     Carregue a sua logo!
                   </Button>
                 </div>
-                <Button className="addToCart" onClick={() => AddToCart()}>
+                <Button className="addToCart" onClick={() => Verify()}>
                   <FaShoppingCart className="icon" size="35px" />
                   ADICIONAR AO CARRINHO
                 </Button>
@@ -392,6 +405,41 @@ function Produto() {
             message={messageSnackbar}
             type={typeSnackbar}
           />
+          <Modal
+            show={confirmDuplicateModal}
+            onHide={() => setConfirmDuplicateModal(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Produto possivelmente duplicado</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              O modelo de produto que deseja adicionar já existe em seu carrinho. No
+              entato, pode ser que seja de tamanho, gênero ou logo diferente.
+              <br />
+              Caso seja esse o caso e queira seguir com a operação, selecione
+              "CONFIRMAR"
+              <br />
+              Caso seja idêntico, solicitamos que altere a quantidade na página
+              de carrinho.
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => setConfirmDuplicateModal(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  AddToCart();
+                  setConfirmDuplicateModal(false);
+                }}
+              >
+                Confirmar
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </>
       ) : (
         <ProductSkeleton screenWidth={window.innerWidth} />

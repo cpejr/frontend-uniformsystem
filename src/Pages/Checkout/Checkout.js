@@ -20,24 +20,7 @@ import SelectShipping from "../../components/SelectShipping";
 function Checkout() {
   const history = useHistory();
 
-  const [cardNumberStored, setCardNumber] = useState("");
-  const [securityNumberStored, setSecurityNumber] = useState("");
-  const [cardNameStored, setCardName] = useState("");
-
   const [loading, setLoading] = useState(false);
-
-  const [errorInputCardNumber, setErrorInputCardNumber] = useState("");
-  const [errorInputSecurityNumber, setErrorInputSecurityNumber] = useState("");
-  const [errorInputCardName, setErrorInputCardName] = useState("");
-
-  const [errorBirthInput, setErrorBirthInput] = useState("");
-  const [errorInstallmentOptions, setErrorInstallmentOptions] = useState("");
-
-  const [dayStored, setDayStored] = useState("");
-  const [monthStored, setMonthStored] = useState("");
-  const [yearStored, setYearStored] = useState("");
-
-  const [installmentOptions, setInstallmentOptions] = useState(" ");
 
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState({});
@@ -67,82 +50,11 @@ function Checkout() {
     imageAlt: "",
   };
 
-  useEffect(() => {
-    function validateBirthInput(type) {
-      if (type === "day") {
-        if (
-          parseInt(dayStored, 10) <= 31 &&
-          parseInt(dayStored, 10) > 0 &&
-          !isNaN(Number(dayStored))
-        ) {
-          setErrorBirthInput("");
-        } else {
-          setErrorBirthInput("Data inválida");
-        }
-      } else if (type === "month") {
-        if (
-          Number(monthStored) <= 12 &&
-          Number(monthStored) > 0 &&
-          !isNaN(Number(monthStored))
-        ) {
-          setErrorBirthInput("");
-        } else {
-          setErrorBirthInput("Data inválida");
-        }
-      } else {
-        var today = new Date();
-        if (
-          parseInt(yearStored, 10) <= today.getFullYear() &&
-          parseInt(yearStored, 10) > 0 &&
-          !isNaN(Number(yearStored))
-        ) {
-          setErrorBirthInput("");
-        } else {
-          setErrorBirthInput("Data inválida");
-        }
-      }
-    }
-
-    validateBirthInput("day");
-    validateBirthInput("month");
-    validateBirthInput("year");
-  }, [dayStored, monthStored, yearStored]);
-
-  useEffect(() => {
-    const maximumInstallment = 10;
-
-    function validateInstallmentOptions() {
-      if (
-        parseInt(installmentOptions, 10) >= 0 &&
-        parseInt(installmentOptions, 10) <= maximumInstallment &&
-        !isNaN(parseInt(installmentOptions, 10))
-      ) {
-        setErrorInstallmentOptions("");
-      } else {
-        setErrorInstallmentOptions("Parcelamento inválido");
-      }
-    }
-
-    validateInstallmentOptions();
-  }, [installmentOptions]);
-
-  useEffect(() => {
-    validateInput("cardNumber");
-  }, [cardNumberStored]);
-
-  useEffect(() => {
-    validateInput("securityNumber");
-  }, [securityNumberStored]);
-
-  useEffect(() => {
-    validateInput("cardName");
-  }, [cardNameStored]);
-
   // Post order
   async function handlePostOrder() {
-    if(shipping){
+    if (shipping) {
       setLoadingPurchase(true);
-  
+
       const productsWithRightAttributes = products.map((item) => {
         delete item.name;
         delete item.img_link;
@@ -150,10 +62,10 @@ function Checkout() {
         delete item.user_id;
         return item;
       });
-  
+
       try {
         const address_id = address.address_id;
-  
+
         await api
           .post(
             "/order",
@@ -221,7 +133,7 @@ function Checkout() {
   };
 
   useEffect(() => {
-    console.log('shipping', shipping)
+    console.log("shipping", shipping);
     try {
       getProducts();
       setTimeout(() => {
@@ -254,28 +166,6 @@ function Checkout() {
   // Chamado quando address atualiza (depois do popUp fechar)
   useEffect(() => {}, [address]);
 
-  function validateInput(type) {
-    if (type === "cardNumber") {
-      if (!isNaN(Number(cardNumberStored))) {
-        setErrorInputCardNumber("");
-      } else {
-        setErrorInputCardNumber("Número de cartão incorreto");
-      }
-    } else if (type === "securityNumber") {
-      if (!isNaN(Number(securityNumberStored))) {
-        setErrorInputSecurityNumber("");
-      } else {
-        setErrorInputSecurityNumber("Código incorreto");
-      }
-    } else {
-      if (!isNaN(Number(cardNameStored))) {
-        setErrorInputCardName("Nome inválido");
-      } else {
-        setErrorInputCardName("");
-      }
-    }
-  }
-
   function handleCloseModal() {
     setOpenModal(false);
   }
@@ -284,8 +174,8 @@ function Checkout() {
     setOpenModal(true);
   }
 
-  function formatPriceToRightWay(value){
-    return (Math.round(value*100)/100).toFixed(2).replace('.', ',');
+  function formatPriceToRightWay(value) {
+    return (Math.round(value * 100) / 100).toFixed(2).replace(".", ",");
   }
 
   let price = 0;
@@ -336,9 +226,15 @@ function Checkout() {
                             Gênero:{" "}
                             {product.gender === "F" ? "Feminino" : "Masculino"}
                           </span>
-                          <span>Preço único: R$ {formatPriceToRightWay(product.price)}</span>
                           <span>
-                            Total: R$ {formatPriceToRightWay(product.amount * product.price)}
+                            Preço único: R${" "}
+                            {formatPriceToRightWay(product.price)}
+                          </span>
+                          <span>
+                            Total: R${" "}
+                            {formatPriceToRightWay(
+                              product.amount * product.price
+                            )}
                           </span>
                         </div>
                       </div>
@@ -352,13 +248,12 @@ function Checkout() {
           </div>
           <div className="aboutPayment">
             <h2>Por favor confira todos os seus dados.</h2>
-            {
-              !shipping && (
-                <span style={{color: 'red'}}>
-                  Compra não permitida. Peso limite excedido, retire itens do carrinho.
-                </span>
-              )
-            }
+            {!shipping && (
+              <span style={{ color: "red" }}>
+                Compra não permitida. Dimensão limite excedida, retire itens do
+                carrinho.
+              </span>
+            )}
           </div>
 
           <Button

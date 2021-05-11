@@ -45,9 +45,14 @@ const validators = {
     }
   },
   size(value) {
+    const maximumValueInCentimeter = 100;
     const regex = /^[0-9]*[1-9][0-9]*$/;
     let isValid;
-    if (value === "" || !regex.test(value) || value>100 ) {
+    if (
+      value === "" ||
+      !regex.test(value) ||
+      value > maximumValueInCentimeter
+    ) {
       isValid = false;
     } else {
       isValid = true;
@@ -55,9 +60,10 @@ const validators = {
     return isValid;
   },
   weight(value) {
+    const maximumWeigthInGrams = 30000;
     const regex = /^[1-9]\d{0,2}(?:\.\d{1,3})?$/;
     let isValid;
-    if (value === "" || !regex.test(value) || value>30 ) {
+    if (value === "" || !regex.test(value) || value > maximumWeigthInGrams) {
       isValid = false;
     } else {
       isValid = true;

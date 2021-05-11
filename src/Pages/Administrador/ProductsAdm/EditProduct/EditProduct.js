@@ -116,7 +116,12 @@ function EditProduct({ history }) {
   async function updateProductInfo(fieldKey, value) {
     try {
       let updated_fields = {};
-      updated_fields[fieldKey] = value;
+      const convertGramsToKilos = 1000;
+      if (fieldKey === "weight") {
+        updated_fields[fieldKey] = (value / convertGramsToKilos).toFixed(3);
+      } else {
+        updated_fields[fieldKey] = value;
+      }
       await api.put(`/product/${product_id}`, { updated_fields });
       productInfo[fieldKey] = value;
       setProductInfo({ ...productInfo });
@@ -219,7 +224,9 @@ function EditProduct({ history }) {
         <form className="formEditProduct">
           <div className="spanWithInput">
             <div>
-              <IconContext.Provider value={{ size: "1.5em", className: "produtEditIcon" }} >
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
                 <FaEdit
                   onClick={() => {
                     handleOpenDialog("name", "Nome");
@@ -239,7 +246,9 @@ function EditProduct({ history }) {
           </div>
           <div className="spanWithInput">
             <div>
-              <IconContext.Provider value={{ size: "1.5em", className: "produtEditIcon" }}>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
                 <FaEdit
                   onClick={() => {
                     handleOpenDialog("description", "Descrição do Produto");
@@ -247,7 +256,6 @@ function EditProduct({ history }) {
                 />
               </IconContext.Provider>
               <span>DESCRIÇÃO:</span>
-
             </div>
             {productInfo && (
               <TextField
@@ -255,6 +263,99 @@ function EditProduct({ history }) {
                 className={classes.inputText}
                 disabled={true}
                 variant="outlined"
+              />
+            )}
+          </div>
+
+          <div className="spanWithInput">
+            <div>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog("height", "Altura do Produto");
+                  }}
+                />
+              </IconContext.Provider>
+              <span>ALTURA:</span>
+            </div>
+            {productInfo && (
+              <TextField
+                value={productInfo.height}
+                className={classes.inputText}
+                disabled={true}
+                variant="outlined"
+                helperText="Considere a altura da vestimenta dobrada. Medida em centímetros, com limite de 100 cm."
+              />
+            )}
+          </div>
+          <div className="spanWithInput">
+            <div>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog("length", "Largura do Produto");
+                  }}
+                />
+              </IconContext.Provider>
+              <span>COMPRIMENTO:</span>
+            </div>
+            {productInfo && (
+              <TextField
+                value={productInfo.length}
+                className={classes.inputText}
+                disabled={true}
+                variant="outlined"
+                helperText="Medida em centímetros, com limite de 100 cm."
+              />
+            )}
+          </div>
+          <div className="spanWithInput">
+            <div>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog("weight", "Peso do Produto");
+                  }}
+                />
+              </IconContext.Provider>
+              <span>PESO:</span>
+            </div>
+            {productInfo && (
+              <TextField
+                value={productInfo.weight.toFixed(3)}
+                className={classes.inputText}
+                disabled={true}
+                variant="outlined"
+                helperText="Medida em gramas, com limite de 30000 gramas."
+              />
+            )}
+          </div>
+          <div className="spanWithInput">
+            <div>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog("width", "Largura do Produto");
+                  }}
+                />
+              </IconContext.Provider>
+              <span>LARGURA:</span>
+            </div>
+            {productInfo && (
+              <TextField
+                value={productInfo.width}
+                className={classes.inputText}
+                disabled={true}
+                variant="outlined"
+                helperText="Medida em centímetros, com limite de 100 cm."
               />
             )}
           </div>

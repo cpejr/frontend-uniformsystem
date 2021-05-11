@@ -35,7 +35,9 @@ function EspecificOrderAdm(props) {
   };
   const [Orders, setOrders] = useState([]);
   const [Models, setModels] = useState([]);
-  const [Code, setCode] = useState([]);
+  const [Code, setCode] = useState("");
+  const [disableSendOrderButton, setDisableSendOrderButton] = useState(false);
+
   const [status, setStatus] = useState(statusFromOrder);
   const history = useHistory();
 
@@ -49,13 +51,15 @@ function EspecificOrderAdm(props) {
     imageAlt: "",
   };
 
-  /*function ChangeStatus() {
-        setLoadingStatus(true);
-
-        setTimeout(() => {
-            setLoadingStatus(false);
-        }, 3000)
-    }*/
+  function validateBeforeSetCode(value) {
+    // Vazio ou menor do que 5
+    if (value === "" || value.length < 5) {
+      setDisableSendOrderButton(true);
+    } else {
+      setDisableSendOrderButton(false);
+      setCode(value);
+    }
+  }
 
   const obterPedidos = async () => {
     const resultado = await api.get(`/order/productsfromorder/${orderId}`, {
@@ -69,7 +73,6 @@ function EspecificOrderAdm(props) {
     const resultado = await api.get(`productmodels`, {
       headers: { authorization: `bearer ${token}` },
     });
-
 
     setModels(resultado.data.models);
   };
@@ -236,9 +239,13 @@ function EspecificOrderAdm(props) {
                 <input
                   placeholder="Código de rastreamento"
                   style={{ marginRight: "10px", marginBottom: "10px" }}
-                  onChange={(e) => setCode(e.target.value)}
-                ></input>
-                <button className="button-status" onClick={ModificarStatus}>
+                  onChange={(e) => validateBeforeSetCode(e.target.value)}
+                />
+                <button
+                  className="button-status"
+                  onClick={ModificarStatus}
+                  disabled={disableSendOrderButton}
+                >
                   Entregar pedido
                 </button>
               </div>
@@ -278,21 +285,21 @@ function EspecificOrderAdm(props) {
                 <tr className="oder-tr-content">
                   <td className="amount">{pedido.amount}</td>
                   <td className="products">
-                    <img src={`${bucketAWS}${img_link}`} className="image-product" />
+                    <img
+                      src={`${bucketAWS}${img_link}`}
+                      className="image-product"
+                    />
 
                     <span className="product-name">{description}</span>
                   </td>
                   <td className="logo">
-                    {
-                      pedido.logo_link === 'Sem Imagem' ? (
-                        <span>Logo não cadastrada</span>
-                      ) 
-                      : (
-                        <a href={`${bucketAWS}${pedido.logo_link}`} download>
-                          Baixar Imagem
-                        </a>
-                      )
-                    }
+                    {pedido.logo_link === "Sem Imagem" ? (
+                      <span>Logo não cadastrada</span>
+                    ) : (
+                      <a href={`${bucketAWS}${pedido.logo_link}`} download>
+                        Baixar Imagem
+                      </a>
+                    )}
                   </td>
                 </tr>
               );

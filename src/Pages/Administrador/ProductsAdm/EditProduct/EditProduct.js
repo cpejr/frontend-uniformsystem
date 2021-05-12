@@ -13,7 +13,7 @@ import ProductEditModal from "../../../../components/ProductEditModal";
 
 import AddIcon from "@material-ui/icons/Add";
 
-import { FaChevronLeft, FaEdit } from "react-icons/fa";
+import { FaChevronLeft, FaEdit, FaTrashAlt } from "react-icons/fa";
 import { IconContext } from "react-icons";
 
 import "./EditProduct.css";
@@ -197,6 +197,16 @@ function EditProduct({ history }) {
     }
   }
 
+  const handleDeleteProduct = async () => {
+    await api.delete(`/product/${product_id}`, {
+      headers: { authorization: `bearer ${token}` },
+    });
+
+    setTimeout(() => {
+      history.push("/adm/produtos");
+    }, [1000]);
+  };
+
   return (
     <div className="editProductFullContent">
       {dialogInfo && (
@@ -213,6 +223,11 @@ function EditProduct({ history }) {
       <FaChevronLeft
         className="iconToReturn"
         onClick={() => history.goBack()}
+      />
+
+      <FaTrashAlt
+        className="excludeProductIcon"
+        onClick={() => handleDeleteProduct()}
       />
 
       <div className="mainContent">

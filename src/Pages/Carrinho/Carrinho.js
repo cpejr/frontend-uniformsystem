@@ -6,7 +6,7 @@ import CartProduct from "./Components/CartProduct";
 import MetaData from "../../meta/reactHelmet";
 import "./Carrinho.css";
 import CalculateShipping from "../../components/CalculateShipping";
-import {isClient} from "../../services/auth";
+import { isClient } from "../../services/auth";
 
 function Carrinho() {
   const history = useHistory();
@@ -72,8 +72,12 @@ function Carrinho() {
   }, [products]);
 
   useEffect(() => {
-    setProducts([...user.cart]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (user?.cart) {
+      setProducts([...user.cart]);
+    } else {
+      setProducts([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -99,7 +103,7 @@ function Carrinho() {
             </tr>
           </thead>
           <tbody>
-            { products.length > 0 ? 
+            {products.length > 0 ? (
               products.map((product, index) => (
                 <CartProduct
                   key={index}
@@ -108,11 +112,10 @@ function Carrinho() {
                   changeAmount={handleChangeAmount}
                   handleDelete={handleDelete}
                 />
-              )) :
-              <tr>
-                Sem itens no carrinho
-              </tr>
-            }
+              ))
+            ) : (
+              <tr>Sem itens no carrinho</tr>
+            )}
             <tr>
               <td colSpan="3" className="subTotalCarrinho">
                 Subtotal:{" "}

@@ -8,7 +8,7 @@ import MetaData from "../../meta/reactHelmet";
 import api from "../../services/api";
 import { LoginContext } from "../../contexts/LoginContext";
 import SnackbarMessage from "../../components/SnackbarMessage";
-
+import Checkbox from "./Checkbox";
 import "./Produto.css";
 import "./Radio.css";
 
@@ -47,6 +47,7 @@ function Produto() {
 
   const [selectedValue, setSelectedValue] = useState(0);
   const [Produto, setProduto] = useState({});
+  const [gender, setGender] = useState([]);
 
   const [models, setModels] = useState([]);
   const [modelChoosen, setModelChoosen] = useState({});
@@ -87,6 +88,8 @@ function Produto() {
     const setup = async () => {
       const response = await api.get(`/productmodels/${product_id}`);
       const arrayOfModels = response.data.models;
+      console.log("MODEL", arrayOfModels);
+      setGender(arrayOfModels);
       setProduto(response.data);
 
       // Armazena o modela
@@ -110,6 +113,10 @@ function Produto() {
       return;
     }
     setOpenSnackbar(false);
+  };
+
+  const sizeValueChild = (child) => {
+    setSelectedValue(child);
   };
 
   //essa funcao tem um CSS só pra ela, pois gastou uns esquemas diferenciados pra fazer
@@ -217,7 +224,7 @@ function Produto() {
       setErrorQuantityMessage("");
       setErrorSize(false);
       setErrorToken(false);
-  
+
       if (
         user.cart &&
         user.cart
@@ -330,7 +337,8 @@ function Produto() {
                     product_models={
                       modelChoosen && [
                         {
-                          product_model_id: modelChoosen.product_model_id?.toString(),
+                          product_model_id:
+                            modelChoosen.product_model_id?.toString(),
                           quantity: inputQuantity.value || 1,
                         },
                       ]
@@ -339,17 +347,13 @@ function Produto() {
                 </div>
               </div>
               <div className="sizeAndQuantity">
+                {console.log("PRODUTO", Produto)}
                 <strong>Tamanho</strong>
-                <div className="divCheckboxes">
-                  <div className="genderCheckboxes">
-                    <h6>Feminino</h6>
-                    {Radio("Fem")}
-                  </div>
-                  <div className="genderCheckboxes">
-                    <h6>Masculino</h6>
-                    {Radio("Mas")}
-                  </div>
-                </div>
+                <Checkbox
+                  gender={gender[0].gender}
+                  setSelectedValue={setSelectedValue}
+                  selectedValue={selectedValue}
+                />
 
                 <div className="quantity">
                   <strong>Quantidade</strong>
@@ -413,8 +417,9 @@ function Produto() {
               <Modal.Title>Produto possivelmente duplicado</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              O modelo de produto que deseja adicionar já existe em seu carrinho. No
-              entato, pode ser que seja de tamanho, gênero ou logo diferente.
+              O modelo de produto que deseja adicionar já existe em seu
+              carrinho. No entato, pode ser que seja de tamanho, gênero ou logo
+              diferente.
               <br />
               Caso seja esse o caso e queira seguir com a operação, selecione
               "CONFIRMAR"

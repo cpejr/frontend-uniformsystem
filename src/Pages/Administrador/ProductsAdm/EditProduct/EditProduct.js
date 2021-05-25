@@ -122,9 +122,15 @@ function EditProduct({ history }) {
       } else {
         updated_fields[fieldKey] = value;
       }
-      await api.put(`/product/${product_id}`, { updated_fields });
-      productInfo[fieldKey] = value;
-      setProductInfo({ ...productInfo });
+
+      const teste = await api.put(`/product/${product_id}`, { updated_fields });
+      if (fieldKey === "weight") {
+        productInfo[fieldKey] = (value / convertGramsToKilos).toFixed(3);
+      } else {
+        productInfo[fieldKey] = value;
+      }
+
+      setProductInfo(productInfo);
       handleCloseDialog();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -343,7 +349,7 @@ function EditProduct({ history }) {
             </div>
             {productInfo && (
               <TextField
-                value={productInfo.weight.toFixed(3)}
+                value={productInfo.weight}
                 className={classes.inputText}
                 disabled={true}
                 variant="outlined"

@@ -167,9 +167,9 @@ function MenuRoutes() {
             <Route path="*" exact component={Error} />
           </Switch>
         </SidebarClient>
-        {user && user.user_type === "adm" ? (
+        {user && user?.user_type === "adm" ? (
           <AdmButton linkToRedirect="/adm/home" isEdit={true} />
-        ) : user.user_type === "employee" ? (
+        ) : user?.user_type === "employee" ? (
           <AdmButton linkToRedirect="/adm/pedidos" isEdit={true} />
         ) : null}
         <Footer />
@@ -218,7 +218,7 @@ function MenuRoutes() {
 function AdmRoutes() {
   const { user } = useContext(LoginContext);
 
-  if (user && user.user_type !== "adm" && user.user_type !== "employee")
+  if (user && user?.user_type !== "adm" && user?.user_type !== "employee")
     return <Redirect to="/" />;
   else
     return (
@@ -271,7 +271,8 @@ function AdmRoutes() {
             <Route path="*" exact={true} component={Error} />
           </Switch>
         </SidebarAdm>
-        {user && (user.user_type === "adm" || user.user_type === "employee") ? (
+        {user &&
+        (user?.user_type === "adm" || user?.user_type === "employee") ? (
           <AdmButton linkToRedirect="/" isEdit={false} />
         ) : null}
         <FooterAdm />

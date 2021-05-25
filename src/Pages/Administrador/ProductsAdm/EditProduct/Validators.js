@@ -21,7 +21,7 @@ const validators = {
     ) {
       return "Digite uma altura válida";
     }
-    if (parseFloat(value) > 300) {
+    if (parseFloat(value) > 100) {
       return "Altura máxima atingida (100 cm)";
     } else {
       return "ok";

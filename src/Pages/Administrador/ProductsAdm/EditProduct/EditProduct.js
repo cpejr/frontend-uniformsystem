@@ -123,7 +123,7 @@ function EditProduct({ history }) {
         updated_fields[fieldKey] = value;
       }
 
-      const teste = await api.put(`/product/${product_id}`, { updated_fields });
+      await api.put(`/product/${product_id}`, { updated_fields });
       if (fieldKey === "weight") {
         productInfo[fieldKey] = (value / convertGramsToKilos).toFixed(3);
       } else {

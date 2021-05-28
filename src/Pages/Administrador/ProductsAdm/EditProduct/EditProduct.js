@@ -85,7 +85,7 @@ function EditProduct({ history }) {
     setOpenSnackBar(false);
   };
 
-  function handleOpenDialog(fieldKey, fieldName, modelId) {
+  function handleOpenDialog(fieldKey, fieldName, placeholder = "", modelId) {
     if (modelId) {
       if (fieldKey === "delete") {
         setDialogInfo({
@@ -100,12 +100,14 @@ function EditProduct({ history }) {
           validator: validators[fieldKey],
           callback: updateModelInfo,
           modelId,
+          placeholder,
         });
       }
     } else {
       setDialogInfo({
         fieldKey,
         fieldName,
+        placeholder,
         validator: validators[fieldKey],
         callback: updateProductInfo,
       });
@@ -222,6 +224,7 @@ function EditProduct({ history }) {
           validator={dialogInfo.validator}
           callback={dialogInfo.callback}
           modelId={dialogInfo.modelId}
+          placeholder={dialogInfo.placeholder}
           open={openEditDialog}
           handleClose={handleCloseDialog}
         />
@@ -295,7 +298,11 @@ function EditProduct({ history }) {
               >
                 <FaEdit
                   onClick={() => {
-                    handleOpenDialog("height", "Altura do Produto");
+                    handleOpenDialog(
+                      "height",
+                      "Altura do Produto",
+                      "Ex: 20 (cm)"
+                    );
                   }}
                 />
               </IconContext.Provider>
@@ -318,7 +325,11 @@ function EditProduct({ history }) {
               >
                 <FaEdit
                   onClick={() => {
-                    handleOpenDialog("length", "Largura do Produto");
+                    handleOpenDialog(
+                      "length",
+                      "Largura do Produto",
+                      "Ex: 20 (cm)"
+                    );
                   }}
                 />
               </IconContext.Provider>
@@ -341,7 +352,11 @@ function EditProduct({ history }) {
               >
                 <FaEdit
                   onClick={() => {
-                    handleOpenDialog("weight", "Peso do Produto");
+                    handleOpenDialog(
+                      "weight",
+                      "Peso do Produto",
+                      "Ex: 350 (gramas)"
+                    );
                   }}
                 />
               </IconContext.Provider>
@@ -364,7 +379,11 @@ function EditProduct({ history }) {
               >
                 <FaEdit
                   onClick={() => {
-                    handleOpenDialog("width", "Largura do Produto");
+                    handleOpenDialog(
+                      "width",
+                      "Largura do Produto",
+                      "Ex: 45 (cm)"
+                    );
                   }}
                 />
               </IconContext.Provider>

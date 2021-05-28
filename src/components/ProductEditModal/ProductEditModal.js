@@ -17,6 +17,7 @@ export default function ProductEditModal({
   modelId,
   open,
   handleClose,
+  placeholder = "",
 }) {
   const classes = useStyles();
   const [value, setValue] = useState();
@@ -25,10 +26,9 @@ export default function ProductEditModal({
   const [error, setError] = useState();
 
   function handleSend() {
-    if(fieldKey==="delete"){
+    if (fieldKey === "delete") {
       callback(modelId);
-    }
-    else{
+    } else {
       const validation = validator(value);
       if (validation === "ok") {
         modelId !== null && modelId !== undefined
@@ -78,7 +78,7 @@ export default function ProductEditModal({
           : `Alterar ${modelId ? "modelo" : "produto"}`}
       </DialogTitle>
       {fieldKey === "imgLink" ? (
-        <DialogContent>
+        <DialogContent style={{ width: "350px", maxWidth: "90%" }}>
           <Button
             className={classes.inputFile}
             onClick={() => handleAddImgLink()}
@@ -112,8 +112,10 @@ export default function ProductEditModal({
         </DialogContent>
       ) : (
         fieldKey !== "delete" && (
-          <DialogContent>
-            <DialogContentText>Digite o novo {fieldName}</DialogContentText>
+          <DialogContent style={{ width: "350px", maxWidth: "90%" }}>
+            <DialogContentText>
+              Digite o(a) novo(a) {fieldName}
+            </DialogContentText>
             <TextField
               error={errorFlag}
               helperText={error}
@@ -121,6 +123,7 @@ export default function ProductEditModal({
               margin="dense"
               label={fieldName}
               fullWidth
+              placeholder={placeholder}
               onChange={(e) => {
                 setValue(e.target.value);
                 setError(null);
@@ -131,7 +134,7 @@ export default function ProductEditModal({
         )
       )}
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleClose} style={{ color: "red" }}>
           Cancelar
         </Button>
         <Button onClick={handleSend} color="primary">

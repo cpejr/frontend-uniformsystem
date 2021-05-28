@@ -471,13 +471,11 @@ function Cadastro({ history }) {
       // const street = str1 + " " + str2;
 
       // setAddressInfo({ ...addressInfo, street: street });
-      // console.log(addressInfo);
       delete addressInfo["number"];
       delete addressInfo["rua"];
 
       delete userInfo.address["number"];
       delete userInfo.address["rua"];
-      // console.log(addressInfo);
       const Address = {
         address: { ...addressInfo },
       };
@@ -486,8 +484,7 @@ function Cadastro({ history }) {
 
       try {
         setLoading(true);
-        const response = await api.post("/users", 
-        {
+        const response = await api.post("/users", {
           name: userInfo.name,
           user_type: userInfo.user_type,
           email: userInfo.email,
@@ -503,13 +500,15 @@ function Cadastro({ history }) {
             country: userInfo.address.country,
             complement: userInfo.address.complement,
           },
-        },
-        );
+        });
 
-        if(response.data.message === "The email address is already in use by another account."){
+        if (
+          response.data.message ===
+          "The email address is already in use by another account."
+        ) {
           throw new Error("Falha no cadastro: Email já está em uso.");
         }
-        if(response.data.message === "Cpf já existe."){
+        if (response.data.message === "Cpf já existe.") {
           throw new Error("Falha no cadastro: CPF já está em uso.");
         }
 
@@ -526,13 +525,14 @@ function Cadastro({ history }) {
         setLoading(false);
         setOpen(true);
         setTypeSnackbar("error");
-        
+
         console.warn(err);
-        if(err.message === "Falha no cadastro: Email já está em uso." ||
+        if (
+          err.message === "Falha no cadastro: Email já está em uso." ||
           err.message === "Falha no cadastro: CPF já está em uso."
-        ){
+        ) {
           setMessageSnackbar(`${err.message}`);
-        }else{
+        } else {
           setMessageSnackbar(`Falha no cadastro. Tente novamente.`);
         }
       }
@@ -712,7 +712,7 @@ function Cadastro({ history }) {
               root: classes.inputLabel,
               focused: classes.inputLabelFocused,
             },
-            style: { marginBottom: 8 }
+            style: { marginBottom: 8 },
           }}
           InputProps={{
             classes: {

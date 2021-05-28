@@ -35,7 +35,6 @@ function Checkbox(props) {
               />
               <span className="radio_checkmark">
                 {props.selectedValue === value ? Content() : null}
-                {console.log("AQUI", props.selectedValue)}
               </span>
             </label>
           );

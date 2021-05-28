@@ -4,7 +4,6 @@ import ContentLoader from "react-content-loader";
 
 const ProductSkeleton = (props) => {
   if (props.screenWidth > 500) {
-    console.log("ENTREI RAPA");
     return (
       <ContentLoader
         speed={2}

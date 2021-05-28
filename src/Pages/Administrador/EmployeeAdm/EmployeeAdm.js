@@ -64,11 +64,10 @@ function EmployeeAdm() {
       const response = await api.get("/users/employees", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response);
       setEmployees([...response.data.employees]);
       setFuncionarioFiltrado([...response.data.employees]);
-    } catch (error) {
-      console.warn(error);
+    } catch (err) {
+      console.warn(err.message);
       alert("Erro ao buscar funcionários");
     }
   }

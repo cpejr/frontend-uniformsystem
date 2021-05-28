@@ -371,7 +371,7 @@ function RegisterProduct({ history }) {
           inputLenght.current.value = "";
         }, 1000);
       } catch (err) {
-        console.log(err.message);
+        console.warn(err.message);
       }
     }
   };

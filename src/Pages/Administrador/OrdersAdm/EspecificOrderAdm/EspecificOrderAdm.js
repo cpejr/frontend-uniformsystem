@@ -62,11 +62,15 @@ function EspecificOrderAdm(props) {
   }
 
   const obterPedidos = async () => {
-    const resultado = await api.get(`/order/productsfromorder/${orderId}`, {
-      headers: { authorization: `bearer ${token}` },
-    });
-    console.log(resultado);
-    setOrders(resultado.data);
+    try {
+      const resultado = await api.get(`/order/productsfromorder/${orderId}`, {
+        headers: { authorization: `bearer ${token}` },
+      });
+      setOrders(resultado.data);
+    } catch (err) {
+      console.warn(err.message);
+      setOrders([]);
+    }
   };
 
   const obterModelos = async () => {

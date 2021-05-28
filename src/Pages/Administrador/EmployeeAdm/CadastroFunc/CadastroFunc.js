@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import MetaData from "../../../../meta/reactHelmet";
 import { withRouter } from "react-router-dom";
 
-import SnackbarMessage from '../../../../components/SnackbarMessage'
+import SnackbarMessage from "../../../../components/SnackbarMessage";
 
 import {
   Button,
@@ -186,25 +186,14 @@ function CadastroFunc({ history }) {
       try {
         setLoading(true);
 
-        // console.log(inputName.current.value,
-        //   inputCPF.current.value,
-        //   inputEmail.current.value,
-        //   inputPassword.current.value,
-        //   typeEmployeeState,
-        //   )
-
-        const response = await api.post("/users", 
-        {
+        const response = await api.post("/users", {
           name: inputName.current.value,
           user_type: typeEmployeeState,
           email: inputEmail.current.value,
           cpf: inputCPF.current.value,
           password: inputPassword.current.value,
-          telefone: '000000000' // validator nao deixa ficar sem telefone
-        },
-        );
-
-        console.log(response)
+          telefone: "000000000", // validator nao deixa ficar sem telefone
+        });
 
         setTimeout(() => {
           setLoading(false);
@@ -222,8 +211,8 @@ function CadastroFunc({ history }) {
       } catch (err) {
         setMessageSnackbar("Falha cadastrar funcionário");
         setTypeSnackbar("error");
-        setLoading(false)
-        console.log(err.message);
+        setLoading(false);
+        console.warn(err.message);
       }
     }
   };
@@ -305,7 +294,12 @@ function CadastroFunc({ history }) {
         </Button>
       </div>
 
-      <SnackbarMessage open={openSnackBar} handleClose={handleCloseSnackBar} message={messageSnackbar} type={typeSnackbar}/>
+      <SnackbarMessage
+        open={openSnackBar}
+        handleClose={handleCloseSnackBar}
+        message={messageSnackbar}
+        type={typeSnackbar}
+      />
     </div>
   );
 }

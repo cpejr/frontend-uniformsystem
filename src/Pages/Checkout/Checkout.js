@@ -91,7 +91,7 @@ function Checkout() {
               }, 2000);
             },
             (error) => {
-              console.log(error);
+              console.warn(error);
             }
           );
       } catch (error) {
@@ -133,7 +133,6 @@ function Checkout() {
   };
 
   useEffect(() => {
-    console.log("shipping", shipping);
     try {
       getProducts();
       setTimeout(() => {

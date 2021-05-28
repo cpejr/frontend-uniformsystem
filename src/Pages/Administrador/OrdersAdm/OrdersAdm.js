@@ -54,7 +54,6 @@ function OrdersAdm() {
         headers: { authorization: `bearer ${token}` },
       });
       setOrders(resultado.data);
-      console.log("DATAAA", resultado.data);
     }
     Orders.reverse();
   };

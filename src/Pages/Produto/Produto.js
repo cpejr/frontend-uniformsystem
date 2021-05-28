@@ -88,7 +88,6 @@ function Produto() {
     const setup = async () => {
       const response = await api.get(`/productmodels/${product_id}`);
       const arrayOfModels = response.data.models;
-      console.log("MODEL", arrayOfModels);
       setGender(arrayOfModels);
       setProduto(response.data);
 
@@ -261,7 +260,6 @@ function Produto() {
     const selectedModel = models.find(
       (item) => item.product_model_id === product_model_id
     );
-    console.log("escolhido", selectedModel);
     setModelChoosen(selectedModel);
     setIsSelect(selectedModel.product_model_id);
   };
@@ -347,7 +345,6 @@ function Produto() {
                 </div>
               </div>
               <div className="sizeAndQuantity">
-                {console.log("PRODUTO", Produto)}
                 <strong>Tamanho</strong>
                 <Checkbox
                   gender={gender[0].gender}

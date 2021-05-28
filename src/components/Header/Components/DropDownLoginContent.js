@@ -70,7 +70,7 @@ export default function DropDownLoginContent({ onClose }) {
           setErrors({ general: "Usuário e/ou senha incorretos." });
         }
       } catch (error) {
-        console.log(error.response);
+        console.warn(error.response);
         if (error.response.status >= 400 && error.response.status < 500)
           setErrors({ general: "Usuário e/ou senha incorretos." });
         else {

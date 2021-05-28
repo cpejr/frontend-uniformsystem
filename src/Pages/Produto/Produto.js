@@ -184,7 +184,7 @@ function Produto() {
         setTypeSnackbar("success");
         setOpenSnackbar(true);
       }, 800);
-      updateCart();
+      updateCart(user);
     } catch (err) {
       setMessageSnackbar("Falha ao adicionar o produto");
       setTypeSnackbar("error");

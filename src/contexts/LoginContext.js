@@ -36,17 +36,17 @@ const LoginContextProvider = (props) => {
     }
   }
 
-  async function updateCart(){
+  async function updateCart(baseUser) {
     try {
-      if(user){
+      if (baseUser) {
         const responseCart = await api.get("/cart", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        user.cart = responseCart.data;
-        setUser({...user})
+        baseUser.cart = responseCart.data;
+        setUser({ ...baseUser });
       }
     } catch (error) {
-      console.warn(error)
+      console.warn(error);
     }
   }
 
@@ -74,6 +74,7 @@ const LoginContextProvider = (props) => {
     localStorage.setItem("accessToken", token);
     setUser(user[0]);
     setToken(token);
+    updateCart(user[0]);
   }
 
   function logOut() {
@@ -84,7 +85,16 @@ const LoginContextProvider = (props) => {
 
   return (
     <LoginContext.Provider
-      value={{ loading, token, user, signIn, logOut, setUser, verify, updateCart }}
+      value={{
+        loading,
+        token,
+        user,
+        signIn,
+        logOut,
+        setUser,
+        verify,
+        updateCart,
+      }}
     >
       {!loading ? props.children : <Loading />}
     </LoginContext.Provider>

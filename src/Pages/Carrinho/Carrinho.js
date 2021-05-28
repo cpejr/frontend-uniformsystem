@@ -55,7 +55,7 @@ function Carrinho() {
       });
       products.splice(product_key, 1);
       setProducts([...products]);
-      updateCart();
+      updateCart(user);
     } catch (error) {
       console.warn(error);
       alert(error);

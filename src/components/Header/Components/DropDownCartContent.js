@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ClickAwayListener } from "@material-ui/core";
 import { FaShoppingCart } from "react-icons/fa";
 
@@ -19,6 +19,8 @@ export default function DropDownCartContent(props) {
   function handleClickAway() {
     props.setClickCart(false);
   }
+
+  useEffect(() => {}, [user]);
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>

@@ -13,7 +13,7 @@ import ProductEditModal from "../../../../components/ProductEditModal";
 
 import AddIcon from "@material-ui/icons/Add";
 
-import { FaChevronLeft, FaEdit } from "react-icons/fa";
+import { FaChevronLeft, FaEdit, FaTrashAlt } from "react-icons/fa";
 import { IconContext } from "react-icons";
 
 import "./EditProduct.css";
@@ -85,7 +85,7 @@ function EditProduct({ history }) {
     setOpenSnackBar(false);
   };
 
-  function handleOpenDialog(fieldKey, fieldName, modelId) {
+  function handleOpenDialog(fieldKey, fieldName, placeholder = "", modelId) {
     if (modelId) {
       if (fieldKey === "delete") {
         setDialogInfo({
@@ -100,12 +100,14 @@ function EditProduct({ history }) {
           validator: validators[fieldKey],
           callback: updateModelInfo,
           modelId,
+          placeholder,
         });
       }
     } else {
       setDialogInfo({
         fieldKey,
         fieldName,
+        placeholder,
         validator: validators[fieldKey],
         callback: updateProductInfo,
       });
@@ -116,10 +118,21 @@ function EditProduct({ history }) {
   async function updateProductInfo(fieldKey, value) {
     try {
       let updated_fields = {};
-      updated_fields[fieldKey] = value;
+      const convertGramsToKilos = 1000;
+      if (fieldKey === "weight") {
+        updated_fields[fieldKey] = (value / convertGramsToKilos).toFixed(3);
+      } else {
+        updated_fields[fieldKey] = value;
+      }
+
       await api.put(`/product/${product_id}`, { updated_fields });
-      productInfo[fieldKey] = value;
-      setProductInfo({ ...productInfo });
+      if (fieldKey === "weight") {
+        productInfo[fieldKey] = (value / convertGramsToKilos).toFixed(3);
+      } else {
+        productInfo[fieldKey] = value;
+      }
+
+      setProductInfo(productInfo);
       handleCloseDialog();
     } catch (error) {
       alert("Erro na atualização do produto");
@@ -192,6 +205,16 @@ function EditProduct({ history }) {
     }
   }
 
+  const handleDeleteProduct = async () => {
+    await api.delete(`/product/${product_id}`, {
+      headers: { authorization: `bearer ${token}` },
+    });
+
+    setTimeout(() => {
+      history.push("/adm/produtos");
+    }, [1000]);
+  };
+
   return (
     <div className="editProductFullContent">
       {dialogInfo && (
@@ -201,6 +224,7 @@ function EditProduct({ history }) {
           validator={dialogInfo.validator}
           callback={dialogInfo.callback}
           modelId={dialogInfo.modelId}
+          placeholder={dialogInfo.placeholder}
           open={openEditDialog}
           handleClose={handleCloseDialog}
         />
@@ -208,6 +232,11 @@ function EditProduct({ history }) {
       <FaChevronLeft
         className="iconToReturn"
         onClick={() => history.goBack()}
+      />
+
+      <FaTrashAlt
+        className="excludeProductIcon"
+        onClick={() => handleDeleteProduct()}
       />
 
       <div className="mainContent">
@@ -219,7 +248,9 @@ function EditProduct({ history }) {
         <form className="formEditProduct">
           <div className="spanWithInput">
             <div>
-              <IconContext.Provider value={{ size: "1.5em", className: "produtEditIcon" }} >
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
                 <FaEdit
                   onClick={() => {
                     handleOpenDialog("name", "Nome");
@@ -239,7 +270,9 @@ function EditProduct({ history }) {
           </div>
           <div className="spanWithInput">
             <div>
-              <IconContext.Provider value={{ size: "1.5em", className: "produtEditIcon" }}>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
                 <FaEdit
                   onClick={() => {
                     handleOpenDialog("description", "Descrição do Produto");
@@ -247,7 +280,6 @@ function EditProduct({ history }) {
                 />
               </IconContext.Provider>
               <span>DESCRIÇÃO:</span>
-
             </div>
             {productInfo && (
               <TextField
@@ -255,6 +287,115 @@ function EditProduct({ history }) {
                 className={classes.inputText}
                 disabled={true}
                 variant="outlined"
+              />
+            )}
+          </div>
+
+          <div className="spanWithInput">
+            <div>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog(
+                      "height",
+                      "Altura do Produto",
+                      "Ex: 20 (cm)"
+                    );
+                  }}
+                />
+              </IconContext.Provider>
+              <span>ALTURA:</span>
+            </div>
+            {productInfo && (
+              <TextField
+                value={productInfo.height}
+                className={classes.inputText}
+                disabled={true}
+                variant="outlined"
+                helperText="Considere a altura da vestimenta dobrada. Medida em centímetros, com limite de 100 cm."
+              />
+            )}
+          </div>
+          <div className="spanWithInput">
+            <div>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog(
+                      "length",
+                      "Largura do Produto",
+                      "Ex: 20 (cm)"
+                    );
+                  }}
+                />
+              </IconContext.Provider>
+              <span>COMPRIMENTO:</span>
+            </div>
+            {productInfo && (
+              <TextField
+                value={productInfo.length}
+                className={classes.inputText}
+                disabled={true}
+                variant="outlined"
+                helperText="Medida em centímetros, com limite de 100 cm."
+              />
+            )}
+          </div>
+          <div className="spanWithInput">
+            <div>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog(
+                      "weight",
+                      "Peso do Produto",
+                      "Ex: 350 (gramas)"
+                    );
+                  }}
+                />
+              </IconContext.Provider>
+              <span>PESO:</span>
+            </div>
+            {productInfo && (
+              <TextField
+                value={productInfo.weight}
+                className={classes.inputText}
+                disabled={true}
+                variant="outlined"
+                helperText="Medida em gramas, com limite de 30000 gramas."
+              />
+            )}
+          </div>
+          <div className="spanWithInput">
+            <div>
+              <IconContext.Provider
+                value={{ size: "1.5em", className: "produtEditIcon" }}
+              >
+                <FaEdit
+                  onClick={() => {
+                    handleOpenDialog(
+                      "width",
+                      "Largura do Produto",
+                      "Ex: 45 (cm)"
+                    );
+                  }}
+                />
+              </IconContext.Provider>
+              <span>LARGURA:</span>
+            </div>
+            {productInfo && (
+              <TextField
+                value={productInfo.width}
+                className={classes.inputText}
+                disabled={true}
+                variant="outlined"
+                helperText="Medida em centímetros, com limite de 100 cm."
               />
             )}
           </div>

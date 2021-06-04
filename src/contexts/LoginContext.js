@@ -12,34 +12,56 @@ const LoginContextProvider = (props) => {
 
   async function verify(token) {
     try {
-      const response = await api.get("/session/verify");
-      const data = response.data;
+      const responseUser = await api.get("/session/verify");
+      const data = responseUser.data;
 
       if (data.verified) {
+        let user = data.user[0];
         setToken(token);
-        setUser(data.user[0]);
+        const responseCart = await api.get("/cart", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (responseCart.data) {
+          user.cart = responseCart.data;
+        }
+        setUser(user);
       } else {
         setToken(null);
         setUser(null);
         localStorage.removeItem("accessToken");
       }
-
       setLoading(false);
     } catch (err) {
       console.warn(err);
     }
   }
 
-  useEffect(async () => {
-
-    const currentToken = localStorage.getItem("accessToken");
-
-    if (currentToken && currentToken !== " ") {
-      await verify(currentToken);
-    } else {
-      setLoading(false);
+  async function updateCart(baseUser) {
+    try {
+      if (baseUser) {
+        const responseCart = await api.get("/cart", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        baseUser.cart = responseCart.data;
+        setUser({ ...baseUser });
+      }
+    } catch (error) {
+      console.warn(error);
     }
-    console.log("UseEffect LoginContext");
+  }
+
+  useEffect(() => {
+    const verification = async () => {
+      const currentToken = localStorage.getItem("accessToken");
+
+      if (currentToken && currentToken !== " ") {
+        await verify(currentToken);
+      } else {
+        setLoading(false);
+      }
+      console.log("UseEffect LoginContext");
+    };
+    verification();
   }, []);
 
   function signIn(token, user) {
@@ -52,6 +74,7 @@ const LoginContextProvider = (props) => {
     localStorage.setItem("accessToken", token);
     setUser(user[0]);
     setToken(token);
+    updateCart(user[0]);
   }
 
   function logOut() {
@@ -62,7 +85,16 @@ const LoginContextProvider = (props) => {
 
   return (
     <LoginContext.Provider
-      value={{ loading, token, user, signIn, logOut, setUser, verify }}
+      value={{
+        loading,
+        token,
+        user,
+        signIn,
+        logOut,
+        setUser,
+        verify,
+        updateCart,
+      }}
     >
       {!loading ? props.children : <Loading />}
     </LoginContext.Provider>
@@ -71,8 +103,17 @@ const LoginContextProvider = (props) => {
 
 function Loading(props) {
   return (
-    <div className="loading" style={{width: '100vw', height: '100vh'}}>
-      <div className="loading-logo" style={{width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+    <div className="loading" style={{ width: "100vw", height: "100vh" }}>
+      <div
+        className="loading-logo"
+        style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <ClipLoader size={100} color={"#123abc"} loading={true} />
       </div>
     </div>

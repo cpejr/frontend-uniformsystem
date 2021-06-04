@@ -87,36 +87,37 @@ function RegisterProduct({ history }) {
 
   // Estados voltados para gerenciar erros no campo Description
   const [errorDescriptionProduct, setErrorDescriptionProduct] = useState(false);
-  const [
-    errorDescriptionProductMessage,
-    setErrorDescriptionProductMessage,
-  ] = useState("");
+  const [errorDescriptionProductMessage, setErrorDescriptionProductMessage] =
+    useState("");
 
   // Estados voltados para gerenciar erros no campo Height
   const [errorHeightProduct, setErrorHeightProduct] = useState(false);
   const [errorHeightProductMessage, setErrorHeightProductMessage] = useState(
-    ""
+    "Considere a altura da vestimenta dobrada. Medida em centímetros, com limite de 100 cm."
   );
 
   // Estados voltados para gerenciar erros no campo Lenght
   const [errorLenghtProduct, setErrorLenghtProduct] = useState(false);
   const [errorLenghtProductMessage, setErrorLenghtProductMessage] = useState(
-    ""
+    "Medida em centímetros, com limite de 100 cm."
   );
 
   // Estados voltados para gerenciar erros no campo Weight
   const [errorWeightProduct, setErrorWeightProduct] = useState(false);
   const [errorWeightProductMessage, setErrorWeightProductMessage] = useState(
-    ""
+    "Medida em gramas, com limite de 30000 gramas."
   );
 
   // Estados voltados para gerenciar erros no campo Width
   const [errorWidthProduct, setErrorWidthProduct] = useState(false);
-  const [errorWidthProductMessage, setErrorWidthProductMessage] = useState("");
+  const [errorWidthProductMessage, setErrorWidthProductMessage] = useState(
+    "Medida em centímetros, com limite de 100 cm."
+  );
 
   // Estados voltados para gerenciar erros no vetor de ProductModels
   const [errorProductModelArray, setErrorProductModelArray] = useState(false);
-  const [errorProductModelArrayMessage, setErrorProductModelArrayMessage] = useState("");
+  const [errorProductModelArrayMessage, setErrorProductModelArrayMessage] =
+    useState("");
 
   const inputTypeCap = useRef(null);
   const inputTypeShirt = useRef(null);
@@ -147,6 +148,7 @@ function RegisterProduct({ history }) {
 
   const handleCompleteProductInfo = (e, type) => {
     let newObjProductInfo;
+    const convertGramsToKilos = 1000;
     if (type === "name") {
       newObjProductInfo = {
         name: e.target.value,
@@ -165,7 +167,7 @@ function RegisterProduct({ history }) {
       };
     } else if (type === "weight") {
       newObjProductInfo = {
-        weight: e.target.value,
+        weight: (parseInt(e.target.value, 10) / convertGramsToKilos).toFixed(3),
       };
     } else if (type === "width") {
       newObjProductInfo = {
@@ -202,20 +204,13 @@ function RegisterProduct({ history }) {
     const resultValidateDescription = validateInputWithTypeText(
       inputDescription.current.value
     );
-    const resultValidateHeight = validators.size(
-      inputHeight.current.value
-    );
-    const resultValidateLenght = validators.size(
-      inputLenght.current.value
-    );
-    const resultValidateWeight = validators.weight(
-      inputWeight.current.value
-    );
-    const resultValidateWidth = validators.size(
-      inputWidth.current.value
-    );
+    const resultValidateHeight = validators.size(inputHeight.current.value);
+    const resultValidateLenght = validators.size(inputLenght.current.value);
+    const resultValidateWeight = validators.weight(inputWeight.current.value);
+    const resultValidateWidth = validators.size(inputWidth.current.value);
 
-    const resultValidateProductModelArray = productModelsArray.length > 0 ? true: false;
+    const resultValidateProductModelArray =
+      productModelsArray.length > 0 ? true : false;
 
     if (
       !resultValidateType ||
@@ -224,7 +219,7 @@ function RegisterProduct({ history }) {
       !resultValidateHeight ||
       !resultValidateLenght ||
       !resultValidateWeight ||
-      !resultValidateWidth  ||
+      !resultValidateWidth ||
       !resultValidateProductModelArray
     ) {
       if (!resultValidateType) {
@@ -251,34 +246,50 @@ function RegisterProduct({ history }) {
 
       if (!resultValidateHeight) {
         setErrorHeightProduct(true);
-        setErrorHeightProductMessage("Digite uma altura (em cm, sem casas decimais, máximo de 100)");
+        setErrorHeightProductMessage(
+          "Digite uma altura válida (em cm, sem casas decimais, máximo de 100)"
+        );
       } else {
         setErrorHeightProduct(false);
-        setErrorHeightProductMessage("");
+        setErrorHeightProductMessage(
+          "Considere a altura da vestimenta dobrada. Medida em centímetros, com limite de 100 cm."
+        );
       }
 
       if (!resultValidateLenght) {
         setErrorLenghtProduct(true);
-        setErrorLenghtProductMessage("Digite um comprimento (em cm, sem casas decimais, máximo de 100)");
+        setErrorLenghtProductMessage(
+          "Digite um comprimento válido (em cm, sem casas decimais, máximo de 100)"
+        );
       } else {
         setErrorLenghtProduct(false);
-        setErrorLenghtProductMessage("");
+        setErrorLenghtProductMessage(
+          "Medida em centímetros, com limite de 100 cm."
+        );
       }
 
       if (!resultValidateWeight) {
         setErrorWeightProduct(true);
-        setErrorWeightProductMessage("Digite um peso (kg, 0 a 30, até 3 casas decimais usando o .)");
+        setErrorWeightProductMessage(
+          "Digite um peso válido(em gramas, máximo 30000.)"
+        );
       } else {
         setErrorWeightProduct(false);
-        setErrorWeightProductMessage("");
+        setErrorWeightProductMessage(
+          "Medida em gramas, com limite de 30000 gramas."
+        );
       }
 
       if (!resultValidateWidth) {
         setErrorWidthProduct(true);
-        setErrorWidthProductMessage("Digite uma largura (em cm, sem casas decimais, máximo de 100)");
+        setErrorWidthProductMessage(
+          "Digite uma largura válida (em cm, sem casas decimais, máximo de 100)"
+        );
       } else {
         setErrorWidthProduct(false);
-        setErrorWidthProductMessage("");
+        setErrorWidthProductMessage(
+          "Medida em centímetros, com limite de 100 cm."
+        );
       }
 
       if (!resultValidateProductModelArray) {
@@ -288,7 +299,6 @@ function RegisterProduct({ history }) {
         setErrorProductModelArray(false);
         setErrorProductModelArrayMessage("");
       }
-      
     } else {
       setErrorTypeProductMessage("");
       setErrorNameProduct(false);
@@ -296,13 +306,21 @@ function RegisterProduct({ history }) {
       setErrorDescriptionProduct(false);
       setErrorDescriptionProductMessage("");
       setErrorHeightProduct(false);
-      setErrorHeightProductMessage("");
+      setErrorHeightProductMessage(
+        "Considere a altura da vestimenta dobrada. Medida em centímetros, com limite de 100 cm."
+      );
       setErrorLenghtProduct(false);
-      setErrorLenghtProductMessage("");
+      setErrorLenghtProductMessage(
+        "Medida em centímetros, com limite de 100 cm."
+      );
       setErrorWeightProduct(false);
-      setErrorWeightProductMessage("");
+      setErrorWeightProductMessage(
+        "Medida em gramas, com limite de 30000 gramas."
+      );
       setErrorWidthProduct(false);
-      setErrorWidthProductMessage("");
+      setErrorWidthProductMessage(
+        "Medida em centímetros, com limite de 100 cm."
+      );
       setErrorProductModelArray(false);
       setErrorProductModelArrayMessage("");
 
@@ -351,10 +369,9 @@ function RegisterProduct({ history }) {
           inputWidth.current.value = "";
           inputHeight.current.value = "";
           inputLenght.current.value = "";
-
         }, 1000);
       } catch (err) {
-        console.log(err.message);
+        console.warn(err.message);
       }
     }
   };
@@ -517,6 +534,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputName}
+              placeholder="Digite um nome para o produto"
               className={classes.inputText}
               error={errorNameProduct}
               helperText={errorNameProductMessage}
@@ -529,6 +547,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputDescription}
+              placeholder="Digite uma descrição sobre o produto"
               className={classes.inputText}
               error={errorDescriptionProduct}
               helperText={errorDescriptionProductMessage}
@@ -543,7 +562,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputHeight}
-              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
+              placeholder="Valor sem casas decimais. Máximo 100 cm"
               className={classes.inputText}
               error={errorHeightProduct}
               helperText={errorHeightProductMessage}
@@ -556,7 +575,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputLenght}
-              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
+              placeholder="Valor sem casas decimais. Máximo 100 cm"
               className={classes.inputText}
               error={errorLenghtProduct}
               helperText={errorLenghtProductMessage}
@@ -569,7 +588,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputWeight}
-              placeholder="Unidade em kg, até 3 casas decimais. Máximo 30"
+              placeholder="Unidade em gramas. Máximo 30000 gramas"
               className={classes.inputText}
               error={errorWeightProduct}
               helperText={errorWeightProductMessage}
@@ -582,7 +601,7 @@ function RegisterProduct({ history }) {
             <TextField
               required
               inputRef={inputWidth}
-              placeholder="Unidade em cm, sem casas decimais. Máximo 100"
+              placeholder="Valor sem casas decimais. Máximo 100 cm"
               className={classes.inputText}
               error={errorWidthProduct}
               helperText={errorWidthProductMessage}
@@ -601,7 +620,8 @@ function RegisterProduct({ history }) {
               </Button>
             </div>
 
-            <div className="boxManipulateModels"
+            <div
+              className="boxManipulateModels"
               style={
                 errorProductModelArray
                   ? { marginBottom: "24px", borderColor: "#f44336" }
@@ -627,21 +647,18 @@ function RegisterProduct({ history }) {
             >
               {loading ? <CircularProgress color="secondary" /> : "CADASTRAR"}
             </Button>
-            {
-              errorProductModelArray && (
-                <span
-                  style={{
-                    fontSize: "1rem",
-                    color: "#f44336",
-                    fontFamily: "Roboto",
-                    marginLeft: "14px",
-                  }}
-                >
-                  {errorProductModelArrayMessage}
-                </span>
-              )
-            }
-
+            {errorProductModelArray && (
+              <span
+                style={{
+                  fontSize: "1rem",
+                  color: "#f44336",
+                  fontFamily: "Roboto",
+                  marginLeft: "14px",
+                }}
+              >
+                {errorProductModelArrayMessage}
+              </span>
+            )}
           </div>
         </form>
       </div>

@@ -25,8 +25,9 @@
 }
 
 .groupShipping {
-  justify-content: center;
+  justify-content: space-between;
 }
 
-.groupShipping button {
+.invalid-feedback{
+  display: block !important;
 }

@@ -12,6 +12,7 @@ import {
 import "./CalculateShipping.css";
 import api from "../../services/api";
 
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { InputGroup, Button, Form } from "react-bootstrap";
 import { IconContext } from "react-icons/lib";
 import { FaTruck } from "react-icons/fa";
@@ -31,6 +32,9 @@ import { FaTruck } from "react-icons/fa";
 function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
   const [errorMessage, setErrorMessage] = useState();
   const [shippingResult, setShippingResult] = useState([]);
+
+  const [loadingProgress, setLoadingProgress] = useState(false);
+
   const inputCEP = useRef();
 
   async function CalculateShipping() {
@@ -41,24 +45,40 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
         cepReceived.length < 8 ||
         isNaN(Number(cepReceived)) ||
         product_models.length === 0
-      ) {
-
-        if(product_models.length === 0){
-          setErrorMessage("Nenhum produto no carrinho.");
-        }else{
-          setErrorMessage("Digite um CEP válido.");
-        }
-      } else {
+        ) {
+          
+          if(product_models.length === 0){
+            setErrorMessage("Nenhum produto no carrinho.");
+          }else{
+            setErrorMessage("Digite um CEP válido.");
+          }
+        } else {
+        setLoadingProgress(true);
         setErrorMessage("");
 
         const response = await api.post(`/order/shippingQuote`, {
           recipient_CEP: cepReceived,
           product_models,
         });
-        setShippingResult(response.data.ShippingSevicesArray);
-        onCalculateShipping(response.data.ShippingSevicesArray);
+        
+        if(response.data.message === "Weight exceeded.") throw new Error ("Weight exceeded.");
+
+        // onCalculateShipping(response.data.ShippingSevicesArray);
+        setTimeout(() => {
+          setLoadingProgress(false);
+          setShippingResult(response.data.ShippingSevicesArray);
+        }, 2000);
       }
+      
     } catch (err) {
+      setTimeout(() => {
+        setLoadingProgress(false);
+        if(err.message === "Weight exceeded."){
+          setErrorMessage("Peso excedido");
+        }else{
+          setErrorMessage("Erro ao calcular o frete");
+        }
+      }, 2000);
       console.warn(err);
     }
   }
@@ -68,26 +88,42 @@ function CalculateShipping({ onCalculateShipping, product_models, ...props }) {
       <span>{`Calcule o Frete: `}</span>
       <div className="calculateQuoteArea">
         <InputGroup className="groupShipping">
-          <Form.Control
-            className="mr-2"
-            maxLength={8}
-            placeholder="Apenas Números"
-            aria-label="CEP"
-            isInvalid={!!errorMessage}
-            ref={inputCEP}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errorMessage}
-          </Form.Control.Feedback>
-          <Button variant="dark" onClick={() => CalculateShipping()}>
-            <div className="d-flex">
-              <div className="mr-2">
-                <IconContext.Provider value={{ size: "20px" }}>
-                  <FaTruck />
-                </IconContext.Provider>
-              </div>
-              Calcular Frete
-            </div>
+          <div className="inputCalculateShipping" >
+            <Form.Control
+              className="mr-2"
+              maxLength={8}
+              placeholder="Apenas Números"
+              aria-label="CEP"
+              isInvalid={!!errorMessage}
+              ref={inputCEP}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errorMessage}
+            </Form.Control.Feedback>
+          </div>
+          <Button 
+            variant="dark"
+            className="calculateShippingButton" 
+            onClick={() => CalculateShipping()}
+          >
+            {
+              loadingProgress ? (
+                <CircularProgress
+                  size={20}
+                  color="secondary"
+                />
+              ) : 
+              (
+                <div className="d-flex">
+                  <div className="mr-2">
+                    <IconContext.Provider value={{ size: "20px" }}>
+                      <FaTruck />
+                    </IconContext.Provider>
+                  </div>
+                  <span>Calcular Frete</span>
+                </div>
+                  )
+                }
           </Button>
         </InputGroup>
       </div>

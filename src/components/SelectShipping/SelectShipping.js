@@ -48,17 +48,28 @@ function SelectShipping({ onSelectShipping, cep, product_models, ...props }) {
           product_models,
         })
         .then((response) => {
+          if (response.data.message === "Weight exceeded.")
+            throw new Error("Weight exceeded.");
+          if (response.data.message === "Height exceeded.")
+            throw new Error("Height exceeded.");
+
           const data = response.data.ShippingSevicesArray;
           setShippingResult(data);
 
           propsData.onSelectShipping && onSelectShipping(data[0]);
-          setErrorMessage();
+          setErrorMessage("");
         })
         .catch((err) => {
-          let message = err?.response?.data?.validation?.body?.message;
-          if (!message) message = JSON.stringify(err.response?.data);
+          if (err.message === "Weight exceeded.") {
+            setErrorMessage("Peso excedido.");
+          } else if (err.message === "Height exceeded.") {
+            setErrorMessage("Altura excedida.");
+          } else {
+            let message = err?.response?.data?.validation?.body?.message;
+            if (!message) message = JSON.stringify(err.response?.data);
 
-          setErrorMessage(message);
+            setErrorMessage(message);
+          }
         });
   }, [propsData]);
 

@@ -6,16 +6,15 @@ import CartProduct from "./Components/CartProduct";
 import MetaData from "../../meta/reactHelmet";
 import "./Carrinho.css";
 import CalculateShipping from "../../components/CalculateShipping";
-import {isClient} from "../../services/auth";
+import { isClient } from "../../services/auth";
 
 function Carrinho() {
   const history = useHistory();
 
-  const { token, user } = useContext(LoginContext);
+  const { token, user, updateCart } = useContext(LoginContext);
 
   const [products, setProducts] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
-  const [shipping, setShipping] = useState(10);
 
   const meta = {
     titlePage: "Uniformes E-commerce | Carrinho",
@@ -56,18 +55,12 @@ function Carrinho() {
       });
       products.splice(product_key, 1);
       setProducts([...products]);
+      updateCart(user);
     } catch (error) {
       console.warn(error);
       alert(error);
       history.push("Error");
     }
-  }
-
-  async function getProducts() {
-    const response = await api.get("/cart", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setProducts([...response.data]);
   }
 
   useEffect(() => {
@@ -79,12 +72,12 @@ function Carrinho() {
   }, [products]);
 
   useEffect(() => {
-    try {
-      getProducts();
-    } catch (error) {
-      console.warn(error);
-      alert("Erro ao Buscar carrinho");
+    if (user?.cart) {
+      setProducts([...user.cart]);
+    } else {
+      setProducts([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -110,7 +103,7 @@ function Carrinho() {
             </tr>
           </thead>
           <tbody>
-            { products.length > 0 ? 
+            {products.length > 0 ? (
               products.map((product, index) => (
                 <CartProduct
                   key={index}
@@ -119,11 +112,10 @@ function Carrinho() {
                   changeAmount={handleChangeAmount}
                   handleDelete={handleDelete}
                 />
-              )) :
-              <tr>
-                Sem itens no carrinho
-              </tr>
-            }
+              ))
+            ) : (
+              <tr>Sem itens no carrinho</tr>
+            )}
             <tr>
               <td colSpan="3" className="subTotalCarrinho">
                 Subtotal:{" "}
@@ -137,7 +129,6 @@ function Carrinho() {
               <td colSpan="5">
                 <CalculateShipping
                   className="p-3"
-                  onCalculateShipping={(e) => console.log(e)}
                   product_models={products?.map(
                     ({ product_model_id, amount }) => ({
                       product_model_id,

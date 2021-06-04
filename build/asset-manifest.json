@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7f58ec5a.chunk.css",
+    "main.js": "/static/js/main.da8a3077.chunk.js",
+    "main.js.map": "/static/js/main.da8a3077.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.1f184d7b.js",
+    "runtime-main.js.map": "/static/js/runtime-main.1f184d7b.js.map",
+    "static/js/2.39e55b3a.chunk.js": "/static/js/2.39e55b3a.chunk.js",
+    "static/js/2.39e55b3a.chunk.js.map": "/static/js/2.39e55b3a.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.7f58ec5a.chunk.css.map": "/static/css/main.7f58ec5a.chunk.css.map",
+    "static/js/2.39e55b3a.chunk.js.LICENSE.txt": "/static/js/2.39e55b3a.chunk.js.LICENSE.txt",
+    "static/media/Logo_1.5a6cc933.png": "/static/media/Logo_1.5a6cc933.png",
+    "static/media/Contato.css": "/static/media/camisa.c00c36a5.jpg",
+    "static/media/error_404.888f9f7c.png": "/static/media/error_404.888f9f7c.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1f184d7b.js",
+    "static/js/2.39e55b3a.chunk.js",
+    "static/css/main.7f58ec5a.chunk.css",
+    "static/js/main.da8a3077.chunk.js"
+  ]
+}

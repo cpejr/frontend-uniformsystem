@@ -146,15 +146,19 @@ function EditarPerfil() {
 
   useEffect(() => {
     async function getUserAddress() {
-      const response = await api.get("/address/${user.user_id}", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setAddressInfo({ ...response.data.adresses[0] });
+      try {
+        const response = await api.get("/address/${user.user_id}", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAddressInfo({ ...response.data.adresses[0] });
+      } catch (err) {
+        console.warn(err.message);
+        setAddressInfo({});
+      }
     }
     getUserAddress();
-    console.log('user', user)
   }, [loading]);
 
   const handleClose = (event, reason) => {
@@ -344,7 +348,7 @@ function EditarPerfil() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        
+
         setTimeout(async () => {
           setLoading(false);
           setMessageSnackbar("Alterações realizadas com sucesso!");
@@ -352,12 +356,11 @@ function EditarPerfil() {
           setOpen(true);
           await verify(token);
         }, 1000);
-
       } catch (err) {
         setMessageSnackbar("Falha ao atualizar os dados");
         setTypeSnackbar("error");
         setLoading(false);
-        console.log(err.message);
+        console.warn(err.message);
       }
     }
   };
@@ -425,7 +428,6 @@ function EditarPerfil() {
       newAddressInfo = {
         state: e.target.value,
       };
-      console.log(newAddressInfo.state);
       setAddressInfo({ ...addressInfo, state: e.target.value });
     }
   };
@@ -470,10 +472,7 @@ function EditarPerfil() {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-        <FaChevronLeft 
-          className="back" 
-          onClick={() => back()} 
-        />
+      <FaChevronLeft className="back" onClick={() => back()} />
       <h1 className={classes.mainTitle}>
         EDITAR DADOS PESSOAIS
         <span className={classes.spanInsideTitle} />

@@ -1,0 +1,17 @@
+
+.groupShipping{
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.inputCalculateShipping{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.calculateShippingButton{
+    height: 40px;
+    min-width: 140px;
+}

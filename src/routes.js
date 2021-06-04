@@ -34,11 +34,7 @@ import FooterAdm from "./components/FooterAdm";
 import SidebarAdm from "./components/SidebarAdm";
 import SidebarClient from "./components/SidebarClient";
 
-import {
-  isAuthenticated,
-  isADM,
-  isADMOrEmployee,
-} from "./services/auth";
+import { isAuthenticated, isADM, isADMOrEmployee } from "./services/auth";
 import { LoginContext } from "./contexts/LoginContext";
 
 function getWindowDimensions() {
@@ -155,7 +151,12 @@ function MenuRoutes() {
                   logado, você será redirecionado para a página Login. */}
 
             <Route path="/perfil" export exact component={Perfil} />
-            <PrivateClientRoute path="/editarPerfil" export exact component={EditarPerfil} />
+            <PrivateClientRoute
+              path="/editarPerfil"
+              export
+              exact
+              component={EditarPerfil}
+            />
 
             <Route path="/cart" export component={Carrinho} />
             <Route path="/login" export component={Login} />
@@ -166,8 +167,10 @@ function MenuRoutes() {
             <Route path="*" exact component={Error} />
           </Switch>
         </SidebarClient>
-        {user && user.user_type === "adm" ? (
+        {user && user?.user_type === "adm" ? (
           <AdmButton linkToRedirect="/adm/home" isEdit={true} />
+        ) : user?.user_type === "employee" ? (
+          <AdmButton linkToRedirect="/adm/pedidos" isEdit={true} />
         ) : null}
         <Footer />
       </>
@@ -186,7 +189,12 @@ function MenuRoutes() {
                   logado, você será redirecionado para a página Login. */}
 
           <Route path="/perfil" export exact component={Perfil} />
-          <PrivateClientRoute path="/editarPerfil" export exact component={EditarPerfil} />
+          <PrivateClientRoute
+            path="/editarPerfil"
+            export
+            exact
+            component={EditarPerfil}
+          />
 
           <Route path="/cart" export component={Carrinho} />
           <Route path="/login" export component={Login} />
@@ -196,8 +204,10 @@ function MenuRoutes() {
           {/* A página abaixo é para que se algo existir uma página que não está no routes, apracer o seguinte. */}
           <Route path="*" exact component={Error} />
         </Switch>
-        {user && user.user_type === "adm" ? (
+        {user && user?.user_type === "adm" ? (
           <AdmButton linkToRedirect="/adm/home" isEdit={true} />
+        ) : user?.user_type === "employee" ? (
+          <AdmButton linkToRedirect="/adm/pedidos" isEdit={true} />
         ) : null}
         <Footer />
       </>
@@ -208,7 +218,7 @@ function MenuRoutes() {
 function AdmRoutes() {
   const { user } = useContext(LoginContext);
 
-  if (user && user.user_type !== "adm")
+  if (user && user?.user_type !== "adm" && user?.user_type !== "employee")
     return <Redirect to="/" />;
   else
     return (
@@ -261,7 +271,8 @@ function AdmRoutes() {
             <Route path="*" exact={true} component={Error} />
           </Switch>
         </SidebarAdm>
-        {user && user.user_type === "adm" ? (
+        {user &&
+        (user?.user_type === "adm" || user?.user_type === "employee") ? (
           <AdmButton linkToRedirect="/" isEdit={false} />
         ) : null}
         <FooterAdm />

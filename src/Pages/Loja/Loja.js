@@ -86,15 +86,17 @@ function Loja() {
 
   useEffect(() => {
     page.current = 1;
-    getProducts().then((newProducts) => {
-      setProducts(newProducts);
-      setTimeout(() => {
+    getProducts()
+      .then((newProducts) => {
+        setProducts(newProducts);
+        setTimeout(() => {
+          setLoading(false);
+        }, [500]);
+      })
+      .catch((err) => {
+        console.warn(err.message);
         setLoading(false);
-      }, [500]);
-    }).catch(err => {
-      console.warn(err.message)
-      setLoading(false);
-    });
+      });
   }, [filter]);
 
   function handleInputChange(e) {
@@ -194,7 +196,6 @@ function Loja() {
     filterWithName.name = nameToSearch;
 
     setFilter(filterWithName);
-
   }
 
   useEffect(() => {
@@ -216,7 +217,7 @@ function Loja() {
       if (windowBottom >= docHeight) {
         //bottom reached
         //Fuçã que faz requisição no back pela proxima pagina
-        // loadNextPage();
+        loadNextPage();
         //TODO ao ativar o scroll infinito (descomentando a função loadNextPage) os filtros param de funcionar
         //.then(setOngsData)
         //.catch((error) => console.error(error));
@@ -241,8 +242,7 @@ function Loja() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products]);
+  }, [filter, products]);
 
   function selectSkeleton() {
     if (window.innerWidth < 500) {
@@ -260,70 +260,76 @@ function Loja() {
         imageUrl={meta.imageUrl}
         imageAlt={meta.imageAlt}
       />
-      {/*<div style={loading? {display: 'none'} : {}}>*/}
-          <div className="search" style={loading? {display: 'none'} : {}}>
-            <input
-              id="search"
-              type="text"
-              ref={inputSearch}
-              placeholder="O que você precisa?"
-            />
+      <form
+        className="search"
+        style={loading ? { display: "none" } : {}}
+        onSubmit={(e) => {
+          e.prevetDefault();
+          findProduct();
+        }}
+      >
+        <input
+          id="search"
+          type="text"
+          ref={inputSearch}
+          placeholder="O que você precisa?"
+        />
 
-            <FaSearch onClick={findProduct} className="searchButton" />
+        <FaSearch onClick={findProduct} className="searchButton" />
+      </form>
+      <div className="shopContainer" style={loading ? { display: "none" } : {}}>
+        <div className="filterContainer">
+          <div className="filterTitleProducts">
+            <FaFilter /> FILTRAR
           </div>
-          <div className="shopContainer"  style={loading? {display: 'none'} : {}}>
-            <div className="filterContainer">
-              <div className="filterTitleProducts">
-                <FaFilter /> FILTRAR
-              </div>
-              <div className="filterContent">
-                {FILTER_OPTIONS.map((option, index) => {
-                  return (
-                    <div className="filtersProducts">
-                      <input
-                        type="checkbox"
-                        id={`filter-${index}`}
-                        name={option}
-                        onChange={handleInputChange}
-                        className="checkbox"
-                      />
-                      <label for={`filter-${index}`}>{option}</label>
-                    </div>
-                  );
-                })}
-
-                <div className="priceContainer">
-                  <br />
-                  <p>PREÇO</p>
-
-                  {PRICE_OPTIONS.map((price, index) => {
-                    return (
-                      <div className="filterPrice">
-                        <input
-                          type="radio"
-                          id={`price-${index}`}
-                          name="price"
-                          onChange={handlePriceChange}
-                          value={price}
-                          className="radio"
-                        />
-                        <label for={`price-${index}`}>{price}</label>
-                      </div>
-                    );
-                  })}
+          <div className="filterContent">
+            {FILTER_OPTIONS.map((option, index) => {
+              return (
+                <div className="filtersProducts">
+                  <input
+                    type="checkbox"
+                    id={`filter-${index}`}
+                    name={option}
+                    onChange={handleInputChange}
+                    className="checkbox"
+                  />
+                  <label for={`filter-${index}`}>{option}</label>
                 </div>
-              </div>
-            </div>
-            <div className="productContainer">
-              {products?.length > 0 && !loading ?
-                products.map((product) => (
-                  <ProductCard key={product.product_model_id} product={product} />
-                ))
-                :
-                <h1>Sem produtos</h1>
-              }
+              );
+            })}
+
+            <div className="priceContainer">
+              <br />
+              <p>PREÇO</p>
+
+              {PRICE_OPTIONS.map((price, index) => {
+                return (
+                  <div className="filterPrice">
+                    <input
+                      type="radio"
+                      id={`price-${index}`}
+                      name="price"
+                      onChange={handlePriceChange}
+                      value={price}
+                      className="radio"
+                    />
+                    <label for={`price-${index}`}>{price}</label>
+                  </div>
+                );
+              })}
             </div>
           </div>
+        </div>
+        <div className="productContainer">
+          {products?.length > 0 && !loading ? (
+            products.map((product) => (
+              <ProductCard key={product.product_model_id} product={product} />
+            ))
+          ) : (
+            <h1>Sem produtos</h1>
+          )}
+        </div>
+      </div>
       {loading && selectSkeleton()}
     </div>
   );
